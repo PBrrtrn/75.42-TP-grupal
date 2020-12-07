@@ -3,16 +3,18 @@
 
 #include <queue>
 #include <mutex>
+#include <condition_variable>
 
 class EventQueue {
 private:
-	std::mutes;
-	std::queue<SDL_Event> queue;
+	std::mutex mutex;
+	std::queue<int> queue;
+	std::condition_variable cv;
 public:
 	EventQueue();
 	~EventQueue();
-	void add(int event); // Modelar la clase evento
-	int pop(); // Acá también, devolver una instancia de evento
+	void add(int event); // TODO: Definir el enum event
+	int pop();
 };
 
 #endif
