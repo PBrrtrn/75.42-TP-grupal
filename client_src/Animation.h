@@ -1,6 +1,9 @@
 #ifndef __ANIMATION_H__
 #define __ANIMATION_H__
 
+#include <SDL2/SDL.h>
+#include <vector>
+
 #include "Texture.h"
 
 class Animation {
@@ -13,7 +16,6 @@ private:
 	std::vector<SDL_Rect> frames;
 	int frame_width;
 	int frame_height;
-	int current_frame;
 public:
 	Animation(Texture& sprite_sheet, int frame_width, 
 						int frame_height, int n_frames);

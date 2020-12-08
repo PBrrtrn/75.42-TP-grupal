@@ -7,13 +7,13 @@ EventQueue::~EventQueue() { }
 void EventQueue::add(int event) {
 	std::unique_lock<std::mutex> lock(this->mutex);
 	this->queue.push(event);
-	this->condition_variable.notify_all();
+	this->cv.notify_all();
 }
 
 int EventQueue::pop() {
 	std::unique_lock<std::mutex> lock(this->mutex);
 	while (queue.empty()) {
-		this->cv.wait();
+		this->cv.wait(lock);
 	}
 	int event = queue.front();
 	queue.pop();

@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "Renderer.h"
+#include "Texture.h"
 
 Renderer::Renderer(const char* title,
 									 int width, int height,
@@ -13,7 +14,7 @@ Renderer::Renderer(const char* title,
 		tenga ownership sin necesitar saber crearla. 
 																						- Pablo (06/12/2020)				*/
 	this->renderer = this->window.getRenderer();
-	if (this->renderer == NULL) throw 1; // TODO: Definir mejores errores
+	if (this->renderer == NULL) throw RendererConstructorError(SDL_GetError());
 
 	SDL_SetRenderDrawColor(this->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
@@ -28,13 +29,30 @@ Renderer::~Renderer() {
 }
 
 void Renderer::run() {
-	Animation animation;
+	Texture texture(this->renderer, "foo.png"); // Placeholder
 
 	while (true) {
 		int event = this->event_queue.pop();
 
-		if (event == QUIT) break;
-
+		if (event == QUIT) {
+			break;
+		} else {
+			SDL_RenderClear(this->renderer);
+			texture.render(this->renderer);
+			SDL_RenderPresent(this->renderer);
+		}
 
 	}
+}
+
+RendererConstructorError::RendererConstructorError
+								(const char *sdl_error) noexcept {
+	snprintf(this->error_msg, ERROR_BUF_LEN, 
+					 "Failed to initialize SDL_Renderer: %s", sdl_error);
+}
+
+RendererConstructorError::~RendererConstructorError() noexcept { }
+
+const char* RendererConstructorError::what() const noexcept {
+	return this->error_msg;
 }
