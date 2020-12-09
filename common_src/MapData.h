@@ -14,9 +14,12 @@ class GridRow : public std::vector<int> {};
 class MapData{
 public:
 	std::vector<GridRow> grid;
+	int width;
+	int height;
+	
 	MapData(const std::string& file_location){
-		int width = 0;
-		int height = 0;
+		this->width = 0;
+		this->height = 0;
 		std::ifstream input_file;
 		input_file.open(file_location);
 		int i = 0;
@@ -26,19 +29,19 @@ public:
 			std::stringstream s;
 			std::string piece;
 			s << current_line;
-			if (width == 0 || height == 0){
+			if (this->width == 0 || this->height == 0){
 				while (s >> piece){
 					if (piece == "width:"){
-						s >> width;
+						s >> this->width;
 					}
 					if (piece == "height:"){
-						s >> height;
+						s >> this->height;
 					}					
 				}
 			} else {
 				GridRow row;
 				
-				for (int j = 0;j < width;j++){
+				for (int j = 0;j < this->width;j++){
 					int value;
 					s >> value;
 					row.push_back(value);
