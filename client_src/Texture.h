@@ -11,6 +11,8 @@ private:
 public:
 	Texture(SDL_Renderer* renderer, const char *filepath);
 	~Texture();
+	Texture(const Texture&) = delete;            // Saco el constructor por copia
+  Texture& operator=(const Texture&) = delete; // Saco la asignacion por copia
 	void render(SDL_Renderer* renderer);
 };
 

@@ -13,7 +13,7 @@ private:
 public:
 	EventQueue();
 	~EventQueue();
-	void add(int event); // TODO: Definir el enum event
+	void push(int event); // TODO: Definir el enum event
 	int pop();
 };
 

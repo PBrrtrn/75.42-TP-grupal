@@ -40,6 +40,7 @@ void Renderer::run() {
 			SDL_RenderClear(this->renderer);
 			texture.render(this->renderer);
 			SDL_RenderPresent(this->renderer);
+			this->event_queue.push(CONTINUE);
 		}
 
 	}

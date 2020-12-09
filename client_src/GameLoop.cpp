@@ -21,6 +21,7 @@ GameLoop::~GameLoop() {
 
 void GameLoop::run() {
 	// this->serverEventsReceiver.start();
+	this->render_events_queue.push(START);
 	this->renderer.start();
 }
 

@@ -4,7 +4,7 @@ EventQueue::EventQueue() { }
 
 EventQueue::~EventQueue() { }
 
-void EventQueue::add(int event) {
+void EventQueue::push(int event) {
 	std::unique_lock<std::mutex> lock(this->mutex);
 	this->queue.push(event);
 	this->cv.notify_all();

@@ -14,8 +14,7 @@ Window::~Window() {
 
 SDL_Renderer* Window::getRenderer() {
 	return SDL_CreateRenderer(this->window, -1, 
-														SDL_RENDERER_ACCELERATED | 
-														SDL_RENDERER_PRESENTVSYNC);
+														SDL_RENDERER_ACCELERATED);
 }
 
 WindowConstructorError::WindowConstructorError

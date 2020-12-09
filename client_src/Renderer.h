@@ -7,7 +7,7 @@
 #include "EventQueue.h"
 #include "Window.h"
 
-enum Event { QUIT, START };
+enum Event { START, QUIT, CONTINUE };
 
 class Renderer : public Thread {
 private:
