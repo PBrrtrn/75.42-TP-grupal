@@ -38,6 +38,8 @@ bool Server:: _is_colision(int id, Vector& next_position) {
         std::cout << "Wall detected - invalid move" << '\n';
         //TODO como imprimir mensaje en pantalla
         return true;
+    } else if (/*agregar !isObject*/) {
+        std::cout << "Object detected - invalid move" << '\n';
     } else {
         this->gameStatus.setPosition(id, next_position);
         return false;
