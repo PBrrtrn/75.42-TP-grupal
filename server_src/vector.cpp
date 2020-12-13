@@ -61,6 +61,10 @@ Vector Vector::operator+(const Vector &another) {
     return Vector(this->x + another.x, this->y + another.y);
 }
 
+Vector Vector::operator-(const Vector &another) {
+    return Vector(this->x - another.x, this->y - another.y);
+}
+
 Vector::Vector(float angle) {
     /*std::cout << "ANGLE 3: " << angle << std::endl;*/
     this->x = cos(angle);

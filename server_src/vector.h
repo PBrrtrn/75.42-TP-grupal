@@ -17,6 +17,7 @@ public:
     float getXCoordinate();
     Vector operator*(float scalar);
     Vector operator+(const Vector &another);
+    Vector operator-(const Vector &another);
     Vector& operator=(const Vector &another);
 
 private:
