@@ -20,8 +20,8 @@ Server::~Server(){
 
 void Server::addClient(Client *client){
 	this->clients.push_back(client);
-	this->gameStatus.setPosition(this->clientCounter,96,96);
-	this->gameStatus.setAngle(this->clientCounter, 1.047);
+	this->gameStatus.setPosition(this->clientCounter, 150, 150);
+	this->gameStatus.setAngle(this->clientCounter, 0);
 	client->startGame(this->gameStatus, clientCounter);
 	clientCounter++;
 }
