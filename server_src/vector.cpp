@@ -40,6 +40,7 @@ float Vector::calculateNorma() {
 float Vector::getAngle() {
     /*std::cout << "Get angle function" << std::endl;
     std::cout << "x: " << this->x << " y: " << this->y << std::endl;*/
+    this->turnUnitary(); //TODO CHECK
     return atan2(this->y, this->x);
     //return atan(this->y / this->x);
 }

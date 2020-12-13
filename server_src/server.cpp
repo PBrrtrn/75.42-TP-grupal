@@ -33,7 +33,7 @@ void Server::newClient(){
     this->clientsThreads.back()->start();
 }
 
-static void _is_colision(int id, Vector& next_position) {
+bool Server:: _is_colision(int id, Vector& next_position) {
     if (this->map.isWall(next_position.getXCoordinate(), next_position.getYCoordinate())) {
         std::cout << "Wall detected - invalid move" << '\n';
         //TODO como imprimir mensaje en pantalla
@@ -60,10 +60,9 @@ void Server::tryMoveBackward(int id) {
     _is_colision(id, next_position);
 }
 
-static void _rotate_and_move(const rotation_angle) {
+void Server:: _rotate_and_move(const int rotation_angle, int id) {
     Vector pos = this->gameStatus.getPosition(id);
-	Vector angle = this->gameStatus.getAngle(id);
-    angle.turnUnitary();
+	float angle = this->gameStatus.getAngle(id);
     angle += rotation_angle;
     Vector next_position = pos + (angle * STEP);
     if (!_is_colision(id, next_position)) {
@@ -72,11 +71,11 @@ static void _rotate_and_move(const rotation_angle) {
 }
 
 void Server::tryMoveLeft(int id) {
-    _rotate_and_move(ROTATION_LEFT);
+    _rotate_and_move(ROTATION_LEFT, id);
 }
 
 void Server::tryMoveRight(int id) {
-    _rotate_and_move(ROTATION_RIGHT);
+    _rotate_and_move(ROTATION_RIGHT, id);
 }
 
 void Server::tryShoot(int id) {}

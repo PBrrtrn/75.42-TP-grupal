@@ -16,6 +16,8 @@ class Server{
 	Map map;
 	int clientCounter;
 	std::vector<ThreadClient*> clientsThreads;
+	void _rotate_and_move(const int rotation_angle, int id);
+	bool _is_colision(int id, Vector& next_position);
 
 public:
 	Server();
