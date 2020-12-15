@@ -19,7 +19,11 @@ void GameLoop::run() {
 	// this->serverEventsReceiver.start();
 	this->render_events_queue.push(START);
 	this->renderer.start();
+
+	SDL_Event user_event;
 	while (true) {
+		SDL_PollEvent(&(user_event));
+		if (user_event.type == SDL_QUIT) break;
 		// poll event, encolarlo, etc.
 	}
 }
