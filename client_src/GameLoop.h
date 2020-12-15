@@ -29,15 +29,4 @@ public:
 	void run();
 };
 
-#define ERROR_BUF_LEN 256
-
-class SDLInitializationError : public std::exception {
-private:
-	char error_msg[ERROR_BUF_LEN];
-public:
-	explicit SDLInitializationError(const char* sdl_error) noexcept;
-	virtual const char* what() const noexcept;
-	virtual ~SDLInitializationError() noexcept;
-};
-
 #endif
