@@ -8,11 +8,8 @@ static const int SCREEN_HEIGHT = 480;
 
 GameLoop::GameLoop() 
 : renderer("TEST", SCREEN_WIDTH, SCREEN_HEIGHT, render_events_queue) { 
+	// IMPORTANTE: Estas creando el renderer antes de hacer SDL_Init, pavote
 	// TODO: Agregar ServerEventsReceiver a la MIL
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) 
-		throw SDLInitializationError(SDL_GetError());
-	if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
-		std::cout << "Warning: Could not set render scale quality" << std::endl;
 }
 
 GameLoop::~GameLoop() {
@@ -23,6 +20,9 @@ void GameLoop::run() {
 	// this->serverEventsReceiver.start();
 	this->render_events_queue.push(START);
 	this->renderer.start();
+	while (true) {
+		// poll event, encolarlo, etc.
+	}
 }
 
 SDLInitializationError::SDLInitializationError
