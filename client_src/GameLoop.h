@@ -3,11 +3,13 @@
 
 #include "EventQueue.h"
 #include "Renderer.h"
+#include "KeyboardState.h"
 
 class GameLoop {
 private:
 	EventQueue render_events_queue;
 	Renderer renderer;
+	KeyboardState keyboard_state;
 	/* render_events_queue es una cola protegida que puede ser accedida tanto por
 	el thread main como por el del serverReceiver. El renderer accede a la cola
 	para desencolar eventos y renderizarlos, mientras que el serverEventsReceiver

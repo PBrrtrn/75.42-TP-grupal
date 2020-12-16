@@ -24,6 +24,25 @@ void GameLoop::run() {
 	while (true) {
 		SDL_PollEvent(&(user_event));
 		if (user_event.type == SDL_QUIT) break;
+
+		switch (user_event.type) {
+			case (SDL_KEYDOWN) : 
+				this->keyboard_state.toggleKeyDown(user_event.key.keysym.sym);
+				break;
+			case (SDL_KEYUP) :
+				this->keyboard_state.toggleKeyUp(user_event.key.keysym.sym);
+				break;
+		}
+
+		if (this->keyboard_state.isDown(SDLK_w)) {
+			std::cout << "Move up" << std::endl;
+		} else if (this->keyboard_state.isDown(SDLK_s)) {
+			std::cout << "Move down" << std::endl;
+		} else if (this->keyboard_state.isDown(SDLK_a)) {
+			std::cout << "Move left" << std::endl;
+		} else if (this->keyboard_state.isDown(SDLK_d)) {
+			std::cout << "Move right" << std::endl;
+		}
 		// poll event, encolarlo, etc.
 	}
 }
