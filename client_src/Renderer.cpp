@@ -1,8 +1,9 @@
-#include <SDL2/SDL_image.h>
 #include <iostream>
+#include <SDL2/SDL_image.h>
 
 #include "Renderer.h"
 #include "Texture.h"
+#include "Animation.h"
 
 Renderer::Renderer(const char* title,
 									 int width, int height,
@@ -29,7 +30,7 @@ Renderer::~Renderer() {
 }
 
 void Renderer::run() {
-	Texture texture(this->renderer, "foo.png"); // Placeholder
+	Animation animation(this->renderer, "foo.png", 64, 205, 4); // Placeholder
 
 	while (true) {
 		int event = this->event_queue.pop();
@@ -38,9 +39,8 @@ void Renderer::run() {
 			break;
 		} else {
 			SDL_RenderClear(this->renderer);
-			texture.render(this->renderer);
+			animation.renderNextFrame(this->renderer, 1, 0, 0);
 			SDL_RenderPresent(this->renderer);
-			this->event_queue.push(CONTINUE);
 		}
 
 	}

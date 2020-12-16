@@ -8,19 +8,17 @@
 
 class Animation {
 private:
-	/* TODO: recibir la textura por movimiento.
-		 No tiene sentido que exista por fuera del objeto Animation 
-															- Pablo (06/12/2020)					 */
-	Texture& sprite_sheet;
+	Texture sprite_sheet;
 	uint current_frame;
 	std::vector<SDL_Rect> frames;
 	int frame_width;
 	int frame_height;
 public:
-	Animation(Texture& sprite_sheet, int frame_width, 
-						int frame_height, int n_frames);
+	Animation(SDL_Renderer* renderer, const char* sheet_filepath, 
+						int frame_width, int frame_height, int n_frames);
 	~Animation();
-	void renderNextFrame(SDL_Renderer* renderer, int x_pos, int y_pos);
+	void renderNextFrame(SDL_Renderer* renderer, int scale,
+											 int x_pos, int y_pos);
 };
 
 #endif

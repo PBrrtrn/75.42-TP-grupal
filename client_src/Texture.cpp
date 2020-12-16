@@ -16,8 +16,8 @@ Texture::~Texture() {
 	SDL_DestroyTexture(this->texture);
 }
 
-void Texture::render(SDL_Renderer* renderer) {
-	SDL_RenderCopy(renderer, this->texture, NULL, NULL); // Aca tienen que ir las dimensiones del render
+void Texture::render(SDL_Renderer* renderer, SDL_Rect *clip, SDL_Rect *dest) {
+	SDL_RenderCopy(renderer, this->texture, clip, dest);
 }
 
 TextureConstructorError::TextureConstructorError

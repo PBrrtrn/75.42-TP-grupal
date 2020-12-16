@@ -13,7 +13,7 @@ public:
 	~Texture();
 	Texture(const Texture&) = delete;            // Saco el constructor por copia
   Texture& operator=(const Texture&) = delete; // Saco la asignacion por copia
-	void render(SDL_Renderer* renderer);
+	void render(SDL_Renderer* renderer, SDL_Rect *clip, SDL_Rect *dst);
 };
 
 #define ERROR_BUF_LEN 256

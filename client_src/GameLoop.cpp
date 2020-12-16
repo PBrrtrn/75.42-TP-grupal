@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 #include <SDL2/SDL.h>
 
 #include "GameLoop.h"
@@ -43,6 +44,10 @@ void GameLoop::run() {
 		} else if (this->keyboard_state.isDown(SDLK_d)) {
 			std::cout << "Move right" << std::endl;
 		}
-		// poll event, encolarlo, etc.
+
+		this->render_events_queue.push(CONTINUE);
+		// encolar los eventos para enviarlos al servidor
+
+		usleep(1000000/24);
 	}
 }
