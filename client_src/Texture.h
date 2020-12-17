@@ -7,24 +7,24 @@
 
 class Texture {
 private:
-	SDL_Texture* texture;
+  SDL_Texture* texture;
 public:
-	Texture(SDL_Renderer* renderer, const char *filepath);
-	~Texture();
-	Texture(const Texture&) = delete;            // Saco el constructor por copia
+  Texture(SDL_Renderer* renderer, const char *filepath);
+  ~Texture();
+  Texture(const Texture&) = delete;            // Saco el constructor por copia
   Texture& operator=(const Texture&) = delete; // Saco la asignacion por copia
-	void render(SDL_Renderer* renderer, SDL_Rect *clip, SDL_Rect *dst);
+  void render(SDL_Renderer* renderer, SDL_Rect *clip, SDL_Rect *dst);
 };
 
 #define ERROR_BUF_LEN 256
 
 class TextureConstructorError : public std::exception {
 private:
-	char error_msg[ERROR_BUF_LEN];
+  char error_msg[ERROR_BUF_LEN];
 public:
-	explicit TextureConstructorError(const char* sdl_error) noexcept;
-	virtual const char* what() const noexcept;
-	virtual ~TextureConstructorError() noexcept;
+  explicit TextureConstructorError(const char* sdl_error) noexcept;
+  virtual const char* what() const noexcept;
+  virtual ~TextureConstructorError() noexcept;
 };
 
 #endif

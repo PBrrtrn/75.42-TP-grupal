@@ -6,9 +6,9 @@
 class ServerEventsReceiver : public Thread {
 private:
 public:
-	ServerEventsReceiver();
-	~ServerEventsReceiver();
-	void run();
+  ServerEventsReceiver();
+  ~ServerEventsReceiver();
+  void run();
 };
 
 #endif

@@ -3,7 +3,7 @@
 ServerEventsReceiver::ServerEventsReceiver() { }
 
 ServerEventsReceiver::~ServerEventsReceiver() {
-	this->join();
+  this->join();
 }
 
 void ServerEventsReceiver::run() { }

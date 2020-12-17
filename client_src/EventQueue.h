@@ -7,14 +7,14 @@
 
 class EventQueue {
 private:
-	std::mutex mutex;
-	std::queue<int> queue;
-	std::condition_variable cv;
+  std::mutex mutex;
+  std::queue<int> queue;
+  std::condition_variable cv;
 public:
-	EventQueue();
-	~EventQueue();
-	void push(int event); // TODO: Definir el enum event
-	int pop();
+  EventQueue();
+  ~EventQueue();
+  void push(int event); // TODO: Definir el enum event
+  int pop();
 };
 
 #endif

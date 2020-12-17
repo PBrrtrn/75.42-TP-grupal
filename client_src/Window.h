@@ -6,26 +6,26 @@
 
 class Window {
 private:
-	SDL_Window* window;
-	int width;
-	int height;
+  SDL_Window* window;
+  int width;
+  int height;
 public:
-	Window(const char* title, int height, int width);
-	~Window();
-	Window(const Window&) = delete;            // Saco el constructor por copia
+  Window(const char* title, int height, int width);
+  ~Window();
+  Window(const Window&) = delete;            // Saco el constructor por copia
   Window& operator=(const Window&) = delete; // Saco la asignacion por copia
-	SDL_Renderer* getRenderer();
+  SDL_Renderer* getRenderer();
 };
 
 #define ERROR_BUF_LEN 256
 
 class WindowConstructorError : public std::exception {
 private:
-	char error_msg[ERROR_BUF_LEN];
+  char error_msg[ERROR_BUF_LEN];
 public:
-	explicit WindowConstructorError(const char* sdl_error) noexcept;
-	virtual const char* what() const noexcept;
-	virtual ~WindowConstructorError() noexcept;
+  explicit WindowConstructorError(const char* sdl_error) noexcept;
+  virtual const char* what() const noexcept;
+  virtual ~WindowConstructorError() noexcept;
 };
 
 #endif

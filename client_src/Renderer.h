@@ -11,24 +11,24 @@ enum Event { START, QUIT, CONTINUE };
 
 class Renderer : public Thread {
 private:
-	SDL_Renderer* renderer;
-	Window window;
-	EventQueue& event_queue;
+  SDL_Renderer* renderer;
+  Window window;
+  EventQueue& event_queue;
 public:
-	Renderer(const char *title, int width, int height, EventQueue& event_queue);
-	~Renderer();
-	void run();
+  Renderer(const char *title, int width, int height, EventQueue& event_queue);
+  ~Renderer();
+  void run();
 };
 
 #define ERROR_BUF_LEN 256
 
 class RendererConstructorError : public std::exception {
 private:
-	char error_msg[ERROR_BUF_LEN];
+  char error_msg[ERROR_BUF_LEN];
 public:
-	explicit RendererConstructorError(const char* sdl_error) noexcept;
-	virtual const char* what() const noexcept;
-	virtual ~RendererConstructorError() noexcept;
+  explicit RendererConstructorError(const char* sdl_error) noexcept;
+  virtual const char* what() const noexcept;
+  virtual ~RendererConstructorError() noexcept;
 };
 
 #endif
