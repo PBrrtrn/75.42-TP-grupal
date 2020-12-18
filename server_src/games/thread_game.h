@@ -10,8 +10,7 @@
 #include "thread_client.h"
 #include "../common_src/socket.h"
 
-#include "Client.h"
-#include "game_status.h"
+#include "../games/game_status.h"
 
 #include "action.h"
 #include "move_right.h"

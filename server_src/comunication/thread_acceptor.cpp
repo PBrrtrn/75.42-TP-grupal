@@ -14,10 +14,16 @@ void ThreadAcceptor:: run() {
         }
         */
         //TODO VER CÓMO CREAR HILO PARTIDA Y UN GAME STATUS POR CADA UNO
-        clients.push_back(new ThreadClient(/*peer, */));
-        clients.back()->start();
-        this->garbage_collector();
+        this->newClient();
+        //this->garbage_collector();
     }
+}
+
+void ThreadAcceptor:: newMessage(std::string message) {
+    Action& action = message_parser.parse(message); //por ahora cout msg
+    //if action == new game
+    //new th_game(id client)
+    //else gameclient(action)
 }
 
 void ThreadAcceptor::newClient(){

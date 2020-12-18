@@ -7,7 +7,7 @@
 
 //#include <fstream>
 
-#include "thread_acceptor.h"
+#include "../comunication/thread_acceptor.h"
 
 class Server{
 	//const char* server_port;
@@ -17,6 +17,7 @@ class Server{
 	public:
 		
 		Server();
+		
 		//Crea un hilo aceptador
 		//para recibir conexiones de
 		//multiples clientes
