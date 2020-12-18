@@ -6,8 +6,8 @@
 class MoveBackward : public Action {
 
     public:
-        MoveBackward(int clientID);
-        void tryAction(Server &server) override;
+        MoveBackward();
+        void tryAction(Server &server, int clientID) override;
         ~MoveBackward();
 };
 

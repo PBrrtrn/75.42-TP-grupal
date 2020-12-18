@@ -6,8 +6,8 @@
 class MoveForward : public Action {
 
     public:
-        MoveForward(int clientID);
-        void tryAction(Server &server) override;
+        MoveForward();
+        void tryAction(Server &server, int clientID) override;
         ~MoveForward();
 };
 

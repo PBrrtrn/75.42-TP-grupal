@@ -16,7 +16,6 @@ class GameStatus{
 	
 public:
 	GameStatus();
-	~GameStatus();
 	Vector getPosition();
 	float getAngle();
 	void addPlayer(int playerID, Vector &position, Vector &direction);
@@ -25,6 +24,7 @@ public:
 	void setPosition(int playerID, Vector &position);
     void setPosition(int playerID, float x, float y);
     void setAngle(int playerID, float angle);
+	~GameStatus();
 };
 
 #endif //GAMESTATUS_H

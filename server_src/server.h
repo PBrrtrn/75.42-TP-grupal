@@ -5,31 +5,29 @@
 #include <string>
 #include <vector>
 
-#include "thread_client.h"
-#include "action.h"
-#include "Client.h"
-#include "game_status.h"
+//#include <fstream>
+
+#include "thread_acceptor.h"
 
 class Server{
-	std::vector<Client*> clients;
-	GameStatus gameStatus;
-	Map map;
-	int clientCounter;
-	std::vector<ThreadClient*> clientsThreads;
-	void _rotate_and_move(const int rotation_angle, int id);
-	bool _is_colision(int id, Vector& next_position);
+	//const char* server_port;
+	//Socket socket;
+	ThreadAcceptor* acceptor;
 
-public:
-	Server();
-	void addClient(Client *client);
-	void newAction(Action action);
-	void newClient();
-    void tryMoveForward(int id);
-    void tryMoveBackward(int id);
-    void tryMoveLeft(int id);
-    void tryMoveRight(int id);
-    void tryShoot(int id);
-	~Server();
+	public:
+		
+		Server();
+		//Crea un hilo aceptador
+		//para recibir conexiones de
+		//multiples clientes
+		void start();
+
+		//Devuelve true en caso de un bind and
+		//listen exitoso del socket, 
+		//false en caso contrario
+		//bool ready_to_receive();
+
+		~Server();
 };
 
 #endif

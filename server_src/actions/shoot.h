@@ -6,8 +6,8 @@
 class Shoot : public Action {
 
     public:
-        Shoot(int clientID);
-        void tryAction(Server &server) override;
+        Shoot();
+        void tryAction(Server &server, int clientID) override;
         ~Shoot();
 };
 

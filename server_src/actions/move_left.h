@@ -6,8 +6,8 @@
 class MoveLeft : public Action {
 
     public:
-        MoveLeft(int clientID);
-        void tryAction(Server &server) override;
+        MoveLeft();
+        void tryAction(Server &server, int clientID) override;
         ~MoveLeft();
 };
 
