@@ -1,20 +1,20 @@
 #ifndef __MAP_H__
 #define __MAP_H__
 
-#include "MapData.h"
+#include <vector>
 
-// uso:
-//	MapData md("map-data.yml");
-//	Map map(md);
-
-class Map{
+class Map {
 private:
-	std::vector<GridRow> grid;
+	std::vector<std::vector<int>> grid; // Usar arrays
+	int width;
+	int height;
 public:
-	Map(MapData m) : grid(m.grid){ }
-	int getValue(int x_position,int y_position){
-		return grid[x_position][y_position];
-	}
+	Map(const char *file_location);
+	~Map();
+	int getGridValue(int x, int y);
+	int isWall(int x, int y);
+	int getWidth();
+	int getHeight();
 };
 
 #endif
