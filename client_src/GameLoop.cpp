@@ -23,6 +23,7 @@ void GameLoop::run() {
 
   SDL_Event user_event;
   while (true) {
+    auto start_t = std::chrono::steady_clock::now();
     SDL_PollEvent(&(user_event));
     if (user_event.type == SDL_QUIT) break;
 
@@ -48,6 +49,8 @@ void GameLoop::run() {
     this->render_events_queue.push(CONTINUE);
     // encolar los eventos para enviarlos al servidor
 
-    usleep(1000000/24);
+    auto t = std::chrono::steady_clock::now() - start_t;
+    auto sleep_t = std::chrono::duration_cast<std::chrono::microseconds>(t);
+    usleep((1000000/29) - sleep_t.count());
   }
 }
