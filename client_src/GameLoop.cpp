@@ -3,13 +3,20 @@
 #include <SDL2/SDL.h>
 
 #include "GameLoop.h"
+#include "GameStatusMonitor.h"
+#include "Renderer.h"
 
 static const int SCREEN_WIDTH = 640;
 static const int SCREEN_HEIGHT = 480;
 
-GameLoop::GameLoop() 
-: renderer("TEST", SCREEN_WIDTH, SCREEN_HEIGHT, render_events_queue) { 
-  // TODO: Agregar ServerEventsReceiver a la MIL
+static const int FPS_CAP = 29;
+
+GameLoop::GameLoop() {
+  if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    throw std::runtime_error("Failed to initialize SDL");
+    // throw SDLInitializationError(SDL_GetError());
+  if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
+    std::cout << "Warning: Could not set render scale quality" << std::endl;
 }
 
 GameLoop::~GameLoop() {
@@ -17,9 +24,15 @@ GameLoop::~GameLoop() {
 }
 
 void GameLoop::run() {
-  // this->serverEventsReceiver.start();
-  this->render_events_queue.push(START);
-  this->renderer.start();
+  GameStatusMonitor game_status_monitor();
+  ServerListener server_listener(game_status_monitor);
+  Renderer renderer("TEST", SCREEN_WIDTH, SCREEN_HEIGHT, game_status_monitor);
+  /* TODO: Pasar al renderer una Configuración leída de un YAML que contenga los
+     paths de las texturas, animaciones, etc. (actualmente hardoceados)
+                              - Pablo (20/12/2020)                            */
+
+  server_listener.start();
+  renderer.start();
 
   SDL_Event user_event;
   while (true) {
@@ -46,11 +59,10 @@ void GameLoop::run() {
       std::cout << "Move right" << std::endl;
     }
 
-    this->render_events_queue.push(CONTINUE);
     // encolar los eventos para enviarlos al servidor
 
     auto t = std::chrono::steady_clock::now() - start_t;
     auto sleep_t = std::chrono::duration_cast<std::chrono::microseconds>(t);
-    usleep((1000000/29) - sleep_t.count());
+    usleep((1000000/FPS_CAP) - sleep_t.count());
   }
 }

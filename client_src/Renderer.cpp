@@ -5,10 +5,10 @@
 #include "Texture.h"
 #include "Animation.h"
 
-Renderer::Renderer(const char* title,
-                   int width, int height,
-                   EventQueue& event_queue) 
-: renderer(NULL), window(title, width, height), event_queue(event_queue) {
+Renderer::Renderer(const char* title, int width, int height,
+                   GameStatusMonitor& game_status_monitor) 
+: renderer(NULL), window(title, width, height), 
+  game_status_monitor(game_status_monitor) {
   /* No me vuelve loco la idea de tener que estar haciendo pasamano de los
     atributos de Window. Capaz sería mejor inicializar la ventana desde
     afuera en el GameLoop y pasarla por movimiento para que el Renderer
@@ -33,7 +33,7 @@ void Renderer::run() {
   Animation animation(this->renderer, "foo.png", 64, 205, 4); // Placeholder
 
   while (true) {
-    int event = this->event_queue.pop();
+    // TODO: Acceder al GameStatus en el monitor
 
     if (event == QUIT) {
       break;

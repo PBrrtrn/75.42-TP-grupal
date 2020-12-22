@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 
 #include "Thread.h"
-#include "EventQueue.h"
+#include "GameStatusMonitor.h"
 #include "Window.h"
 
 enum Event { START, QUIT, CONTINUE };
@@ -13,9 +13,10 @@ class Renderer : public Thread {
 private:
   SDL_Renderer* renderer;
   Window window;
-  EventQueue& event_queue;
+  GameStatusMonitor& game_status_monitor;
 public:
-  Renderer(const char *title, int width, int height, EventQueue& event_queue);
+  Renderer(const char *title, int width, int height, 
+           GameStatusMonitor& status_monitor);
   ~Renderer();
   void run();
 };
