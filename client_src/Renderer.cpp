@@ -50,18 +50,6 @@ void Renderer::run() {
   // Tomar las acciones que sean necesarias para cerrar el programa.
 }
 
-void Renderer::load() {
-  /* TODO: Por el momento solo se carga una animación al vector para poder
-  testear. Acá habría que cargar todas las animaciones, texturas, etc.
-  recibiendo sus paths y dimensiones desde una clase Config que las cargue
-  desde el YML. Si, estoy programando en Navidad.
-                                      - Pablo (25/12/2020)              */
-  this->map = this->game_status_monitor.getMap();
-
-  Animation* animation = new Animation(this->renderer, "foo.png", 64, 205, 4);
-  this->animations.push_back(animation);
-}
-
 void Renderer::render(GameStatusUpdate& status_update) {
   SDL_RenderClear(this->renderer);
 
@@ -72,6 +60,18 @@ void Renderer::render(GameStatusUpdate& status_update) {
   // Hacer el resto del rendering
 
   SDL_RenderPresent(this->renderer);
+}
+
+void Renderer::load() {
+  /* TODO: Por el momento solo se carga una animación al vector para poder
+  testear. Acá habría que cargar todas las animaciones, texturas, etc.
+  recibiendo sus paths y dimensiones desde una clase Config que las cargue
+  desde el YML. Si, estoy programando en Navidad.
+                                      - Pablo (25/12/2020)              */
+  this->map = this->game_status_monitor.getMap();
+
+  Animation* animation = new Animation(this->renderer, "foo.png", 64, 205, 4);
+  this->animations.push_back(animation);
 }
 
 RendererConstructorError::RendererConstructorError

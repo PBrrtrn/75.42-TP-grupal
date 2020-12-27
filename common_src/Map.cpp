@@ -30,13 +30,22 @@ Map::Map(const char* file_location) {
 	while (file.hasLine()) {
 		stream << file.getLine();
 
+		/* Actualmente se guarda una fila de más en el vector si la última línea 
+		  está vacía en el YML. Puede ser que necesitemos debuggear eso, pero no
+		  interfiere con el correcto funcionamiento del mapa, además de que es
+		  posible que cuando hagamos el parseo del YML con una biblioteca externa
+		  ya venga resuelto el problema por nosotros y no sea necesario.
+		  																- Pablo (27/12/2020)								 */
+
 		std::vector<int> row;
 		for (int i = 0; i < this->width; i++) {
 			int value;
 			stream >> value;
 			row.push_back(value);
 		}
+
 		this->grid.push_back(row);
+		stream.clear();
 	}
 }
 
