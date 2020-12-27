@@ -1,19 +1,25 @@
 #ifndef __RENDERER_H__
 #define __RENDERER_H__
 
+#include <vector>
 #include <SDL2/SDL.h>
 
 #include "Thread.h"
 #include "GameStatusMonitor.h"
+#include "GameStatus.h"
 #include "Window.h"
-
-enum Event { START, QUIT, CONTINUE };
+#include "Animation.h"
+#include "../common_src/Map.h"
 
 class Renderer : public Thread {
 private:
   SDL_Renderer* renderer;
   Window window;
   GameStatusMonitor& game_status_monitor;
+  Map map;
+  std::vector<Animation*> animations;
+  void load();
+  void render(GameStatusUpdate& status_update);
 public:
   Renderer(const char *title, int width, int height, 
            GameStatusMonitor& status_monitor);

@@ -9,8 +9,7 @@ struct GameStatusUpdate {
 	int player_health;
 	int player_weapon;
 	int player_ammo;
-	GameStatusUpdate();
-	~GameStatusUpdate();
+	bool running;
 };
 
 struct PlayerStatus {
@@ -18,19 +17,21 @@ struct PlayerStatus {
 	int health;
 	int current_weapon;
 	int current_weapon_ammo;
-	PlayerStatus();
-	~PlayerStatus();
 };
 
 class GameStatus {
 private:
 	Map map;
 	PlayerStatus player_status;
+	bool running;
 public:
 	GameStatus();
 	~GameStatus();
 	void initialize(Map& new_map, GameStatusUpdate& initial_state);
 	void update(GameStatusUpdate& status_update);
+	Map& getMap();
+	GameStatusUpdate getUpdate();
+	bool isRunning();
 };
 
 #endif

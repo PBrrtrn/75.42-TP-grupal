@@ -3,6 +3,8 @@
 #include <SDL2/SDL.h>
 
 #include "GameLoop.h"
+#include "ServerListener.h"
+#include "GameStatus.h"
 #include "GameStatusMonitor.h"
 #include "Renderer.h"
 
@@ -24,7 +26,7 @@ GameLoop::~GameLoop() {
 }
 
 void GameLoop::run() {
-  GameStatusMonitor game_status_monitor();
+  GameStatusMonitor game_status_monitor;
   ServerListener server_listener(game_status_monitor);
   Renderer renderer("TEST", SCREEN_WIDTH, SCREEN_HEIGHT, game_status_monitor);
   /* TODO: Pasar al renderer una Configuración leída de un YAML que contenga los
@@ -38,7 +40,7 @@ void GameLoop::run() {
   while (true) {
     auto start_t = std::chrono::steady_clock::now();
     SDL_PollEvent(&(user_event));
-    if (user_event.type == SDL_QUIT) break;
+    if (user_event.type == SDL_QUIT) throw 1;
 
     switch (user_event.type) {
       case (SDL_KEYDOWN) : 

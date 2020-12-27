@@ -1,45 +1,43 @@
+#include <iostream>
 #include <sstream>
 #include <fstream>
 
 #include "Map.h"
+#include "File.h"
+
+Map::Map() { }
+/* TODO: No me gusta tener que inicializar el mapa vacío y después
+	volver a construirlo con file_location. Revisar eso para solo hacer
+	la construción del mapa una vez (posiblemente con el objeto 
+	configuración que contenga la especificación del YAML)
+												- Pablo (25/12/2020)													*/
 
 Map::Map(const char* file_location) {
-	this->width = 0;
-	this->height = 0;
+	File file(file_location);
 
-	std::ifstream input_file;
-	input_file.open(file_location);
-	int i = 0;
-	while (!input_file.eof()){
-		std::string current_line;
-		std::getline(input_file,current_line);
-		std::stringstream s;
-		std::string piece;
-		s << current_line;
+	std::stringstream stream;
 
-		if (this->width == 0 || this->height == 0){
-			while (s >> piece){
-				if (piece == "width:"){
-					s >> this->width;
-				}
-				if (piece == "height:"){
-					s >> this->height;
-				}					
-			}
-		} else {
-			std::vector<int> row;
-			
-			for (int j = 0;j < this->width;j++){
-				int value;
-				s >> value;
-				row.push_back(value);
-			}
-			this->grid.push_back(row);
-			i++;
+	std::string line = file.getLine();
+	stream << line.substr(7);
+	stream >> this->width;
+	stream.clear();
+
+	line = file.getLine();
+	stream << line.substr(8);
+	stream >> this->height;
+	stream.clear();
+
+	while (file.hasLine()) {
+		stream << file.getLine();
+
+		std::vector<int> row;
+		for (int i = 0; i < this->width; i++) {
+			int value;
+			stream >> value;
+			row.push_back(value);
 		}
+		this->grid.push_back(row);
 	}
-
-	input_file.close();
 }
 
 Map::~Map() { }

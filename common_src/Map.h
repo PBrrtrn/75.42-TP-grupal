@@ -9,6 +9,7 @@ private:
 	int width;
 	int height;
 public:
+	Map();
 	Map(const char *file_location);
 	~Map();
 	int getGridValue(int x, int y);

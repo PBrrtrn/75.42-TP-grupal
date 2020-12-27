@@ -6,7 +6,8 @@ private:
 	float x;
 	float y;
 public:
-	Vector(float x, float y);
+	Vector();
+  Vector(float x, float y);
 	Vector(float angle);
   ~Vector();
   float norm();

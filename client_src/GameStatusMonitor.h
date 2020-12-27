@@ -13,13 +13,13 @@ private:
 	std::mutex mutex;
 	std::condition_variable cv;
 	std::atomic<bool> synchronized;
-	void apply(GameStatusUpdate& update);
 public:
 	GameStatusMonitor();
 	~GameStatusMonitor();
-	initializeGameStatus(Map& map, GameStatusUpdate& update);
+	void initializeGameStatus(Map& map, GameStatusUpdate& update);
 	void updateGameStatus(GameStatusUpdate& update);
-	GameStatus& getCurrentGameStatus();
+	GameStatusUpdate getUpdate();
+	Map& getMap();
 };
 
 #endif

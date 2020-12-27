@@ -2,6 +2,8 @@
 
 #include "Vector.h"
 
+Vector::Vector() { }
+
 Vector::Vector(float x, float y) : x(x), y(y) { }
 
 Vector::Vector(float angle) {
