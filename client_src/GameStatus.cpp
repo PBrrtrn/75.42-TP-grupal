@@ -13,7 +13,8 @@ void GameStatus::update(GameStatusUpdate& status_update) {
 	PlayerStatus new_player_status { status_update.player_position,
 																	 status_update.player_health,
 																	 status_update.player_weapon,
-																	 status_update.player_ammo };
+																	 status_update.player_ammo,
+																	 status_update.player_angle };
 	this->player_status = new_player_status;
 	this->running = status_update.running;
 }
@@ -27,6 +28,7 @@ GameStatusUpdate GameStatus::getUpdate() {
 														this->player_status.health,
 														this->player_status.current_weapon,
 														this->player_status.current_weapon_ammo,
+														this->player_status.angle,
 														this->running };
 
 	return update;

@@ -9,6 +9,7 @@ struct GameStatusUpdate {
 	int player_health;
 	int player_weapon;
 	int player_ammo;
+	float player_angle;
 	bool running;
 };
 
@@ -17,6 +18,7 @@ struct PlayerStatus {
 	int health;
 	int current_weapon;
 	int current_weapon_ammo;
+	float angle;
 };
 
 class GameStatus {
