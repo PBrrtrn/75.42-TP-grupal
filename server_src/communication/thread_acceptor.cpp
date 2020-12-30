@@ -2,6 +2,7 @@
 
 ThreadAcceptor:: ThreadAcceptor(/*const Socket& s, */) {
     //this->socket = s;
+    this->clients_counter = 0;
 }
 
 void ThreadAcceptor:: run() {
@@ -16,49 +17,38 @@ void ThreadAcceptor:: run() {
         //TODO VER CÓMO CREAR HILO PARTIDA Y UN GAME STATUS POR CADA UNO
         this->newClient();
         //this->garbage_collector();
+        if (this->clients_counter == 2) keep_running = false; //HARDCODED
     }
 }
 
-void ThreadAcceptor:: newMessage(std::string message) {
-    Action& action = message_parser.parse(message); //por ahora cout msg
+void ThreadAcceptor:: newMessage(std::string message, int clientID) {
+    this->_parse_message(message, clientID); //por ahora cout msg
     //if action == new game
     //new th_game(id client)
     //else gameclient(action)
 }
 
+void ThreadAcceptor:: _parse_message(std::string message, int clientID) {
+    if (message == "w") {
+        this->clientsGames.at(clientID).tryMoveForward(clientID);
+    } else if (message == "a") {
+        this->clientsGames.at(clientID).tryMoveLeft(clientID);
+    } else if (message == "d") {
+        this->clientsGames.at(clientID).tryMoveRight(clientID);
+    } else if (message == "s") {
+        this->clientsGames.at(clientID).tryMoveBackward(clientID);
+    }
+}
+
 void ThreadAcceptor::newClient(){
-    this->clientsThreads.push_back(new ThreadClient(*this));
-    this->clientsThreads.back()->start();
+    this->clientsThreads.insert({this->clients_counter, new ThreadClient(*this, this->clients_counter)});
+    this->clientsThreads.at(this->clients_counter)->start();
+    this->clients_counter++;
 }
 
-/*
-void ThreadAcceptor:: garbage_collector() {
-    std::list<ThreadClient*>::iterator it;
-    it = this->clients.begin();
-    while (it != this->clients.end()) {
-        if ((*it)->is_dead()) {
-            (*it)->stop();
-            delete (*it);
-            it = this->clients.erase(it);
-        } else {
-            ++it;
-        }
+ThreadAcceptor:: ~ThreadAcceptor() {
+    for (auto& x: clientsThreads) {
+        x.second->join();
+        delete x.second;
     }
 }
-*/
-
-/*
-void ThreadAcceptor:: stop() {
-    this->keep_running = false;
-    //shutdown(this->socket.get_fd(), SHUT_RDWR);
-    //close(this->socket.get_fd());
-    std::list<ThreadClient*>::iterator it;
-    for (it = this->clients.begin(); 
-    it != this->clients.end(); ++it) {
-        (*it)->join(); //TODO hacer stop
-        delete (*it);
-    }
-}
-*/
-
-ThreadAcceptor:: ~ThreadAcceptor(){}

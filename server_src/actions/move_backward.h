@@ -2,12 +2,11 @@
 #define MOVE_BACKWARD_H
 #include "action.h"
 
-
 class MoveBackward : public Action {
 
     public:
         MoveBackward();
-        void tryAction(Server &server, int clientID) override;
+        void tryAction(GameStatus& gs, int clientID, Map& map) override;
         ~MoveBackward();
 };
 

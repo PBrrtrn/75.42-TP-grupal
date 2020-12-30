@@ -1,8 +1,9 @@
 #include "thread_client.h"
 #include "server.h"
 
-ThreadClient::ThreadClient(ThreadAcceptor& acceptor) : acceptor(acceptor) {
+ThreadClient::ThreadClient(ThreadAcceptor& acceptor, int id) : acceptor(acceptor) {
     //this->peer = peer;
+    this->id = id;
 }
 
 void ThreadClient::run() {

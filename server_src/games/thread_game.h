@@ -9,8 +9,8 @@
 
 #include "thread_client.h"
 #include "../common_src/socket.h"
-
-#include "../games/game_status.h"
+#include "../communication/thread_client.h"
+#include "game_status.h"
 
 #include "action.h"
 #include "move_right.h"
@@ -19,24 +19,18 @@
 #include "move_forward.h"
 
 class ThreadGame: public Thread {
-    GameStatus gs;
-    int clientCounter;
-    std::vector<Client*> clients;
+    GameStatus gameStatus;
+    std::vector<ThreadClient&> clients;
     Map map;
-
     MoveForward move_forward;
 	MoveLeft move_left;
 	MoveRight move_right;
 	MoveBackward move_backward;
-    void _rotate_and_move(const int rotation_angle, int id);
-	bool _is_colision(int id, Vector& next_position);
-	void _parse_message(std::string message);
 
     public:
     ThreadGame();
     virtual void run() override;
-    void addClient(Client *client);
-    void newAction(std::string message);
+    void addClient(ThreadClient& client);
     void tryMoveForward(int id);
     void tryMoveBackward(int id);
     void tryMoveLeft(int id);

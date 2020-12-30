@@ -2,12 +2,11 @@
 #define MOVE_FORWARD_H
 #include "action.h"
 
-
 class MoveForward : public Action {
 
     public:
         MoveForward();
-        void tryAction(Server &server, int clientID) override;
+        void tryAction(GameStatus& gs, int clientID, Map& map) override;
         ~MoveForward();
 };
 

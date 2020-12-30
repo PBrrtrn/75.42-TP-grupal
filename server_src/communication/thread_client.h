@@ -19,9 +19,10 @@ class ThreadClient : public Thread {
     std::atomic<bool> dead{false};
 
     ThreadAcceptor& acceptor;
+    int id;
 
 public:
-    ThreadClient(ThreadAcceptor& acceptor);
+    ThreadClient(ThreadAcceptor& acceptor, int id);
     virtual void run() override;
     void stop();
     bool is_dead();

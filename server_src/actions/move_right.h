@@ -7,7 +7,7 @@ class MoveRight : public Action {
 
     public:
         MoveRight();
-        void tryAction(Server &server, int clientID) override;
+        void tryAction(GameStatus& gs, int clientID, Map& map) override;
         ~MoveRight();
 };
 

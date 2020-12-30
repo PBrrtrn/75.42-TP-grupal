@@ -9,7 +9,7 @@
 
 #include "../comunication/thread_acceptor.h"
 
-class Server{
+class Server {
 	//const char* server_port;
 	//Socket socket;
 	ThreadAcceptor* acceptor;
@@ -28,6 +28,8 @@ class Server{
 		//false en caso contrario
 		//bool ready_to_receive();
 
+		//Cierra el hilo aceptador
+		//y lo elimina
 		~Server();
 };
 

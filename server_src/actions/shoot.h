@@ -2,12 +2,11 @@
 #define SHOOT_H
 #include "action.h"
 
-
 class Shoot : public Action {
 
     public:
         Shoot();
-        void tryAction(Server &server, int clientID) override;
+        void tryAction(GameStatus& gs, int clientID, Map& map) override;
         ~Shoot();
 };
 
