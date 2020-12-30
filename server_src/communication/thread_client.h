@@ -23,9 +23,14 @@ class ThreadClient : public Thread {
 
 public:
     ThreadClient(ThreadAcceptor& acceptor, int id);
+    
+    /**
+     * @brief Entrega al hilo aceptador
+     * el mensaje enviado por el cliente.
+     */
     virtual void run() override;
-    void stop();
-    bool is_dead();
+    //void stop();
+    //bool is_dead();
     virtual ~ThreadClient() override;
 };
 

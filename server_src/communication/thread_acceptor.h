@@ -29,11 +29,13 @@ class ThreadAcceptor: public Thread {
     ThreadAcceptor(/*const Socket& socket, */);
 
     virtual void run() override;
-
-    //Inicia un nuevo hilo cliente y guarda el mismo en
-    //el mapa de hilos cliente, usando como clave
-    //el numero que indica el contador de clientes
-    //al momento de ser agregado.
+    /**
+     * @brief Inicia un nuevo hilo cliente y guarda el mismo en
+     * el mapa de hilos cliente, usando como clave
+     * el numero que indica el contador de clientes
+     * al momento de ser agregado.
+     *
+    */
     void newClient();
 
     void newMessage(std::string message, int clientID);

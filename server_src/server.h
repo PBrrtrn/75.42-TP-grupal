@@ -17,19 +17,24 @@ class Server {
 	public:
 		
 		Server();
-		
-		//Crea un hilo aceptador
-		//para recibir conexiones de
-		//multiples clientes
+		/**
+		 * @brief Crea un hilo aceptador
+		 * para recibir conexiones de
+		 * multiples clientes
+		 */
 		void start();
 
-		//Devuelve true en caso de un bind and
-		//listen exitoso del socket, 
-		//false en caso contrario
+		/**
+		 * @brief Devuelve true en caso de un bind and
+		 * listen exitoso del socket, 
+		 * false en caso contrario
+		*/
 		//bool ready_to_receive();
 
-		//Cierra el hilo aceptador
-		//y lo elimina
+		/**
+		 * @brief Cierra el hilo aceptador 
+		 * y lo elimina
+		 */
 		~Server();
 };
 

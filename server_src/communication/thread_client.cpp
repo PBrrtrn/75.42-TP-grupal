@@ -34,6 +34,7 @@ void ThreadClient::run() {
     //dead = true; 
 }
 
+/*
 void ThreadClient:: stop() {
     keep_running = false;
     delete this->peer;
@@ -42,6 +43,7 @@ void ThreadClient:: stop() {
 bool ThreadClient:: is_dead() {
     return this->dead;
 }
+*/
 
 ThreadClient:: ~ThreadClient(){
     this->join();
