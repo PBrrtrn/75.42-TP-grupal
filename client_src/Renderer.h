@@ -9,14 +9,16 @@
 #include "GameStatus.h"
 #include "Window.h"
 #include "Animation.h"
+#include "MapDrawer.h"
 #include "../common_src/Map.h"
 
 class Renderer : public Thread {
 private:
   SDL_Renderer* renderer;
   Window window;
-  GameStatusMonitor& game_status_monitor;
+  MapDrawer map_drawer;
   Map map;
+  GameStatusMonitor& game_status_monitor;
   std::vector<Animation*> animations;
   void load();
   void render(GameStatusUpdate& status_update);

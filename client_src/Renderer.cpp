@@ -9,12 +9,10 @@ static const int FPS_CAP = 29;
 
 Renderer::Renderer(const char* title, const int width, const int height,
                    GameStatusMonitor& game_status_monitor) 
-: renderer(NULL), window(title, width, height), 
+: renderer(NULL), window(title, width, height), map_drawer(width, height, 90),
   game_status_monitor(game_status_monitor) {
-  /* No me vuelve loco la idea de tener que estar haciendo pasamano de los
-    atributos de Window. Capaz sería mejor inicializar la ventana desde
-    afuera en el GameLoop y pasarla por movimiento para que el Renderer
-    tenga ownership sin necesitar saber crearla. 
+  /* Update: El titulo y la resolución, así como el FOV, eventualmente van a
+    llegar por YML así que no estaría mal pasarle los parámetros al Renderer 
                                             - Pablo (06/12/2020)        */
   this->renderer = this->window.getRenderer();
   if (this->renderer == NULL) throw RendererConstructorError(SDL_GetError());
@@ -40,6 +38,7 @@ void Renderer::run() {
 
     GameStatusUpdate status_update = this->game_status_monitor.getUpdate();
     if (!status_update.running) break;
+
     this->render(status_update);
 
     auto t = std::chrono::steady_clock::now() - start_t;
@@ -47,11 +46,15 @@ void Renderer::run() {
     usleep((1000000/FPS_CAP) - sleep_t.count());
   }
 
-  // Tomar las acciones que sean necesarias para cerrar el programa.
+  // Cerrar el programa de forma ordenada
 }
 
-void Renderer::render(GameStatusUpdate& status_update) {
+void Renderer::render(GameStatusUpdate& status) {
   SDL_RenderClear(this->renderer);
+
+  std::vector<int> z_buffer = this->map_drawer.draw(this->renderer, this->map,
+                                                    status.player_position,
+                                                    status.player_angle);
 
   for (Animation* animation : this->animations) {
     animation->renderNextFrame(this->renderer, 1, 0, 0);
@@ -69,6 +72,10 @@ void Renderer::load() {
   desde el YML. Si, estoy programando en Navidad.
                                       - Pablo (25/12/2020)              */
   this->map = this->game_status_monitor.getMap();
+  /* TODO: Ya que el mapa es inmutable, no tiene sentido que se lo copie y
+   que existan dos mapas iguales en memoria a la vez (el otro está en
+   GameStatus). Habría que ver si se puede realizar la carga en el constructor
+                                      - Pablo (3/12/2020)               */
 
   Animation* animation = new Animation(this->renderer, "foo.png", 64, 205, 4);
   this->animations.push_back(animation);
