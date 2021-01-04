@@ -1,5 +1,5 @@
-#ifndef THREAD_SEND_H
-#define THREAD_SEND_H
+#ifndef THREAD_ACCEPTOR_H
+#define THREAD_ACCEPTOR_H
 
 #include <stdio.h>
 #include <string.h>
@@ -7,12 +7,14 @@
 #include <atomic>
 #include <iostream>
 #include <unordered_map>
-#include "thread.h"
+#include "../../common_src/thread.h"
 #include "thread_client.h"
 #include "../games/thread_game.h"
+#include "../../common_src/blocking_queue.h"
 
 class ThreadAcceptor: public Thread {
     //Socket socket;
+    BlockingQueue<std::string>& messages;
 
     /** 
      * @brief Numero siempre creciente
@@ -49,7 +51,7 @@ class ThreadAcceptor: public Thread {
 
     public:
 
-    ThreadAcceptor(/*const Socket& socket, */);
+    ThreadAcceptor(/*const Socket& socket, */BlockingQueue<std::string>& messages);
 
     virtual void run() override;
 

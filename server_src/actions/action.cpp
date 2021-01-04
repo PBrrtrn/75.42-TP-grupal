@@ -10,7 +10,7 @@ bool Action:: is_colision(int clientID, Vector& next_position, Map& map, GameSta
         std::cout << "Wall detected - invalid move" << '\n';
         //TODO como imprimir mensaje en pantalla
         return true;
-    } else if (/*agregar !isObject y funcion en map*/) {
+    } else if (/*agregar !isObject y funcion en map*/!3) {
         std::cout << "Object detected - invalid move" << '\n';
     } else {
         gs.setPosition(clientID, next_position);

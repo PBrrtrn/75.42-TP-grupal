@@ -2,7 +2,8 @@
 #include "vector.h"
 #include <iostream>
 
-Server::Server() {}
+//TODO sacar parametro, llega por socket
+Server::Server(BlockingQueue<std::string>& messages) : messages(messages) {}
 
 void Server:: start() {
     std::cout << "SERVER STARTED." << std::endl;
@@ -13,7 +14,7 @@ void Server:: start() {
         if (line == "q" || line == "quit") break;
     }
     */
-    this->acceptor = new ThreadAcceptor(/*this->socket*/);
+    this->acceptor = new ThreadAcceptor(/*this->socket*/messages);
     this->acceptor->start();
 }
 

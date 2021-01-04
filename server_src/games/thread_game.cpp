@@ -1,15 +1,13 @@
 #include "thread_game.h"
 
-ThreadGame:: ThreadGame() : clientCounter(0){}
+ThreadGame:: ThreadGame() {}
 
 void ThreadGame:: run() {}
 
-void ThreadGame::addClient(Client *client){
+void ThreadGame::addClient(ThreadClient& client, int id){
 	this->clients.push_back(client);
-	this->gameStatus.setPosition(this->clientCounter, 150, 150);
-	this->gameStatus.setAngle(this->clientCounter, 0);
-	client->startGame(this->gameStatus, clientCounter);
-	clientCounter++;
+	this->gameStatus.setPosition(id, 150, 150);
+	this->gameStatus.setAngle(id, 0);
 }
 
 void ThreadGame::tryMoveForward(int id) {

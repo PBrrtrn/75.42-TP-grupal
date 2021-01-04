@@ -1,7 +1,7 @@
 #ifndef MESSAGE_PARSER_H
 #define MESSAGE_PARSER_H
 
-#include "action.h"
+#include "../actions/action.h"
 #include <string>
 
 class MessageParser {

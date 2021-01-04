@@ -1,6 +1,7 @@
 #include "thread_acceptor.h"
 
-ThreadAcceptor:: ThreadAcceptor(/*const Socket& s, */) {
+ThreadAcceptor:: ThreadAcceptor(/*const Socket& s, */BlockingQueue<std::string>& messages) :
+messages(messages) {
     //this->socket = s;
     this->clients_counter = 0;
 }
@@ -41,7 +42,8 @@ void ThreadAcceptor:: _parse_message(std::string message, int clientID) {
 }
 
 void ThreadAcceptor::newClient(){
-    this->clientsThreads.insert({this->clients_counter, new ThreadClient(*this, this->clients_counter)});
+    this->clientsThreads.insert({this->clients_counter, 
+        new ThreadClient(*this, this->clients_counter, messages)});
     this->clientsThreads.at(this->clients_counter)->start();
     this->clients_counter++;
 }

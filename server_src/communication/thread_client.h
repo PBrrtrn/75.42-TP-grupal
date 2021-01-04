@@ -3,13 +3,12 @@
 
 //#include <mutex>
 #include <atomic>
-#include "thread.h"
-#include "../common_src/socket.h"
+#include "../../common_src/thread.h"
+#include "../../common_src/socket.h"
+#include "../../common_src/blocking_queue.h"
 #include "thread_acceptor.h"
 
 #define BUF_SIZE 64
-
-class Server;
 
 class ThreadClient : public Thread {
     Socket* peer;
@@ -19,10 +18,12 @@ class ThreadClient : public Thread {
     std::atomic<bool> dead{false};
 
     ThreadAcceptor& acceptor;
+    BlockingQueue<std::string>& messages;
     int id;
 
 public:
-    ThreadClient(ThreadAcceptor& acceptor, int id);
+
+    ThreadClient(ThreadAcceptor& acceptor, int id, BlockingQueue<std::string>& messages);
     
     /**
      * @brief Entrega al hilo aceptador
@@ -31,6 +32,7 @@ public:
     virtual void run() override;
     //void stop();
     //bool is_dead();
+    
     virtual ~ThreadClient() override;
 };
 

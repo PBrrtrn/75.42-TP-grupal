@@ -7,16 +7,18 @@
 #include <atomic>
 #include <iostream>
 
-#include "thread_client.h"
-#include "../common_src/socket.h"
-#include "../communication/thread_client.h"
+//#include "../communication/thread_client.h"
+#include "../../common_src/thread.h"
+#include "../../common_src/socket.h"
 #include "game_status.h"
 
-#include "action.h"
-#include "move_right.h"
-#include "move_left.h"
-#include "move_backward.h"
-#include "move_forward.h"
+#include "../actions/action.h"
+#include "../actions/move_right.h"
+#include "../actions/move_left.h"
+#include "../actions/move_backward.h"
+#include "../actions/move_forward.h"
+
+class ThreadClient;
 
 class ThreadGame: public Thread {
     GameStatus gameStatus;
@@ -30,7 +32,7 @@ class ThreadGame: public Thread {
     public:
     ThreadGame();
     virtual void run() override;
-    void addClient(ThreadClient& client);
+    void addClient(ThreadClient& client, int id);
     void tryMoveForward(int id);
     void tryMoveBackward(int id);
     void tryMoveLeft(int id);
