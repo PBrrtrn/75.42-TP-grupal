@@ -4,6 +4,7 @@ ThreadClient::ThreadClient(ThreadAcceptor& acceptor, int id,
 BlockingQueue<std::string>& messages) : 
 acceptor(acceptor), messages(messages) {
     //this->peer = peer;
+    
     this->id = id;
 }
 
