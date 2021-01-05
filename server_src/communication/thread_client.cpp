@@ -1,10 +1,10 @@
 #include "thread_client.h"
 
-//ThreadClient::ThreadClient(ThreadAcceptor& acceptor, int id, 
-ThreadClient::ThreadClient(int id, 
+ThreadClient::ThreadClient(ThreadAcceptor& acceptor, int id, 
+//ThreadClient::ThreadClient(int id, 
 BlockingQueue<std::string>& messages) : 
-//acceptor(acceptor), messages(messages) {
-messages(messages) {
+acceptor(acceptor), messages(messages) {
+//messages(messages) {
     //this->peer = peer;
     
     this->id = id;
@@ -28,7 +28,7 @@ void ThreadClient::run() {
             //TODO pasarle al acceptor a qué partida
             //quiere ir el cliente y los movimientos
             std::string message = this->messages.pop();
-            //acceptor.newMessage(message, this->id);
+            acceptor.newMessage(message, this->id);
 
         } catch (...) {
             if (!keep_running) break;

@@ -12,6 +12,8 @@
 #include "../games/thread_game.h"
 #include "../../common_src/blocking_queue.h"
 
+class ThreadGame;
+
 class ThreadAcceptor: public Thread {
     //Socket socket;
     BlockingQueue<std::string>& messages;
@@ -36,7 +38,8 @@ class ThreadAcceptor: public Thread {
      * el numero de cliente con su hilo partida
      * correspondiente
      */
-    std::unordered_map<int, ThreadGame&> clientsGames;
+    //std::unordered_map<int, ThreadGame&> clientsGames;
+    std::unordered_map<int, ThreadGame*> clientsGames;
 
     /**
      * @brief Base de datos que almacena

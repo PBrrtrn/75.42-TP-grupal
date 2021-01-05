@@ -31,13 +31,13 @@ void ThreadAcceptor:: newMessage(std::string message, int clientID) {
 
 void ThreadAcceptor:: _parse_message(std::string message, int clientID) {
     if (message == "w") {
-        this->clientsGames.at(clientID).tryMoveForward(clientID);
+        this->clientsGames.at(clientID)->tryMoveForward(clientID);
     } else if (message == "a") {
-        this->clientsGames.at(clientID).tryMoveLeft(clientID);
+        this->clientsGames.at(clientID)->tryMoveLeft(clientID);
     } else if (message == "d") {
-        this->clientsGames.at(clientID).tryMoveRight(clientID);
+        this->clientsGames.at(clientID)->tryMoveRight(clientID);
     } else if (message == "s") {
-        this->clientsGames.at(clientID).tryMoveBackward(clientID);
+        this->clientsGames.at(clientID)->tryMoveBackward(clientID);
     }
 }
 
