@@ -4,7 +4,7 @@ ThreadGame:: ThreadGame() {}
 
 void ThreadGame:: run() {}
 
-void ThreadGame::addClient(ThreadClient& client, int id){
+void ThreadGame::addClient(ThreadClient* client, int id){
 	this->clients.push_back(client);
 	this->gameStatus.setPosition(id, 150, 150);
 	this->gameStatus.setAngle(id, 0);

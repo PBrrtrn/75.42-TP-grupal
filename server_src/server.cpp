@@ -1,11 +1,11 @@
 #include "server.h"
-#include "vector.h"
+//#include "vector.h"
 #include <iostream>
 
 //TODO sacar parametro, llega por socket
 Server::Server(BlockingQueue<std::string>& messages) : messages(messages) {}
 
-void Server:: start() {
+void Server::start() {
     std::cout << "SERVER STARTED." << std::endl;
     //TODO mensajes inicio juego
     /*

@@ -29,7 +29,7 @@ class ThreadAcceptor: public Thread {
      * @brief Base de datos que asocia el numero 
      * de cliente con su hilo correspondiente
      */
-    std::unordered_map<int, ThreadClient*> clientsThreads;
+    //std::unordered_map<int, ThreadClient*> clientsThreads;
 
     /**
      * @brief Base de datos que asocia

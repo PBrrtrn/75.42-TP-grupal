@@ -42,15 +42,17 @@ void ThreadAcceptor:: _parse_message(std::string message, int clientID) {
 }
 
 void ThreadAcceptor::newClient(){
-    this->clientsThreads.insert({this->clients_counter, 
-        new ThreadClient(*this, this->clients_counter, messages)});
-    this->clientsThreads.at(this->clients_counter)->start();
-    this->clients_counter++;
+    //this->clientsThreads.insert({this->clients_counter, 
+	//	new ThreadClient(this->clients_counter, messages)});
+		//new ThreadClient(this->clients_counter, messages)});
+        //new ThreadClient(*this, this->clients_counter, messages)});
+    //this->clientsThreads.at(this->clients_counter)->start();
+    //this->clients_counter++;
 }
 
 ThreadAcceptor:: ~ThreadAcceptor() {
-    for (auto& x: clientsThreads) {
-        x.second->join();
-        delete x.second;
-    }
+    //for (auto& x: clientsThreads) {
+    //    x.second->join();
+    //    delete x.second;
+    //}
 }

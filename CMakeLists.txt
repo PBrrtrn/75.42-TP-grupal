@@ -24,6 +24,7 @@ add_executable (tp
   server_src/games/game_status.cpp
   server_src/games/thread_game.cpp
   server_src/games/vector.cpp
+  server_src/client.cpp
   server_src/server_main.cpp
   server_src/server.cpp
 )
