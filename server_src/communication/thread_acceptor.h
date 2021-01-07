@@ -8,15 +8,20 @@
 #include <iostream>
 #include <unordered_map>
 #include "../../common_src/thread.h"
-#include "thread_client.h"
-#include "../games/thread_game.h"
+////#include "thread_client.h"
+////#include "../games/thread_game.h"
+#include "../games/game_manager.h"
 #include "../../common_src/blocking_queue.h"
 
-class ThreadGame;
+//class ThreadGame;
+//class ThreadClient;
+class GameManager;
 
 class ThreadAcceptor: public Thread {
     //Socket socket;
-    BlockingQueue<std::string>& messages;
+    //BlockingQueue<std::string>& messages;
+
+	GameManager gameManager;
 
     /** 
      * @brief Numero siempre creciente
@@ -39,22 +44,24 @@ class ThreadAcceptor: public Thread {
      * correspondiente
      */
     //std::unordered_map<int, ThreadGame&> clientsGames;
-    std::unordered_map<int, ThreadGame*> clientsGames;
+    //std::unordered_map<int, ThreadGame*> clientsGames;
 
     /**
      * @brief Base de datos que almacena
      * las partidas en juego
      */
-    int games_counter;
-    std::unordered_map<int, ThreadGame*> games;
+    //int games_counter;
+    //std::unordered_map<int, ThreadGame*> games;
 
     std::atomic<bool> keep_running{true};
 
-    void _parse_message(std::string message, int clientID);
+    //void _parse_message(std::string message, int clientID);
 
     public:
 
-    ThreadAcceptor(/*const Socket& socket, */BlockingQueue<std::string>& messages);
+    ThreadAcceptor(/*const Socket& socket, BlockingQueue<std::string>& messages*/);
+    
+    void acceptConnection();
 
     virtual void run() override;
 

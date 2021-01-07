@@ -3,7 +3,8 @@
 #include <iostream>
 
 //TODO sacar parametro, llega por socket
-Server::Server(BlockingQueue<std::string>& messages) : messages(messages) {}
+//Server::Server(BlockingQueue<std::string>& messages) : messages(messages) {}
+Server::Server() {}
 
 void Server::start() {
     std::cout << "SERVER STARTED." << std::endl;
@@ -14,8 +15,8 @@ void Server::start() {
         if (line == "q" || line == "quit") break;
     }
     */
-    this->acceptor = new ThreadAcceptor(/*this->socket*/messages);
-    this->acceptor->start();
+    //this->acceptor = new ThreadAcceptor(/*this->socket, messages*/);
+    this->acceptor.start();
 }
 
 /*
@@ -26,6 +27,6 @@ bool Server:: ready_to_receive() {
 
 Server::~Server(){
     //this->acceptor->stop();
-    this->acceptor->join();
-    delete this->acceptor;
+    this->acceptor.join();
+    //delete this->acceptor;
 }

@@ -3,14 +3,28 @@
 
 ////#include <vector>
 #include "../communication/thread_client.h"
+#include "thread_game.h"
 
 class GameManager{
 
 private:
+
+	BlockingQueue<std::string> messages;
+	std::unordered_map<int, ThreadClient*> clientsThreads;
+	std::unordered_map<int, ThreadGame*> games;
+	std::unordered_map<int, int> clientsInGames;
+	int games_counter;
+	int clients_counter;
+
 	//Game game; //aqui deberia haber un conjunto de Games, por ahora manejo uno.
-	ThreadClient* c;
+	//ThreadClient* c;
 
 public:
-	void addClient(ThreadClient& c);
+
+	GameManager();
+	~GameManager();
+	void acceptClient(std::string socket);
+	
+};
 
 #endif

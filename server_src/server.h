@@ -12,12 +12,13 @@
 class Server {
 	//const char* server_port;
 	//Socket socket;
-	ThreadAcceptor* acceptor;
-	BlockingQueue<std::string>& messages;
+	ThreadAcceptor acceptor;
+	//BlockingQueue<std::string>& messages;
 
 	public:
 		
-		Server(BlockingQueue<std::string>& messages);
+		//Server(BlockingQueue<std::string>& messages);
+		Server();
 		/**
 		 * @brief Crea un hilo aceptador
 		 * para recibir conexiones de
@@ -37,6 +38,7 @@ class Server {
 		 * y lo elimina
 		 */
 		~Server();
+		
 };
 
 #endif

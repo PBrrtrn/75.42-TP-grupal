@@ -1,12 +1,13 @@
 #include "thread_acceptor.h"
 
-ThreadAcceptor:: ThreadAcceptor(/*const Socket& s, */BlockingQueue<std::string>& messages) :
-messages(messages) {
+ThreadAcceptor:: ThreadAcceptor(/*const Socket& s, BlockingQueue<std::string>& messages*/)
+/*messages(messages)*/ {
     //this->socket = s;
-    this->clients_counter = 0;
+    //this->clients_counter = 0;
 }
 
 void ThreadAcceptor:: run() {
+	std::cout << "Acceptor receiving in socket. (mock!)" << std::endl;
     while (keep_running) {
         /*
         Socket* peer = new Socket();
@@ -16,20 +17,21 @@ void ThreadAcceptor:: run() {
         }
         */
         //TODO VER CÓMO CREAR HILO PARTIDA Y UN GAME STATUS POR CADA UNO
-        this->newClient();
+        //this->newClient();
+        this->acceptConnection();
         //this->garbage_collector();
-        if (this->clients_counter == 2) keep_running = false; //HARDCODED
+        //if (this->clients_counter == 2) keep_running = false; //HARDCODED
     }
 }
 
-void ThreadAcceptor:: newMessage(std::string message, int clientID) {
+/*void ThreadAcceptor:: newMessage(std::string message, int clientID) {
     this->_parse_message(message, clientID); //por ahora cout msg
     //if action == new game
     //new th_game(id client)
     //else gameclient(action)
-}
+}*/
 
-void ThreadAcceptor:: _parse_message(std::string message, int clientID) {
+/*void ThreadAcceptor:: _parse_message(std::string message, int clientID) {
     if (message == "w") {
         this->clientsGames.at(clientID)->tryMoveForward(clientID);
     } else if (message == "a") {
@@ -39,20 +41,17 @@ void ThreadAcceptor:: _parse_message(std::string message, int clientID) {
     } else if (message == "s") {
         this->clientsGames.at(clientID)->tryMoveBackward(clientID);
     }
-}
+}*/
 
-void ThreadAcceptor::newClient(){
+void ThreadAcceptor::acceptConnection(){
+	std::string socket; //solo como placeholder, esto traeria el Socket real
+	this->gameManager.acceptClient(socket);
     //this->clientsThreads.insert({this->clients_counter, 
-	//	new ThreadClient(this->clients_counter, messages)});
-		//new ThreadClient(this->clients_counter, messages)});
-        //new ThreadClient(*this, this->clients_counter, messages)});
+	//	new ThreadClient(this, this->clients_counter, messages)});
     //this->clientsThreads.at(this->clients_counter)->start();
     //this->clients_counter++;
 }
 
 ThreadAcceptor:: ~ThreadAcceptor() {
-    //for (auto& x: clientsThreads) {
-    //    x.second->join();
-    //    delete x.second;
-    //}
+
 }

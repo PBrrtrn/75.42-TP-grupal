@@ -6,11 +6,12 @@
 #include "../../common_src/thread.h"
 #include "../../common_src/socket.h"
 #include "../../common_src/blocking_queue.h"
-#include "thread_acceptor.h"
+////#include "thread_acceptor.h"
 
 #define BUF_SIZE 64
 
-class ThreadAcceptor;
+////class ThreadAcceptor;
+class GameManager;
 
 class ThreadClient : public Thread {
     Socket* peer;
@@ -19,13 +20,13 @@ class ThreadClient : public Thread {
     std::atomic<bool> keep_running{true};
     std::atomic<bool> dead{false};
 
-    ThreadAcceptor& acceptor;
+    GameManager* manager;
     BlockingQueue<std::string>& messages;
     int id;
 
 public:
 
-    ThreadClient(ThreadAcceptor& acceptor, int id, BlockingQueue<std::string>& messages);
+    ThreadClient(GameManager* manager, int id, BlockingQueue<std::string>& messages);
     //ThreadClient(int id, BlockingQueue<std::string>& messages);
     
     /**
