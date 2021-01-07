@@ -19,8 +19,9 @@ add_executable (tp
   server_src/actions/move_left.cpp
   server_src/actions/move_right.cpp
   server_src/actions/shoot.cpp
-  server_src/communication/thread_acceptor.cpp
+  server_src/games/game_manager.cpp
   server_src/communication/thread_client.cpp
+  server_src/communication/thread_acceptor.cpp
   server_src/games/game_status.cpp
   server_src/games/thread_game.cpp
   server_src/games/vector.cpp
