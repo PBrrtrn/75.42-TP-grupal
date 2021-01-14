@@ -19,7 +19,7 @@ class GameManager;
 
 class ThreadAcceptor: public Thread {
     //Socket socket;
-    //BlockingQueue<std::string>& messages;
+    BlockingQueue<std::string> messages;
 
 	GameManager gameManager;
 
@@ -58,6 +58,8 @@ class ThreadAcceptor: public Thread {
     //void _parse_message(std::string message, int clientID);
 
     public:
+
+	void checkNews();
 
     ThreadAcceptor(/*const Socket& socket, BlockingQueue<std::string>& messages*/);
     

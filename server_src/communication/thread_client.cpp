@@ -1,9 +1,9 @@
 #include "thread_client.h"
 
-ThreadClient::ThreadClient(GameManager* gm, int id, 
+ThreadClient::ThreadClient(int id, 
 BlockingQueue<std::string>& messages) : 
-manager(gm), messages(messages) {
-    
+ messages(messages) {
+    this->keep_running = true;
     this->id = id;
 }
 
@@ -24,7 +24,14 @@ void ThreadClient::run() {
             */
             //TODO pasarle al acceptor a qué partida
             //quiere ir el cliente y los movimientos
-            std::string message = this->messages.pop();
+            //std::string message = this->messages.pop();
+            
+            std::string stringId = std::to_string(id);
+            
+            this->messages.push("client " + stringId + " sent a message to the manager");
+            
+            //this->manager->pushMessage("client " + stringId + " sent a message to the manager");
+            
             //acceptor.newMessage(message, this->id);
 
         } catch (...) {
@@ -47,5 +54,5 @@ bool ThreadClient:: is_dead() {
 */
 
 ThreadClient:: ~ThreadClient(){
-    this->join();
+    //this->join();
 }
