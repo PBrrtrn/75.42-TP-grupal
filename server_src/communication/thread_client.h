@@ -6,7 +6,7 @@
 #include "../../common_src/thread.h"
 #include "../../common_src/socket.h"
 #include "../../common_src/blocking_queue.h"
-#include "../games/game_manager.h"
+////#include "../games/game_manager.h"
 ////#include "thread_acceptor.h"
 
 #define BUF_SIZE 64

@@ -7,7 +7,7 @@
 #include <atomic>
 #include <iostream>
 
-////#include "../communication/thread_client.h"
+#include "../communication/thread_client.h"
 #include "../../common_src/thread.h"
 #include "../../common_src/socket.h"
 #include "game_status.h"
@@ -18,7 +18,7 @@
 #include "../actions/move_backward.h"
 #include "../actions/move_forward.h"
 
-class ThreadClient;
+//class ThreadClient;
 
 class ThreadGame: public Thread {
     GameStatus gameStatus;
