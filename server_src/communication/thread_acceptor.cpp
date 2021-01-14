@@ -8,7 +8,7 @@ ThreadAcceptor:: ThreadAcceptor(/*const Socket& s, BlockingQueue<std::string>& m
 
 void ThreadAcceptor:: run() {
 	std::cout << "Acceptor receiving in socket. (mock!)" << std::endl;
-    while (keep_running) {
+    //while (keep_running) {
         /*
         Socket* peer = new Socket();
         if (peer->socket_accept(&this->socket) < 0) {
@@ -21,27 +21,8 @@ void ThreadAcceptor:: run() {
         this->acceptConnection();
         //this->garbage_collector();
         //if (this->clients_counter == 2) keep_running = false; //HARDCODED
-    }
+    //}
 }
-
-/*void ThreadAcceptor:: newMessage(std::string message, int clientID) {
-    this->_parse_message(message, clientID); //por ahora cout msg
-    //if action == new game
-    //new th_game(id client)
-    //else gameclient(action)
-}*/
-
-/*void ThreadAcceptor:: _parse_message(std::string message, int clientID) {
-    if (message == "w") {
-        this->clientsGames.at(clientID)->tryMoveForward(clientID);
-    } else if (message == "a") {
-        this->clientsGames.at(clientID)->tryMoveLeft(clientID);
-    } else if (message == "d") {
-        this->clientsGames.at(clientID)->tryMoveRight(clientID);
-    } else if (message == "s") {
-        this->clientsGames.at(clientID)->tryMoveBackward(clientID);
-    }
-}*/
 
 void ThreadAcceptor::acceptConnection(){
 	std::string socket; //solo como placeholder, esto traeria el Socket real

@@ -2,7 +2,7 @@
 
 ThreadGame:: ThreadGame() {}
 
-void ThreadGame:: run() {}
+//void ThreadGame:: run() {}
 
 void ThreadGame::addClient(ThreadClient* client, int id){
 	this->clients.push_back(client);

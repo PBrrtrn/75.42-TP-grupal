@@ -4,6 +4,7 @@
 ////#include <vector>
 #include "../communication/thread_client.h"
 #include "thread_game.h"
+#include <unordered_map>
 
 class GameManager{
 
@@ -16,14 +17,24 @@ private:
 	int games_counter;
 	int clients_counter;
 
-	//Game game; //aqui deberia haber un conjunto de Games, por ahora manejo uno.
+	void _parse_message(std::string message, int clientID);
+
+	ThreadGame game; //aqui deberia haber un conjunto de Games, por ahora manejo uno.
 	//ThreadClient* c;
 
 public:
 
 	GameManager();
-	~GameManager();
+
 	void acceptClient(std::string socket);
+
+	/**
+     * @brief Parsea el mensaje recibido y efectúa 
+     * la acción correspondiente.
+     */
+    void newMessage(std::string message, int clientID);
+
+	~GameManager();
 	
 };
 

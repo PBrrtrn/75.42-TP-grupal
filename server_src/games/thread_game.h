@@ -20,7 +20,7 @@
 
 class ThreadClient;
 
-class ThreadGame: public Thread {
+class ThreadGame /*: public Thread */ {
     GameStatus gameStatus;
     std::vector<ThreadClient*> clients;
     Map map;
@@ -31,14 +31,14 @@ class ThreadGame: public Thread {
 
     public:
     ThreadGame();
-    virtual void run() override;
+    //virtual void run() override;
     void addClient(ThreadClient* client, int id);
     void tryMoveForward(int id);
     void tryMoveBackward(int id);
     void tryMoveLeft(int id);
     void tryMoveRight(int id);
     void tryShoot(int id);
-    virtual ~ThreadGame() override;
+    /*virtual*/ ~ThreadGame() /*override*/;
 };
 
 #endif

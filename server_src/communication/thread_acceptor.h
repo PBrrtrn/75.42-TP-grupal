@@ -55,8 +55,6 @@ class ThreadAcceptor: public Thread {
 
     std::atomic<bool> keep_running{true};
 
-    //void _parse_message(std::string message, int clientID);
-
     public:
 
     ThreadAcceptor(/*const Socket& socket, BlockingQueue<std::string>& messages*/);
@@ -73,12 +71,6 @@ class ThreadAcceptor: public Thread {
      *
     */
     void newClient();
-
-    /**
-     * @brief Parsea el mensaje recibido y efectúa 
-     * la acción correspondiente.
-     */
-    void newMessage(std::string message, int clientID);
 
     //void stop();
     //void garbage_collector();
