@@ -1,9 +1,8 @@
 #include "thread_acceptor.h"
 
-ThreadAcceptor:: ThreadAcceptor(/*const Socket& s, BlockingQueue<std::string>& messages*/)
-/*messages(messages)*/ {
-    //this->socket = s;
-    //this->clients_counter = 0;
+ThreadAcceptor:: ThreadAcceptor() : message_processor(messages)
+{
+	this->message_processor.start();
 }
 
 void ThreadAcceptor:: run() {
@@ -21,7 +20,7 @@ void ThreadAcceptor:: run() {
         //this->newClient();
         this->acceptConnection();
         
-        this->checkNews();
+        //this->checkNews();
         
         //this->garbage_collector();
         //if (this->clients_counter == 2) keep_running = false; //HARDCODED
@@ -47,10 +46,10 @@ void ThreadAcceptor:: run() {
     }
 }*/
 
-void ThreadAcceptor::checkNews(){
-	std::cout << this->messages.pop() << std::endl;
+//void ThreadAcceptor::checkNews(){
+//	std::cout << this->messages.pop() << std::endl;
 
-}
+//}
 
 void ThreadAcceptor::acceptConnection(){
 	std::string socket; //solo como placeholder, esto traeria el Socket real

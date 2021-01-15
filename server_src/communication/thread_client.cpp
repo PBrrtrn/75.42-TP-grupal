@@ -1,5 +1,7 @@
 #include "thread_client.h"
 
+#include <unistd.h>
+
 ThreadClient::ThreadClient(int id, 
 BlockingQueue<std::string>& messages) : 
  messages(messages) {
@@ -28,7 +30,9 @@ void ThreadClient::run() {
             
             std::string stringId = std::to_string(id);
             
-            this->messages.push("client " + stringId + " sent a message to the manager");
+            usleep(3000);
+            
+            this->messages.push("client " + stringId + " sent a message to the message processor");
             
             //this->manager->pushMessage("client " + stringId + " sent a message to the manager");
             

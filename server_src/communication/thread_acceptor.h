@@ -8,18 +8,17 @@
 #include <iostream>
 #include <unordered_map>
 #include "../../common_src/thread.h"
-////#include "thread_client.h"
-////#include "../games/thread_game.h"
 #include "../games/game_manager.h"
 #include "../../common_src/blocking_queue.h"
+#include "message_processor.h"
 
-//class ThreadGame;
-//class ThreadClient;
 class GameManager;
 
 class ThreadAcceptor: public Thread {
     //Socket socket;
     BlockingQueue<std::string> messages;
+    
+    MessageProcessor message_processor;
 
 	GameManager gameManager;
 
@@ -59,7 +58,7 @@ class ThreadAcceptor: public Thread {
 
     public:
 
-	void checkNews();
+	//void checkNews();
 
     ThreadAcceptor(/*const Socket& socket, BlockingQueue<std::string>& messages*/);
     
