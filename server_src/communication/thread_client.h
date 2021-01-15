@@ -22,11 +22,13 @@ class ThreadClient : public Thread {
 
     GameManager* manager;
     BlockingQueue<std::string>& messages;
+    BlockingQueue<std::string>& messages_internos;
     int id;
 
 public:
 
-    ThreadClient(GameManager* manager, int id, BlockingQueue<std::string>& messages);
+    ThreadClient(GameManager* manager, int id, BlockingQueue<std::string>& messages, 
+        BlockingQueue<std::string>& messages_internos);
     //ThreadClient(int id, BlockingQueue<std::string>& messages);
     
     /**

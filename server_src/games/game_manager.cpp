@@ -2,18 +2,18 @@
 
 GameManager::GameManager(){
 	this->messages.push("a");
-    /*this->messages.push("s");
+    this->messages.push("s");
     this->messages.push("d");
     this->messages.push("a");
     this->messages.push("s");
-    this->messages.push("w");*/
+    this->messages.push("w");
     //this->game.start();
 }
 
-void GameManager::acceptClient(std::string socket){
+void GameManager::acceptClient(std::string socket, BlockingQueue<std::string>& messages_internos){
 	std::cout << "Game manager accepted new Client (mock!)" << std::endl;
     this->clientsThreads.insert({this->clients_counter, 
-		new ThreadClient(this, this->clients_counter, messages)});
+		new ThreadClient(this, this->clients_counter, messages, messages_internos)});
     this->clientsThreads.at(this->clients_counter)->start();
     this->game.addClient(this->clientsThreads.at(this->clients_counter), this->clients_counter);
     this->clients_counter++;

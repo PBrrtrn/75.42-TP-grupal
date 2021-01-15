@@ -1,7 +1,8 @@
 #include "thread_client.h"
 
 ThreadClient::ThreadClient(GameManager* gm, int id, 
-BlockingQueue<std::string>& messages) :  messages(messages) {
+BlockingQueue<std::string>& messages, BlockingQueue<std::string>& messages_internos) :  
+messages(messages) , messages_internos(messages_internos){
     this->id = id;
     this->manager = gm;
 }
@@ -24,6 +25,7 @@ void ThreadClient::run() {
             //quiere ir el cliente y los movimientos
             std::string message = this->messages.pop();
             std::cout << "el mensaje recibido del cliente es: " << message << '\n';
+            this->messages_internos.push(message);
             //this->manager->newMessage(message, this->id);
             //acceptor.newMessage(message, this->id);
 

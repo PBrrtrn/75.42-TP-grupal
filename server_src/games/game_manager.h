@@ -6,7 +6,7 @@
 #include "thread_game.h"
 #include <unordered_map>
 
-class GameManager{
+class GameManager : public Thread {
 
 private:
 
@@ -26,15 +26,16 @@ public:
 
 	GameManager();
 
-	void acceptClient(std::string socket);
+	void acceptClient(std::string socket, BlockingQueue<std::string>& messages_internos);
 
 	/**
      * @brief Parsea el mensaje recibido y efectúa 
      * la acción correspondiente.
      */
     void newMessage(std::string message, int clientID);
+	virtual void run() override;
 
-	~GameManager();
+	virtual ~GameManager() override;
 	
 };
 

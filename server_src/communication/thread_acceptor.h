@@ -20,6 +20,7 @@ class GameManager;
 class ThreadAcceptor: public Thread {
     //Socket socket;
     //BlockingQueue<std::string>& messages;
+    BlockingQueue<std::string> messages_internos;
 
 	GameManager gameManager;
 
