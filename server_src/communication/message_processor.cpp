@@ -6,7 +6,7 @@ MessageProcessor::MessageProcessor(BlockingQueue<Message>& m, GameManager& gm) :
 	
 void MessageProcessor::run(){
 
-	std::cout << "Message Processor running. (mock!)" << std::endl;
+	std::cout << "Message Processor running." << std::endl;
     while (keep_running) {
         this->checkNews();
     }	
@@ -16,7 +16,7 @@ void MessageProcessor::run(){
 void MessageProcessor::checkNews(){
 	
 	Message m = this->messages.pop();
-	std::cout << m.getMessage() << m.getClientId() << std::endl;
+	std::cout << "En processor. Mensaje:"<< (char)m.getType()<< ", cliente:" << m.getClientId() << std::endl;
 	
 	this->gameManager.newMessage(m);
 	

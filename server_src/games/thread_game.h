@@ -25,7 +25,7 @@ class ThreadGame: public Thread {
     BlockingQueue<Message>* messages;
     GameStatus gameStatus;
     std::unordered_map<int,ThreadClient*> clients;
-    Map map;
+    //Map map;
     MoveForward move_forward;
 	MoveLeft move_left;
 	MoveRight move_right;

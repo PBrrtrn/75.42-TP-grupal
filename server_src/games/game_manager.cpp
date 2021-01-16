@@ -26,7 +26,7 @@ void GameManager:: newMessage(Message message) {
 
 void GameManager:: _parse_message(Message message) {
 	
-	if (message.getMessage() == "n") {
+	if (message.getType() == TYPE_START_GAME) {
 		this->startGame(message.getClientId());
 		
 	} else {

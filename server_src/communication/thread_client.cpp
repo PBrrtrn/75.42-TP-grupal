@@ -14,11 +14,12 @@ void ThreadClient::run() {
     char buffer[BUF_SIZE];
     ssize_t bytes_received = 0;
 
-	if (this->id == 0) {
-		Message m1("n",this->id);
+	//if (this->id == 0) {
+	if (true) {
+		Message m1(TYPE_START_GAME,0,0,this->id);
 		this->messages.push(m1);
 	} else {
-		Message m1("j",this->id);
+		Message m1(TYPE_JOIN_GAME,0,0,this->id);
 		this->messages.push(m1);		
 	}
 
@@ -29,13 +30,17 @@ void ThreadClient::run() {
             
             usleep(id * 1000000 + 1000000); //removeme
             
-            Message m("w",this->id); //removeme
+            Message m(TYPE_MOVE_FORWARD,0,0,this->id); //removeme
             
             this->messages.push(m);
+            
+            usleep(id * 1000000 + 1000000); //removeme
             
             //Message m("w",this->id); //removeme
             
             this->messages.push(m);
+            
+            usleep(id * 1000000 + 1000000); //removeme
             
             //Message m("w",this->id); //removeme
             
@@ -50,7 +55,7 @@ void ThreadClient::run() {
     //shutdown(peer->get_fd(), SHUT_WR);
     //dead = true; 
     
-	Message m2("e",this->id); //removeme
+	Message m2(TYPE_EXIT_GAME,0,0,this->id); //removeme
 	
 	this->messages.push(m2);    
     

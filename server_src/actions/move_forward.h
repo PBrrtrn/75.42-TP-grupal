@@ -6,7 +6,7 @@ class MoveForward : public Action {
 
     public:
         MoveForward();
-        void tryAction(GameStatus& gs, int clientID, Map& map) override;
+        void tryAction(GameStatus& gs, int clientID) override;
         ~MoveForward();
 };
 

@@ -13,8 +13,8 @@ class Action {
     
 public:
     explicit Action();
-    virtual void tryAction(GameStatus& gs, int clientID, Map& map);
-    bool is_colision(int clientID, Vector& next_position, Map& map, GameStatus& gs);
+    virtual void tryAction(GameStatus& gs, int clientID);
+    bool is_colision(int clientID, Vector& next_position, GameStatus& gs);
     ~Action();
 };
 

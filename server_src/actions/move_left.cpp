@@ -5,12 +5,12 @@
 
 MoveLeft::MoveLeft() {}
 
-void MoveLeft::tryAction(GameStatus& gs, int clientID, Map& map){
+void MoveLeft::tryAction(GameStatus& gs, int clientID){
     Vector pos = gs.getPosition(clientID);
 	float angle = gs.getAngle(clientID);
     angle += ROTATION_LEFT;
     Vector next_position = pos + (angle * STEP);
-    if (!is_colision(clientID, next_position, map, gs)) {
+    if (!is_colision(clientID, next_position, gs)) {
         gs.setAngle(clientID, angle);
     }
 }

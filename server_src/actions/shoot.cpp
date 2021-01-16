@@ -5,6 +5,6 @@
 
 Shoot::Shoot(){}
 
-void Shoot::tryAction(GameStatus& gs, int clientID, Map& map){}
+void Shoot::tryAction(GameStatus& gs, int clientID){}
 
 Shoot::~Shoot() {}

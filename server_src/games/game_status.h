@@ -8,14 +8,16 @@
 #include <unordered_map>
 
 class GameStatus{
-	Map map;
+	
 	Vector position;
 	std::unordered_map<int, Vector> playersPositions;
 	std::unordered_map<int, Vector> playersDirections;
 	Vector angle;
+	Map map;
 	
 public:
-	GameStatus();
+	
+	GameStatus(std::string mapLocation);
 	Vector getPosition();
 	float getAngle();
 	void addPlayer(int playerID, Vector &position, Vector &direction);
@@ -24,6 +26,9 @@ public:
 	void setPosition(int playerID, Vector &position);
     void setPosition(int playerID, float x, float y);
     void setAngle(int playerID, float angle);
+    
+    friend class Action;
+    
 	~GameStatus();
 };
 

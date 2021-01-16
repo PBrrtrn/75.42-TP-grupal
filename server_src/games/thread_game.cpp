@@ -1,6 +1,6 @@
 #include "thread_game.h"
 
-ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m) : id(gameId),messages(m) {}
+ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m) : id(gameId),messages(m),gameStatus("./maps/map-data.yml") {}
 
 void ThreadGame:: run() {
 	
@@ -18,10 +18,17 @@ void ThreadGame:: run() {
 void ThreadGame::checkNews(){
 	
 	Message m = this->messages->pop();
-	std::cout << "en el game: " << m.getMessage() << ", client:" << m.getClientId() << std::endl;
+	std::cout << "en el game: " << (char)m.getType() << ", client:" << m.getClientId() << std::endl;
+	
+	/*SI un cliente quiere ir hacia adelante*/
+	if (m.getType() == TYPE_MOVE_FORWARD){
+		this->tryMoveForward(m.getClientId());
+	}
+	
+	//agregar otras acciones
 	
 	/*Si un cliente le pide salir*/
-	if (m.getMessage() == "e") {
+	if (m.getType() == TYPE_EXIT_GAME) {
 		this->expelClient(m.getClientId());
 		
 	}
@@ -37,24 +44,26 @@ void ThreadGame::expelClient(int id){
 
 void ThreadGame::addClient(ThreadClient* client, int id){
 	this->clients.insert({id,client});
-	//this->gameStatus.setPosition(id, 150, 150);
-	//this->gameStatus.setAngle(id, 0);
+	Vector position(3,4);
+	Vector direction(1,0);
+	this->gameStatus.addPlayer(id, position, direction);
+
 }
 
 void ThreadGame::tryMoveForward(int id) {
-    this->move_forward.tryAction(this->gameStatus, id, this->map);
+    this->move_forward.tryAction(this->gameStatus, id );
 }
 
 void ThreadGame::tryMoveBackward(int id) {
-    this->move_backward.tryAction(this->gameStatus, id, this->map);
+    this->move_backward.tryAction(this->gameStatus, id );
 }
 
 void ThreadGame::tryMoveLeft(int id) {
-    this->move_left.tryAction(this->gameStatus, id, this->map);
+    this->move_left.tryAction(this->gameStatus, id );
 }
 
 void ThreadGame::tryMoveRight(int id) {
-    this->move_right.tryAction(this->gameStatus, id, this->map);
+    this->move_right.tryAction(this->gameStatus, id );
 }
 
 void ThreadGame::tryShoot(int id) {}
