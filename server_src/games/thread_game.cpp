@@ -1,8 +1,28 @@
 #include "thread_game.h"
 
-ThreadGame:: ThreadGame() {}
+ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m) : id(gameId),messages(m) {}
 
-void ThreadGame:: run() {}
+void ThreadGame:: run() {
+	
+	bool keep_running = true;
+	
+	std::cout << "Game started!" << std::endl;
+    while (keep_running) {
+        
+        this->checkNews();
+     
+    }
+	
+}
+
+void ThreadGame::checkNews(){
+	
+	Message m = this->messages->pop();
+	std::cout << "en el game: " << m.getMessage() << "client" << m.getClientId() << std::endl;
+	
+	//this->gameManager.newMessage(m);
+	
+}
 
 void ThreadGame::addClient(ThreadClient* client, int id){
 	this->clients.push_back(client);

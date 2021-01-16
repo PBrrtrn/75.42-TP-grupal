@@ -11,12 +11,13 @@
 #include "../games/game_manager.h"
 #include "../../common_src/blocking_queue.h"
 #include "message_processor.h"
+#include "message.h"
 
 class GameManager;
 
 class ThreadAcceptor: public Thread {
     //Socket socket;
-    BlockingQueue<std::string> messages;
+    BlockingQueue<Message> messages;
     
     MessageProcessor message_processor;
 

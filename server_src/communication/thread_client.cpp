@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 ThreadClient::ThreadClient(int id, 
-BlockingQueue<std::string>& messages) : 
+BlockingQueue<Message>& messages) : 
  messages(messages) {
     this->keep_running = true;
     this->id = id;
@@ -13,6 +13,10 @@ void ThreadClient::run() {
 
     char buffer[BUF_SIZE];
     ssize_t bytes_received = 0;
+
+	Message m("n",this->id);
+	
+	this->messages.push(m);
 
     while (keep_running){
         try {
@@ -28,15 +32,15 @@ void ThreadClient::run() {
             //quiere ir el cliente y los movimientos
             //std::string message = this->messages.pop();
             
-            std::string stringId = std::to_string(id);
+            //std::string stringId = std::to_string(id);
             
-            usleep(3000);
+            usleep(id * 1000000 + 1000000);
             
-            this->messages.push("client " + stringId + " sent a message to the message processor");
+            Message m("w",this->id);
             
-            //this->manager->pushMessage("client " + stringId + " sent a message to the manager");
+            this->messages.push(m);
             
-            //acceptor.newMessage(message, this->id);
+            //this->messages.push("client " + stringId + " sent a message to the message processor");
 
         } catch (...) {
             if (!keep_running) break;

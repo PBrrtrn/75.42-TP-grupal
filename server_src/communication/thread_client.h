@@ -1,18 +1,14 @@
 #ifndef THREAD_CLIENT_H
 #define THREAD_CLIENT_H
 
-//#include <mutex>
 #include <atomic>
 #include "../../common_src/thread.h"
 #include "../../common_src/socket.h"
 #include "../../common_src/blocking_queue.h"
-////#include "../games/game_manager.h"
-////#include "thread_acceptor.h"
+#include "message.h"
 
 #define BUF_SIZE 64
 
-////class ThreadAcceptor;
-////class GameManager;
 
 class ThreadClient : public Thread {
     Socket* peer;
@@ -21,13 +17,12 @@ class ThreadClient : public Thread {
     std::atomic<bool> keep_running{true};
     std::atomic<bool> dead{false};
 
-    BlockingQueue<std::string>& messages;
+    BlockingQueue<Message>& messages;
     int id;
 
 public:
 
-    ThreadClient(int id, BlockingQueue<std::string>& messages);
-    //ThreadClient(int id, BlockingQueue<std::string>& messages);
+    ThreadClient(int id, BlockingQueue<Message>& messages);
     
     /**
      * @brief Entrega al hilo aceptador

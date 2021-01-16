@@ -34,6 +34,11 @@ public:
         queue.pop();
         return t;
     }
+    
+    bool isEmpty(){
+		std::unique_lock<std::mutex> lock(m);
+		return (queue.empty());
+	}
 
     void close() {
         std::unique_lock<std::mutex> lock(m);

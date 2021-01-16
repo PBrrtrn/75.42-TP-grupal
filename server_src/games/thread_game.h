@@ -21,6 +21,8 @@
 //class ThreadClient;
 
 class ThreadGame: public Thread {
+	int id;
+    BlockingQueue<Message>* messages;
     GameStatus gameStatus;
     std::vector<ThreadClient*> clients;
     Map map;
@@ -28,9 +30,11 @@ class ThreadGame: public Thread {
 	MoveLeft move_left;
 	MoveRight move_right;
 	MoveBackward move_backward;
+	
+	void checkNews();
 
     public:
-    ThreadGame();
+    ThreadGame(int gameId,BlockingQueue<Message>* m);
     virtual void run() override;
     void addClient(ThreadClient* client, int id);
     void tryMoveForward(int id);

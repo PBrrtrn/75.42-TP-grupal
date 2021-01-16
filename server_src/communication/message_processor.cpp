@@ -1,24 +1,25 @@
 #include "message_processor.h"
 
-#include <unistd.h>
 
-MessageProcessor::MessageProcessor(BlockingQueue<std::string>& m) : messages(m)
+MessageProcessor::MessageProcessor(BlockingQueue<Message>& m) : messages(m)
 	{}
 	
 void MessageProcessor::run(){
 
 	std::cout << "Message Processor running. (mock!)" << std::endl;
     while (keep_running) {
-        
         this->checkNews();
-		usleep(3000);
     }	
 	
 }
 
 void MessageProcessor::checkNews(){
-	std::cout << this->messages.pop() << std::endl;
-
+	
+	Message m = this->messages.pop();
+	std::cout << m.getMessage() << m.getClientId() << std::endl;
+	
+	this->gameManager.newMessage(m);
+	
 }
 
 MessageProcessor::~MessageProcessor(){}
