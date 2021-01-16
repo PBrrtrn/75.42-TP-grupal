@@ -24,14 +24,18 @@ class ThreadGame: public Thread {
 	int id;
     BlockingQueue<Message>* messages;
     GameStatus gameStatus;
-    std::vector<ThreadClient*> clients;
+    std::unordered_map<int,ThreadClient*> clients;
     Map map;
     MoveForward move_forward;
 	MoveLeft move_left;
 	MoveRight move_right;
 	MoveBackward move_backward;
 	
+	bool keep_running;
+	
 	void checkNews();
+	
+	void expelClient(int id);
 
     public:
     ThreadGame(int gameId,BlockingQueue<Message>* m);

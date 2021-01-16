@@ -35,6 +35,8 @@ public:
 	int clients_counter;
 	
 	void newMessage(Message m);
+	
+	void cleanUpDeadGames();
 
 	GameManager();
 	~GameManager();

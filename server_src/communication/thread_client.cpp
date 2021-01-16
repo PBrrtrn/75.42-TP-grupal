@@ -1,6 +1,6 @@
 #include "thread_client.h"
 
-#include <unistd.h>
+#include <unistd.h>  //removeme
 
 ThreadClient::ThreadClient(int id, 
 BlockingQueue<Message>& messages) : 
@@ -14,33 +14,34 @@ void ThreadClient::run() {
     char buffer[BUF_SIZE];
     ssize_t bytes_received = 0;
 
-	Message m("n",this->id);
-	
-	this->messages.push(m);
+	if (this->id == 0) {
+		Message m1("n",this->id);
+		this->messages.push(m1);
+	} else {
+		Message m1("j",this->id);
+		this->messages.push(m1);		
+	}
 
     while (keep_running){
         try {
-            /*
-            bytes_received = peer->socket_receive(buffer, BUF_SIZE);
-            if (bytes_received < 0 || bytes_received == 0) {
-                keep_running = false;
-                break;
-            }
-            std::string str(buffer, bytes_received);
-            */
-            //TODO pasarle al acceptor a qué partida
-            //quiere ir el cliente y los movimientos
-            //std::string message = this->messages.pop();
+	
+			//recibir datos por socket
             
-            //std::string stringId = std::to_string(id);
+            usleep(id * 1000000 + 1000000); //removeme
             
-            usleep(id * 1000000 + 1000000);
-            
-            Message m("w",this->id);
+            Message m("w",this->id); //removeme
             
             this->messages.push(m);
             
-            //this->messages.push("client " + stringId + " sent a message to the message processor");
+            //Message m("w",this->id); //removeme
+            
+            this->messages.push(m);
+            
+            //Message m("w",this->id); //removeme
+            
+            this->messages.push(m);
+
+			keep_running = false;
 
         } catch (...) {
             if (!keep_running) break;
@@ -48,19 +49,15 @@ void ThreadClient::run() {
     }
     //shutdown(peer->get_fd(), SHUT_WR);
     //dead = true; 
+    
+	Message m2("e",this->id); //removeme
+	
+	this->messages.push(m2);    
+    
+    
 }
 
-/*
-void ThreadClient:: stop() {
-    keep_running = false;
-    delete this->peer;
-}
-
-bool ThreadClient:: is_dead() {
-    return this->dead;
-}
-*/
 
 ThreadClient:: ~ThreadClient(){
-    //this->join();
+
 }

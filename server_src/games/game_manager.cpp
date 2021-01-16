@@ -1,8 +1,9 @@
 #include "game_manager.h"
 
 GameManager::GameManager(){
+	std::cout << "game manager constructor"  << std::endl;
 	this->clients_counter = 0;
-	//this->messages.push("a");
+
 }
 
 GameManager::~GameManager(){
@@ -51,24 +52,21 @@ void GameManager::startGame(int clientIdStarter){
 	this->games.insert({ this->games_counter, new ThreadGame(this->games_counter,queue) });
 	this->clientsInGames.insert({clientIdStarter,this->games_counter});
 	this->queues.insert(std::make_pair(this->games_counter, queue));
-	
+	std::cout << "id de cliente arrancando juego:" << clientIdStarter << std::endl;
+	this->games.at(this->games_counter)->addClient(this->clientsThreads.at(clientIdStarter), clientIdStarter);
 	this->games.at(this->games_counter)->start();
-	
 	this->games_counter++;
-	
-	
-	
+
 }
 
 void GameManager::acceptClient(std::string socket, BlockingQueue<Message>& q){
-	std::cout << "Game manager accepted new Client (mock!)" << std::endl;
-    this->clientsThreads.insert({this->clients_counter, 
-		new ThreadClient(this->clients_counter, q)});
+	std::cout << "Game manager accepted new Client:"<< this->clients_counter << std::endl;
+    this->clientsThreads.insert({this->clients_counter, new ThreadClient(this->clients_counter, q)});
     this->clientsThreads.at(this->clients_counter)->start();
     this->clients_counter++; 
-    
-    
-    
+
 }
 
-
+void GameManager::cleanUpDeadGames(){
+	//recorrer this->games y si game.isDead, join() y eliminar
+}

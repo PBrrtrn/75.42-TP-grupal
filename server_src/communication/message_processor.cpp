@@ -1,7 +1,7 @@
 #include "message_processor.h"
 
 
-MessageProcessor::MessageProcessor(BlockingQueue<Message>& m) : messages(m)
+MessageProcessor::MessageProcessor(BlockingQueue<Message>& m, GameManager& gm) : messages(m), gameManager(gm)
 	{}
 	
 void MessageProcessor::run(){
