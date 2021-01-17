@@ -5,6 +5,7 @@
 #include "../../common_src/thread.h"
 #include "../../common_src/socket.h"
 #include "../../common_src/blocking_queue.h"
+#include "../games/game_status.h"
 #include "message.h"
 
 #define BUF_SIZE 64
@@ -18,11 +19,13 @@ class ThreadClient : public Thread {
     std::atomic<bool> dead{false};
 
     BlockingQueue<Message>& messages;
+    BlockingQueue<GameStatus>& messages_out;
     int id;
 
 public:
 
-    ThreadClient(int id, BlockingQueue<Message>& messages);
+    ThreadClient(int id, BlockingQueue<Message>& messages, 
+        BlockingQueue<GameStatus>& messages_out);
     
     /**
      * @brief Entrega al hilo aceptador

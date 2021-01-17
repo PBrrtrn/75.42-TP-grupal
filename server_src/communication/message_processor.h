@@ -16,21 +16,31 @@ class MessageProcessor: public Thread {
 
 	private:
 
-    BlockingQueue<Message>& messages;
-    
-    GameManager& gameManager;
-
-    std::atomic<bool> keep_running{true};
+        BlockingQueue<Message>& messages;
+        GameManager& gameManager;
+        std::atomic<bool> keep_running{true};
 
     public:
 
-    MessageProcessor(BlockingQueue<Message>& m, GameManager& gm);
+        MessageProcessor(BlockingQueue<Message>& m, GameManager& gm);
+        virtual void run() override;
 
-    virtual void run() override;
-    
-    void checkNews();
+        /**
+         * @brief Agarra un nuevo mensaje de la cola
+         * y se lo pasa al game manager para que
+         * ejecute las acciones correspondientes
+         */
+        void checkNews();
 
-    virtual ~MessageProcessor() override;
+        /**
+         * @brief Se ocupa de enviarle a cada
+         * cliente a traves de la cola bloqueante
+         * el gameStatus actual de la
+         * partida en la que se encuentra
+         */
+        void updateClients();
+        
+        virtual ~MessageProcessor() override;
 };
 
 #endif

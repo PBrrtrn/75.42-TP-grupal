@@ -12,29 +12,27 @@ class Message {
 
 	private:
 
-	//std::string m;
-	int type;
-	int entity;
-	int value;
-	int clientId;	
+		//std::string m;
+		int type;
+		int entity;
+		int value;
+		int clientId;	
 
 	public:
 
-	//Message(std::string data,int clientId);
-	
-	Message(int type,int entity, int value,int clientId);
-	
-	//std::string getMessage();
-	
-	int getType();
-	int getEntity();
-	int getValue();
-	
-	int getClientId();
-	
-	~Message();
-
-
+		//Message(std::string data,int clientId);
+		
+		Message(int type,int entity, int value,int clientId);
+		
+		//std::string getMessage();
+		
+		int getType();
+		int getEntity();
+		int getValue();
+		
+		int getClientId();
+		
+		~Message();
 };
 
 #endif

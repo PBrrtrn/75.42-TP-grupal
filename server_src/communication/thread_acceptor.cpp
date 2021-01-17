@@ -1,7 +1,6 @@
 #include "thread_acceptor.h"
 
-ThreadAcceptor:: ThreadAcceptor() : message_processor(messages,gameManager)
-{
+ThreadAcceptor:: ThreadAcceptor() : message_processor(messages,gameManager){
 	this->message_processor.start();
 }
 
@@ -15,8 +14,6 @@ void ThreadAcceptor:: run() {
     }
 }
 
-
-
 void ThreadAcceptor::acceptConnection(){
 	std::string socket; //solo como placeholder, esto traeria el Socket real
 	if (this->gameManager.clients_counter < 3)
@@ -24,6 +21,4 @@ void ThreadAcceptor::acceptConnection(){
     
 }
 
-ThreadAcceptor:: ~ThreadAcceptor() {
-
-}
+ThreadAcceptor:: ~ThreadAcceptor() {}

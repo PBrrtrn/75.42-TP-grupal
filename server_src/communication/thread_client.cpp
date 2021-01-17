@@ -3,8 +3,8 @@
 #include <unistd.h>  //removeme
 
 ThreadClient::ThreadClient(int id, 
-BlockingQueue<Message>& messages) : 
- messages(messages) {
+BlockingQueue<Message>& messages, BlockingQueue<GameStatus>& messages_out) : 
+ messages(messages), messages_out(messages_out) {
     this->keep_running = true;
     this->id = id;
 }
@@ -15,10 +15,11 @@ void ThreadClient::run() {
     ssize_t bytes_received = 0;
 
 	//if (this->id == 0) {
-	if (true) {
+	if (this->id == 0) {
 		Message m1(TYPE_START_GAME,0,0,this->id);
 		this->messages.push(m1);
 	} else {
+        usleep(3000000);
 		Message m1(TYPE_JOIN_GAME,0,0,this->id);
 		this->messages.push(m1);		
 	}
@@ -62,7 +63,4 @@ void ThreadClient::run() {
     
 }
 
-
-ThreadClient:: ~ThreadClient(){
-
-}
+ThreadClient:: ~ThreadClient(){}

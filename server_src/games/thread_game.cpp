@@ -1,6 +1,7 @@
 #include "thread_game.h"
 
-ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m) : id(gameId),messages(m),gameStatus("./maps/map-data.yml") {}
+ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m) : 
+id(gameId), messages(m),gameStatus("./maps/map-data.yml") {}
 
 void ThreadGame:: run() {
 	
@@ -10,9 +11,11 @@ void ThreadGame:: run() {
     while (keep_running) {
         
         this->checkNews();
-     
     }
-	
+}
+
+GameStatus ThreadGame:: getGameStatus() {
+	return this->gameStatus;
 }
 
 void ThreadGame::checkNews(){
@@ -20,19 +23,30 @@ void ThreadGame::checkNews(){
 	Message m = this->messages->pop();
 	std::cout << "en el game: " << (char)m.getType() << ", client:" << m.getClientId() << std::endl;
 	
-	/*SI un cliente quiere ir hacia adelante*/
-	if (m.getType() == TYPE_MOVE_FORWARD){
+	switch (m.getType())
+	{
+	case TYPE_MOVE_FORWARD:
 		this->tryMoveForward(m.getClientId());
+		break;
+
+	case TYPE_EXIT_GAME:
+		this->expelClient(m.getClientId());
+		break;
+
+	default:
+		break;
 	}
 	
 	//agregar otras acciones
-	
-	/*Si un cliente le pide salir*/
-	if (m.getType() == TYPE_EXIT_GAME) {
-		this->expelClient(m.getClientId());
-		
-	}
-	
+	    /*if (message.getMessage() == "w") {
+        this->games.at(gameId)->tryMoveForward(message.getClientId());
+    } else if (message.getMessage() == "a") {
+        this->games.at(gameId)->tryMoveLeft(message.getClientId());
+    } else if (message.getMessage() == "d") {
+        this->games.at(gameId)->tryMoveRight(message.getClientId());
+    } else if (message.getMessage() == "s") {
+        this->games.at(gameId)->tryMoveBackward(message.getClientId());
+    }*/
 }
 
 void ThreadGame::expelClient(int id){
@@ -47,7 +61,6 @@ void ThreadGame::addClient(ThreadClient* client, int id){
 	Vector position(3,4);
 	Vector direction(1,0);
 	this->gameStatus.addPlayer(id, position, direction);
-
 }
 
 void ThreadGame::tryMoveForward(int id) {
