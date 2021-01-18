@@ -12,6 +12,7 @@ public:
 	Map();
 	Map(const char *file_location);
 	~Map();
+	std::vector<int>& operator[](int x);
 	int getGridValue(int x, int y);
 	int isWall(int x, int y);
 	int getWidth();

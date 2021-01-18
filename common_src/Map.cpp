@@ -51,6 +51,10 @@ Map::Map(const char* file_location) {
 
 Map::~Map() { }
 
+std::vector<int>& Map::operator[](int x) {
+	return this->grid[x];
+}
+
 int Map::getGridValue(int x, int y) {
 	return this->grid[x][y];
 }

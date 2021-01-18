@@ -1,5 +1,6 @@
 #include <iostream>
 #include <unistd.h>
+#include <array>
 #include <SDL2/SDL_image.h>
 
 #include "Renderer.h"
@@ -52,9 +53,10 @@ void Renderer::run() {
 void Renderer::render(GameStatusUpdate& status) {
   SDL_RenderClear(this->renderer);
 
-  std::vector<int> z_buffer = this->map_drawer.draw(this->renderer, this->map,
-                                                    status.player_position,
-                                                    status.player_angle);
+  std::vector<float> z_buffer = this->map_drawer.draw(this->renderer, 
+                                                      this->map,
+                                                      status.player_position,
+                                                      status.player_angle);
 
   for (Animation* animation : this->animations) {
     animation->renderNextFrame(this->renderer, 1, 0, 0);
