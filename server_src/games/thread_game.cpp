@@ -29,24 +29,30 @@ void ThreadGame::checkNews(){
 		this->tryMoveForward(m.getClientId());
 		break;
 
+	case TYPE_MOVE_BACKWARD:
+		this->tryMoveBackward(m.getClientId());
+		break;
+	
+	case TYPE_MOVE_LEFT:
+		this->tryMoveLeft(m.getClientId());
+		break;
+
+	case TYPE_MOVE_RIGHT:
+		this->tryMoveRight(m.getClientId());
+		break;
+
 	case TYPE_EXIT_GAME:
 		this->expelClient(m.getClientId());
+		break;
+	
+	case TYPE_SHOOT:
+		this->tryShoot(m.getClientId());
 		break;
 
 	default:
 		break;
 	}
-	
-	//agregar otras acciones
-	    /*if (message.getMessage() == "w") {
-        this->games.at(gameId)->tryMoveForward(message.getClientId());
-    } else if (message.getMessage() == "a") {
-        this->games.at(gameId)->tryMoveLeft(message.getClientId());
-    } else if (message.getMessage() == "d") {
-        this->games.at(gameId)->tryMoveRight(message.getClientId());
-    } else if (message.getMessage() == "s") {
-        this->games.at(gameId)->tryMoveBackward(message.getClientId());
-    }*/
+
 }
 
 void ThreadGame::expelClient(int id){

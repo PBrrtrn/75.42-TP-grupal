@@ -6,7 +6,11 @@
 #define TYPE_START_GAME 'n'
 #define TYPE_JOIN_GAME 'j'
 #define TYPE_MOVE_FORWARD 'w'
+#define TYPE_MOVE_BACKWARD 's'
+#define TYPE_MOVE_LEFT 'a'
+#define TYPE_MOVE_RIGHT 'd'
 #define TYPE_EXIT_GAME 'e'
+#define TYPE_SHOOT 'l'
 
 class Message {
 
