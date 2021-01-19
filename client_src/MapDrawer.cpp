@@ -13,6 +13,15 @@ MapDrawer::~MapDrawer() { }
 
 std::vector<float> MapDrawer::draw(SDL_Renderer* renderer, Map& map,
 										 							 Vector position, float view_angle) {
+	SDL_Rect top_half { 0, 0, this->screen_width, (this->screen_height)/2 };
+	SDL_SetRenderDrawColor(renderer, 130, 130, 130, 255);
+	SDL_RenderFillRect(renderer, &top_half);
+
+	SDL_Rect bottom_half { 0, (this->screen_height)/2,
+												 this->screen_width, (this->screen_height)/2 };
+	SDL_SetRenderDrawColor(renderer, 90, 90, 90, 255);
+	SDL_RenderFillRect(renderer, &bottom_half);
+
 	std::vector<float> z_buffer;
 	z_buffer.reserve(this->screen_width);
 
