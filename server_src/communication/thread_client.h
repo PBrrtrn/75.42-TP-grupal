@@ -8,6 +8,8 @@
 #include "../games/game_status.h"
 #include "message.h"
 
+#include <unistd.h>  //removeme
+
 #define BUF_SIZE 64
 
 
@@ -19,13 +21,14 @@ class ThreadClient : public Thread {
     std::atomic<bool> dead{false};
 
     BlockingQueue<Message>& messages;
-    BlockingQueue<GameStatus>& messages_out;
+    BlockingQueue<GameStatus>* messages_out;
     int id;
 
 public:
 
-    ThreadClient(int id, BlockingQueue<Message>& messages, 
-        BlockingQueue<GameStatus>& messages_out);
+    ThreadClient(int id, BlockingQueue<Message>& messages);
+        
+    void assignToOutQueue(BlockingQueue<GameStatus>* messages_out);
     
     /**
      * @brief Entrega al hilo aceptador

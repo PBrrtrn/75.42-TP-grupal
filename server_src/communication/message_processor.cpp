@@ -12,13 +12,26 @@ void MessageProcessor::run(){
 }
 
 void MessageProcessor::checkNews() {
-	Message m = this->messages.pop();
-	std::cout << "En processor. Mensaje:"<< (char)m.getType()<< ", cliente:" << m.getClientId() << std::endl;
-	this->gameManager.newMessage(m);
+	this->messages.lock();
+	while (!this->messages.isEmptySync()) {
+		Message m = this->messages.popSync();
+		std::cout << "En processor. Mensaje:"<< (char)m.getType()<< ", cliente:" << m.getClientId() << std::endl;
+		this->gameManager.newMessage(m);
+	}
+	this->messages.unlock();
+	
+	
+		//Message m = this->messages.pop();
+		//std::cout << "En processor. Mensaje:"<< (char)m.getType()<< ", cliente:" << m.getClientId() << std::endl;
+		//this->gameManager.newMessage(m);
+		
+	
+	
+	
 }
 
 void MessageProcessor::updateClients() {
-	this->gameManager.updateClients();
+	//this->gameManager.updateClients();
 }
 
 MessageProcessor::~MessageProcessor(){}

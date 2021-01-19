@@ -20,8 +20,11 @@ private:
 	/* clave: gameId value: gameQueue*/
 	std::unordered_map<int, BlockingQueue<Message>*> queues;
 
-	/* clave: gameId value: gameQueue*/
+	/* clave: clientId value: gameQueue*/
 	std::unordered_map<int, BlockingQueue<GameStatus>*> out_queues;
+	
+	/* clave: gameId value: gameQueue*/
+	std::unordered_map<int, BlockingQueue<GameStatus>*> out_game_queues;	
 
 	/* clave:clientId, value:gameId*/
 	std::unordered_map<int, int> clientsInGames;

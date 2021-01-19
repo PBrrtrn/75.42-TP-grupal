@@ -11,6 +11,10 @@ void ThreadGame:: run() {
     while (keep_running) {
         
         this->checkNews();
+        this->sendGameUpdates();
+        
+        usleep(1000000/60); //todo: hacer variable respecto a tiempo demorado en ejecutar checkNews y sendUpdates
+        
     }
 }
 
@@ -55,6 +59,19 @@ void ThreadGame::checkNews(){
 
 }
 
+void ThreadGame::sendGameUpdates(){
+	for (auto& it: this->out_queues) {
+        int clientId = it.first;
+        
+        this->out_queues.at(clientId)->push(this->gameStatus); 
+        
+        //int gameId = this->clientsInGames.at(it.first);
+        //TODO: chequear tiempo de ejecucion -- eficiencia pasaje gamestatus
+        //this->out_queues.at(clientId)->push(this->games.at(gameId)->getGameStatus());
+    }
+	
+}
+
 void ThreadGame::expelClient(int id){
 	this->clients.erase(id);	
 	if (this->clients.size() == 0)
@@ -63,10 +80,21 @@ void ThreadGame::expelClient(int id){
 }
 
 void ThreadGame::addClient(ThreadClient* client, int id){
+	
+	std::cout << "en el game: " << this->id << ", client:" << id << " se inserto en este game." << std::endl;
 	this->clients.insert({id,client});
+	
+	BlockingQueue<GameStatus>* queue_out = new BlockingQueue<GameStatus>();
+    this->out_queues.insert(std::make_pair(id, queue_out));
+    client->assignToOutQueue(queue_out);
+	
 	Vector position(3,4);
 	Vector direction(1,0);
 	this->gameStatus.addPlayer(id, position, direction);
+	
+	//GameStatus g(); //removeme
+	//this->out_queues.at(id)->push(this->gameStatus); //removeme
+	
 }
 
 void ThreadGame::tryMoveForward(int id) {

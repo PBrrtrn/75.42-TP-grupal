@@ -18,6 +18,8 @@
 #include "../actions/move_backward.h"
 #include "../actions/move_forward.h"
 
+#include <unistd.h>  //removeme
+
 class ThreadGame: public Thread {
         int id;
         BlockingQueue<Message>* messages;
@@ -27,6 +29,8 @@ class ThreadGame: public Thread {
         MoveLeft move_left;
         MoveRight move_right;
         MoveBackward move_backward;
+        
+        std::unordered_map<int, BlockingQueue<GameStatus>*> out_queues;
         
         bool keep_running;
         
@@ -44,6 +48,9 @@ class ThreadGame: public Thread {
         void tryMoveRight(int id);
         void tryShoot(int id);
         GameStatus getGameStatus();
+        
+        void sendGameUpdates();
+        
         virtual ~ThreadGame() override;
 };
 

@@ -1,12 +1,11 @@
 #include "thread_client.h"
 
-#include <unistd.h>  //removeme
-
 ThreadClient::ThreadClient(int id, 
-BlockingQueue<Message>& messages, BlockingQueue<GameStatus>& messages_out) : 
- messages(messages), messages_out(messages_out) {
+BlockingQueue<Message>& messages) : 
+ messages(messages) {
     this->keep_running = true;
     this->id = id;
+    this->messages_out = NULL;
 }
 
 void ThreadClient::run() {
@@ -35,19 +34,25 @@ void ThreadClient::run() {
             
             this->messages.push(m);
             
-            usleep(id * 1000000 + 1000000); //removeme
+            //usleep(id * 1000000 + 1000000); //removeme
             
             //Message m("w",this->id); //removeme
             
-            this->messages.push(m);
+            //this->messages.push(m);
             
-            usleep(id * 1000000 + 1000000); //removeme
+            //usleep(id * 1000000 + 1000000); //removeme
             
             //Message m("w",this->id); //removeme
             
-            this->messages.push(m);
+            //this->messages.push(m);
 
-			keep_running = false;
+			if ( this->messages_out != NULL && !this->messages_out->isEmpty())
+			{
+				this->messages_out->pop();
+				std::cout << "got a new event in outgoing queue in client " << this->id << std::endl; 
+			}
+
+			//keep_running = false;
 
         } catch (...) {
             if (!keep_running) break;
@@ -56,11 +61,15 @@ void ThreadClient::run() {
     //shutdown(peer->get_fd(), SHUT_WR);
     //dead = true; 
     
-	Message m2(TYPE_EXIT_GAME,0,0,this->id); //removeme
+	//Message m2(TYPE_EXIT_GAME,0,0,this->id); //removeme
 	
-	this->messages.push(m2);    
+	//this->messages.push(m2);    
     
     
+}
+
+void ThreadClient::assignToOutQueue(BlockingQueue<GameStatus>* messages_out){
+	this->messages_out = messages_out;
 }
 
 ThreadClient:: ~ThreadClient(){}

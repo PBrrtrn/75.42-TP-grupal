@@ -20,6 +20,27 @@ public:
         queue.push(t);
         cv.notify_all();
     }
+    
+    //TEST
+    void lock(){
+		this->m.lock();
+	}
+	
+	T popSync(){
+		T t = queue.front();
+		queue.pop();
+		return t;
+	}
+	
+	bool isEmptySync(){
+		return (queue.empty());
+	}
+
+    void unlock(){
+		this->m.unlock();
+	}
+	
+	//end test
 
     T pop() {
         std::unique_lock<std::mutex> lock(m);
