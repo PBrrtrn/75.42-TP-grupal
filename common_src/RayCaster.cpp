@@ -40,7 +40,7 @@ RayHit RayCaster::castRay(Map& map, Vector position, float angle) {
 	float columnwise_distance = first_column_distance * columnwise_delta;
 	float rowwise_distance = first_row_distance * rowwise_delta;
 
-	int hit_side;
+	int hit_side = 1;
 	while (map[map_row][map_column] < 1) {
 		if (columnwise_distance < rowwise_distance) {
 			map_column += columnwise_step;
@@ -68,6 +68,5 @@ RayHit RayCaster::castRay(Map& map, Vector position, float angle) {
 	else texel = position.x + distance * ray_x;
 	texel -= floor(texel);
 
-	// std::cout << distance << std::endl;
 	return RayHit { distance, texture, texel, hit_side };
 }

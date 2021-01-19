@@ -22,12 +22,11 @@ void ServerListener::run() {
 		en el medio de una partida o no.
 																	- Pablo (20/12/2020)								 */
 	Map map("assets/maps/map.yml");
-	GameStatusUpdate initial_state { Vector(1,1), 100, 0, 0, 0, true };
 
-	this->game_status_monitor.initializeGameStatus(map, initial_state);
+	this->game_status_monitor.initializeMap(map);
 
 	while (true) {
-		GameStatusUpdate update { Vector(1,1), 100, 0, 0, 0, true };
+		GameStatusUpdate update { Vector(1.5,1.5), 100, 0, 0, 0, true };
 		this->game_status_monitor.updateGameStatus(update);
 	}
 

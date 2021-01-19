@@ -14,6 +14,8 @@ public:
   ~Window();
   Window(const Window&) = delete;            // Saco el constructor por copia
   Window& operator=(const Window&) = delete; // Saco la asignacion por copia
+  int getWidth();
+  int getHeight();
   SDL_Renderer* getRenderer();
 };
 

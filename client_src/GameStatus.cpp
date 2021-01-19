@@ -4,9 +4,8 @@ GameStatus::GameStatus() : running(false) { }
 
 GameStatus::~GameStatus() { }
 
-void GameStatus::initialize(Map& new_map, GameStatusUpdate& status_update) {
-	this->map = map;
-	this->update(status_update);
+void GameStatus::initialize(Map new_map) {
+	this->map = new_map;
 }
 
 void GameStatus::update(GameStatusUpdate& status_update) {

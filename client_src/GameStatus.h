@@ -29,7 +29,7 @@ private:
 public:
 	GameStatus();
 	~GameStatus();
-	void initialize(Map& new_map, GameStatusUpdate& initial_state);
+	void initialize(Map new_map);
 	void update(GameStatusUpdate& status_update);
 	Map& getMap();
 	GameStatusUpdate getUpdate();

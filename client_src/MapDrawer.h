@@ -16,14 +16,10 @@ private:
 	int screen_height;
 	float fov;
 	std::vector<Texture*>& wall_textures;
-	std::vector<Texture*>& floor_textures;
-	std::vector<Texture*>& ceiling_textures;
 	RayCaster ray_caster;
 public:
 	MapDrawer(int screen_width, int screen_height, float fov,
-						std::vector<Texture*>& wall_textures,
-						std::vector<Texture*>& floor_textures,
-						std::vector<Texture*>& ceiling_textures);
+						std::vector<Texture*>& wall_textures);
 	~MapDrawer();
 	std::vector<float> draw(SDL_Renderer* renderer, Map& map, 
 													Vector position, float view_angle);

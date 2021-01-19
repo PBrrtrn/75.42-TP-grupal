@@ -12,14 +12,15 @@ private:
 	GameStatus game_status;
 	std::mutex mutex;
 	std::condition_variable cv;
-	std::atomic<bool> synchronized;
+	bool synchronized;
+	bool map_initialized;
 public:
 	GameStatusMonitor();
 	~GameStatusMonitor();
-	void initializeGameStatus(Map& map, GameStatusUpdate& update);
+	void initializeMap(Map& map);
+	Map& getMap();
 	void updateGameStatus(GameStatusUpdate& update);
 	GameStatusUpdate getUpdate();
-	Map& getMap();
 };
 
 #endif

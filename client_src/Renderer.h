@@ -9,6 +9,7 @@
 #include "GameStatus.h"
 #include "Window.h"
 #include "Animation.h"
+#include "Texture.h"
 #include "MapDrawer.h"
 #include "../common_src/Map.h"
 
@@ -16,12 +17,12 @@ class Renderer : public Thread {
 private:
   SDL_Renderer* renderer;
   Window window;
-  MapDrawer map_drawer;
-  Map map;
   GameStatusMonitor& game_status_monitor;
   std::vector<Animation*> animations;
+  std::vector<Texture*> wall_textures;
   void load();
-  void render(GameStatusUpdate& status_update);
+  void render(GameStatusUpdate& status_update, 
+              MapDrawer& map_drawer, Map& map);
 public:
   Renderer(const char *title, int width, int height, 
            GameStatusMonitor& status_monitor);

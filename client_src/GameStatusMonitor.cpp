@@ -2,16 +2,22 @@
 
 #include "GameStatusMonitor.h"
 
-GameStatusMonitor::GameStatusMonitor() : synchronized(false) { }
+GameStatusMonitor::GameStatusMonitor() 
+: synchronized(false), map_initialized(false) { }
 
 GameStatusMonitor::~GameStatusMonitor() { }
 
-void GameStatusMonitor::initializeGameStatus(Map& map, 
-																						 GameStatusUpdate& update) {
+void GameStatusMonitor::initializeMap(Map& map) {
 	std::unique_lock<std::mutex> lock(this->mutex);
-	this->game_status.initialize(map, update);
-	this->synchronized = true;
+	this->game_status.initialize(map);
+	this->map_initialized = true;
 	this->cv.notify_one();
+}
+
+Map& GameStatusMonitor::getMap() {
+	std::unique_lock<std::mutex> lock(this->mutex);
+	while (!this->map_initialized) this->cv.wait(lock);
+	return this->game_status.getMap();
 }
 
 void GameStatusMonitor::updateGameStatus(GameStatusUpdate& status_update) {
@@ -29,12 +35,4 @@ GameStatusUpdate GameStatusMonitor::getUpdate() {
 	this->synchronized = false;
 	this->cv.notify_one();
 	return update;
-}
-
-Map& GameStatusMonitor::getMap() {
-	std::unique_lock<std::mutex> lock(this->mutex);
-	while (!this->synchronized) this->cv.wait(lock);
-	this->synchronized = false;
-	this->cv.notify_one();
-	return this->game_status.getMap();
 }
