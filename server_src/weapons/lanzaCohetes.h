@@ -9,4 +9,4 @@ class LanzaCohetes : public Arma {
         virtual ~LanzaCohetes() override;
 };
 
-#endif //GAMESTATUS_H
+#endif

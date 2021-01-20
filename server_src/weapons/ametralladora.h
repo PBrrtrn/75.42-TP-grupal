@@ -9,4 +9,4 @@ class Ametralladora : public Arma {
         virtual ~Ametralladora() override;
 };
 
-#endif //GAMESTATUS_H
+#endif

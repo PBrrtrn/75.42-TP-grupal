@@ -9,4 +9,4 @@ class Pistola : public Arma {
         virtual ~Pistola() override;
 };
 
-#endif //GAMESTATUS_H
+#endif

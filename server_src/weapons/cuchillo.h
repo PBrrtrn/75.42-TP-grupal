@@ -9,4 +9,4 @@ class Cuchillo : public Arma {
         virtual ~Cuchillo() override;
 };
 
-#endif //GAMESTATUS_H
+#endif

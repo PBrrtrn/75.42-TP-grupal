@@ -9,4 +9,4 @@ class CanionDeCadena : public Arma {
         virtual ~CanionDeCadena() override;
 };
 
-#endif //GAMESTATUS_H
+#endif

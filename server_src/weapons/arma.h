@@ -15,4 +15,4 @@ class Arma {
 		virtual ~Arma();
 };
 
-#endif //GAMESTATUS_H
+#endif

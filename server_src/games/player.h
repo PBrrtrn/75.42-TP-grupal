@@ -20,4 +20,4 @@ public:
 	~Player();
 };
 
-#endif //GAMESTATUS_H
+#endif
