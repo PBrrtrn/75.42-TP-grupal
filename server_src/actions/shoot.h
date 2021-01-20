@@ -2,6 +2,8 @@
 #define SHOOT_H
 #include "action.h"
 
+#define DELTA 0.1
+
 class Shoot : public Action {
 
     public:

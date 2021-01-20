@@ -9,7 +9,6 @@
 #include "player.h"
 
 class GameStatus {
-	
 	Vector position;
 	std::unordered_map<int, Vector> playersPositions;
 	std::unordered_map<int, Vector> playersDirections;
