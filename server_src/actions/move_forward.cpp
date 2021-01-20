@@ -11,7 +11,6 @@ void MoveForward::tryAction(GameStatus& gs, int clientID){
     angle.turnUnitary();
     Vector next_position = pos + (angle * STEP);
     is_colision(clientID, next_position, gs);
-    
 }
 
 MoveForward::~MoveForward() {}

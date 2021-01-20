@@ -30,6 +30,9 @@ Vector GameStatus::getPosition(int playerID) {
 void GameStatus::addPlayer(int playerID, Vector &position, Vector &direction) {
     this->playersPositions[playerID] = position;
     this->playersDirections[playerID] = direction;
+
+    Player jugador(playerID);
+	this->players.insert({playerID, jugador});
 }
 
 float GameStatus::getAngle(int playerID) {

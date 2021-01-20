@@ -91,10 +91,6 @@ void ThreadGame::addClient(ThreadClient* client, int id){
 	Vector position(3,4);
 	Vector direction(1,0);
 	this->gameStatus.addPlayer(id, position, direction);
-	
-	//GameStatus g(); //removeme
-	//this->out_queues.at(id)->push(this->gameStatus); //removeme
-	
 }
 
 void ThreadGame::tryMoveForward(int id) {
@@ -113,6 +109,8 @@ void ThreadGame::tryMoveRight(int id) {
     this->move_right.tryAction(this->gameStatus, id );
 }
 
-void ThreadGame::tryShoot(int id) {}
+void ThreadGame::tryShoot(int id) {
+	this->shoot.tryAction(this->gameStatus, id);
+}
 
 ThreadGame:: ~ThreadGame(){}

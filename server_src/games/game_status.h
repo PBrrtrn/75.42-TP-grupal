@@ -6,12 +6,14 @@
 #include "vector.h"
 #include "../../common_src/Map.h"
 #include <unordered_map>
+#include "player.h"
 
-class GameStatus{
+class GameStatus {
 	
 	Vector position;
 	std::unordered_map<int, Vector> playersPositions;
 	std::unordered_map<int, Vector> playersDirections;
+	std::unordered_map<int,Player> players;
 	Vector angle;
 	Map map;
 	
@@ -28,6 +30,7 @@ public:
     void setAngle(int playerID, float angle);
     
     friend class Action;
+	friend class Shoot;
     
 	~GameStatus();
 };

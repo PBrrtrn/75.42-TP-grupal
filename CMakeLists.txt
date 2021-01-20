@@ -24,12 +24,19 @@ add_executable (tp
   server_src/communication/message_processor.cpp
   server_src/communication/thread_client.cpp
   server_src/communication/thread_acceptor.cpp
+  server_src/games/player.cpp
   server_src/games/game_status.cpp
   server_src/games/thread_game.cpp
   server_src/games/vector.cpp
   server_src/client.cpp
   server_src/server_main.cpp
   server_src/server.cpp
+  server_src/weapons/arma.cpp
+  server_src/weapons/ametralladora.cpp
+  server_src/weapons/canionDeCadena.cpp
+  server_src/weapons/cuchillo.cpp
+  server_src/weapons/pistola.cpp
+  server_src/weapons/lanzaCohetes.cpp
 )
 
 target_link_libraries(tp SDL2 SDL2_image pthread)

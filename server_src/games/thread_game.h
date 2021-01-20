@@ -17,6 +17,7 @@
 #include "../actions/move_left.h"
 #include "../actions/move_backward.h"
 #include "../actions/move_forward.h"
+#include "../actions/shoot.h"
 
 #include <unistd.h>  //removeme
 
@@ -29,6 +30,7 @@ class ThreadGame: public Thread {
         MoveLeft move_left;
         MoveRight move_right;
         MoveBackward move_backward;
+        Shoot shoot;
         
         std::unordered_map<int, BlockingQueue<GameStatus>*> out_queues;
         
