@@ -9,7 +9,7 @@
 class Player {
 	int id;
     int vida;
-    std::array <Arma, AMOUNT_WEAPONS> armas;
+    std::array<Arma,AMOUNT_WEAPONS> armas;
 
 public:
 	

@@ -10,6 +10,7 @@ class Arma {
 		std::string nombre;
 
 	public:
+		Arma();
 		Arma(std::string config);
 		virtual ~Arma();
 };

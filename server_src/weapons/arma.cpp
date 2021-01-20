@@ -5,4 +5,10 @@ Arma::Arma(std::string config) {
     this->cadencia = cadencia;
 }
 
+Arma::Arma(){
+	this->nombre = "VACIA";
+    this->precision = 0;
+    this->cadencia = 0;	
+	}
+
 Arma::~Arma(){}
