@@ -4,7 +4,6 @@
 #include <vector>
 #include <SDL2/SDL.h>
 
-#include "Thread.h"
 #include "GameStatusMonitor.h"
 #include "GameStatus.h"
 #include "Window.h"
@@ -12,6 +11,7 @@
 #include "Texture.h"
 #include "MapDrawer.h"
 #include "../common_src/Map.h"
+#include "../common_src/Thread.h"
 
 class Renderer : public Thread {
 private:

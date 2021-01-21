@@ -1,7 +1,7 @@
 #ifndef __SERVER_LISTENER_H__
 #define __SERVER_LISTENER_H__
 
-#include "Thread.h"
+#include "../common_src/Thread.h"
 #include "GameStatusMonitor.h"
 
 class ServerListener : public Thread {

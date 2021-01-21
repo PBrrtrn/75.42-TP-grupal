@@ -21,7 +21,7 @@ void ServerListener::run() {
 		un MenuHandler (o algo por el estilo) dependiendo de si se encuentra
 		en el medio de una partida o no.
 																	- Pablo (20/12/2020)								 */
-	Map map("assets/maps/map.yml");
+	Map map("../assets/maps/map.yml");
 
 	this->game_status_monitor.initializeMap(map);
 

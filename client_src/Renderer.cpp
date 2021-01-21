@@ -76,7 +76,7 @@ void Renderer::load() {
   recibiendo sus paths y dimensiones desde una clase Config que las cargue
   desde el YML. Si, estoy programando en Navidad.
                                       - Pablo (25/12/2020)              */
-  Texture *texture = new Texture(this->renderer, "assets/textures/wood.png");
+  Texture *texture = new Texture(this->renderer, "../assets/textures/wood.png");
   this->wall_textures.push_back(texture);
 }
 
