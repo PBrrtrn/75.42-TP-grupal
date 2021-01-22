@@ -11,6 +11,11 @@
 #define TYPE_MOVE_RIGHT 'd'
 #define TYPE_EXIT_GAME 'e'
 #define TYPE_SHOOT 'l'
+#define TYPE_CHANGE_PISTOLA '1'
+#define TYPE_CHANGE_CUCHILLO '2'
+#define TYPE_CHANGE_LANZA_COHETES '3'
+#define TYPE_CHANGE_AMETRALLADORA '4'
+#define TYPE_CHANGE_CANION '5'
 
 class Message {
 

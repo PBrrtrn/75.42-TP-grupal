@@ -74,6 +74,26 @@ void ThreadGame::checkNews(){
 	case TYPE_SHOOT:
 		this->tryShoot(m.getClientId());
 		break;
+	
+	case TYPE_CHANGE_AMETRALLADORA:
+		this->changeWeapon("AMETRALLADORA");
+		break;
+	
+	case TYPE_CHANGE_CANION:
+		this->changeWeapon("CANION");
+		break;
+
+	case TYPE_CHANGE_CUCHILLO:
+		this->changeWeapon("CUCHILLO");
+		break;
+
+	case TYPE_CHANGE_LANZA_COHETES:
+		this->changeWeapon("LANZA_COHETES");
+		break;
+
+	case TYPE_CHANGE_PISTOLA:
+		this->changeWeapon("PISTOLA");
+		break;
 
 	default:
 		break;

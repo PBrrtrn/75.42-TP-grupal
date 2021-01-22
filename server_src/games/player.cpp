@@ -7,6 +7,17 @@ Player::Player(int id){
 	this->has_key = false;
 	this->max_bullets = 100; //TODO definir bien y pasar a config
 	this->bullets = 8; //TODO pasar a config -- cant balas con las que inicia
+	this->armas[0] =  Cuchillo("config");
+	this->armas[1] = Pistola("config");
+	this->selected_weapon_idx = 1;
+}
+
+int Player::getWeaponPrecision() {
+	return this->armas[this->selected_weapon_idx].getPrecision();
+}
+
+int Player::getWeaponAttackRange() {
+	return this->armas[this->selected_weapon_idx].getAttackRange();
 }
 
 void Player::loseHealth(int amount) {
@@ -15,6 +26,12 @@ void Player::loseHealth(int amount) {
 		this->health = 20;
 		this->vidas--;
 		this->has_key = false;
+		this->bullets = 8;
+		this->selected_weapon_idx = 1;
+		Arma a("config");
+		this->armas[2] = a;
+		this->armas[3] = a;
+		this->armas[4] = a;
 	}
 }
 
@@ -54,6 +71,7 @@ bool Player::addWeapon(Arma& arma) {
 		}
 	}
 	this->armas[free_idx] = arma;
+	this->selected_weapon_idx = free_idx;
 	return true;
 }
 
