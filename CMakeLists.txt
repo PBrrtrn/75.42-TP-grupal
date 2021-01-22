@@ -38,6 +38,16 @@ add_executable (tp
   server_src/weapons/cuchillo.cpp
   server_src/weapons/pistola.cpp
   server_src/weapons/lanzaCohetes.cpp
+  server_src/items/item.cpp
+  server_src/items/arma_ametralladora.cpp
+  server_src/items/arma_canion.cpp
+  server_src/items/arma_lanzacohetes.cpp
+  server_src/items/blood.cpp
+  server_src/items/bullets.cpp
+  server_src/items/food.cpp
+  server_src/items/key.cpp
+  server_src/items/medkit.cpp
+  server_src/items/treasure.cpp
 )
 
 target_link_libraries(tp SDL2 SDL2_image pthread)
