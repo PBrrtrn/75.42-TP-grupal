@@ -4,10 +4,17 @@ GameStatus::GameStatus(std::string mapLocation) {
 	MapData md(mapLocation);
 	Map m(md);
 	this->map = m;
-	
+
+	/***************** REMOVE ************************************/
 	Vector v(2,3); //removeme
 	Item i(v); //removeme
 	this->items.push_back(i); //removeme
+
+	Vector v2(2,3); //removeme
+	ArmaAmetralladora a(v2); //removeme
+	this->items.push_back(i); //removeme
+	/***************** REMOVE ************************************/
+
 }
 
 void GameStatus::setPosition(int playerID, float pos_x, float pos_y) {
@@ -41,16 +48,16 @@ float GameStatus::getAngle(int playerID) {
 
 void GameStatus::checkPlayerPickups(){
 	for (auto& item: this->items) {
-		std::cout << "leyendo el unico item que tiene el gs, posx "<< item.getPosition().getXCoordinate() << std::endl;
-        //int item_id = it.first;
+		Vector item_position = item.getPosition();
 
-        for (auto& player: this->players){
-			//key: player.first;
-			//valor: player.second;
-			
-			//comparar distancia de posicion item - posicion player
-			// si la norma es menor a X AND item.canBePickedUp(), item.pickUp();
-			
+        for (auto& it: this->players){
+			int player_id = it.first;
+			Player player = it.second;
+
+			Vector distance = item_position - this->getPosition(player_id);
+			if (abs(distance.calculateNorma()) < 1 && item.canBePickedUp()) {
+				item.pickUp(player);
+			}			
 		}
         
     }

@@ -11,6 +11,14 @@ Arma::Arma(){
     this->precision = 0;
     this->cadencia = 0;	
     this->balas = 0;
-	}
+}
+
+bool Arma::is_empty() {
+    return this->nombre == "VACIA";
+}
+
+bool Arma::operator==(const Arma &another) {
+    return this->nombre == another.nombre;
+}
 
 Arma::~Arma(){}

@@ -12,6 +12,8 @@ class Player {
     int health;
     
     int puntaje;
+    int max_bullets;
+    int bullets;
     
     bool has_key;
     
@@ -21,7 +23,13 @@ public:
 	
 	Player(int id);
     void loseHealth(int amount);
+    bool gainHealth(int amount);
+    int getHealth();
     bool is_dead();
+    bool addScore(int amount);
+    bool addBullets(int amount);
+    bool gainKey();
+    bool addWeapon(Arma& arma);
 	~Player();
 };
 

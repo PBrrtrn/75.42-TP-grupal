@@ -13,6 +13,8 @@ class Arma {
 	public:
 		Arma();
 		Arma(std::string config);
+		bool operator==(const Arma &another);
+		bool is_empty();
 		virtual ~Arma();
 };
 

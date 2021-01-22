@@ -2,29 +2,21 @@
 
 Item::Item(Vector pos_inicial) {
 	this->pos = pos_inicial;
+	this->canBePicked = true;
+}
+
+bool Item::pickUpAction(Player& p) {
+	return false;
 }
 
 bool Item::pickUp(Player& p){
-	
-	//ejecutar cambio de estado si el pickup fue exitoso (this->canBePickedUp = false);
-	
-	//si el item cura
-	//return p.gainHealth(this->amount);
 
-	//si el item son balas
-	//return p.addBullets(this->amount);
-	
-	//si el item es un arma
-	//return p.addWeapon(this->weapon);
-	
-	//si el item es un tesoro
-	//return p.addScore(this->amount);
-	
-	//si el item es una llave
-	//return p.gainKey();	
-	
-	return true;
-	
+	if(this->pickUpAction(p)) {
+		this->canBePicked = false;
+		return true;
+	} else {
+		return false;
+	}
 }
 
 Vector Item::getPosition(){

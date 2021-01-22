@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include "player.h"
 #include "../items/item.h"
+#include "../items/arma_ametralladora.h"
 #include <vector>
 
 class GameStatus {

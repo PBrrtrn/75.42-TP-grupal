@@ -6,7 +6,7 @@
 
 class Item {
 
-private:
+protected:
 	bool canBePicked;
 	int timeToRespawn;
 	int amount;
@@ -19,6 +19,8 @@ public:
 	bool pickUp(Player& p);
 
 	bool canBePickedUp();
+
+	virtual bool pickUpAction(Player& p);
 
 	Vector getPosition();
 
