@@ -20,6 +20,7 @@ add_executable (tp
   server_src/actions/move_right.cpp
   server_src/actions/shoot.cpp
   server_src/games/game_manager.cpp
+  server_src/items/item.cpp
   server_src/communication/message.cpp
   server_src/communication/message_processor.cpp
   server_src/communication/thread_client.cpp

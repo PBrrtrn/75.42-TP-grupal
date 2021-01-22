@@ -10,6 +10,11 @@ class Player {
 	int id;
     int vidas;
     int health;
+    
+    int puntaje;
+    
+    bool has_key;
+    
     std::array<Arma,AMOUNT_WEAPONS> armas;
 
 public:

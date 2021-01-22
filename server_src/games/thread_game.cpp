@@ -11,15 +11,37 @@ void ThreadGame:: run() {
     while (keep_running) {
         
         this->checkNews();
+        this->checkPlayerPickups();
+        this->respawnItems();
         this->sendGameUpdates();
         
         usleep(1000000/60); //todo: hacer variable respecto a tiempo demorado en ejecutar checkNews y sendUpdates
         
     }
+    
+    this->sendGameStatistics();
+    
 }
 
 GameStatus ThreadGame:: getGameStatus() {
 	return this->gameStatus;
+}
+
+void ThreadGame::respawnItems(){
+	//iterar por todos los items y checkear si hay que "revivirlos"
+}
+
+void ThreadGame::checkPlayerPickups(){
+	
+	this->gameStatus.checkPlayerPickups();
+	
+	//for all items en game status
+	//comparar distancia de item contra todos los jugadores
+	//si la distancia es menor a un entero en la configuracion, entonces pick up
+}
+
+void ThreadGame::sendGameStatistics(){
+	
 }
 
 void ThreadGame::checkNews(){

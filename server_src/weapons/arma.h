@@ -7,6 +7,7 @@ class Arma {
 	protected:
 		int precision;
 		float cadencia; //cuanto dispara por segundo
+		int balas;
 		std::string nombre;
 
 	public:

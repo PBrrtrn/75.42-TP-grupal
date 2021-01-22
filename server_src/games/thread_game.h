@@ -39,6 +39,11 @@ class ThreadGame: public Thread {
         void checkNews();
         
         void expelClient(int id);
+        
+
+		void checkPlayerPickups();
+
+		void sendGameStatistics();   
 
     public:
         ThreadGame(int gameId, BlockingQueue<Message>* m);
@@ -52,6 +57,8 @@ class ThreadGame: public Thread {
         GameStatus getGameStatus();
         
         void sendGameUpdates();
+        
+        void respawnItems();
         
         virtual ~ThreadGame() override;
 };
