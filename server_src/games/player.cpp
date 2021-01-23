@@ -10,6 +10,10 @@ Player::Player(int id){
 	this->armas[0] =  Cuchillo("config");
 	this->armas[1] = Pistola("config");
 	this->selected_weapon_idx = 1;
+	Arma a("config");
+	this->armas[2] = a;
+	this->armas[3] = a;
+	this->armas[4] = a;
 }
 
 int Player::getWeaponPrecision() {
@@ -82,11 +86,12 @@ bool Player::addWeapon(Arma& arma) {
 	Ametralladora ametralladora("config");
 	CanionDeCadena canion("config");
 	LanzaCohetes lanza_cohetes("config");
-	if (arma == ametralladora && this->armas[2].is_empty()) {
+	Arma empty("config");
+	if (arma == ametralladora && this->armas[2] == empty) {
 		return this->_addWeapon(2, arma);
-	} else if (arma == canion && this->armas[3].is_empty()) {
+	} else if (arma == canion && this->armas[3] == empty) {
 		return this->_addWeapon(3, arma);
-	} else if (arma == lanza_cohetes && this->armas[4].is_empty()) {
+	} else if (arma == lanza_cohetes && this->armas[4] == empty) {
 		return this->_addWeapon(4, arma);
 	} else {
 		return false;
@@ -126,6 +131,8 @@ int Player::getCurrentBullets(){
 }
 
 bool Player::changeWeapon(int weapon_idx){
+	Arma empty("config");
+	if (this->armas[weapon_idx] == empty) return false;
 	this->selected_weapon_idx = weapon_idx;
 	return true;
 }
