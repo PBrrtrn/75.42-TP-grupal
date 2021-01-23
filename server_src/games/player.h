@@ -24,6 +24,7 @@ class Player {
     int selected_weapon_idx;
     
     std::array<Arma,AMOUNT_WEAPONS> armas;
+    bool _addWeapon(int idx, Arma& arma);
 
 public:
 	

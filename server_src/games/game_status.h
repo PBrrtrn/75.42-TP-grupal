@@ -43,6 +43,10 @@ public:
     friend class Action;
 	friend class Shoot;
 	friend class ChangeWeaponCuchillo;
+	friend class ChangeWeaponPistola;
+	friend class ChangeWeaponAmetralladora;
+	friend class ChangeWeaponCanion;
+	friend class ChangeWeaponLanzaCohetes;
 	friend class UseDoor;
     
 	~GameStatus();
