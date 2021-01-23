@@ -4,6 +4,7 @@ Arma::Arma(std::string config) {
     this->precision = precision;
     this->cadencia = cadencia;
     this->balas = 100;
+    this->indice = -1;
 }
 
 Arma::Arma(){
@@ -12,6 +13,7 @@ Arma::Arma(){
     this->cadencia = 0;	
     this->balas = 0;
     this->attack_range = 0;
+    this->indice = -1;
 }
 
 int Arma::getAttackRange() {
@@ -28,6 +30,10 @@ bool Arma::is_empty() {
 
 bool Arma::operator==(const Arma &another) {
     return this->nombre == another.nombre;
+}
+
+int Arma::getIndex(){
+	return this->indice;
 }
 
 Arma::~Arma(){}

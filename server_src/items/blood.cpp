@@ -1,6 +1,6 @@
 #include "blood.h"
 
-Blood::Blood(Vector pos_inicial) : Item(pos_inicial) {
+Blood::Blood(Vector pos_inicial,bool respawns) : Item(pos_inicial,respawns) {
     this->amount = 1; //TODO pasar a config
 }
 

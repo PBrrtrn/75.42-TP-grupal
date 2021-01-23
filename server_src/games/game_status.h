@@ -39,6 +39,8 @@ public:
     
     void checkPlayerBullets();
     
+    void respawnItems();
+    
     
     friend class Action;
 	friend class Shoot;

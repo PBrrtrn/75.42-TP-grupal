@@ -1,6 +1,6 @@
 #include "food.h"
 
-Food::Food(Vector pos_inicial) : Item(pos_inicial) {
+Food::Food(Vector pos_inicial,bool respawns) : Item(pos_inicial,respawns) {
     this->amount = 10; //TODO pasar a config
 }
 

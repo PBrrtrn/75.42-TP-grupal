@@ -7,7 +7,7 @@ class Blood : public Item {
 
 public:
 
-	Blood(Vector pos_inicial);
+	Blood(Vector pos_inicial,bool respawns);
 
 	bool pickUpAction(Player& p) override;
 

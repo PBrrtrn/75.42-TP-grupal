@@ -10,10 +10,6 @@ Player::Player(int id){
 	this->armas[0] =  Cuchillo("config");
 	this->armas[1] = Pistola("config");
 	this->selected_weapon_idx = 1;
-	Arma a("config");
-	this->armas[2] = a;
-	this->armas[3] = a;
-	this->armas[4] = a;
 }
 
 int Player::getWeaponPrecision() {
@@ -24,7 +20,7 @@ int Player::getWeaponAttackRange() {
 	return this->armas[this->selected_weapon_idx].getAttackRange();
 }
 
-void Player::loseHealth(int amount) {
+bool Player::loseHealth(int amount) {
 	this->health = this->health - amount;
 	if (this->health <= 0 && this->vidas > 0) {
 		this->health = 20;
@@ -36,6 +32,9 @@ void Player::loseHealth(int amount) {
 		this->armas[2] = a;
 		this->armas[3] = a;
 		this->armas[4] = a;
+		return true;
+	} else {
+		return false;
 	}
 }
 
@@ -66,36 +65,11 @@ bool Player::addBullets(int amount) {
 	return false;
 }
 
-/*
 bool Player::addWeapon(Arma& arma) {
-	int free_idx;
-	for(int i = 0; i < this->armas.size(); i++) {
-		if (this->armas[i].is_empty()) free_idx = i;
-		if (this->armas[i] == arma) {
-			return false;
-		}
+	if (arma.getIndex() < this->armas.size() && this->armas[arma.getIndex()].is_empty()){
+		return this->_addWeapon(arma.getIndex(),arma);
 	}
-	this->armas[free_idx] = arma;
-	this->selected_weapon_idx = free_idx;
-	return true;
-}
-*/
-
-//TODO chequear hardcodeo de posiciones -- no se si esta ok
-bool Player::addWeapon(Arma& arma) {
-	Ametralladora ametralladora("config");
-	CanionDeCadena canion("config");
-	LanzaCohetes lanza_cohetes("config");
-	Arma empty("config");
-	if (arma == ametralladora && this->armas[2] == empty) {
-		return this->_addWeapon(2, arma);
-	} else if (arma == canion && this->armas[3] == empty) {
-		return this->_addWeapon(3, arma);
-	} else if (arma == lanza_cohetes && this->armas[4] == empty) {
-		return this->_addWeapon(4, arma);
-	} else {
-		return false;
-	}
+	return false;
 }
 
 bool Player::_addWeapon(int idx, Arma& arma) {
@@ -131,8 +105,7 @@ int Player::getCurrentBullets(){
 }
 
 bool Player::changeWeapon(int weapon_idx){
-	Arma empty("config");
-	if (this->armas[weapon_idx] == empty) return false;
+	if (this->armas[weapon_idx].is_empty()) return false;
 	this->selected_weapon_idx = weapon_idx;
 	return true;
 }

@@ -13,6 +13,7 @@ void ThreadGame:: run() {
         this->checkNews();
         this->checkPlayerPickups();
         this->respawnItems();
+        //this->respawnPlayers();
         this->checkPlayerBullets();
         this->sendGameUpdates();
         
@@ -30,6 +31,7 @@ GameStatus ThreadGame:: getGameStatus() {
 
 void ThreadGame::respawnItems(){
 	//iterar por todos los items y checkear si hay que "revivirlos"
+	this->gameStatus.respawnItems();
 }
 
 void ThreadGame::checkPlayerBullets(){

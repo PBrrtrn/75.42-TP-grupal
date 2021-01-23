@@ -9,7 +9,7 @@ class ArmaAmetralladora : public Item {
 		Ametralladora ametralladora;
 
 	public:
-		ArmaAmetralladora(Vector pos_inicial);
+		ArmaAmetralladora(Vector pos_inicial,bool respawns);
 		bool pickUpAction(Player& p) override;
 		~ArmaAmetralladora() override;
 

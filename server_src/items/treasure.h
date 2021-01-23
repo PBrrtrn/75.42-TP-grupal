@@ -7,7 +7,7 @@ class Treasure : public Item {
 
 public:
 
-	Treasure(Vector pos_inicial);
+	Treasure(Vector pos_inicial,bool respawns);
 
 	bool pickUpAction(Player& p) override;
 

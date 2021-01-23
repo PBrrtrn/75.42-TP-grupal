@@ -7,7 +7,7 @@ class Bullets : public Item {
 
 public:
 
-	Bullets(Vector pos_inicial);
+	Bullets(Vector pos_inicial,bool respawns);
 
 	bool pickUpAction(Player& p) override;
 

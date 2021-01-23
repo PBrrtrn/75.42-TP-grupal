@@ -1,6 +1,6 @@
 #include "bullets.h"
 
-Bullets::Bullets(Vector pos_inicial) : Item(pos_inicial) {
+Bullets::Bullets(Vector pos_inicial,bool respawns) : Item(pos_inicial,respawns) {
     this->amount = 5;
 }
 

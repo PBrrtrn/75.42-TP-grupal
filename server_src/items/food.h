@@ -7,7 +7,7 @@ class Food : public Item {
 
 public:
 
-	Food(Vector pos_inicial);
+	Food(Vector pos_inicial,bool respawns);
 
 	bool pickUpAction(Player& p) override;
 

@@ -7,11 +7,11 @@ GameStatus::GameStatus(std::string mapLocation) {
 
 	/***************** REMOVE ************************************/
 	Vector v(2,3); //removeme
-	Item i(v); //removeme
+	Item i(v,true); //removeme
 	this->items.push_back(i); //removeme
 
 	Vector v2(2,3); //removeme
-	ArmaAmetralladora a(v2); //removeme
+	ArmaAmetralladora a(v2,true); //removeme
 	this->items.push_back(i); //removeme
 	/***************** REMOVE ************************************/
 
@@ -66,13 +66,20 @@ void GameStatus::checkPlayerPickups(){
 void GameStatus::checkPlayerBullets(){
 	for (auto& it: this->players){
 		int player_id = it.first;
-		Player player = it.second;
+		Player& player = it.second;
 
 		if (player.getCurrentBullets() == 0) {
 			player.changeWeapon(0);
 		}		
 	}	
 	
+}
+
+void GameStatus::respawnItems(){
+	for (auto& it: this->items){
+		Item& item = it;
+		item.tick();
+	}
 }
 
 GameStatus::~GameStatus() {}

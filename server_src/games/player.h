@@ -29,7 +29,7 @@ class Player {
 public:
 	
 	Player(int id);
-    void loseHealth(int amount);
+    bool loseHealth(int amount);
     bool gainHealth(int amount);
     int getHealth();
     bool is_dead();

@@ -12,7 +12,7 @@ private:
 
 public:
 
-	ArmaLanzaCohetes(Vector pos_inicial);
+	ArmaLanzaCohetes(Vector pos_inicial,bool respawns);
 
 	bool pickUpAction(Player& p) override;
 

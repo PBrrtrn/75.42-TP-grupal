@@ -7,7 +7,7 @@ class Medkit : public Item {
 
 public:
 
-	Medkit(Vector pos_inicial);
+	Medkit(Vector pos_inicial,bool respawns);
 
 	bool pickUpAction(Player& p) override;
 

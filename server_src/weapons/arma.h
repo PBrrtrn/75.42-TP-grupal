@@ -9,6 +9,7 @@ class Arma {
 		float cadencia; //cuanto dispara por segundo
 		int balas;
 		int attack_range;
+		int indice;
 		std::string nombre;
 
 	public:
@@ -18,6 +19,7 @@ class Arma {
 		bool is_empty();
 		int getAttackRange();
 		int getPrecision();
+		int getIndex();
 		virtual ~Arma();
 };
 

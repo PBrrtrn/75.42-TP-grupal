@@ -1,6 +1,6 @@
 #include "treasure.h"
 
-Treasure::Treasure(Vector pos_inicial) : Item(pos_inicial) {
+Treasure::Treasure(Vector pos_inicial,bool respawns) : Item(pos_inicial,respawns) {
     this->amount = 50; //TODO pasar a config -- VARIA EL VALOR OJO
 }
 

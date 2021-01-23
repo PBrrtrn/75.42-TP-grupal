@@ -11,14 +11,20 @@ protected:
 	int timeToRespawn;
 	int amount;
 	Vector pos;
+	bool respawns;
 
 public:
 
-	Item(Vector pos_inicial);
+	Item(Vector pos_inicial,bool respawns);
 
 	bool pickUp(Player& p);
 
 	bool canBePickedUp();
+	
+	int getTimeToRespawn();
+	
+	/*Si el objeto fue creado como respawneable, reduce en 1 el timer. Si llego a 0 y es respawneable, se marca como levantable.*/
+	bool tick();
 
 	virtual bool pickUpAction(Player& p);
 

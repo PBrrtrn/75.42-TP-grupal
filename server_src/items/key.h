@@ -7,7 +7,7 @@ class Key : public Item {
 
 public:
 
-	Key(Vector pos_inicial);
+	Key(Vector pos_inicial,bool respawns);
 
 	bool pickUpAction(Player& p) override;
 
