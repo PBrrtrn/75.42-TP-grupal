@@ -35,9 +35,12 @@ public:
     bool addScore(int amount);
     bool addBullets(int amount);
     bool gainKey();
+    bool useKey();
     bool addWeapon(Arma& arma);
     int getWeaponPrecision();
     int getWeaponAttackRange();
+    int getCurrentBullets();
+    bool changeWeapon(int weapon_idx);
 	~Player();
 };
 

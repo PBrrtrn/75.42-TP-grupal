@@ -19,6 +19,8 @@ add_executable (tp
   server_src/actions/move_left.cpp
   server_src/actions/move_right.cpp
   server_src/actions/shoot.cpp
+  server_src/actions/change_weapon_cuchillo.cpp
+  server_src/actions/use_door.cpp
   server_src/games/game_manager.cpp
   server_src/items/item.cpp
   server_src/communication/message.cpp
@@ -29,6 +31,7 @@ add_executable (tp
   server_src/games/game_status.cpp
   server_src/games/thread_game.cpp
   server_src/games/vector.cpp
+  server_src/games/door.cpp
   server_src/client.cpp
   server_src/server_main.cpp
   server_src/server.cpp

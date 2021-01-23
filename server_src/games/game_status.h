@@ -10,12 +10,16 @@
 #include "../items/item.h"
 #include "../items/arma_ametralladora.h"
 #include <vector>
+#include "door.h"
 
 class GameStatus {
+	
+private:
 	Vector position;
 	std::unordered_map<int, Vector> playersPositions;
 	std::unordered_map<int, Vector> playersDirections;
 	std::unordered_map<int,Player> players;
+	std::unordered_map<int,Door> doors;
 	std::vector<Item> items;
 	Vector angle;
 	Map map;
@@ -33,9 +37,13 @@ public:
     void setAngle(int playerID, float angle);
     void checkPlayerPickups();
     
+    void checkPlayerBullets();
+    
     
     friend class Action;
 	friend class Shoot;
+	friend class ChangeWeaponCuchillo;
+	friend class UseDoor;
     
 	~GameStatus();
 };

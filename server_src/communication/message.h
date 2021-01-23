@@ -16,6 +16,7 @@
 #define TYPE_CHANGE_LANZA_COHETES '3'
 #define TYPE_CHANGE_AMETRALLADORA '4'
 #define TYPE_CHANGE_CANION '5'
+#define TYPE_USE_DOOR 'f'
 
 class Message {
 

@@ -18,8 +18,9 @@
 #include "../actions/move_backward.h"
 #include "../actions/move_forward.h"
 #include "../actions/shoot.h"
+#include "../actions/change_weapon_cuchillo.h"
+#include "../actions/use_door.h"
 
-#include <unistd.h>  //removeme
 
 class ThreadGame: public Thread {
         int id;
@@ -31,6 +32,8 @@ class ThreadGame: public Thread {
         MoveRight move_right;
         MoveBackward move_backward;
         Shoot shoot;
+        ChangeWeaponCuchillo change_cuchillo;
+        UseDoor use_door;
         
         std::unordered_map<int, BlockingQueue<GameStatus>*> out_queues;
         
@@ -59,6 +62,15 @@ class ThreadGame: public Thread {
         void sendGameUpdates();
         
         void respawnItems();
+		void checkPlayerBullets();   
+		
+		void changeWeaponAmetralladora(int id);
+		void changeWeaponCanion(int id);
+		void changeWeaponCuchillo(int id);
+		void changeWeaponLanzacohetes(int id);
+		void changeWeaponPistola(int id);
+		
+		void useDoor(int id);
         
         virtual ~ThreadGame() override;
 };

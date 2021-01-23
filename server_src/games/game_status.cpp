@@ -63,4 +63,16 @@ void GameStatus::checkPlayerPickups(){
     }
 }
 
+void GameStatus::checkPlayerBullets(){
+	for (auto& it: this->players){
+		int player_id = it.first;
+		Player player = it.second;
+
+		if (player.getCurrentBullets() == 0) {
+			player.changeWeapon(0);
+		}		
+	}	
+	
+}
+
 GameStatus::~GameStatus() {}

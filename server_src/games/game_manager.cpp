@@ -59,11 +59,7 @@ void GameManager::joinGame(int clientId, int gameId) {
 void GameManager::acceptClient(std::string socket, BlockingQueue<Message>& q){
 	std::cout << "Game manager accepted new Client:"<< this->clients_counter << std::endl;
 
-    //BlockingQueue<GameStatus>* queue_out = new BlockingQueue<GameStatus>();
-    //this->out_queues.insert(std::make_pair(this->clients_counter, queue_out));
-
     this->clientsThreads.insert({this->clients_counter, 
-        //new ThreadClient(this->clients_counter, q, *queue_out)});
         new ThreadClient(this->clients_counter, q )});
     this->clientsThreads.at(this->clients_counter)->start();
     this->clients_counter++;

@@ -13,6 +13,7 @@ void ThreadGame:: run() {
         this->checkNews();
         this->checkPlayerPickups();
         this->respawnItems();
+        this->checkPlayerBullets();
         this->sendGameUpdates();
         
         usleep(1000000/60); //todo: hacer variable respecto a tiempo demorado en ejecutar checkNews y sendUpdates
@@ -30,6 +31,12 @@ GameStatus ThreadGame:: getGameStatus() {
 void ThreadGame::respawnItems(){
 	//iterar por todos los items y checkear si hay que "revivirlos"
 }
+
+void ThreadGame::checkPlayerBullets(){
+	//iterar por todos los players y checkear si hay que hacerlos cambiar al cuchillo
+	this->gameStatus.checkPlayerBullets();
+}
+
 
 void ThreadGame::checkPlayerPickups(){
 	
@@ -76,24 +83,28 @@ void ThreadGame::checkNews(){
 		break;
 	
 	case TYPE_CHANGE_AMETRALLADORA:
-		this->changeWeapon("AMETRALLADORA");
+		this->changeWeaponAmetralladora(m.getClientId());
 		break;
 	
 	case TYPE_CHANGE_CANION:
-		this->changeWeapon("CANION");
+		this->changeWeaponCanion(m.getClientId());
 		break;
 
 	case TYPE_CHANGE_CUCHILLO:
-		this->changeWeapon("CUCHILLO");
+		this->changeWeaponCuchillo(m.getClientId());
 		break;
 
 	case TYPE_CHANGE_LANZA_COHETES:
-		this->changeWeapon("LANZA_COHETES");
+		this->changeWeaponLanzacohetes(m.getClientId());
 		break;
 
 	case TYPE_CHANGE_PISTOLA:
-		this->changeWeapon("PISTOLA");
+		this->changeWeaponPistola(m.getClientId());
 		break;
+		
+	case TYPE_USE_DOOR:
+		this->useDoor(m.getClientId());
+		break;		
 
 	default:
 		break;
@@ -153,6 +164,18 @@ void ThreadGame::tryMoveRight(int id) {
 
 void ThreadGame::tryShoot(int id) {
 	this->shoot.tryAction(this->gameStatus, id);
+}
+
+void ThreadGame::changeWeaponAmetralladora(int id){}
+void ThreadGame::changeWeaponCanion(int id){}
+void ThreadGame::changeWeaponCuchillo(int id){
+	this->change_cuchillo.tryAction(this->gameStatus,id);
+}
+void ThreadGame::changeWeaponLanzacohetes(int id){}
+void ThreadGame::changeWeaponPistola(int id){}
+
+void ThreadGame::useDoor(int id){
+	this->use_door.tryAction(this->gameStatus,id);
 }
 
 ThreadGame:: ~ThreadGame(){}

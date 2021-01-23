@@ -88,4 +88,22 @@ bool Player::gainKey() {
 	}
 }
 
+bool Player::useKey(){
+	if (this->has_key){
+		this->has_key = false;
+		return true;
+	} else {
+		return false;
+	}
+}
+
+int Player::getCurrentBullets(){
+	return this->bullets;
+}
+
+bool Player::changeWeapon(int weapon_idx){
+	this->selected_weapon_idx = weapon_idx;
+	return true;
+}
+
 Player::~Player(){}
