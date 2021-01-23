@@ -19,6 +19,10 @@
 #include "../actions/move_forward.h"
 #include "../actions/shoot.h"
 #include "../actions/change_weapon_cuchillo.h"
+#include "../actions/change_weapon_ametralladora.h"
+#include "../actions/change_weapon_pistola.h"
+#include "../actions/change_weapon_canion.h"
+#include "../actions/change_weapon_lanzacohetes.h"
 #include "../actions/use_door.h"
 
 
@@ -33,6 +37,11 @@ class ThreadGame: public Thread {
         MoveBackward move_backward;
         Shoot shoot;
         ChangeWeaponCuchillo change_cuchillo;
+        ChangeWeaponAmetralladora change_ametralladora;
+        ChangeWeaponCanion change_canion;
+        ChangeWeaponPistola change_pistola;
+        ChangeWeaponLanzaCohetes change_lanzacohetes;
+
         UseDoor use_door;
         
         std::unordered_map<int, BlockingQueue<GameStatus>*> out_queues;

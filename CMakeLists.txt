@@ -20,6 +20,10 @@ add_executable (tp
   server_src/actions/move_right.cpp
   server_src/actions/shoot.cpp
   server_src/actions/change_weapon_cuchillo.cpp
+  server_src/actions/change_weapon_pistola.cpp
+  server_src/actions/change_weapon_ametralladora.cpp
+  server_src/actions/change_weapon_canion.cpp
+  server_src/actions/change_weapon_lanzacohetes.cpp
   server_src/actions/use_door.cpp
   server_src/games/game_manager.cpp
   server_src/items/item.cpp

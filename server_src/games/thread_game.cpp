@@ -147,32 +147,43 @@ void ThreadGame::addClient(ThreadClient* client, int id){
 }
 
 void ThreadGame::tryMoveForward(int id) {
-    this->move_forward.tryAction(this->gameStatus, id );
+    this->move_forward.tryAction(this->gameStatus, id);
 }
 
 void ThreadGame::tryMoveBackward(int id) {
-    this->move_backward.tryAction(this->gameStatus, id );
+    this->move_backward.tryAction(this->gameStatus, id);
 }
 
 void ThreadGame::tryMoveLeft(int id) {
-    this->move_left.tryAction(this->gameStatus, id );
+    this->move_left.tryAction(this->gameStatus, id);
 }
 
 void ThreadGame::tryMoveRight(int id) {
-    this->move_right.tryAction(this->gameStatus, id );
+    this->move_right.tryAction(this->gameStatus, id);
 }
 
 void ThreadGame::tryShoot(int id) {
 	this->shoot.tryAction(this->gameStatus, id);
 }
 
-void ThreadGame::changeWeaponAmetralladora(int id){}
-void ThreadGame::changeWeaponCanion(int id){}
+void ThreadGame::changeWeaponAmetralladora(int id){
+	this->change_ametralladora.tryAction(this->gameStatus, id);
+}
+
+void ThreadGame::changeWeaponCanion(int id){
+	this->change_canion.tryAction(this->gameStatus, id);
+}
+
 void ThreadGame::changeWeaponCuchillo(int id){
 	this->change_cuchillo.tryAction(this->gameStatus,id);
 }
-void ThreadGame::changeWeaponLanzacohetes(int id){}
-void ThreadGame::changeWeaponPistola(int id){}
+void ThreadGame::changeWeaponLanzacohetes(int id){
+	this->change_lanzacohetes.tryAction(this->gameStatus, id);
+}
+
+void ThreadGame::changeWeaponPistola(int id){
+	this->change_pistola.tryAction(this->gameStatus, id);
+}
 
 void ThreadGame::useDoor(int id){
 	this->use_door.tryAction(this->gameStatus,id);
