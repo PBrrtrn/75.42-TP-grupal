@@ -20,8 +20,7 @@ void Shoot::tryAction(GameStatus& gs, int clientID){
                  target_distance <= gs.players.at(clientID).getWeaponAttackRange()) {
 				int precision = gs.players.at(clientID).getWeaponPrecision();
 				int danio = (rand() % 10 + 1) * precision / target_distance;
-				target.loseHealth(danio);
-				if (target.is_dead()) {
+				if (target.loseHealth(danio) ) {
 					std::cout << "this player has been killed" << std::endl;
 					//TODO: El arma a dropear tiene que ser del tipo que llevaba el jugador muerto en ese momento.
 					//TODO: Dropear item falso "cadaver" que no va a ser utilizable pero si visible.

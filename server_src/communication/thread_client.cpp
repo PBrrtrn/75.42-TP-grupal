@@ -27,13 +27,17 @@ void ThreadClient::run() {
 	
 			//recibir datos por socket
             
+            //this->socket.receive(&datos,tamanioDeDatos); //recibo datos binarios
+         
+			//Message m = MessageParser.parse(datos,tamanioDeDatos); //convierto datos binarios a un message.
+            
             usleep(id * 1000000 + 1000000); //removeme
             
             Message m(TYPE_MOVE_FORWARD,0,0,this->id); //removeme
             
             this->messages.push(m);
 
-			if ( this->messages_out != NULL && !this->messages_out->isEmpty())
+			if ( this->messages_out != NULL && !this->messages_out->isEmpty()) //puede que haya un problema similar al de la cola de entrada al servidor - hay que bloquear la cola, desencolar TODOS los game status pendientes de envio, y luego desbloquear
 			{
 				this->messages_out->pop();
 				std::cout << "got a new event in outgoing queue in client " << this->id << std::endl; 

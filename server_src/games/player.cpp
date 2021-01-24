@@ -21,6 +21,7 @@ int Player::getWeaponAttackRange() {
 	return this->armas[this->selected_weapon_idx].getAttackRange();
 }
 
+//si el jugador es muerto como resultado de perder vida, devuelvo true.
 bool Player::loseHealth(int amount) {
 	this->health = this->health - amount;
 	if (this->health <= 0 && this->vidas > 0) {

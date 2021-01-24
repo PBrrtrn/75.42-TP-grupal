@@ -5,6 +5,8 @@ Item::Item(Vector pos_inicial,bool respawns) {
 	this->canBePicked = true;
 	this->respawns = respawns;
 	this->timeToRespawn = 600; //600 frames, 10 segundos
+	this->isDecoration = false;
+	this->has_volume = false;
 }
 
 bool Item::pickUpAction(Player& p) {
@@ -44,5 +46,28 @@ bool Item::tick(){
 int Item::getTimeToRespawn(){
 	return this->timeToRespawn;
 }
+
+bool Item::isVisible(){
+	
+	if (this->canBePicked && !this->isDecoration) {
+		return true;
+	}
+	else if (!this->canBePicked && !this->isDecoration) {
+		return false;
+	}
+	else if (!this->canBePicked && this->isDecoration) {
+		return true;
+	} 
+	
+	return true;
+	//si se puede levantar y no es decoracion ->es visible -- es un item que se puede levantar
+	//si no se puede levantar y no es decoracion -> es invisible -- es un item que todavia no respawneo
+	//si no se puede levantar y es decoracion -> es visible --es un barrel / corpse
+}
+
+bool Item::hasVolume(){
+	return has_volume;
+}
+
 
 Item::~Item() {}

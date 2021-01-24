@@ -7,6 +7,7 @@ void MessageProcessor::run(){
 	std::cout << "Message Processor running." << std::endl;
     while (keep_running) {
         this->checkNews();
+        this->gameManager.informAvailableGames();
     }	
 }
 

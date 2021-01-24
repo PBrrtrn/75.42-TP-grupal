@@ -37,6 +37,7 @@ add_executable (tp
   server_src/games/vector.cpp
   server_src/games/door.cpp
   server_src/games/statistics.cpp
+  server_src/games/available_games.cpp
   server_src/client.cpp
   server_src/server_main.cpp
   server_src/server.cpp

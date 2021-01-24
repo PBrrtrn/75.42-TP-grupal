@@ -1,17 +1,22 @@
 #include "thread_game.h"
 
+#define PREFERRED_PLAYERS 3
+
 ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m) : 
 id(gameId), messages(m),gameStatus("./maps/map-data.yml") {
 	this->remaining_time = 60 * 1000;
 	this->waiting_time_to_start = 60 * 60; 
+	this->start_running = true;
 }
 
 void ThreadGame:: run() {
 	
-	this->start_running = true;
+	std::cout << "Game waiting for more players!" << std::endl;
 
 	while(start_running) {
-		if (this->gameStatus.getAlivePlayers() > 2 && this->waiting_time_to_start == 0) {
+		std::cout << "players now:" << this->gameStatus.getAlivePlayers() << std::endl;
+		if ( (this->gameStatus.getAlivePlayers() == PREFERRED_PLAYERS) || 
+		 (this->gameStatus.getAlivePlayers() > 2 && this->waiting_time_to_start == 0)) {
 			this->keep_running = true;
 			this->start_running = false;
 		} else if (this->gameStatus.getAlivePlayers() < 2 && this->waiting_time_to_start == 0) {
@@ -19,7 +24,7 @@ void ThreadGame:: run() {
 			this->start_running = false;
 		}
 		this->sendGameUpdates();
-		usleep(1000000/60);
+		usleep(1000000/3);
 		this->waiting_time_to_start--;
 	}
 	
@@ -28,7 +33,6 @@ void ThreadGame:: run() {
         this->checkNews();
         this->checkPlayerPickups();
         this->respawnItems();
-        //this->respawnPlayers();
         this->checkPlayerBullets();
         this->sendGameUpdates();
         

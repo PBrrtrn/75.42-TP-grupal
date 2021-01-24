@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include "../../common_src/blocking_queue.h"
 #include "../communication/message.h"
+#include "available_games.h"
 
 class GameManager{
 
@@ -25,6 +26,9 @@ private:
 	
 	/* clave: gameId value: gameQueue*/
 	std::unordered_map<int, BlockingQueue<GameStatus>*> out_game_queues;	
+	
+	/* clave: clientId value: socket*/
+	std::unordered_map<int, std::string> clientsSockets;	
 
 	/* clave:clientId, value:gameId*/
 	std::unordered_map<int, int> clientsInGames;
@@ -56,6 +60,8 @@ private:
 	 */
 	void _parse_message(Message m);
 
+	AvailableGames getAvailableGames();
+
 public:
 
 	GameManager();
@@ -81,6 +87,8 @@ public:
 	void acceptClient(std::string socket,BlockingQueue<Message>& q);
 
 	void updateClients();
+	
+	void informAvailableGames();
 
 	~GameManager();
 };

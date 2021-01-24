@@ -12,6 +12,8 @@ protected:
 	int amount;
 	Vector pos;
 	bool respawns;
+	bool isDecoration;
+	bool has_volume;
 
 public:
 
@@ -29,6 +31,10 @@ public:
 	virtual bool pickUpAction(Player& p);
 
 	Vector getPosition();
+	
+	bool isVisible();
+	
+	bool hasVolume();
 
 	virtual ~Item();
 

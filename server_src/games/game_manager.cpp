@@ -28,6 +28,8 @@ void GameManager:: _parse_message(Message message) {
         this->joinGame(message.getClientId(), message.getEntity());
         break;
     
+    /*si el cliente mando un mensaje que esta asociado al juego donde 
+     * esta jugando*/
     default:
         int gameId = this->clientsInGames.at(message.getClientId());
 		this->queues.at(gameId)->push(message);	
@@ -62,7 +64,24 @@ void GameManager::acceptClient(std::string socket, BlockingQueue<Message>& q){
     this->clientsThreads.insert({this->clients_counter, 
         new ThreadClient(this->clients_counter, q )});
     this->clientsThreads.at(this->clients_counter)->start();
+    this->clientsSockets.insert({this->clients_counter, socket});
     this->clients_counter++;
+}
+
+void GameManager::informAvailableGames(){
+	AvailableGames a = this->getAvailableGames();
+	//busco los clientes que NO estan en un game actualmente
+	for (auto& it: this->clientsThreads) {
+		if (this->clientsInGames.find(it.first) == this->clientsInGames.end()) {
+			//this->clientsSockets.send(a);
+		}
+	}
+	
+}
+// TODO: Implementar devolucion de estructura AvailableGames
+AvailableGames GameManager::getAvailableGames(){ 
+	AvailableGames a;
+	return a;
 }
 
 void GameManager:: updateClients() {
