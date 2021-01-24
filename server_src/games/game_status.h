@@ -43,6 +43,7 @@ public:
 	void addEnemyDead(int playerID);
 	void addBulletShooted(int playerID);
 	void addPointTreasure(int playerID);
+	int getAlivePlayers();
     
 	Statistics showStatistics();
     

@@ -46,7 +46,10 @@ class ThreadGame: public Thread {
         
         std::unordered_map<int, BlockingQueue<GameStatus>*> out_queues;
         
+        bool start_running;
         bool keep_running;
+        int remaining_time;
+        int waiting_time_to_start;
         
         void checkNews();
         

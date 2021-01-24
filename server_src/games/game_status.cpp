@@ -74,8 +74,18 @@ void GameStatus::checkPlayerBullets(){
 	
 }
 
+int GameStatus::getAlivePlayers() {
+	int amount_alive = 0;
+	for (auto& it: this->players){
+		int player_id = it.first;
+		Player& player = it.second;
+		if (!player.is_dead()) amount_alive++;
+	}	
+	return amount_alive;
+}
+
 Statistics GameStatus::showStatistics() {
-		for (auto& it: this->players){
+	for (auto& it: this->players){
 		int player_id = it.first;
 		Player& player = it.second;
 		this->statistics.addPointsTreasure(player_id, player.getPoints());	

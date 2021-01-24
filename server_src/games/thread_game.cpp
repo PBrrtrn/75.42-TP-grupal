@@ -1,15 +1,30 @@
 #include "thread_game.h"
 
 ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m) : 
-id(gameId), messages(m),gameStatus("./maps/map-data.yml") {}
+id(gameId), messages(m),gameStatus("./maps/map-data.yml") {
+	this->remaining_time = 60 * 1000;
+	this->waiting_time_to_start = 60 * 60; 
+}
 
 void ThreadGame:: run() {
 	
-	this->keep_running = true;
+	this->start_running = true;
+
+	while(start_running) {
+		if (this->gameStatus.getAlivePlayers() > 2 && this->waiting_time_to_start == 0) {
+			this->keep_running = true;
+			this->start_running = false;
+		} else if (this->gameStatus.getAlivePlayers() < 2 && this->waiting_time_to_start == 0) {
+			this->keep_running = false;
+			this->start_running = false;
+		}
+		this->sendGameUpdates();
+		usleep(1000000/60);
+		this->waiting_time_to_start--;
+	}
 	
 	std::cout << "Game started!" << std::endl;
     while (keep_running) {
-        
         this->checkNews();
         this->checkPlayerPickups();
         this->respawnItems();
@@ -18,11 +33,11 @@ void ThreadGame:: run() {
         this->sendGameUpdates();
         
         usleep(1000000/60); //todo: hacer variable respecto a tiempo demorado en ejecutar checkNews y sendUpdates
-        
+        this->remaining_time--;
+		this->keep_running = this->gameStatus.getAlivePlayers() > 1 && this->remaining_time != 0;
     }
     
     this->sendGameStatistics();
-    
 }
 
 GameStatus ThreadGame:: getGameStatus() {
@@ -39,9 +54,7 @@ void ThreadGame::checkPlayerBullets(){
 	this->gameStatus.checkPlayerBullets();
 }
 
-
 void ThreadGame::checkPlayerPickups(){
-	
 	this->gameStatus.checkPlayerPickups();
 	
 	//for all items en game status
@@ -49,12 +62,9 @@ void ThreadGame::checkPlayerPickups(){
 	//si la distancia es menor a un entero en la configuracion, entonces pick up
 }
 
-void ThreadGame::sendGameStatistics(){
-	
-}
+void ThreadGame::sendGameStatistics(){}
 
-void ThreadGame::checkNews(){
-	
+void ThreadGame::checkNews() {
 	Message m = this->messages->pop();
 	std::cout << "en el game: " << (char)m.getType() << ", client:" << m.getClientId() << std::endl;
 	
@@ -117,14 +127,12 @@ void ThreadGame::checkNews(){
 void ThreadGame::sendGameUpdates(){
 	for (auto& it: this->out_queues) {
         int clientId = it.first;
-        
         this->out_queues.at(clientId)->push(this->gameStatus); 
         
         //int gameId = this->clientsInGames.at(it.first);
         //TODO: chequear tiempo de ejecucion -- eficiencia pasaje gamestatus
         //this->out_queues.at(clientId)->push(this->games.at(gameId)->getGameStatus());
     }
-	
 }
 
 void ThreadGame::expelClient(int id){
@@ -135,6 +143,8 @@ void ThreadGame::expelClient(int id){
 }
 
 void ThreadGame::addClient(ThreadClient* client, int id){
+	if (!this->start_running) return; //si el juego esta iniciado, no se pueden agregar
+									//mas jugadores a la partida
 	
 	std::cout << "en el game: " << this->id << ", client:" << id << " se inserto en este game." << std::endl;
 	this->clients.insert({id,client});
@@ -191,6 +201,4 @@ void ThreadGame::useDoor(int id){
 	this->use_door.tryAction(this->gameStatus,id);
 }
 
-ThreadGame:: ~ThreadGame(){
-	this->gameStatus.showStatistics();
-}
+ThreadGame:: ~ThreadGame(){}

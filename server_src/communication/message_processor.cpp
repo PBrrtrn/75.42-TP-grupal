@@ -1,6 +1,5 @@
 #include "message_processor.h"
 
-
 MessageProcessor::MessageProcessor(BlockingQueue<Message>& m, GameManager& gm) : 
 messages(m), gameManager(gm){}
 	
@@ -20,14 +19,9 @@ void MessageProcessor::checkNews() {
 	}
 	this->messages.unlock();
 	
-	
-		//Message m = this->messages.pop();
-		//std::cout << "En processor. Mensaje:"<< (char)m.getType()<< ", cliente:" << m.getClientId() << std::endl;
-		//this->gameManager.newMessage(m);
-		
-	
-	
-	
+	//Message m = this->messages.pop();
+	//std::cout << "En processor. Mensaje:"<< (char)m.getType()<< ", cliente:" << m.getClientId() << std::endl;
+	//this->gameManager.newMessage(m);
 }
 
 void MessageProcessor::updateClients() {
