@@ -41,6 +41,7 @@ public:
     int getWeaponPrecision();
     int getWeaponAttackRange();
     int getCurrentBullets();
+    int getPoints();
     bool changeWeapon(int weapon_idx);
 	~Player();
 };

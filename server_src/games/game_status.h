@@ -11,11 +11,13 @@
 #include "../items/arma_ametralladora.h"
 #include <vector>
 #include "door.h"
+#include "statistics.h"
 
 class GameStatus {
 	
 private:
 	Vector position;
+	Statistics statistics;
 	std::unordered_map<int, Vector> playersPositions;
 	std::unordered_map<int, Vector> playersDirections;
 	std::unordered_map<int,Player> players;
@@ -36,11 +38,13 @@ public:
     void setPosition(int playerID, float x, float y);
     void setAngle(int playerID, float angle);
     void checkPlayerPickups();
-    
     void checkPlayerBullets();
-    
     void respawnItems();
+	void addEnemyDead(int playerID);
+	void addBulletShooted(int playerID);
+	void addPointTreasure(int playerID);
     
+	Statistics showStatistics();
     
     friend class Action;
 	friend class Shoot;

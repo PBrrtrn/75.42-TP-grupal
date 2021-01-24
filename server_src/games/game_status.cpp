@@ -22,7 +22,6 @@ void GameStatus::setPosition(int playerID, float pos_x, float pos_y) {
 }
 
 void GameStatus::setPosition(int playerID, Vector &playerPosition) {
-	
     this->playersPositions[playerID] = playerPosition;
 }
 
@@ -73,6 +72,23 @@ void GameStatus::checkPlayerBullets(){
 		}		
 	}	
 	
+}
+
+Statistics GameStatus::showStatistics() {
+		for (auto& it: this->players){
+		int player_id = it.first;
+		Player& player = it.second;
+		this->statistics.addPointsTreasure(player_id, player.getPoints());	
+	}	
+	return this->statistics;
+}
+
+void GameStatus::addEnemyDead(int playerID) {
+	this->statistics.addEnemyDead(playerID);
+}
+
+void GameStatus::addBulletShooted(int playerID) {
+	this->statistics.addBulletShooted(playerID);
 }
 
 void GameStatus::respawnItems(){

@@ -52,7 +52,6 @@ class ThreadGame: public Thread {
         
         void expelClient(int id);
         
-
 		void checkPlayerPickups();
 
 		void sendGameStatistics();   

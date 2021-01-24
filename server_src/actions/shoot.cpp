@@ -27,10 +27,12 @@ void Shoot::tryAction(GameStatus& gs, int clientID){
 					//TODO: Dropear item falso "cadaver" que no va a ser utilizable pero si visible.
 					gs.items.push_back(ArmaAmetralladora(gs.getPosition(target_id),false));
 					gs.items.push_back(Bullets(gs.getPosition(target_id),false));
+                    gs.addEnemyDead(clientID);
 				}
             }
         }
     }
+    gs.addBulletShooted(clientID);
 }
 
 Shoot::~Shoot() {}

@@ -191,4 +191,6 @@ void ThreadGame::useDoor(int id){
 	this->use_door.tryAction(this->gameStatus,id);
 }
 
-ThreadGame:: ~ThreadGame(){}
+ThreadGame:: ~ThreadGame(){
+	this->gameStatus.showStatistics();
+}

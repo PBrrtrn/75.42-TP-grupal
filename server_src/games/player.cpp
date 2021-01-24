@@ -5,6 +5,7 @@ Player::Player(int id){
 	this->vidas = 3;
 	this->health = 20;
 	this->has_key = false;
+	this->puntaje = 0;
 	this->max_bullets = 100; //TODO definir bien y pasar a config
 	this->bullets = 8; //TODO pasar a config -- cant balas con las que inicia
 	this->armas[0] =  Cuchillo("config");
@@ -27,6 +28,7 @@ bool Player::loseHealth(int amount) {
 		this->vidas--;
 		this->has_key = false;
 		this->bullets = 8;
+		this->puntaje = 0;
 		this->selected_weapon_idx = 1;
 		Arma a("config");
 		this->armas[2] = a;
@@ -98,6 +100,10 @@ bool Player::useKey(){
 	} else {
 		return false;
 	}
+}
+
+int Player::getPoints() {
+	return this->puntaje;
 }
 
 int Player::getCurrentBullets(){
