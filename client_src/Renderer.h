@@ -2,6 +2,7 @@
 #define __RENDERER_H__
 
 #include <vector>
+#include <yaml-cpp/yaml.h>
 #include <SDL2/SDL.h>
 
 #include "GameStatusMonitor.h"
@@ -16,6 +17,7 @@
 class Renderer : public Thread {
 private:
   SDL_Renderer* renderer;
+  YAML::Node& config;
   Window window;
   GameStatusMonitor& game_status_monitor;
   std::vector<Animation*> animations;
@@ -24,8 +26,7 @@ private:
   void render(GameStatusUpdate& status_update, 
               MapDrawer& map_drawer, Map& map);
 public:
-  Renderer(const char *title, int width, int height, 
-           GameStatusMonitor& status_monitor);
+  Renderer(YAML::Node& config, GameStatusMonitor& game_status_monitor);
   ~Renderer();
   void run();
 };

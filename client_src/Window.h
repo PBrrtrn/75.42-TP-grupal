@@ -1,6 +1,7 @@
 #ifndef __WINDOW_H__
 #define __WINDOW_H__
 
+#include <yaml-cpp/yaml.h>
 #include <SDL2/SDL.h>
 #include <exception>
 
@@ -10,7 +11,7 @@ private:
   int width;
   int height;
 public:
-  Window(const char* title, int height, int width);
+  Window(YAML::Node config);
   ~Window();
   Window(const Window&) = delete;            // Saco el constructor por copia
   Window& operator=(const Window&) = delete; // Saco la asignacion por copia

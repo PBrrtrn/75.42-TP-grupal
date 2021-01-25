@@ -1,10 +1,13 @@
 #include "Window.h"
 
-Window::Window(const char* title, int width, int height) 
-              : window(NULL), width(width), height(height) {
-  this->window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED,
-                                  SDL_WINDOWPOS_UNDEFINED, width,
-                                  height, SDL_WINDOW_SHOWN);
+Window::Window(YAML::Node config) : window(NULL), 
+                                    width(config["width"].as<int>()), 
+                                    height(config["height"].as<int>()) {
+  this->window = SDL_CreateWindow(config["title"].as<std::string>().c_str(), 
+                                  SDL_WINDOWPOS_UNDEFINED,
+                                  SDL_WINDOWPOS_UNDEFINED, 
+                                  this->width, this->height,
+                                  SDL_WINDOW_SHOWN);
   if (this->window == NULL) throw WindowConstructorError(SDL_GetError());
 }
 

@@ -8,12 +8,7 @@
 #include "GameStatusMonitor.h"
 #include "Renderer.h"
 
-static const int SCREEN_WIDTH = 640;
-static const int SCREEN_HEIGHT = 480;
-
-static const int FPS_CAP = 29;
-
-GameLoop::GameLoop() {
+GameLoop::GameLoop(YAML::Node& config) : config(config) {
   if (SDL_Init(SDL_INIT_VIDEO) < 0)
     throw std::runtime_error("Failed to initialize SDL");
     // throw SDLInitializationError(SDL_GetError());
@@ -28,10 +23,9 @@ GameLoop::~GameLoop() {
 void GameLoop::run() {
   GameStatusMonitor game_status_monitor;
   ServerListener server_listener(game_status_monitor);
-  Renderer renderer("TEST", SCREEN_WIDTH, SCREEN_HEIGHT, game_status_monitor);
-  /* TODO: Pasar al renderer una Configuración leída de un YAML que contenga los
-     paths de las texturas, animaciones, etc. (actualmente hardoceados)
-                              - Pablo (20/12/2020)                            */
+  Renderer renderer(this->config, game_status_monitor);
+
+  int fps_cap = this->config["FPS_cap"].as<int>();
 
   server_listener.start();
   renderer.start();
@@ -65,6 +59,7 @@ void GameLoop::run() {
 
     auto t = std::chrono::steady_clock::now() - start_t;
     auto sleep_t = std::chrono::duration_cast<std::chrono::microseconds>(t);
-    usleep((1000000/FPS_CAP) - sleep_t.count());
+
+    usleep((1000000/fps_cap) - sleep_t.count());
   }
 }

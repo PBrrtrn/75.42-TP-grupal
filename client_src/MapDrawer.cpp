@@ -4,9 +4,11 @@
 
 #define WALL_HEIGHT 1.5
 
-MapDrawer::MapDrawer(int screen_width, int screen_height, float fov,
-										 std::vector<Texture*>& wall_textures)
-	: screen_width(screen_width), screen_height(screen_height), fov(fov),
+MapDrawer::MapDrawer(YAML::Node& config, std::vector<Texture*>& wall_textures)
+	: screen_width(config["window"]["width"].as<int>()), 
+		screen_height(config["window"]["height"].as<int>()), 
+		fov(config["graphics"]["FOV"].as<float>()),
+		wall_height(config["graphics"]["wall_height"].as<float>()),
 		wall_textures(wall_textures) { }
 
 MapDrawer::~MapDrawer() { }
@@ -36,7 +38,7 @@ std::vector<float> MapDrawer::draw(SDL_Renderer* renderer, Map& map,
 		RayHit hit = this->ray_caster.castRay(map, position, a);
 
 		float distance = cos(a - view_angle) * hit.distance;
-		int l = std::abs(WALL_HEIGHT * projection_distance / distance); 
+		int l = std::abs(this->wall_height * projection_distance / distance);
 		/* TODO: Ver cuales son los casos en los cuales esto da negativo 
 			así no hay que hacer std::abs a lo bruto.
 																			- Pablo (14/01/2020)				*/

@@ -1,0 +1,48 @@
+FPS_cap: 29
+graphics:
+  FOV: 1.0472
+  wall_height: 1.5
+window:
+  title: FIUBAstein 3D
+  width: 640
+  height: 480
+walls:
+  directory: ../assets/textures/walls/
+  files:
+    - wood.png
+    - bluestone.png
+    - colorstone.png
+    - eagle.png
+    - greystone.png
+props:
+  directory: ../assets/textures/props/
+  files: 
+    - barrel.png
+    - greenlight.png
+    - pillar.png
+consumables:
+  directory: ../assets/textures/consumables/
+animations:
+  enemies:
+    directory: ../assets/sprites/enemies
+    sprites:
+      - file: dog.png
+        frames: 2
+        frame_width: 100
+        frame_height: 100
+      - file: guard.png
+        frames: 2
+        frame_width: 100
+        frame_height: 100
+      - file: ss.png
+        frames: 2
+        frame_width: 100
+        frame_height: 100
+      - file: official.png
+        frames: 2
+        frame_width: 100
+        frame_height: 100
+      - file: mutant.png
+        frames: 2
+        frame_width: 100
+        frame_height: 100
