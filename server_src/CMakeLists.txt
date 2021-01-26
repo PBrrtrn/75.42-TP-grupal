@@ -1,0 +1,46 @@
+project(TPGrupal)
+
+add_library(server_classes SHARED
+  ./actions/action.cpp
+  ./actions/move_backward.cpp
+  ./actions/move_forward.cpp
+  ./actions/move_left.cpp
+  ./actions/move_right.cpp
+  ./actions/shoot.cpp
+  ./actions/change_weapon_cuchillo.cpp
+  ./actions/change_weapon_pistola.cpp
+  ./actions/change_weapon_ametralladora.cpp
+  ./actions/change_weapon_canion.cpp
+  ./actions/change_weapon_lanzacohetes.cpp
+  ./actions/use_door.cpp
+  ./games/game_manager.cpp
+  ./items/item.cpp
+  ./communication/message.cpp
+  ./communication/message_processor.cpp
+  ./communication/thread_client.cpp
+  ./communication/thread_acceptor.cpp
+  ./games/player.cpp
+  ./games/game_status.cpp
+  ./games/thread_game.cpp
+  ./games/door.cpp
+  ./games/statistics.cpp
+  ./games/available_games.cpp
+  ./server_main.cpp
+  ./server.cpp
+  ./weapons/arma.cpp
+  ./weapons/ametralladora.cpp
+  ./weapons/canionDeCadena.cpp
+  ./weapons/cuchillo.cpp
+  ./weapons/pistola.cpp
+  ./weapons/lanzaCohetes.cpp
+  ./items/item.cpp
+  ./items/arma_ametralladora.cpp
+  ./items/arma_canion.cpp
+  ./items/arma_lanzacohetes.cpp
+  ./items/blood.cpp
+  ./items/bullets.cpp
+  ./items/food.cpp
+  ./items/key.cpp
+  ./items/medkit.cpp
+  ./items/treasure.cpp
+)

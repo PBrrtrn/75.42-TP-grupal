@@ -51,6 +51,8 @@ Map::Map(const char* file_location) {
 
 Map::~Map() { }
 
+Map::Map(const std::string& file_location): Map(file_location.c_str()){ }
+
 std::vector<int>& Map::operator[](int x) {
 	return this->grid[x];
 }

@@ -2,6 +2,7 @@
 #define __MAP_H__
 
 #include <vector>
+#include <string>
 
 class Map {
 private:
@@ -11,6 +12,7 @@ private:
 public:
 	Map();
 	Map(const char *file_location);
+	Map(const std::string& file_location);
 	~Map();
 	std::vector<int>& operator[](int x);
 	int getGridValue(int x, int y);
