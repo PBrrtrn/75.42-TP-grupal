@@ -5,7 +5,7 @@
 
 class CanionDeCadena : public Arma {
     public:
-        CanionDeCadena(std::string config);
+        CanionDeCadena();
         virtual ~CanionDeCadena() override;
 };
 

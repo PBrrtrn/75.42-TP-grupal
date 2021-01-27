@@ -1,15 +1,20 @@
 #include "player.h"
 
+#include <iostream>
+
 Player::Player(int id){
+	
+	const YAML::Node& c = ServerConfig::Config["Player"];
+	
 	this->id = id;	
-	this->vidas = 3;
-	this->health = 20;
+	this->vidas = c["MaxLives"].as<int>();
+	this->health = c["StartingHealth"].as<int>();
 	this->has_key = false;
 	this->puntaje = 0;
-	this->max_bullets = 100; //TODO definir bien y pasar a config
-	this->bullets = 8; //TODO pasar a config -- cant balas con las que inicia
-	this->armas[0] =  Cuchillo("config");
-	this->armas[1] = Pistola("config");
+	this->max_bullets = c["MaxBullets"].as<int>();
+	this->bullets = c["StartingBullets"].as<int>();
+	this->armas[0] =  Cuchillo();
+	this->armas[1] = Pistola();
 	this->selected_weapon_idx = 1;
 }
 
@@ -31,7 +36,7 @@ bool Player::loseHealth(int amount) {
 		this->bullets = 8;
 		this->puntaje = 0;
 		this->selected_weapon_idx = 1;
-		Arma a("config");
+		Arma a;
 		this->armas[2] = a;
 		this->armas[3] = a;
 		this->armas[4] = a;

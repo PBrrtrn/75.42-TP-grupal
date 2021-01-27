@@ -4,12 +4,15 @@
 #define AMOUNT_WEAPONS 5
 
 #include <array>
+#include <yaml-cpp/yaml.h>
 #include "../weapons/arma.h"
 #include "../weapons/cuchillo.h"
 #include "../weapons/ametralladora.h"
 #include "../weapons/canionDeCadena.h"
 #include "../weapons/lanzaCohetes.h"
 #include "../weapons/pistola.h"
+#include "../server_config.h"
+
 
 class Player {
 	int id;

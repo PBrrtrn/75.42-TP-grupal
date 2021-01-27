@@ -1,6 +1,6 @@
 #include "cuchillo.h"
 
-Cuchillo::Cuchillo(std::string config) : Arma(config) {
+Cuchillo::Cuchillo() : Arma() {
     this->nombre = "CUCHILLO";
     this->attack_range = 1;
     this->indice = 0;

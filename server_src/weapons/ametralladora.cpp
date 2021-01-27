@@ -1,6 +1,6 @@
 #include "ametralladora.h"
 
-Ametralladora::Ametralladora(std::string config) : Arma(config) {
+Ametralladora::Ametralladora() : Arma() {
     this->precision = 10;
     this->cadencia = 0.1;
     this->nombre = "AMETRALLADORA";

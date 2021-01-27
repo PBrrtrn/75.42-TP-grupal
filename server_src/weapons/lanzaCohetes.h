@@ -5,7 +5,7 @@
 
 class LanzaCohetes : public Arma {
     public:
-        LanzaCohetes(std::string config);
+        LanzaCohetes();
         virtual ~LanzaCohetes() override;
 };
 

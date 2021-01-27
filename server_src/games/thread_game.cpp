@@ -3,7 +3,7 @@
 #define PREFERRED_PLAYERS 3
 
 ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m) : 
-id(gameId), messages(m),gameStatus("./maps/map-data.yml") {
+id(gameId), messages(m),gameStatus("../maps/map-data.yml") {
 	this->remaining_time = 60 * 1000;
 	this->waiting_time_to_start = 60 * 60; 
 	this->start_running = true;

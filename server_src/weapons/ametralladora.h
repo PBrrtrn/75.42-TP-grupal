@@ -5,7 +5,7 @@
 
 class Ametralladora : public Arma {
     public:
-        Ametralladora(std::string config);
+        Ametralladora();
         virtual ~Ametralladora() override;
 };
 

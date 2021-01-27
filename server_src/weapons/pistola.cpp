@@ -1,6 +1,6 @@
 #include "pistola.h"
 
-Pistola::Pistola(std::string config) : Arma(config) {
+Pistola::Pistola() : Arma() {
     this->nombre = "PISTOLA";
     this->attack_range = 1000000;
     this->indice = 1;

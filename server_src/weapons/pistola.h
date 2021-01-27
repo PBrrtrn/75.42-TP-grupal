@@ -5,7 +5,7 @@
 
 class Pistola : public Arma {
     public:
-        Pistola(std::string config);
+        Pistola();
         virtual ~Pistola() override;
 };
 

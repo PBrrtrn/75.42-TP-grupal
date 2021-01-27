@@ -6,8 +6,7 @@
 #include <vector>
 
 #include "./communication/thread_acceptor.h"
-
-//#include <fstream>
+#include "server_config.h"
 
 class Server {
 	//const char* server_port;

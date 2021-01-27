@@ -1,0 +1,5 @@
+Player:
+  StartingHealth: 20
+  MaxLives: 3
+  MaxBullets: 100
+  StartingBullets: 8

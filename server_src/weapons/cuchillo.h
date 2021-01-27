@@ -5,7 +5,7 @@
 
 class Cuchillo : public Arma {
     public:
-        Cuchillo(std::string config);
+        Cuchillo();
         virtual ~Cuchillo() override;
 };
 
