@@ -1,7 +1,9 @@
 #ifndef __SOCKET_H__
 #define __SOCKET_H__
 
+#ifndef _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE 200112L
+#endif
 
 #include <sys/types.h>
 #include <sys/socket.h>

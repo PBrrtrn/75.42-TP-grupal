@@ -62,13 +62,13 @@ void GameManager::joinGame(int clientId, int gameId) {
     this->games.at(gameId)->addClient(this->clientsThreads.at(clientId), clientId);
 }
 
-void GameManager::acceptClient(std::string socket, BlockingQueue<Message>& q){
+void GameManager::acceptClient(Socket& socket, BlockingQueue<Message>& q){
 	std::cout << "Game manager accepted new Client:"<< this->clients_counter << std::endl;
 
     this->clientsThreads.insert({this->clients_counter, 
         new ThreadClient(this->clients_counter, q )});
     this->clientsThreads.at(this->clients_counter)->start();
-    this->clientsSockets.insert({this->clients_counter, socket});
+    this->clientsSockets.insert({this->clients_counter, Socket(&socket)});
     this->clients_counter++;
 }
 

@@ -1,6 +1,7 @@
 #ifndef __GAMEMANAGER_H__
 #define __GAMEMANAGER_H__
 
+#include "../../common_src/Socket.h"
 #include "../communication/thread_client.h"
 #include "thread_game.h"
 #include <unordered_map>
@@ -28,7 +29,7 @@ private:
 	std::unordered_map<int, BlockingQueue<GameStatus>*> out_game_queues;	
 	
 	/* clave: clientId value: socket*/
-	std::unordered_map<int, std::string> clientsSockets;	
+	std::unordered_map<int, Socket> clientsSockets;	
 
 	/* clave:clientId, value:gameId*/
 	std::unordered_map<int, int> clientsInGames;
@@ -84,7 +85,7 @@ public:
 	 * @param q: cola bloqueante para enviar al servidor
 	 * los mensajes enviados por el cliente
 	 */
-	void acceptClient(std::string socket,BlockingQueue<Message>& q);
+	void acceptClient(Socket& socket,BlockingQueue<Message>& q);
 
 	void updateClients();
 	

@@ -1,6 +1,7 @@
 #ifndef THREAD_ACCEPTOR_H
 #define THREAD_ACCEPTOR_H
 
+#include "../../common_src/Socket.h"
 #include <stdio.h>
 #include <string.h>
 #include <list>
@@ -13,13 +14,16 @@
 #include "message_processor.h"
 #include "message.h"
 
+
 class GameManager;
 
 class ThreadAcceptor: public Thread {
+
+    MessageProcessor message_processor;
+    Socket socket;
     
     BlockingQueue<Message> messages;
     
-    MessageProcessor message_processor;
 
 	GameManager gameManager;
 
