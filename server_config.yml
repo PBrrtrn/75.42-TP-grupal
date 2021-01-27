@@ -25,3 +25,7 @@ Pistola:
   Nombre: PISTOLA
   AttackRange: 1000000
   Idx: 1
+Moves:
+  Step: 5
+  RotationLeft: 15
+  RotationRight: -15

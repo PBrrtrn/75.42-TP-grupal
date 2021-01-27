@@ -73,6 +73,16 @@ int main(const int argc, const char* argv[]) {
 			out << YAML::Key << "Idx";
 			out << YAML::Value << 1 ;			
 		out << YAML::EndMap;
+	
+	out << YAML::Key << "Moves" ;
+		out << YAML::BeginMap;
+			out << YAML::Key << "Step";
+			out << YAML::Value << 5 ;
+			out << YAML::Key << "RotationLeft";
+			out << YAML::Value << 15 ;	
+			out << YAML::Key << "RotationRight";
+			out << YAML::Value << -15 ;			
+		out << YAML::EndMap;
 
 	out << YAML::EndMap;
 

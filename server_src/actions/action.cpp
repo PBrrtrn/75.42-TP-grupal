@@ -1,7 +1,12 @@
 #include "action.h"
 #include <iostream>
 
-Action::Action(){}
+Action::Action(){
+    const YAML::Node& c = ServerConfig::Config["Moves"];
+    this->step = c["Step"].as<int>();
+    this->rotation_left = c["RotationLeft"].as<int>();
+    this->rotation_right = c["RotationRight"].as<int>();
+}
 
 void Action::tryAction(GameStatus& gs, int clientID) {}
 

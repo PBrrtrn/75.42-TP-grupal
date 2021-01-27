@@ -4,12 +4,11 @@
 #include "../../common_src/Vector.h"
 #include "../games/game_status.h"
 
-// TODO pasar a configuration
-#define STEP 5
-#define ROTATION_LEFT 15
-#define ROTATION_RIGHT -15
-
 class Action {
+protected:
+    int step;
+    int rotation_left;
+    int rotation_right;
     
 public:
     explicit Action();
