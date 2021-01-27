@@ -27,6 +27,10 @@ void GameManager:: _parse_message(Message message) {
     case TYPE_JOIN_GAME:
         this->joinGame(message.getClientId(), message.getEntity());
         break;
+
+    case TYPE_REFRESH_GAMES_LIST:
+        this->informAvailableGames(); //TODO ver a quién mandarle el refresh -- por socket
+        break;
     
     /*si el cliente mando un mensaje que esta asociado al juego donde 
      * esta jugando*/
