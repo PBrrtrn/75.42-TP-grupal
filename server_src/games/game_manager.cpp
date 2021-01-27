@@ -68,7 +68,7 @@ void GameManager::acceptClient(Socket& socket, BlockingQueue<Message>& q){
     this->clientsThreads.insert({this->clients_counter, 
         new ThreadClient(this->clients_counter, q )});
     this->clientsThreads.at(this->clients_counter)->start();
-    this->clientsSockets.insert({this->clients_counter, Socket(&socket)});
+    this->clientsSockets.insert({this->clients_counter, Socket(std::move(socket))});
     this->clients_counter++;
 }
 

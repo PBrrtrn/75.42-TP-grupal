@@ -1,80 +1,65 @@
-#ifndef __SOCKET_H__
-#define __SOCKET_H__
+#ifndef SOCKET_H
+#define SOCKET_H
 
-#ifndef _POSIX_C_SOURCE
-#define _POSIX_C_SOURCE 200112L
-#endif
-
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <stdbool.h>
 #include <netdb.h>
-#include <unistd.h>
-#include <string>
-#include <cstring>
+#include <errno.h>
 
-#define MAX_CLIENTS 25
-#define MAX_BUFFER 16
+#include <iostream>
 
-class Socket{
-private:
-	struct addrinfo datos_conexion;
-	struct addrinfo* lista_direcciones;
-	bool server;
-	int fd;
-	
-public:
-	/*Si is_server == true, se usara como aceptador 
-	 * (acceptOn y getReceiveSocket), de otra forma sera cliente
-	 * (connectTo)*/
-	explicit Socket(bool is_server);
-	Socket(Socket&& from);
-	
-	Socket(const Socket&) = delete;	
+#define FAMILY AF_INET
+#define PROTOCOL 0
+#define SOCK_TYPE SOCK_STREAM
+#define SERVER_FLAGS AI_PASSIVE
+#define CLIENT_FLAGS 0
 
-	/* Abre un canal a remote_address en el puerto protocol.
-	 * Si es server, se ignora el valor de remote_address.
-	 * */
-	int connectTo(std::string remote_address,std::string protocol);
+class Socket {
+    private:
+        int fd;
+        //Devuelve una lista de posibles direcciones para conectarse.
+        struct addrinfo* _get_addrinfo(const char* host, 
+            const char* service, int flags);
 
-	/* Acepta conexiones en remote_address de sockets cliente entrantes.
-	 * Escucha por default en localhost
-	 * */
-	int acceptOn(std::string remote_address,std::string protocol);
+    public:
+        //Inicializa un socket.
+        explicit Socket();
+        
+        //Move constructor
+        Socket(Socket&& from);
+		Socket(const Socket&) = delete;	
 
-	/* Envia un mensaje de formato texto contenido en message.
-	* Reintenta hasta que logre mandarlo completo.*/
-	int sendMessage(const std::string& message);
-	
-	/* Envia un message binario de tamanio size.
-	 * Reintenta hasta que logre mandarlo completo.*/
-	int sendByteMessage(int size,const char* message);
+        //Devuelve true si pudo conectarse a un puerto y 
+        //activarse para recibir conexiones,
+        //false en caso de error.
+        bool socket_bind_and_listen(const char* host, const char* service);
 
-	/* Obtiene un socket receptor asociado al aceptador, para atender
-	 * la conexion entrante. */
-	Socket getReceiveSocket();
-	
-	bool isOpen();
+        //Devuelve el fd asociado al socket
+        int& get_fd();
 
-	/* Guarda en message un mensaje recibido. 
-	 * Asume que lo recibido es texto. */
-	bool receiveMessage(std::string& message);
-	
-	/* Recibe datos binarios y guarda en m, sin terminacion \0
-	 * Entrada: size indica el ancho del buffer m
-	 * 	m debe ser un buffer ya reservado en memoria
-	 * post: Se devuelve en size la cantidad de bytes leidos.*/
-	bool receiveByteMessage(int& size,char* message);
+        //Acepta una conexion y devuelve
+        // el fd en caso exitoso, 
+        //-1 en caso de error.
+        int socket_accept(Socket& listener);
 
-	/* Cierra la conexion completamente contra el server o client. */
-	void closeSocket();
-	
+        //Devuelve true si la conexión fue exitosa, false en caso de error.
+        bool socket_connect(const char* host, const char* service);
 
-	/*Realiza el shutdown contra el socket receptor del otro lado,
-	* pero solo de escritura (sigue abierto para recibir)*/
-	void stopSending();	
+        //Devuelve la cantidad de bytes enviados o -1 si ocurrió un error.
+        ssize_t socket_send(const char* buffer, size_t length);
 
-	/* Libera los recursos. Cierra el socket si estuviera abierto. */
-	~Socket();
+        //Devuelve la cantidad de bytes recibidos o -1 si ocurrió un error.
+        ssize_t socket_receive(char* buffer, size_t length);
+
+        //Cierra y hace un shutdown del socket.
+        ~Socket();
 };
 
 #endif

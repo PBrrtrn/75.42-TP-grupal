@@ -1,189 +1,152 @@
+#define _POSIX_C_SOURCE 200112L
 #include "Socket.h"
 
-/*Si is_server == true, se usara como aceptador 
- * (acceptOn y getReceiveSocket), de otra forma sera cliente
- * (connectTo)*/
-Socket::Socket(bool is_server){
-	this->fd = -1;
-	this->server = is_server;
-	memset(&(this->datos_conexion), 0, sizeof(struct addrinfo));
-	this->datos_conexion.ai_family = AF_INET;       
-	this->datos_conexion.ai_socktype = SOCK_STREAM;
-	this->datos_conexion.ai_flags = this->server? AI_PASSIVE : 0; 	
-	this->lista_direcciones = NULL;
+Socket:: Socket(){
+    this->fd = -1;
 }
 
 Socket::Socket(Socket&& from){
-	this->server = from.server;
-	this->lista_direcciones = from.lista_direcciones;
 	this->fd = from.fd;
 	from.fd = -1;
 }
 
-/* Abre un canal a remote_address en el puerto protocol.
- * Si es server, se ignora el valor de remote_address. */
-int Socket::connectTo(std::string remote_address,std::string protocol){
-	int result = -1;
-	result = getaddrinfo(this->server ? NULL : remote_address.c_str(),
-						protocol.c_str(), 
-						&(this->datos_conexion), 
-						&(this->lista_direcciones));
-	
-	/*Si getaddrinfo tuvo un error, termino y lo devuelvo.*/
-	if (result){
-		return result;
-	} else {
-		struct addrinfo* current;
-		for (current = this->lista_direcciones; current != NULL; 
-										current = current->ai_next) {
-			this->fd = socket(current->ai_family, 
-							 current->ai_socktype, 
-							 current->ai_protocol);
-			result = connect(this->fd,
-					current->ai_addr, 
-					current->ai_addrlen);	
-			
-			if (result == 0)
-				break;
-		}
-		freeaddrinfo(this->lista_direcciones);
-		
-		/* Si no pudo encontrar ninguna direccion para conectarse,
-		 * cierro el socket y marco el fd como invalido*/
-		if (result != 0) {
-			close(this->fd);
-			this->fd = -1;
-		}	
+struct addrinfo* Socket:: _get_addrinfo
+(const char* host, const char* service, int flags) {
+	int error;
+	struct addrinfo *addr_list;
+	struct addrinfo hints;
+	memset(&hints, 0, sizeof(struct addrinfo));
+	hints.ai_family = FAMILY;
+    hints.ai_socktype = SOCK_TYPE;
+    hints.ai_protocol = PROTOCOL;    
+	hints.ai_flags = flags;
+	if ((error = getaddrinfo(host, service, &hints, &addr_list)) != 0) {
+		fprintf(stderr, "_get_addrinfo: %s\n", gai_strerror(error));
+        return NULL;
+    }
+	return addr_list;
+}
+
+bool Socket::socket_bind_and_listen(const char* host, const char* service){
+	bool bind_error = false;
+	int fd;
+	int val = 1;
+	struct addrinfo *addr, *addr_list;
+	if ((addr_list = _get_addrinfo(host, service, SERVER_FLAGS)) == NULL) {
+        return false;
+    }
+
+	for (addr = addr_list; addr && !bind_error; addr = addr->ai_next) {
+        fd = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
+		setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
+        if (bind(fd, addr->ai_addr, addr->ai_addrlen) == 0) bind_error = true;
+    }
+    freeaddrinfo(addr_list);
+    
+    if (!bind_error) {
+		fprintf(stderr, "socket_bind_and_listen-->bind: %s\n", strerror(errno));
+        return false;
+    }
+
+	this->fd = fd;
+
+	if (listen(this->fd, 10) < 0) {
+		fprintf(stderr, "socket_bind_and_listen-->listen: %s\n", strerror(errno));
+		return false;
 	}
-	return 0;	
+
+	return true;
 }
 
-/* Acepta conexiones en remote_address de sockets cliente entrantes.
- * Escucha por default en localhost
- * */
-int Socket::acceptOn(std::string remote_address,std::string protocol){
-	int result = -1;
-	result = getaddrinfo(this->server ? NULL : remote_address.c_str(),
-						protocol.c_str(), 
-						&(this->datos_conexion), 
-						&(this->lista_direcciones));
-	
-	/*Si getaddrinfo tuvo un error, termino y lo devuelvo.*/
-	if (result){
-		return result;
-	} else {
-		this->fd = socket(this->lista_direcciones->ai_family, 
-						 this->lista_direcciones->ai_socktype, 
-						 this->lista_direcciones->ai_protocol);
-		bind(this->fd, 
-					this->lista_direcciones->ai_addr, 
-					this->lista_direcciones->ai_addrlen);
-		listen(this->fd, MAX_CLIENTS);
+int& Socket:: get_fd(){
+    return this->fd;
+}
 
-		freeaddrinfo(this->lista_direcciones);
+int Socket:: socket_accept(Socket& listener){    
+	if ((this->fd = accept(listener.get_fd(), NULL, NULL)) < 0) {
+		//fprintf(stderr, "socket_accept-->accept: %s\n", strerror(errno));
 	}
-	return 0;	
+	return this->fd;
 }
 
-/* Envia un message binario de tamanio size.
- * Reintenta hasta que logre mandarlo completo.*/
-int Socket::sendByteMessage(int size,const char* message){
-	if (this->fd > 0) {
-		int sent = send(this->fd, message, size, MSG_NOSIGNAL);
-		while (sent < size){
-			char* aux_send = (char*)message + sent;
-			int size_left = size - sent;
-			int res = send(this->fd, aux_send, size_left, MSG_NOSIGNAL);
-			if (res > 0) {
-				sent += res;
-			} else {
-				return -1;
-			}
-		}
-	} else {
-		return -1;
-	}	
-	return 0;
+bool Socket:: socket_connect(const char* host, const char* service){
+	int fd;
+	bool connection = false;
+
+    struct addrinfo *addr, *addr_list;
+    if ((addr_list = _get_addrinfo(host, 
+        service, CLIENT_FLAGS)) == NULL) {
+        return false;
+    }
+
+    for (addr = addr_list; addr && !connection; addr = addr->ai_next) {
+        fd = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
+        if (connect(fd, addr->ai_addr, addr->ai_addrlen) != -1) {
+            connection = true;
+        }
+    }
+    freeaddrinfo(addr_list);
+
+    if (!connection) {
+		fprintf(stderr, "socket_connect-->connect: %s\n", strerror(errno));
+        return false;
+    }
+
+	this->fd = fd;
+    return true;
 }
 
-/* Envia un mensaje de formato texto contenido en message.
-* Reintenta hasta que logre mandarlo completo.*/
-int Socket::sendMessage(const std::string& message){
-	const char* m = message.c_str();
-	int size = message.length();
-	
-	return this->sendByteMessage(size,m);
+ssize_t Socket:: socket_send(const char* buffer, size_t length){
+	if (length == 0) return 0;
+
+    int remaining_bytes = length;
+    size_t total_bytes_sent = 0;
+
+    while (total_bytes_sent < length) {
+        ssize_t bytes = send(this->fd, &buffer[total_bytes_sent], 
+                        remaining_bytes, MSG_NOSIGNAL);
+
+        if (bytes == -1) {
+			fprintf(stderr, "socket_send-->send: %s\n", strerror(errno));
+            return bytes;
+        }
+        if (bytes == 0) break;
+        
+        total_bytes_sent += bytes;
+        remaining_bytes -= bytes;
+    }
+
+    return total_bytes_sent;
 }
 
-/* Obtiene un socket receptor asociado al aceptador, para atender
- * la conexion entrante. */
-Socket Socket::getReceiveSocket(){
-	Socket receiver(this->server);	
-	receiver.datos_conexion.ai_family = AF_INET;       
-	receiver.datos_conexion.ai_socktype = SOCK_STREAM;
-	receiver.datos_conexion.ai_flags = this->server? AI_PASSIVE : 0; 		
-	receiver.fd = accept(this->fd, NULL, NULL);
-	
-	return receiver;
+ssize_t Socket:: socket_receive(char* buffer, size_t length){
+	if (length == 0) return 0;
+
+    int remaining_bytes = length;
+    size_t total_bytes_received = 0;
+
+    while (total_bytes_received < length) {
+        ssize_t bytes = recv(this->fd, &buffer[total_bytes_received],
+                        remaining_bytes, 0);
+
+        if (bytes == -1) {
+            fprintf(stderr, "socket_receive-->recv: %s\n", strerror(errno));
+            return bytes;
+        }
+        if (bytes == 0) break;
+        
+        total_bytes_received += bytes;
+        remaining_bytes -= bytes;
+    }
+
+    return total_bytes_received;
 }
 
-bool Socket::isOpen(){
-	return (this->fd > -1);
-}
-
-/* Recibe datos binarios y guarda en m, sin terminacion \0
- * Entrada: size indica el ancho del buffer m
- * 	m debe ser un buffer ya reservado en memoria
- * post: Se devuelve en size la cantidad de bytes leidos.*/
-bool Socket::receiveByteMessage(int& message_size,char* m){
-	int size;
-	size = recv(this->fd, m, message_size, 0);
-	int result = 1;
-	while (result > 0 && size < message_size) {
-		result = recv(this->fd, (m + size),message_size - size, 0);
-		if (result > 0) {
-			size = size + result;
-		}
-	}
-	message_size = size;
-	return (message_size > 0)? true : false;
-}
-
-/* Guarda en message un mensaje recibido. 
- * Asume que lo recibido es texto. */
-bool Socket::receiveMessage(std::string& message){
-	char m[MAX_BUFFER];
-	int size = MAX_BUFFER;
-	int total_size = 0;
-	message.clear();
-	
-	while (this->receiveByteMessage(size,m)){
-		char b[MAX_BUFFER + 1];
-		snprintf(b,size + 1,"%s",m);
-		message = message + std::string(b);
-		total_size = total_size + size;
-		size = MAX_BUFFER;
-	}
-	return (total_size > 0)? true : false;
-}
-
-/* Cierra la conexion completamente contra el server o client. */
-void Socket::closeSocket(){
-	if (this->fd > 0){
-		shutdown(this->fd, SHUT_RDWR);
-		close(this->fd);
-	}
-}
-
-/*Realiza el shutdown contra el socket receptor del otro lado,
- * pero solo de escritura (sigue abierto para recibir)*/
-void Socket::stopSending(){
-	if (this->fd > 0){
-		shutdown(this->fd,SHUT_WR);
-	}
-}
-
-/* Libera los recursos. Cierra el socket si estuviera abierto. */
-Socket::~Socket(){
-	this->closeSocket();
+Socket:: ~Socket(){
+    if (this->fd != -1) {
+    	shutdown(this->fd, SHUT_RDWR);
+        if (close(this->fd) == -1) {
+		    //fprintf(stderr, "socket_uninit-->close: %s\n", strerror(errno));
+        }
+    }
 }
