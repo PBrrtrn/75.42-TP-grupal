@@ -3,7 +3,8 @@
 #include "action.h"
 
 class ChangeWeaponLanzaCohetes : public Action {
-
+    private:
+        int lanzacohetes_idx;
     public:
         ChangeWeaponLanzaCohetes();
         void tryAction(GameStatus& gs, int clientID) override;

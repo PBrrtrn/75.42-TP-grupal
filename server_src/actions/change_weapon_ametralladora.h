@@ -3,6 +3,8 @@
 #include "action.h"
 
 class ChangeWeaponAmetralladora : public Action {
+    private:
+        int ametralladora_idx;
 
     public:
         ChangeWeaponAmetralladora();

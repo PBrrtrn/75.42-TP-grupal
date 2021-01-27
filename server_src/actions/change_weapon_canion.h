@@ -3,6 +3,8 @@
 #include "action.h"
 
 class ChangeWeaponCanion : public Action {
+    private:
+        int canion_idx;
 
     public:
         ChangeWeaponCanion();
