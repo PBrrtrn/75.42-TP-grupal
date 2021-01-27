@@ -3,7 +3,6 @@
 #include <iostream>
 
 Player::Player(int id){
-	
 	const YAML::Node& c = ServerConfig::Config["Player"];
 	
 	this->id = id;	

@@ -2,11 +2,13 @@
 #define ARMA_H
 
 #include <string>
+#include <yaml-cpp/yaml.h>
+#include "../server_config.h"
 
 class Arma {
 	protected:
 		int precision;
-		float cadencia; //cuanto dispara por segundo
+		double cadencia; //cuanto dispara por segundo
 		int balas;
 		int attack_range;
 		int indice;

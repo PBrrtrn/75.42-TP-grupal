@@ -1,9 +1,11 @@
 #include "canionDeCadena.h"
 
 CanionDeCadena::CanionDeCadena() : Arma() {
-    this->nombre = "CANION_DE_CADENA";
-    this->attack_range = 1000000;
-    this->indice = 3;
+    const YAML::Node& c = ServerConfig::Config["CanionDeCadena"];
+
+    this->nombre = c["Nombre"].as<std::string>();
+    this->attack_range = c["AttackRange"].as<int>();
+    this->indice = c["Idx"].as<int>();
 }
 
 CanionDeCadena::~CanionDeCadena() {}
