@@ -17,6 +17,8 @@ protected:
 
 public:
 
+	char item_type_id;
+
 	Item(Vector pos_inicial,bool respawns);
 
 	bool pickUp(Player& p);

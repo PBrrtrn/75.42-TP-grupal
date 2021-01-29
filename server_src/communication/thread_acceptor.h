@@ -13,6 +13,7 @@
 #include "../../common_src/blocking_queue.h"
 #include "message_processor.h"
 #include "message.h"
+#include "../server_config.h"
 
 
 class GameManager;

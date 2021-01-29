@@ -62,18 +62,30 @@ void GameManager::joinGame(int clientId, int gameId) {
     this->games.at(gameId)->addClient(this->clientsThreads.at(clientId), clientId);
 }
 
-void GameManager::acceptClient(Socket& socket, BlockingQueue<Message>& q){
+void GameManager::acceptClient(Socket&& socket, BlockingQueue<Message>& qClientsProcessor){
 	std::cout << "Game manager accepted new Client:"<< this->clients_counter << std::endl;
 
+
+	//BlockingQueue<Message>* qProcessorClientQueue = ;
+	
+	int clientId = this->clients_counter;
+	
+	this->out_queues.insert({clientId, new BlockingQueue<Message>()} );
+
+
+    //char client_id = (char)this->clients_counter;
+    //std::cout << "string:"<< std::to_string(client_id) << std::endl;
+    
+    //socket.socket_send(&client_id, sizeof(char));	
+
     this->clientsThreads.insert({this->clients_counter, 
-        new ThreadClient(this->clients_counter, q )});
+        new ThreadClient(this->clients_counter, qClientsProcessor , this->out_queues.at(this->clients_counter), std::move(socket))});
+        
+    
     this->clientsThreads.at(this->clients_counter)->start();
-    //std::string client_id;
-    //client_id = std::to_string(this->clients_counter);
-    char client_id = (char)this->clients_counter;
-    //socket.socket_send(client_id.c_str(), strlen(client_id.c_str()));
-    socket.socket_send(&client_id, sizeof(char));
-    this->clientsSockets.insert({this->clients_counter, Socket(std::move(socket))});
+
+
+    //this->clientsSockets.insert({this->clients_counter, Socket(std::move(socket))});
     this->clients_counter++;
 }
 
@@ -98,7 +110,9 @@ void GameManager:: updateClients() {
         int clientId = it.first;
         int gameId = this->clientsInGames.at(it.first);
         //TODO: chequear tiempo de ejecucion -- eficiencia pasaje gamestatus
-        this->out_queues.at(clientId)->push(this->games.at(gameId)->getGameStatus());
+        //this->out_queues.at(clientId)->push(this->games.at(gameId)->getGameStatus());
+        //TODO : definir tipos de mensajes HACIA clientes
+        this->out_queues.at(clientId)->push(Message(0,0,0,clientId));
     }
 }
 

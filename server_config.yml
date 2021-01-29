@@ -29,3 +29,6 @@ Moves:
   Step: 5
   RotationLeft: 15
   RotationRight: -15
+Server:
+  Hostname: localhost
+  Port: 9001

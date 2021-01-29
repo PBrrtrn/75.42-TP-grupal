@@ -6,7 +6,8 @@
 
 int main(const int argc, const char* argv[]) {
 
-	YAML::Emitter out;
+	YAML::Emitter out;	
+	
 	out << YAML::BeginMap;
 	out << YAML::Key << "Player" ;
 		out << YAML::BeginMap;
@@ -73,7 +74,6 @@ int main(const int argc, const char* argv[]) {
 			out << YAML::Key << "Idx";
 			out << YAML::Value << 1 ;			
 		out << YAML::EndMap;
-	
 	out << YAML::Key << "Moves" ;
 		out << YAML::BeginMap;
 			out << YAML::Key << "Step";
@@ -83,7 +83,13 @@ int main(const int argc, const char* argv[]) {
 			out << YAML::Key << "RotationRight";
 			out << YAML::Value << -15 ;			
 		out << YAML::EndMap;
-
+	out << YAML::Key << "Server" ;
+		out << YAML::BeginMap;
+			out << YAML::Key << "Hostname";
+			out << YAML::Value << "localhost" ;
+			out << YAML::Key << "Port";
+			out << YAML::Value << "9000" ;		
+		out << YAML::EndMap;
 	out << YAML::EndMap;
 
 	std::ofstream fout("../server_config.yml");

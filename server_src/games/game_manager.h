@@ -23,10 +23,10 @@ private:
 	std::unordered_map<int, BlockingQueue<Message>*> queues;
 
 	/* clave: clientId value: gameQueue*/
-	std::unordered_map<int, BlockingQueue<GameStatus>*> out_queues;
+	std::unordered_map<int, BlockingQueue<Message>*> out_queues;
 	
 	/* clave: gameId value: gameQueue*/
-	std::unordered_map<int, BlockingQueue<GameStatus>*> out_game_queues;	
+	//std::unordered_map<int, BlockingQueue<OutMessage>*> out_game_queues;	
 	
 	/* clave: clientId value: socket*/
 	std::unordered_map<int, Socket> clientsSockets;	
@@ -85,7 +85,7 @@ public:
 	 * @param q: cola bloqueante para enviar al servidor
 	 * los mensajes enviados por el cliente
 	 */
-	void acceptClient(Socket& socket,BlockingQueue<Message>& q);
+	void acceptClient(Socket&& socket,BlockingQueue<Message>& q);
 
 	void updateClients();
 	

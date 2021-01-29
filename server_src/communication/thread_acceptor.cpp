@@ -6,7 +6,14 @@ ThreadAcceptor:: ThreadAcceptor() : message_processor(messages,gameManager){
 
 void ThreadAcceptor:: run() {
 	
-	bool resultado = this->socket.socket_bind_and_listen("localhost","666");
+	const YAML::Node& c = ServerConfig::Config["Server"];
+	
+	std::string host = c["Hostname"].as<std::string>();
+	std::string port = c["Port"].as<std::string>();
+	
+	std::cout << host <<":" << port << std::endl;
+	
+	bool resultado = this->socket.socket_bind_and_listen(host.c_str(),port.c_str());
 	
 	std::cout << "Acceptor socket opened:" << (resultado ? 0 : -1) << std::endl;
 	
@@ -21,7 +28,7 @@ void ThreadAcceptor:: run() {
 void ThreadAcceptor::acceptConnection(){
 	Socket peer;
 	if (peer.socket_accept(this->socket) > 0) {
-		this->gameManager.acceptClient(peer, this->messages);
+		this->gameManager.acceptClient(std::move(peer), this->messages);
 	}
 }
 

@@ -6,7 +6,7 @@ int main(const int argc, const char* argv[]) {
 
 	Socket socket;
 
-	bool resultado = socket.socket_connect("localhost","666");
+	bool resultado = socket.socket_connect("localhost","9001");
 	
 	char buffer[20];
 	int length;

@@ -155,7 +155,7 @@ void ThreadGame::addClient(ThreadClient* client, int id){
 	
 	BlockingQueue<GameStatus>* queue_out = new BlockingQueue<GameStatus>();
     this->out_queues.insert(std::make_pair(id, queue_out));
-    client->assignToOutQueue(queue_out);
+    //client->assignToOutQueue(queue_out);
 	
 	Vector position(3,4);
 	Vector direction(1,0);

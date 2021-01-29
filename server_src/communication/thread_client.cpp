@@ -1,17 +1,24 @@
 #include "thread_client.h"
 
-ThreadClient::ThreadClient(int id, 
-BlockingQueue<Message>& messages) : 
- messages(messages) {
-    this->keep_running = true;
-    this->id = id;
-    this->messages_out = NULL;
+ThreadClient::ThreadClient(int id, BlockingQueue<Message>& messages, BlockingQueue<Message>* messagesOut, Socket&& socket) : 
+		id(id), messages(messages) , messages_out(messagesOut), peer(std::move(socket)), keep_running(true), dead(false) {
+    //this->keep_running = true;
+    //this->id = id;
+    //this->messages_out = messagesOut;
 }
 
 void ThreadClient::run() {
 
     char buffer[BUF_SIZE];
     ssize_t bytes_received = 0;
+    
+    
+    
+    std::cout << "string:"<< std::to_string(id) << std::endl;
+    
+    char client_id = (char)id;
+    
+    this->peer.socket_send(&client_id, sizeof(client_id));
 
 	//if (this->id == 0) {
 	//	Message m1(TYPE_START_GAME,0,0,this->id);
@@ -41,6 +48,12 @@ void ThreadClient::run() {
 			{
 				this->messages_out->pop();
 				std::cout << "got a new event in outgoing queue in client " << this->id << std::endl; 
+				//switch evento.getType(){
+					// si hay que enviar gameList..
+					// si hay que enviar mapList..
+					// si hay que enviar Map..
+					// si hay que enviar ClientGameStatus..
+				//}
 			}
 
         } catch (...) {
@@ -57,8 +70,8 @@ void ThreadClient::run() {
     
 }
 
-void ThreadClient::assignToOutQueue(BlockingQueue<GameStatus>* messages_out){
-	this->messages_out = messages_out;
-}
+//void ThreadClient::assignToOutQueue(BlockingQueue<Message>* messages_out){
+//	this->messages_out = messages_out;
+//}
 
 ThreadClient:: ~ThreadClient(){}

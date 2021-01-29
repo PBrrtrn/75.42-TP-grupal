@@ -3,7 +3,7 @@
 
 #include <atomic>
 #include "../../common_src/Thread.h"
-////#include "../../common_src/socket.h"
+#include "../../common_src/Socket.h"
 #include "../../common_src/blocking_queue.h"
 #include "../games/game_status.h"
 #include "message.h"
@@ -14,21 +14,21 @@
 
 
 class ThreadClient : public Thread {
-    //Socket* peer;
-    //Server &server;
-    //std::mutex mtx;
+
+	int id;
+    BlockingQueue<Message>& messages;
+    BlockingQueue<Message>* messages_out;
+    Socket peer;
     std::atomic<bool> keep_running{true};
     std::atomic<bool> dead{false};
 
-    BlockingQueue<Message>& messages;
-    BlockingQueue<GameStatus>* messages_out;
-    int id;
+    
 
 public:
 
-    ThreadClient(int id, BlockingQueue<Message>& messages);
+    ThreadClient(int id, BlockingQueue<Message>& messages, BlockingQueue<Message>* messagesOut, Socket&& socket);
         
-    void assignToOutQueue(BlockingQueue<GameStatus>* messages_out);
+    //void assignToOutQueue(BlockingQueue<GameStatus>* messages_out);
     
     /**
      * @brief Entrega al hilo aceptador
