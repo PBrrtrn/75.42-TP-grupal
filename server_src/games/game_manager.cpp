@@ -38,24 +38,22 @@ void GameManager:: _parse_message(Message message) {
 
 void GameManager::startGame(int clientIdStarter) {
 	BlockingQueue<Message>* queue = new BlockingQueue<Message>();
-    
 	this->games.insert({ this->games_counter, new ThreadGame(this->games_counter, queue, this->games_list) });
 	this->clientsInGames.insert({clientIdStarter,this->games_counter});
-
 	this->queues.insert(std::make_pair(this->games_counter, queue));
-
 	std::cout << "id de cliente arrancando juego:" << clientIdStarter << std::endl;
-
-	this->games.at(this->games_counter)->addClient(this->clientsThreads.at(clientIdStarter), clientIdStarter);
+    this->joinGame(clientIdStarter, this->games_counter);
 	this->games.at(this->games_counter)->start();
 	this->games_counter++;
 }
 
 void GameManager::joinGame(int clientId, int gameId) {
-    
     if (this->games.at(gameId)->addClient(this->clientsThreads.at(clientId), clientId)) {
 		this->clientsInGames.insert({clientId, gameId});
-	}
+        this->out_queues.at(clientId)->push(Message(TYPE_SERVER_JOIN_OK, 0, clientId));
+	} else {
+        this->out_queues.at(clientId)->push(Message(TYPE_SERVER_JOIN_REFUSED, 0, clientId));
+    }
 }
 
 void GameManager::acceptClient(Socket&& socket, BlockingQueue<Message>& qClientsProcessor){

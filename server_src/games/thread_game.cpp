@@ -17,8 +17,8 @@ void ThreadGame:: run() {
 	GameListItem game;
 	game.gameId = this->id;
 	game.players = this->clients.size();
-	game.maxPlayers = 32;
-	game.mapId = 1;
+	game.maxPlayers = 32; //TODO sacar de config
+	game.mapId = 1; //TODO sacar del mapa cargado
 	
 	this->gameList.insert({this->id,game});
 
@@ -35,8 +35,8 @@ void ThreadGame:: run() {
 		
 		this->gameList.at(this->id).players = this->clients.size();
 		
-		this->sendGameUpdates();
-		usleep(1000000/3);
+		this->sendLobbyStatus();
+		usleep(1000000);
 		this->waiting_time_to_start--;
 	}
 	//el juego ya esta por arrancar (o hubo timeout sin gente), lo saco de la lista de disponibles
@@ -50,7 +50,8 @@ void ThreadGame:: run() {
         this->checkPlayerBullets();
         this->sendGameUpdates();
         
-        usleep(1000000/60); //todo: hacer variable respecto a tiempo demorado en ejecutar checkNews y sendUpdates
+        usleep(1000000/60); //todo: hacer variable respecto a tiempo 
+		//demorado en ejecutar checkNews y sendUpdates
         this->remaining_time--;
 		this->keep_running = this->gameStatus.getAlivePlayers() > 1 && this->remaining_time != 0 && !this->is_dead;
     }
@@ -59,26 +60,16 @@ void ThreadGame:: run() {
 	this->is_dead = true;
 }
 
-GameStatus ThreadGame:: getGameStatus() {
-	return this->gameStatus;
-}
-
 void ThreadGame::respawnItems(){
-	//iterar por todos los items y checkear si hay que "revivirlos"
 	this->gameStatus.respawnItems();
 }
 
 void ThreadGame::checkPlayerBullets(){
-	//iterar por todos los players y checkear si hay que hacerlos cambiar al cuchillo
 	this->gameStatus.checkPlayerBullets();
 }
 
 void ThreadGame::checkPlayerPickups(){
 	this->gameStatus.checkPlayerPickups();
-	
-	//for all items en game status
-	//comparar distancia de item contra todos los jugadores
-	//si la distancia es menor a un entero en la configuracion, entonces pick up
 }
 
 void ThreadGame::sendGameStatistics(){}
@@ -88,7 +79,8 @@ void ThreadGame::checkNews() {
 	while (!this->messages->isEmptySync()) {
 		Message m = this->messages->popSync();
 
-		std::cout << "en el game: " << (char)m.getType() << ", client:" << m.getClientId() << std::endl;
+		std::cout << "en el game: " << (char)m.getType() << ", client:" 
+			<< m.getClientId() << std::endl;
 		
 		switch (m.getType())
 		{
@@ -143,27 +135,29 @@ void ThreadGame::checkNews() {
 		default:
 			break;
 		}
-
 	}
 	this->messages->unlock();
+}
+
+void ThreadGame::sendLobbyStatus() {
+	for (auto& it: this->out_queues) {
+        int clientId = it.first;
+        this->out_queues.at(clientId)->push(Message(TYPE_LOBBY_STATUS_UPDATE,0,clientId)); 
+    }
 }
 
 void ThreadGame::sendGameUpdates(){
 	for (auto& it: this->out_queues) {
         int clientId = it.first;
-        this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAME_UPDATE,0,clientId)); 
-        
-        //int gameId = this->clientsInGames.at(it.first);
-        //TODO: chequear tiempo de ejecucion -- eficiencia pasaje gamestatus
-        //this->out_queues.at(clientId)->push(this->games.at(gameId)->getGameStatus());
+        this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAME_UPDATE,0,clientId));
     }
 }
 
 void ThreadGame::expelClient(int id){
 	this->clients.erase(id);	
-	if (this->clients.size() == 0)
-		this->keep_running = false;
-	//todo: keep_running = false si no hay mas clientes
+	if (this->clients.size() <= 1){
+		this->shutdown();
+	}
 }
 
 bool ThreadGame::addClient(ThreadClient* client, int id){

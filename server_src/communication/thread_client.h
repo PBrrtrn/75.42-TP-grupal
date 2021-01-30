@@ -33,7 +33,27 @@ public:
         ServerStatus& serverStatus);
     virtual void run() override;    
     void shutdown();
+
+    /**
+     * @brief Guarda un puntero a la cola bloqueante
+     * de mensajes para recibir respuesta del game manager
+     * @param messages_out: cola bloqueante compartida con el
+     * game manager
+     */
     void assignToOutQueue(BlockingQueue<Message>* messages_out);
+
+    /**
+     * @brief Envia al cliente la lista de juegos disponibles
+     * activos en el momento en el que pidió el refresh
+     */
+    void sendGamesList();
+
+    /**
+     * @brief Envia al cliente su numero
+     * de jugador asignado a través del socket.
+     */
+    void informClientId();
+
     virtual ~ThreadClient() override;
 };
 

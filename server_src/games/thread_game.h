@@ -28,11 +28,20 @@
 #include "../../common_src/GameListItem.h"
 
 class ThreadGame: public Thread {
-        int id;
+        int id; /*numero de partida*/
         BlockingQueue<Message>* messages;
-        std::unordered_map<int,GameListItem>& gameList;
-        GameStatus gameStatus;
+        std::unordered_map<int, BlockingQueue<Message>*> out_queues;
+
+        /*clave: id game, value: lista de juegos activos en servidor*/
+        std::unordered_map<int, GameListItem >& gameList;
+        //TODO ver optimizacion --> ver si puede solo tener referencia a GameListItem
+
+        /*clave: id del cliente, value: th cliente*/
+        /*diccionario de clientes en partida*/
         std::unordered_map<int,ThreadClient*> clients;
+        
+        GameStatus gameStatus;
+
         MoveForward move_forward;
         MoveLeft move_left;
         MoveRight move_right;
@@ -43,10 +52,7 @@ class ThreadGame: public Thread {
         ChangeWeaponCanion change_canion;
         ChangeWeaponPistola change_pistola;
         ChangeWeaponLanzaCohetes change_lanzacohetes;
-
         UseDoor use_door;
-        
-        std::unordered_map<int, BlockingQueue<Message>*> out_queues;
         
         std::atomic<bool>start_running;
         std::atomic<bool>keep_running;
@@ -54,29 +60,61 @@ class ThreadGame: public Thread {
         int remaining_time;
         int waiting_time_to_start;
         
-        void checkNews();
-        
+        /**
+         * @brief Elimina un jugador de la partida
+         * @param id: id del cliente a eliminar
+         */
         void expelClient(int id);
         
+        void checkNews();
 		void checkPlayerPickups();
+        void respawnItems();
+		void checkPlayerBullets();   
 
-		void sendGameStatistics();   
+        /**
+         * @brief Envia las estadisticas
+         * de la partida, una vez finalizada
+         */
+		void sendGameStatistics();
+
+        /**
+         * @brief Envia los datos actualizados
+         * de la partida a sus jugadores.
+         */
+        void sendGameUpdates();
+
+        /**
+         * @brief Envia los datos del estado de 
+         * espera de inicio del juego:
+         * cantidad de jugadores que ingresaron y
+         * tiempo restante para comenzar.
+         */
+        void sendLobbyStatus();
 
     public:
         ThreadGame(int gameId, BlockingQueue<Message>* m,std::unordered_map<int,GameListItem>& list);
         virtual void run() override;
+
+        /**
+         * @brief Agrega un nuevo jugador a la partida
+         * si la misma todavia no comenzo y no supero
+         * el maximo de jugadores permitidos
+         * @param client: thread cliente
+         * @param id: id asociado al cliente
+         */
         bool addClient(ThreadClient* client, int id);
+
+        /**
+         * @brief Metodos encargados de efectuar
+         * las acciones solicitadas por el cliente 
+         * en caso de ser validas
+         */
         void tryMoveForward(int id);
         void tryMoveBackward(int id);
         void tryMoveLeft(int id);
         void tryMoveRight(int id);
         void tryShoot(int id);
-        GameStatus getGameStatus();
-        
-        void sendGameUpdates();
-        
-        void respawnItems();
-		void checkPlayerBullets();   
+
 		
 		void changeWeaponAmetralladora(int id);
 		void changeWeaponCanion(int id);
