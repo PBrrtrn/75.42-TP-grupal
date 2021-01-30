@@ -23,10 +23,6 @@ std::vector<GameListItem> ServerStatus::getGamesList() {
 	GameListItem game;
 	
 	for (auto& it: this->games) {
-		//game.gameId = it.first;
-		//game.players = it.second->getCurrentPlayers();
-		//game.maxPlayers = it.second->getMaxPlayers();
-		//game.mapId = it.second->getMapId();
 		list.emplace_back(it.second);
 	}
 

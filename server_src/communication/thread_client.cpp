@@ -18,21 +18,18 @@ void ThreadClient::run() {
     
     this->peer.socket_send(&client_id, sizeof(client_id));
 
-	//if (this->id == 0) {
-	//	Message m1(TYPE_START_GAME,0,0,this->id);
-	//	this->messages.push(m1);
-	//} else {
-    //    usleep(3000000);
-	//	Message m1(TYPE_JOIN_GAME,0,0,this->id);
-	//	this->messages.push(m1);		
-	//}
-
 	std::vector<GameListItem> list = this->serverStatus.getGamesList();
 	
 	char size = list.size()*sizeof(GameListItem);
 	
 	this->peer.socket_send(&size, sizeof(char));
-
+	
+	for (auto& it: list) {
+		std::cout << "sending game in list" << std::endl;
+		this->peer.socket_send((char*)(&it), sizeof(GameListItem));
+	}
+	
+	//send game list
 	
 	this->peer.socket_receive(buffer, sizeof(char)*2);
 
@@ -44,30 +41,6 @@ void ThreadClient::run() {
 	bool choosing_game = true;
 
 	while(choosing_game){
-		
-
-		
-		//for (auto& it: list) { 
-		//	GameListItem& game = (*it);
-		//	this->peer.socket_send(game, sizeof(GameListItem));
-		//	
-		//}
-		
-		
-		
-	     /*
-        
-			ServerStatus& ss;
-			tamanio = this->ss.getGameListSize();
-			GameListItem item;
-			//this->ss.getGameListItem(0,item);
-			//char game[item.getMessageSize()];
-			sizeOfMessage = tamanio*sizeof(GameListItem);					
-			for (desde 0 hasta tamanio)
-				this->ss.getGameListItem(char id,item);
-				//item.serialize(game);				
-				this->peer.send_socket(item,sizeof(GameListItem));
-        */	
 	
 	}
 

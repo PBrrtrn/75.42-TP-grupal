@@ -22,10 +22,6 @@ void ThreadAcceptor:: run() {
         this->acceptConnection();
         this->gameManager.cleanUpDeadGames();
     }
-    
-    
-    
-    
 }
 
 void ThreadAcceptor::acceptConnection(){
