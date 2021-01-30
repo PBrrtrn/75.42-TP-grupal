@@ -15,56 +15,33 @@
 #include "message.h"
 #include "../server_config.h"
 
-
 class GameManager;
 
 class ThreadAcceptor: public Thread {
 
-    MessageProcessor message_processor;
-    Socket socket;
-    
-    BlockingQueue<Message> messages;
-    
+    private:
 
-	GameManager gameManager;
+        MessageProcessor message_processor;
+        Socket socket;
+        BlockingQueue<Message> messages;
+        GameManager gameManager;
 
-    /** 
-     * @brief Numero siempre creciente
-     * para asignar un ID numerico
-     * a cada cliente nuevo
-     */
-    int clients_counter;
+        /** 
+         * @brief Numero siempre creciente
+         * para asignar un ID numerico
+         * a cada cliente nuevo
+         */
+        int clients_counter;
 
-    std::atomic<bool> keep_running{true};
+        std::atomic<bool> keep_running{true};
 
     public:
 
-    ThreadAcceptor();
-    
-    void acceptConnection();
-
-    virtual void run() override;
-
-    /**
-     * @brief Inicia un nuevo hilo cliente y guarda el mismo en
-     * el mapa de hilos cliente, usando como clave
-     * el numero que indica el contador de clientes
-     * al momento de ser agregado.
-     *
-    */
-    void newClient();
-
-    /**
-     * @brief Parsea el mensaje recibido y efectúa 
-     * la acción correspondiente.
-     */
-    void newMessage(std::string message, int clientID);
-
-    //void garbage_collector();
-    
-    void shutdown();
-
-    virtual ~ThreadAcceptor() override;
+        ThreadAcceptor();
+        void acceptConnection();
+        virtual void run() override;
+        void shutdown();
+        virtual ~ThreadAcceptor() override;
 };
 
 #endif

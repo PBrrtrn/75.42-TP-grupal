@@ -7,6 +7,7 @@ id(gameId), messages(m),gameStatus("../maps/map-data.yml"), gameList(list) {
 	this->remaining_time = 60 * 1000;
 	this->waiting_time_to_start = 60 * 60; 
 	this->start_running = true;
+	this->is_dead = false;
 }
 
 void ThreadGame:: run() {
@@ -43,7 +44,7 @@ void ThreadGame:: run() {
 	
 	std::cout << "Game started!" << std::endl;
     while (keep_running) {
-        this->checkNews();
+		this->checkNews();
         this->checkPlayerPickups();
         this->respawnItems();
         this->checkPlayerBullets();
@@ -51,10 +52,11 @@ void ThreadGame:: run() {
         
         usleep(1000000/60); //todo: hacer variable respecto a tiempo demorado en ejecutar checkNews y sendUpdates
         this->remaining_time--;
-		this->keep_running = this->gameStatus.getAlivePlayers() > 1 && this->remaining_time != 0;
+		this->keep_running = this->gameStatus.getAlivePlayers() > 1 && this->remaining_time != 0 && !this->is_dead;
     }
     
     this->sendGameStatistics();
+	this->is_dead = true;
 }
 
 GameStatus ThreadGame:: getGameStatus() {
@@ -82,69 +84,74 @@ void ThreadGame::checkPlayerPickups(){
 void ThreadGame::sendGameStatistics(){}
 
 void ThreadGame::checkNews() {
-	Message m = this->messages->pop();
-	std::cout << "en el game: " << (char)m.getType() << ", client:" << m.getClientId() << std::endl;
-	
-	switch (m.getType())
-	{
-	case TYPE_MOVE_FORWARD:
-		this->tryMoveForward(m.getClientId());
-		break;
+	this->messages->lock();
+	while (!this->messages->isEmptySync()) {
+		Message m = this->messages->popSync();
 
-	case TYPE_MOVE_BACKWARD:
-		this->tryMoveBackward(m.getClientId());
-		break;
-	
-	case TYPE_MOVE_LEFT:
-		this->tryMoveLeft(m.getClientId());
-		break;
-
-	case TYPE_MOVE_RIGHT:
-		this->tryMoveRight(m.getClientId());
-		break;
-
-	case TYPE_EXIT_GAME:
-		this->expelClient(m.getClientId());
-		break;
-	
-	case TYPE_SHOOT:
-		this->tryShoot(m.getClientId());
-		break;
-	
-	case TYPE_CHANGE_AMETRALLADORA:
-		this->changeWeaponAmetralladora(m.getClientId());
-		break;
-	
-	case TYPE_CHANGE_CANION:
-		this->changeWeaponCanion(m.getClientId());
-		break;
-
-	case TYPE_CHANGE_CUCHILLO:
-		this->changeWeaponCuchillo(m.getClientId());
-		break;
-
-	case TYPE_CHANGE_LANZA_COHETES:
-		this->changeWeaponLanzacohetes(m.getClientId());
-		break;
-
-	case TYPE_CHANGE_PISTOLA:
-		this->changeWeaponPistola(m.getClientId());
-		break;
+		std::cout << "en el game: " << (char)m.getType() << ", client:" << m.getClientId() << std::endl;
 		
-	case TYPE_USE_DOOR:
-		this->useDoor(m.getClientId());
-		break;		
+		switch (m.getType())
+		{
+		case TYPE_MOVE_FORWARD:
+			this->tryMoveForward(m.getClientId());
+			break;
 
-	default:
-		break;
+		case TYPE_MOVE_BACKWARD:
+			this->tryMoveBackward(m.getClientId());
+			break;
+		
+		case TYPE_MOVE_LEFT:
+			this->tryMoveLeft(m.getClientId());
+			break;
+
+		case TYPE_MOVE_RIGHT:
+			this->tryMoveRight(m.getClientId());
+			break;
+
+		case TYPE_EXIT_GAME:
+			this->expelClient(m.getClientId());
+			break;
+		
+		case TYPE_SHOOT:
+			this->tryShoot(m.getClientId());
+			break;
+		
+		case TYPE_CHANGE_AMETRALLADORA:
+			this->changeWeaponAmetralladora(m.getClientId());
+			break;
+		
+		case TYPE_CHANGE_CANION:
+			this->changeWeaponCanion(m.getClientId());
+			break;
+
+		case TYPE_CHANGE_CUCHILLO:
+			this->changeWeaponCuchillo(m.getClientId());
+			break;
+
+		case TYPE_CHANGE_LANZA_COHETES:
+			this->changeWeaponLanzacohetes(m.getClientId());
+			break;
+
+		case TYPE_CHANGE_PISTOLA:
+			this->changeWeaponPistola(m.getClientId());
+			break;
+			
+		case TYPE_USE_DOOR:
+			this->useDoor(m.getClientId());
+			break;		
+
+		default:
+			break;
+		}
+
 	}
-
+	this->messages->unlock();
 }
 
 void ThreadGame::sendGameUpdates(){
 	for (auto& it: this->out_queues) {
         int clientId = it.first;
-        this->out_queues.at(clientId)->push(this->gameStatus); 
+        this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAME_UPDATE,0,clientId)); 
         
         //int gameId = this->clientsInGames.at(it.first);
         //TODO: chequear tiempo de ejecucion -- eficiencia pasaje gamestatus
@@ -166,9 +173,9 @@ bool ThreadGame::addClient(ThreadClient* client, int id){
 	std::cout << "en el game: " << this->id << ", client:" << id << " se inserto en este game." << std::endl;
 	this->clients.insert({id,client});
 	
-	BlockingQueue<GameStatus>* queue_out = new BlockingQueue<GameStatus>();
+	BlockingQueue<Message>* queue_out = new BlockingQueue<Message>();
     this->out_queues.insert(std::make_pair(id, queue_out));
-    //client->assignToOutQueue(queue_out);
+    client->assignToOutQueue(queue_out);
 	
 	Vector position(3,4);
 	Vector direction(1,0);
@@ -229,4 +236,18 @@ char ThreadGame::getMaxPlayers(){
 	return 32; //TODO devolver max players real
 }
 
-ThreadGame:: ~ThreadGame(){}
+bool ThreadGame:: isDead() {
+	return this->is_dead;
+}
+
+void ThreadGame::shutdown(){
+	this->keep_running = false;
+	this->start_running = false;
+	this->is_dead = true;
+}
+
+ThreadGame:: ~ThreadGame(){
+	for (auto x: this->out_queues) {
+        delete x.second;
+    }
+}

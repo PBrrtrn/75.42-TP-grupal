@@ -11,7 +11,6 @@ void Server::start() {
     while (std::getline(std::cin, line)) {
 		if (line == "q" || line == "quit") break;
 	}
-	
 	this->acceptor.shutdown();
 }
 

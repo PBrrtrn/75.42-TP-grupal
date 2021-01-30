@@ -14,6 +14,7 @@ class GameManager{
 
 private:
 
+	/* clave: gameId value: GameListItem*/
 	std::unordered_map<int, GameListItem> games_list;
 
 	ServerStatus serverStatus;
@@ -87,6 +88,12 @@ public:
 	 */
 	void acceptClient(Socket&& socket,BlockingQueue<Message>& q);
 	
+	/**
+	 * @brief Envia al cliente la lista de las partidas
+	 * que estan disponibles para unirse
+	 * @param clientId: id del cliente al cual le envia
+	 * la informacion
+	 */
 	void informAvailableGames(int clientId);
 
 	~GameManager();

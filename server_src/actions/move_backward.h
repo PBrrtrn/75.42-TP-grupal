@@ -3,7 +3,6 @@
 #include "action.h"
 
 class MoveBackward : public Action {
-
     public:
         MoveBackward();
         void tryAction(GameStatus& gs, int clientID) override;

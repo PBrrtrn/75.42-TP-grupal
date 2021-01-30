@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 
 #include "../common_src/Socket.h"
 #include "../common_src/GameListItem.h"
@@ -9,7 +10,7 @@ int main(const int argc, const char* argv[]) {
 
 	Socket socket;
 
-	bool resultado = socket.socket_connect("localhost","9001");
+	bool resultado = socket.socket_connect("localhost","9002");
 	
 	char buffer[BUF_SIZE];
 	int length = 1;
@@ -40,17 +41,18 @@ int main(const int argc, const char* argv[]) {
 	//char buffer_list[gameListSize];
 	
 	//envio evento start si soy el primer client, buffer[0] = evento, buffer[1] = mapId
-	if (clientId == "0" || clientId == "1"){
-		buffer[0] = 'n';
-		buffer[1] = 2;
-	} else {
-		buffer[0] = 'j';
-		buffer[1] = 0;		
+	if(true) {
+		if (clientId == "0" /*|| clientId == "1"*/){
+			buffer[0] = 'n';
+			buffer[1] = 2;
+		} else {
+			buffer[0] = 'j';
+			buffer[1] = 0;		
+		}
+		length = 2;
+		socket.socket_send(buffer,length);
 	}
-	length = 2;
 	
-	socket.socket_send(buffer,length);
-
-
+	usleep(6000000);
     return 0;
 }

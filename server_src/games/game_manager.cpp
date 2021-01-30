@@ -39,7 +39,6 @@ void GameManager:: _parse_message(Message message) {
 void GameManager::startGame(int clientIdStarter) {
 	BlockingQueue<Message>* queue = new BlockingQueue<Message>();
     
-    
 	this->games.insert({ this->games_counter, new ThreadGame(this->games_counter, queue, this->games_list) });
 	this->clientsInGames.insert({clientIdStarter,this->games_counter});
 
@@ -76,20 +75,33 @@ void GameManager::acceptClient(Socket&& socket, BlockingQueue<Message>& qClients
 
 void GameManager::informAvailableGames(int clientId){
 	this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAMES_LIST,0,clientId));
-	
 }
 
 void GameManager::cleanUpDeadGames(){
-	//recorrer this->games y si game.isDead, join() y eliminar
+	for (auto x: this->games) {
+        if (x.second->isDead()) {
+            x.second->join();
+            delete x.second;
+            this->games.erase(x.first);
+        }
+    }
 }
 
 GameManager::~GameManager(){
-    for (auto x: clientsThreads) {
+    for (auto x: this->clientsThreads) {
+        x.second->shutdown();
         x.second->join();
         delete x.second;
     }
-    
-    //recorrer lista de clients y joinear y destruir
-    //recorrer lista de games y joinear y destruir
-    //recorrer lista de queues y destruir
+    for (auto x: this->games) {
+        x.second->shutdown();
+        x.second->join();
+        delete x.second;
+    }
+    for (auto x: this->queues) {
+        delete x.second;
+    }
+    for (auto x: this->out_queues) {
+        delete x.second;
+    }
 }

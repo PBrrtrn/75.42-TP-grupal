@@ -5,27 +5,27 @@
 
 class Door{
 
-private:
+    private:
 
-bool locked;
-bool open;
-int time_to_close;
-Vector location;
+        bool locked;
+        bool open;
+        int time_to_close;
+        Vector location;
 
-public:
+    public:
 
-Door(bool is_locked,int xGridLocation,int yGridLocation);
+        Door(bool is_locked,int xGridLocation,int yGridLocation);
 
-bool isLocked();
-bool isOpen();
-int getTimeToClose();
+        bool isLocked();
+        bool isOpen();
+        int getTimeToClose();
 
-void openDoor();
-void unlockDoor();
+        void openDoor();
+        void unlockDoor();
 
-Vector getLocation();
+        Vector getLocation();
 
-~Door();
+        ~Door();
 
 };
 

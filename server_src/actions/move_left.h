@@ -4,7 +4,6 @@
 
 
 class MoveLeft : public Action {
-
     public:
         MoveLeft();
         void tryAction(GameStatus& gs, int clientID) override;

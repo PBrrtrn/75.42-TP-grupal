@@ -46,10 +46,11 @@ class ThreadGame: public Thread {
 
         UseDoor use_door;
         
-        std::unordered_map<int, BlockingQueue<GameStatus>*> out_queues;
+        std::unordered_map<int, BlockingQueue<Message>*> out_queues;
         
-        bool start_running;
-        bool keep_running;
+        std::atomic<bool>start_running;
+        std::atomic<bool>keep_running;
+        std::atomic<bool>is_dead;
         int remaining_time;
         int waiting_time_to_start;
         
@@ -88,6 +89,9 @@ class ThreadGame: public Thread {
 		char getMapId();
 		char getCurrentPlayers();
         char getMaxPlayers();
+
+        bool isDead();
+        void shutdown();
         
         virtual ~ThreadGame() override;
 };

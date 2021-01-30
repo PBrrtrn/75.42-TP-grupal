@@ -1,7 +1,7 @@
 #include "message_processor.h"
 
 MessageProcessor::MessageProcessor(BlockingQueue<Message>& m, GameManager& gm) : 
-messages(m), gameManager(gm){}
+messages(m), gameManager(gm), keep_running(true) {}
 	
 void MessageProcessor::run(){
 	std::cout << "Message Processor running." << std::endl;
@@ -20,6 +20,8 @@ void MessageProcessor::checkNews() {
 	this->messages.unlock();
 }
 
-
+void MessageProcessor::shutdown(){
+	this->keep_running = false;
+}
 
 MessageProcessor::~MessageProcessor(){}

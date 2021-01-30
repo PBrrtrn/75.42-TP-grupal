@@ -3,7 +3,6 @@
 #include "action.h"
 
 class MoveForward : public Action {
-
     public:
         MoveForward();
         void tryAction(GameStatus& gs, int clientID) override;

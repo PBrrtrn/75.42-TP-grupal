@@ -3,7 +3,6 @@
 #include "action.h"
 
 class UseDoor : public Action {
-
     public:
         UseDoor();
         void tryAction(GameStatus& gs, int clientID) override;

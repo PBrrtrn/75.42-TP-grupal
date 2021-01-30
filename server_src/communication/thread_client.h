@@ -23,25 +23,17 @@ class ThreadClient : public Thread {
     Socket peer;
     std::atomic<bool> keep_running{true};
     std::atomic<bool> dead{false};
-    
     ServerStatus serverStatus;
-
-    
+    bool choosing_game;
 
 public:
 
-    ThreadClient(int id, BlockingQueue<Message>& messages, BlockingQueue<Message>* messagesOut, Socket&& socket, ServerStatus& serverStatus);
-        
-    //void assignToOutQueue(BlockingQueue<GameStatus>* messages_out);
-    
-    /**
-     * @brief Entrega al hilo aceptador
-     * el mensaje enviado por el cliente.
-     */
-    virtual void run() override;
-    //void stop();
-    //bool is_dead();
-    
+    ThreadClient(int id, BlockingQueue<Message>& messages, 
+        BlockingQueue<Message>* messagesOut, Socket&& socket, 
+        ServerStatus& serverStatus);
+    virtual void run() override;    
+    void shutdown();
+    void assignToOutQueue(BlockingQueue<Message>* messages_out);
     virtual ~ThreadClient() override;
 };
 

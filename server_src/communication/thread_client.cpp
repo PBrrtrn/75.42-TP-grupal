@@ -38,12 +38,12 @@ void ThreadClient::run() {
 	Message m(buffer[0],buffer[1],this->id);
 	this->messages.push(m);
 
-	bool choosing_game = true;
+	this->choosing_game = true;
 
+	/*
 	while(choosing_game){
 	
-	}
-
+	}*/
 
     while (keep_running){
         try {
@@ -86,8 +86,13 @@ void ThreadClient::run() {
     
 }
 
-//void ThreadClient::assignToOutQueue(BlockingQueue<Message>* messages_out){
-//	this->messages_out = messages_out;
-//}
+void ThreadClient::assignToOutQueue(BlockingQueue<Message>* messages_out){
+	this->messages_out = messages_out;
+}
+
+void ThreadClient::shutdown(){
+	this->keep_running = false;
+	this->choosing_game = false;
+}
 
 ThreadClient:: ~ThreadClient(){}

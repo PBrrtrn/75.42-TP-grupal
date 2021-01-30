@@ -18,7 +18,6 @@ void ThreadAcceptor:: run() {
 	std::cout << "Acceptor socket opened:" << (resultado ? 0 : -1) << std::endl;
 	
     while (this->keep_running) {
-		
         this->acceptConnection();
         this->gameManager.cleanUpDeadGames();
     }
@@ -37,5 +36,6 @@ void ThreadAcceptor::shutdown(){
 }
 
 ThreadAcceptor:: ~ThreadAcceptor() {
+	this->message_processor.shutdown();
 	this->message_processor.join();
 }
