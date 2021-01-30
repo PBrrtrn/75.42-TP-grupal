@@ -24,7 +24,6 @@ add_library(server_classes SHARED
   ./games/thread_game.cpp
   ./games/door.cpp
   ./games/statistics.cpp
-  ./games/available_games.cpp
   ./games/ServerStatus.cpp
   ./server_main.cpp
   ./server.cpp

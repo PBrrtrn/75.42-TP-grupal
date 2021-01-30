@@ -58,6 +58,8 @@ class Socket {
         //Devuelve la cantidad de bytes recibidos o -1 si ocurrió un error.
         ssize_t socket_receive(char* buffer, size_t length);
 
+		void close_socket();
+
         //Cierra y hace un shutdown del socket.
         ~Socket();
 };

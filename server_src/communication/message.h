@@ -19,28 +19,24 @@
 #define TYPE_CHANGE_CANION '5'
 #define TYPE_USE_DOOR 'f'
 
+#define TYPE_SERVER_SEND_GAME_UPDATE 1
+#define TYPE_SERVER_SEND_GAMES_LIST 2
+#define TYPE_SERVER_SEND_MAP_LIST 3
+#define TYPE_SERVER_SEND_MAP 4
+
 class Message {
 
 	private:
-
-		//std::string m;
 		int type;
 		int entity;
-		int value;
 		int clientId;	
 
 	public:
-
-		//Message(std::string data,int clientId);
 		
-		Message(int type,int entity, int value,int clientId);
-		
-		//std::string getMessage();
+		Message(int type,int entity,int clientId);
 		
 		int getType();
 		int getEntity();
-		int getValue();
-		
 		int getClientId();
 		
 		~Message();

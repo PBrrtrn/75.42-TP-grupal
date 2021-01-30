@@ -9,35 +9,23 @@
 #include "server_config.h"
 
 class Server {
-	//const char* server_port;
-	//Socket socket;
+	private:
 	ThreadAcceptor acceptor;
-	//BlockingQueue<std::string>& messages;
 
 	public:
-		
-		//Server(BlockingQueue<std::string>& messages);
-		Server();
-		/**
-		 * @brief Crea un hilo aceptador
-		 * para recibir conexiones de
-		 * multiples clientes
-		 */
-		void start();
+	Server();
+	/**
+	 * @brief Crea un hilo aceptador
+	 * para recibir conexiones de
+	 * multiples clientes
+	 */
+	void start();
 
-		/**
-		 * @brief Devuelve true en caso de un bind and
-		 * listen exitoso del socket, 
-		 * false en caso contrario
-		*/
-		//bool ready_to_receive();
-
-		/**
-		 * @brief Cierra el hilo aceptador 
-		 * y lo elimina
-		 */
-		~Server();
-		
+	/**
+	 * @brief Cierra el hilo aceptador 
+	 * y lo elimina
+	 */
+	~Server();
 };
 
 #endif

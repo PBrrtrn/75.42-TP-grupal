@@ -1,10 +1,7 @@
 #include "message.h"
 
-Message::Message(int t,int e, int v, int clientId) : type(t), entity(e), value(v) ,clientId(clientId){}
+Message::Message(int t,int e, int clientId) : type(t), entity(e), clientId(clientId){}
 
-//std::string Message::getMessage(){
-//	return this->m;
-//}
 int Message::getClientId(){
 	return this->clientId;
 }
@@ -15,8 +12,4 @@ int Message::getType(){
 int Message::getEntity(){
 	return this->entity;
 }
-int Message::getValue(){
-	return this->value;
-}
-
 Message::~Message(){}

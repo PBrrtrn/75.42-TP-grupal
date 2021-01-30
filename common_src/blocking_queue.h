@@ -20,8 +20,7 @@ public:
         queue.push(t);
         cv.notify_all();
     }
-    
-    //TEST
+
     void lock(){
 		this->m.lock();
 	}
@@ -39,8 +38,6 @@ public:
     void unlock(){
 		this->m.unlock();
 	}
-	
-	//end test
 
     T pop() {
         std::unique_lock<std::mutex> lock(m);

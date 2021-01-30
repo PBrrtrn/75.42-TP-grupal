@@ -142,6 +142,14 @@ ssize_t Socket:: socket_receive(char* buffer, size_t length){
     return total_bytes_received;
 }
 
+void Socket::close_socket(){
+	if (this->fd > -1){
+		shutdown(this->fd, SHUT_RDWR);
+		close(this->fd);
+		this->fd != -1;
+	}
+}
+
 Socket:: ~Socket(){
     if (this->fd != -1) {
     	shutdown(this->fd, SHUT_RDWR);

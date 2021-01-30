@@ -7,7 +7,6 @@ void MessageProcessor::run(){
 	std::cout << "Message Processor running." << std::endl;
     while (keep_running) {
         this->checkNews();
-        this->gameManager.informAvailableGames();
     }	
 }
 
@@ -19,14 +18,8 @@ void MessageProcessor::checkNews() {
 		this->gameManager.newMessage(m);
 	}
 	this->messages.unlock();
-	
-	//Message m = this->messages.pop();
-	//std::cout << "En processor. Mensaje:"<< (char)m.getType()<< ", cliente:" << m.getClientId() << std::endl;
-	//this->gameManager.newMessage(m);
 }
 
-void MessageProcessor::updateClients() {
-	//this->gameManager.updateClients();
-}
+
 
 MessageProcessor::~MessageProcessor(){}

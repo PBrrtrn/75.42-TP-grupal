@@ -7,7 +7,6 @@
 #include <unordered_map>
 #include "../../common_src/blocking_queue.h"
 #include "../communication/message.h"
-#include "available_games.h"
 #include "ServerStatus.h"
 #include "../../common_src/GameListItem.h"
 
@@ -30,9 +29,6 @@ private:
 
 	/* clave: clientId value: gameQueue*/
 	std::unordered_map<int, BlockingQueue<Message>*> out_queues;
-	
-	/* clave: gameId value: gameQueue*/
-	//std::unordered_map<int, BlockingQueue<OutMessage>*> out_game_queues;	
 	
 	/* clave: clientId value: socket*/
 	std::unordered_map<int, Socket> clientsSockets;	
@@ -67,8 +63,6 @@ private:
 	 */
 	void _parse_message(Message m);
 
-	AvailableGames getAvailableGames();
-
 public:
 
 	GameManager();
@@ -92,10 +86,8 @@ public:
 	 * los mensajes enviados por el cliente
 	 */
 	void acceptClient(Socket&& socket,BlockingQueue<Message>& q);
-
-	void updateClients();
 	
-	void informAvailableGames();
+	void informAvailableGames(int clientId);
 
 	~GameManager();
 };

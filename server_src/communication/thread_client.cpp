@@ -38,7 +38,7 @@ void ThreadClient::run() {
 
 	std::cout << "evento:"<< buffer[0] <<",mapId:"<< std::to_string(buffer[1]) << std::endl;
 	
-	Message m(buffer[0],buffer[1],0,this->id);
+	Message m(buffer[0],buffer[1],this->id);
 	this->messages.push(m);
 
 	bool choosing_game = true;

@@ -31,14 +31,6 @@ class MessageProcessor: public Thread {
          * ejecute las acciones correspondientes
          */
         void checkNews();
-
-        /**
-         * @brief Se ocupa de enviarle a cada
-         * cliente a traves de la cola bloqueante
-         * el gameStatus actual de la
-         * partida en la que se encuentra
-         */
-        void updateClients();
         
         virtual ~MessageProcessor() override;
 };

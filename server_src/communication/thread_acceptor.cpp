@@ -11,19 +11,21 @@ void ThreadAcceptor:: run() {
 	std::string host = c["Hostname"].as<std::string>();
 	std::string port = c["Port"].as<std::string>();
 	
-	std::cout << host <<":" << port << std::endl;
+	std::cout << "Running server on: " << host << ":" << port << std::endl;
 	
 	bool resultado = this->socket.socket_bind_and_listen(host.c_str(),port.c_str());
 	
 	std::cout << "Acceptor socket opened:" << (resultado ? 0 : -1) << std::endl;
 	
-    while (keep_running) {
+    while (this->keep_running) {
 		
         this->acceptConnection();
-        
-        
         this->gameManager.cleanUpDeadGames();
     }
+    
+    
+    
+    
 }
 
 void ThreadAcceptor::acceptConnection(){
@@ -33,4 +35,11 @@ void ThreadAcceptor::acceptConnection(){
 	}
 }
 
-ThreadAcceptor:: ~ThreadAcceptor() {}
+void ThreadAcceptor::shutdown(){
+	this->keep_running = false;
+	this->socket.close_socket();
+}
+
+ThreadAcceptor:: ~ThreadAcceptor() {
+	this->message_processor.join();
+}

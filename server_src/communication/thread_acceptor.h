@@ -61,6 +61,8 @@ class ThreadAcceptor: public Thread {
     void newMessage(std::string message, int clientID);
 
     //void garbage_collector();
+    
+    void shutdown();
 
     virtual ~ThreadAcceptor() override;
 };
