@@ -25,10 +25,12 @@
 #include "../actions/change_weapon_lanzacohetes.h"
 #include "../actions/use_door.h"
 
+#include "../../common_src/GameListItem.h"
 
 class ThreadGame: public Thread {
         int id;
         BlockingQueue<Message>* messages;
+        std::unordered_map<int,GameListItem>& gameList;
         GameStatus gameStatus;
         std::unordered_map<int,ThreadClient*> clients;
         MoveForward move_forward;
@@ -60,9 +62,9 @@ class ThreadGame: public Thread {
 		void sendGameStatistics();   
 
     public:
-        ThreadGame(int gameId, BlockingQueue<Message>* m);
+        ThreadGame(int gameId, BlockingQueue<Message>* m,std::unordered_map<int,GameListItem>& list);
         virtual void run() override;
-        void addClient(ThreadClient* client, int id);
+        bool addClient(ThreadClient* client, int id);
         void tryMoveForward(int id);
         void tryMoveBackward(int id);
         void tryMoveLeft(int id);
@@ -82,6 +84,10 @@ class ThreadGame: public Thread {
 		void changeWeaponPistola(int id);
 		
 		void useDoor(int id);
+		
+		char getMapId();
+		char getCurrentPlayers();
+        char getMaxPlayers();
         
         virtual ~ThreadGame() override;
 };

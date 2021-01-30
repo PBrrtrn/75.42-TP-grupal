@@ -8,10 +8,16 @@
 #include "../../common_src/blocking_queue.h"
 #include "../communication/message.h"
 #include "available_games.h"
+#include "ServerStatus.h"
+#include "../../common_src/GameListItem.h"
 
 class GameManager{
 
 private:
+
+	std::unordered_map<int, GameListItem> games_list;
+
+	ServerStatus serverStatus;
 
 	/* clave: clientId value: thClient*/
 	std::unordered_map<int, ThreadClient*> clientsThreads;

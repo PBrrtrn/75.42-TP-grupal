@@ -2,8 +2,8 @@
 
 #define PREFERRED_PLAYERS 3
 
-ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m) : 
-id(gameId), messages(m),gameStatus("../maps/map-data.yml") {
+ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m, std::unordered_map<int,GameListItem>& list) : 
+id(gameId), messages(m),gameStatus("../maps/map-data.yml"), gameList(list) {
 	this->remaining_time = 60 * 1000;
 	this->waiting_time_to_start = 60 * 60; 
 	this->start_running = true;
@@ -12,6 +12,14 @@ id(gameId), messages(m),gameStatus("../maps/map-data.yml") {
 void ThreadGame:: run() {
 	
 	std::cout << "Game waiting for more players!" << std::endl;
+	
+	GameListItem game;
+	game.gameId = this->id;
+	game.players = this->clients.size();
+	game.maxPlayers = 32;
+	game.mapId = 1;
+	
+	this->gameList.insert({this->id,game});
 
 	while(start_running) {
 		std::cout << "players now:" << this->gameStatus.getAlivePlayers() << std::endl;
@@ -23,10 +31,15 @@ void ThreadGame:: run() {
 			this->keep_running = false;
 			this->start_running = false;
 		}
+		
+		this->gameList.at(this->id).players = this->clients.size();
+		
 		this->sendGameUpdates();
 		usleep(1000000/3);
 		this->waiting_time_to_start--;
 	}
+	//el juego ya esta por arrancar (o hubo timeout sin gente), lo saco de la lista de disponibles
+	this->gameList.erase(this->id);
 	
 	std::cout << "Game started!" << std::endl;
     while (keep_running) {
@@ -146,8 +159,8 @@ void ThreadGame::expelClient(int id){
 	//todo: keep_running = false si no hay mas clientes
 }
 
-void ThreadGame::addClient(ThreadClient* client, int id){
-	if (!this->start_running) return; //si el juego esta iniciado, no se pueden agregar
+bool ThreadGame::addClient(ThreadClient* client, int id){
+	if (!this->start_running) return false; //si el juego esta iniciado, no se pueden agregar
 									//mas jugadores a la partida
 	
 	std::cout << "en el game: " << this->id << ", client:" << id << " se inserto en este game." << std::endl;
@@ -160,6 +173,7 @@ void ThreadGame::addClient(ThreadClient* client, int id){
 	Vector position(3,4);
 	Vector direction(1,0);
 	this->gameStatus.addPlayer(id, position, direction);
+	return true;
 }
 
 void ThreadGame::tryMoveForward(int id) {
@@ -203,6 +217,16 @@ void ThreadGame::changeWeaponPistola(int id){
 
 void ThreadGame::useDoor(int id){
 	this->use_door.tryAction(this->gameStatus,id);
+}
+
+char ThreadGame::getMapId(){
+	return 1; //TODO devolver map Id real
+}
+char ThreadGame::getCurrentPlayers(){
+	return this->clients.size();
+}
+char ThreadGame::getMaxPlayers(){
+	return 32; //TODO devolver max players real
 }
 
 ThreadGame:: ~ThreadGame(){}

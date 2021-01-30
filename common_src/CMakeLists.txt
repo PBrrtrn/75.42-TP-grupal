@@ -8,4 +8,5 @@ add_library(common_classes SHARED
 	RayCaster.cpp
 	Vector.cpp
 	Thread.cpp
+	GameListItem.h
 )

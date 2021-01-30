@@ -7,6 +7,8 @@
 #include "../../common_src/blocking_queue.h"
 #include "../games/game_status.h"
 #include "message.h"
+#include "../../common_src/GameListItem.h"
+#include "../games/ServerStatus.h"
 
 #include <unistd.h>  //removeme
 
@@ -21,12 +23,14 @@ class ThreadClient : public Thread {
     Socket peer;
     std::atomic<bool> keep_running{true};
     std::atomic<bool> dead{false};
+    
+    ServerStatus serverStatus;
 
     
 
 public:
 
-    ThreadClient(int id, BlockingQueue<Message>& messages, BlockingQueue<Message>* messagesOut, Socket&& socket);
+    ThreadClient(int id, BlockingQueue<Message>& messages, BlockingQueue<Message>* messagesOut, Socket&& socket, ServerStatus& serverStatus);
         
     //void assignToOutQueue(BlockingQueue<GameStatus>* messages_out);
     

@@ -1,6 +1,6 @@
 #include "game_manager.h"
 
-GameManager::GameManager(){
+GameManager::GameManager() : serverStatus(this->games_list){
 	std::cout << "game manager constructor"  << std::endl;
 	this->clients_counter = 0;
     this->games_counter = 0;
@@ -45,7 +45,7 @@ void GameManager::startGame(int clientIdStarter) {
 	BlockingQueue<Message>* queue = new BlockingQueue<Message>();
     
     
-	this->games.insert({ this->games_counter, new ThreadGame(this->games_counter, queue) });
+	this->games.insert({ this->games_counter, new ThreadGame(this->games_counter, queue, this->games_list) });
 	this->clientsInGames.insert({clientIdStarter,this->games_counter});
 
 	this->queues.insert(std::make_pair(this->games_counter, queue));
@@ -58,8 +58,10 @@ void GameManager::startGame(int clientIdStarter) {
 }
 
 void GameManager::joinGame(int clientId, int gameId) {
-    this->clientsInGames.insert({clientId, gameId});
-    this->games.at(gameId)->addClient(this->clientsThreads.at(clientId), clientId);
+    
+    if (this->games.at(gameId)->addClient(this->clientsThreads.at(clientId), clientId)) {
+		this->clientsInGames.insert({clientId, gameId});
+	}
 }
 
 void GameManager::acceptClient(Socket&& socket, BlockingQueue<Message>& qClientsProcessor){
@@ -79,7 +81,7 @@ void GameManager::acceptClient(Socket&& socket, BlockingQueue<Message>& qClients
     //socket.socket_send(&client_id, sizeof(char));	
 
     this->clientsThreads.insert({this->clients_counter, 
-        new ThreadClient(this->clients_counter, qClientsProcessor , this->out_queues.at(this->clients_counter), std::move(socket))});
+        new ThreadClient(this->clients_counter, qClientsProcessor , this->out_queues.at(this->clients_counter), std::move(socket), this->serverStatus)});
         
     
     this->clientsThreads.at(this->clients_counter)->start();
@@ -119,3 +121,4 @@ void GameManager:: updateClients() {
 void GameManager::cleanUpDeadGames(){
 	//recorrer this->games y si game.isDead, join() y eliminar
 }
+
