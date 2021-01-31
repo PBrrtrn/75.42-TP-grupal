@@ -19,6 +19,6 @@ void KeyboardState::toggleKeyUp(int key) {
   this->keyboard_state[key] = UP;
 }
 
-bool KeyboardState::isDown(int key) {
+KeyState KeyboardState::isDown(int key) {
   return this->keyboard_state[key] == DOWN;
 }

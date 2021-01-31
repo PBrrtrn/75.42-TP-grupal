@@ -1,4 +1,5 @@
 #include <iostream>
+#include <atomic>
 #include <unistd.h>
 #include <SDL2/SDL.h>
 
@@ -20,6 +21,48 @@ GameLoop::~GameLoop() {
   SDL_Quit();
 }
 
+void GameLoop::run() {
+  int fps_cap = this->config["FPS_cap"].as<int>();
+
+  std::atomic<bool> in_game = false;
+  MenuStatusMonitor menu_status_monitor(in_game);
+  GameStatusMonitor game_status_monitor();
+
+  UpdateQueue update_queue;
+
+  InputHandler user_input_handler(in_game, update_queue);
+  // Pasar socket/ServerConnection más adelante para poder enviar el input al server
+
+  StatusUpdater status_updater(in_game, update_queue,
+                               menu_status_monitor,
+                               game_status_monitor);
+  // Pasar socket/ServerConnection más adelante para recibir los updates
+
+  Renderer renderer(this->config, menu_status_monitor, game_status_monitor);
+
+  status_updater.start();
+  renderer.start();
+
+  SDL_Event user_event;
+  while (true) {
+    auto start_t = std::chrono::steady_clock::now();
+
+    SDL_PollEvent(&(user_event));
+    if (user_event.type == SDL_QUIT) {
+      // TODO: Salir de forma ordenada
+      throw 1;
+    }
+
+    user_input_handler.process(user_event);
+
+    auto t = std::chrono::steady_clock::now() - start_t;
+    auto sleep_t = std::chrono::duration_cast<std::chrono::microseconds>(t);
+
+    usleep((1000000/fps_cap) - sleep_t.count());
+  }
+}
+
+/*
 void GameLoop::run() {
   GameStatusMonitor game_status_monitor;
   ServerListener server_listener(game_status_monitor);
@@ -63,3 +106,4 @@ void GameLoop::run() {
     usleep((1000000/fps_cap) - sleep_t.count());
   }
 }
+*/

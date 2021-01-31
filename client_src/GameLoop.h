@@ -3,12 +3,9 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include "KeyboardState.h"
-
 class GameLoop {
 private:
 	YAML::Node& config;
-  KeyboardState keyboard_state;
 public:
   GameLoop(YAML::Node& config);
   ~GameLoop();

@@ -8,13 +8,13 @@ enum KeyState { UP, DOWN };
 
 class KeyboardState {
 private:
-  std::unordered_map<int, bool> keyboard_state;
+  std::unordered_map<int, KeyState> keyboard_state;
 public:
   KeyboardState();
   ~KeyboardState();
   void toggleKeyDown(int key);
   void toggleKeyUp(int key);
-  bool isDown(int key);
+  KeyState isDown(int key);
 };
 
 #endif
