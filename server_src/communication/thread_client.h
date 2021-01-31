@@ -16,7 +16,7 @@
 
 
 class ThreadClient : public Thread {
-
+private:
 	int id;
     BlockingQueue<Message>& messages;
     BlockingQueue<Message>* messages_out;
@@ -25,6 +25,9 @@ class ThreadClient : public Thread {
     std::atomic<bool> dead{false};
     ServerStatus serverStatus;
     bool choosing_game;
+    
+	void sendJoinOk();
+	void sendJoinRefused();
 
 public:
 

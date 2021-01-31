@@ -18,24 +18,26 @@ void ThreadClient::run() {
 
 	while(choosing_game){	
 		this->peer.socket_receive(buffer, sizeof(char)*2);
-		std::cout << "evento: "<< buffer[0] <<", mapId:"<< std::to_string(buffer[1]) << std::endl;
+		std::cout << "evento: "<< buffer[0] <<", mapId o gameId:"<< std::to_string(buffer[1]) << std::endl;
 		Message m(buffer[0], buffer[1], this->id);
 		this->messages.push(m);
 		Message answer = this->messages_out->pop();
 		char result_join;
 		switch (answer.getType())
 		{
+		case TYPE_SERVER_SEND_GAMES_LIST:
+			this->sendGamesList();
+			break;			
 		case TYPE_SERVER_JOIN_OK:
 			this->choosing_game = false;
-			result_join = 0;
+			this->sendJoinOk();
 			break;
 		case TYPE_SERVER_JOIN_REFUSED:
-			result_join = -1;
+			this->sendJoinRefused();
 			break;
 		default:
 			break;
 		}
-		this->peer.socket_send(&result_join, sizeof(result_join)); 
 	}
 
     while (keep_running){
@@ -107,6 +109,16 @@ void ThreadClient::sendGamesList() {
 	for (auto& it: list) {
 		this->peer.socket_send((char*)(&it), sizeof(GameListItem));
 	}
+}
+
+void ThreadClient::sendJoinOk() {
+	char result_join = 0;
+	this->peer.socket_send(&result_join, sizeof(result_join)); 
+}
+
+void ThreadClient::sendJoinRefused() {
+	char result_join = -1;
+	this->peer.socket_send(&result_join, sizeof(result_join)); 
 }
 
 void ThreadClient::shutdown(){

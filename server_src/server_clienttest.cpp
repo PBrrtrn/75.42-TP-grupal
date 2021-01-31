@@ -3,23 +3,24 @@
 
 #include "../common_src/Socket.h"
 #include "../common_src/GameListItem.h"
+#include "./communication/message.h"
 
 #define BUF_SIZE 64
 
-int main(const int argc, const char* argv[]) {
-
-	Socket socket;
-
-	bool resultado = socket.socket_connect("localhost","9002");
-	
+void connectAndGetClientId(Socket& socket){
 	char buffer[BUF_SIZE];
+	bool resultado = socket.socket_connect("localhost","9002");
 	int length = 1;
-
 	//recibo el clientId
 	socket.socket_receive(buffer,length);
 	std::string clientId = std::to_string(buffer[0]);
 	std::cout << "client id:" << clientId << std::endl;
+	
+}
 
+void getAndPrintGameList(Socket& socket){
+	char buffer[BUF_SIZE];
+	int length = 1;
 	//recibo el size del game list	
 	socket.socket_receive(buffer,length);
 	buffer[length] = '\0';	
@@ -33,26 +34,66 @@ int main(const int argc, const char* argv[]) {
 	for (int i = 0; i < buffer[0]/sizeof(GameListItem); i++ ){
 		std::cout << "receiving game in list" << std::endl;
 		socket.socket_receive((char*)(&list_item),sizeof(GameListItem));
-		std::cout << "socket pos:" << i << ", data:" <<  std::to_string(list_item.gameId) << " " << std::to_string(list_item.players)<< " " << std::to_string(list_item.maxPlayers)<< " " << std::to_string(list_item.mapId) << std::endl;	
-	}
+		std::cout << "game index:" << i << ", gameId:" <<  std::to_string(list_item.gameId) << ",players:" << std::to_string(list_item.players)<< ",maxPlayers:" << std::to_string(list_item.maxPlayers)<< ",mapId:" << std::to_string(list_item.mapId) << std::endl;	
+	}	
+}
+
+void askForGameList(Socket& socket){
+	char buffer[BUF_SIZE];
+	int length = 2;
+	buffer[0] = TYPE_REFRESH_GAMES_LIST;
+	buffer[1] = 0;
 	
+	socket.socket_send(buffer,length);
+}
+
+int main(const int argc, const char* argv[]) {
+
+	char buffer[BUF_SIZE];
+
+	Socket socket;
 	
-	
-	//char buffer_list[gameListSize];
-	
-	//envio evento start si soy el primer client, buffer[0] = evento, buffer[1] = mapId
-	if(true) {
-		if (clientId == "0" /*|| clientId == "1"*/){
-			buffer[0] = 'n';
-			buffer[1] = 2;
-		} else {
-			buffer[0] = 'j';
-			buffer[1] = 0;		
+	connectAndGetClientId(socket);
+	getAndPrintGameList(socket);
+	    
+    std::string line;
+    while (std::getline(std::cin, line)) {
+		if (line == "q" || line == "quit") break;
+		
+		if (line[0] == TYPE_JOIN_GAME) {
+			int length;
+			char gameId = std::stoi(line.substr(2,1));
+			buffer[0] = TYPE_JOIN_GAME;
+			buffer[1] = gameId;
+			length = 2;
+			//envio el evento join game, ej: j 3
+			socket.socket_send(buffer,length);
+			length = 1;
+			socket.socket_receive(buffer,length);
+			if (buffer[0] == 0)
+				std::cout << "join successful" << std::endl;
 		}
-		length = 2;
-		socket.socket_send(buffer,length);
+
+		if (line[0] == TYPE_START_GAME) {
+			int length;
+			char mapId = std::stoi(line.substr(2,1));
+			buffer[0] = TYPE_START_GAME;
+			buffer[1] = mapId;
+			length = 2;
+			//envio el evento new game, ej: n 10
+			socket.socket_send(buffer,length);
+			length = 1;
+			socket.socket_receive(buffer,length);
+			if (buffer[0] == 0)
+				std::cout << "start successful" << std::endl;			
+		}		
+		
+		if (line[0] == TYPE_REFRESH_GAMES_LIST) {
+			askForGameList(socket);
+			getAndPrintGameList(socket);
+			
+		}			
+		
 	}
-	
-	usleep(6000000);
     return 0;
 }
