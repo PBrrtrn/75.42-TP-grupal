@@ -64,7 +64,9 @@ public:
         cv.notify_all();
     }
 
-    ~BlockingQueue() {}
+    ~BlockingQueue() { 
+		this->close();
+	}
 
 };
 

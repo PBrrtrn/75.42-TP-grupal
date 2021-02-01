@@ -22,29 +22,34 @@ void ThreadClient::run() {
 			<< std::to_string(buffer[1]) << std::endl;
 		Message m(buffer[0], buffer[1], this->id);
 		this->messages.push(m);
-		Message answer = this->messages_out->pop();
-		char result_join;
-		switch (answer.getType())
-		{
-		case TYPE_SERVER_SEND_GAMES_LIST:
-			this->sendGamesList();
-			break;			
-		case TYPE_SERVER_JOIN_OK:
-			this->choosing_game = false;
-			this->sendJoinOk();
-			break;
-		case TYPE_SERVER_JOIN_REFUSED:
-			this->sendJoinRefused();
-			break;
-		case TYPE_SERVER_SEND_MAP_LIST:
-			this->sendMapsList();
-			break;
-		case TYPE_SERVER_SEND_MAP:
-			break;
-		default:
-			break;
+		try{
+			Message answer = this->messages_out->pop();
+			//char result_join;
+			switch (answer.getType())
+			{
+			case TYPE_SERVER_SEND_GAMES_LIST:
+				this->sendGamesList();
+				break;			
+			case TYPE_SERVER_JOIN_OK:
+				this->choosing_game = false;
+				this->sendJoinOk();
+				break;
+			case TYPE_SERVER_JOIN_REFUSED:
+				this->sendJoinRefused();
+				break;
+			case TYPE_SERVER_SEND_MAP_LIST:
+				this->sendMapsList();
+				break;
+			case TYPE_SERVER_SEND_MAP:
+				break;
+			default:
+				break;
+			}			
+		} catch (...) {
+			this->shutdown();
 		}
-	}
+
+	} 
 
     while (keep_running){
         try {
@@ -69,7 +74,7 @@ void ThreadClient::run() {
         } catch (...) {
             if (!keep_running) break;
         } 
-    }    
+    }
 }
 
 void ThreadClient::assignToOutQueue(BlockingQueue<Message>* messages_out){
@@ -111,10 +116,10 @@ void ThreadClient::sendJoinRefused() {
 }
 
 void ThreadClient::shutdown(){
-	std::cout << "---EN SHUTDOWN TH CLIENT--" << std::endl;
 	this->keep_running = false;
 	this->choosing_game = false;
 	this->peer.close_socket();
+	this->messages_out->close();
 }
 
-ThreadClient:: ~ThreadClient(){	std::cout << "---EN destructor TH CLIENT--" << std::endl;}
+ThreadClient:: ~ThreadClient(){	}
