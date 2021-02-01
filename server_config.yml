@@ -31,4 +31,9 @@ Moves:
   RotationRight: -15
 Server:
   Hostname: localhost
-  Port: 9002
+  Port: 9000
+Maps:
+  Location: ../maps
+MapsSequence:
+  - map1.yml
+  - map2.yml

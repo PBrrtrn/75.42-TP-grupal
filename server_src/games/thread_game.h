@@ -92,7 +92,8 @@ class ThreadGame: public Thread {
         void sendLobbyStatus();
 
     public:
-        ThreadGame(int gameId, BlockingQueue<Message>* m,std::unordered_map<int,GameListItem>& list);
+        ThreadGame(int gameId, BlockingQueue<Message>* m,
+            std::unordered_map<int,GameListItem>& list, const char* map_location);
         virtual void run() override;
 
         /**

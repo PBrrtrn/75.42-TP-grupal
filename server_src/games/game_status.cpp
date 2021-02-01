@@ -1,20 +1,7 @@
 #include "game_status.h"
 
 GameStatus::GameStatus(std::string mapLocation) {
-	//MapData md(mapLocation);
-	//Map m(mapLocation);
 	this->map = Map(mapLocation);
-
-	/***************** REMOVE ************************************/
-	Vector v(2,3); //removeme
-	Item i(v,true); //removeme
-	this->items.push_back(i); //removeme
-
-	Vector v2(2,3); //removeme
-	ArmaAmetralladora a(v2,true); //removeme
-	this->items.push_back(i); //removeme
-	/***************** REMOVE ************************************/
-
 }
 
 void GameStatus::setPosition(int playerID, float pos_x, float pos_y) {

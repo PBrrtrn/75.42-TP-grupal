@@ -9,7 +9,7 @@
 
 void connectAndGetClientId(Socket& socket){
 	char buffer[BUF_SIZE];
-	bool resultado = socket.socket_connect("localhost","9002");
+	bool resultado = socket.socket_connect("localhost","9000");
 	int length = 1;
 	//recibo el clientId
 	socket.socket_receive(buffer,length);

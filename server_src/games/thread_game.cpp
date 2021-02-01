@@ -2,8 +2,9 @@
 
 #define PREFERRED_PLAYERS 3
 
-ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m, std::unordered_map<int,GameListItem>& list) : 
-id(gameId), messages(m),gameStatus("../maps/map-data.yml"), gameList(list) {
+ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m, 
+	std::unordered_map<int,GameListItem>& list, const char* map_location) : 
+id(gameId), messages(m), gameStatus(map_location), gameList(list) {
 	this->remaining_time = 60 * 1000;
 	this->waiting_time_to_start = 60 * 60; 
 	this->start_running = true;

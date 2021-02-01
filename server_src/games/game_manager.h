@@ -9,6 +9,7 @@
 #include "../communication/message.h"
 #include "ServerStatus.h"
 #include "../../common_src/GameListItem.h"
+#include "../maps/mapRepository.h"
 
 class GameManager{
 
@@ -18,6 +19,7 @@ private:
 	std::unordered_map<int, GameListItem> games_list;
 
 	ServerStatus serverStatus;
+	MapRepository mapsRepo;
 
 	/* clave: clientId value: thClient*/
 	std::unordered_map<int, ThreadClient*> clientsThreads;
@@ -46,8 +48,9 @@ private:
 	 * Da inicio a la partida
 	 * @param clientIdStarter : id del jugador que inicia la partida
 	 * y es agregado a ella (primer jugador)
+	 * @param mapId: id del mapa con el que quiere crear la partida
 	 */
-	void startGame(int clientIdStarter);
+	void startGame(int clientIdStarter, int mapId);
 
 	/**
 	 * @brief Funcion para unir a un jugador a una 

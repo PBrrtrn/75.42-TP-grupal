@@ -7,7 +7,6 @@ GameManager::GameManager() : serverStatus(this->games_list){
 }
 
 
-
 void GameManager:: newMessage(Message message) {
     this->_parse_message(message);
 }
@@ -16,7 +15,7 @@ void GameManager:: _parse_message(Message message) {
     switch (message.getType())
     {
     case TYPE_START_GAME:
-        this->startGame(message.getClientId());
+        this->startGame(message.getClientId(), message.getEntity());
         break;
     
     case TYPE_JOIN_GAME:
@@ -36,15 +35,22 @@ void GameManager:: _parse_message(Message message) {
     }
 }
 
-void GameManager::startGame(int clientIdStarter) {
-	BlockingQueue<Message>* queue = new BlockingQueue<Message>();
-	this->games.insert({ this->games_counter, new ThreadGame(this->games_counter, queue, this->games_list) });
-	this->clientsInGames.insert({clientIdStarter,this->games_counter});
-	this->queues.insert(std::make_pair(this->games_counter, queue));
-	std::cout << "id de cliente arrancando juego:" << clientIdStarter << std::endl;
-    this->joinGame(clientIdStarter, this->games_counter);
-	this->games.at(this->games_counter)->start();
-	this->games_counter++;
+void GameManager::startGame(int clientIdStarter, int mapId) {
+    if (this->mapsRepo.validMap(mapId)) {
+        MapListItem map = this->mapsRepo.getMap(mapId);
+        BlockingQueue<Message>* queue = new BlockingQueue<Message>();
+        this->games.insert({ this->games_counter, 
+            new ThreadGame(this->games_counter, queue, this->games_list, map.location) });
+        this->clientsInGames.insert({clientIdStarter,this->games_counter});
+        this->queues.insert(std::make_pair(this->games_counter, queue));
+        std::cout << "id de cliente arrancando juego:" << clientIdStarter << std::endl;
+        this->joinGame(clientIdStarter, this->games_counter);
+        this->games.at(this->games_counter)->start();
+        this->games_counter++;
+    } else {
+        //TODO enviar al cliente diciendole que no pudo iniciar el juego
+        //refused por map id invalido
+    }
 }
 
 void GameManager::joinGame(int clientId, int gameId) {

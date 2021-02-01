@@ -95,9 +95,15 @@ int main(const int argc, const char* argv[]) {
 			out << YAML::EndMap;
 
 		out << YAML::Key << "Maps";
+			out << YAML::BeginMap;
+				out << YAML::Key << "Location";
+				out << YAML::Value << "../maps" ;
+			out << YAML::EndMap;
+
+		out << YAML::Key << "MapsSequence";
 			out << YAML::BeginSeq; 
-			out << "map1";
-			out << "map2";
+			out << "map1.yml";
+			out << "map2.yml";
 			out << YAML::EndSeq;
 
 	out << YAML::EndMap;

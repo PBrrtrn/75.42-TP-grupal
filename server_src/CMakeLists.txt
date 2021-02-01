@@ -43,4 +43,5 @@ add_library(server_classes SHARED
   ./items/key.cpp
   ./items/medkit.cpp
   ./items/treasure.cpp
+  ./maps/mapRepository.cpp
 )
