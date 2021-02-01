@@ -42,18 +42,6 @@ void ThreadClient::run() {
 
     while (keep_running){
         try {
-	
-			//recibir datos por socket
-            
-            //this->socket.receive(&datos,tamanioDeDatos); //recibo datos binarios
-         
-			//Message m = MessageParser.parse(datos,tamanioDeDatos); //convierto datos binarios a un message.
-            
-            //usleep(id * 1000000 + 1000000); //removeme
-            
-            //Message m(TYPE_MOVE_FORWARD,0,0,this->id); //removeme
-            
-            //this->messages.push(m);
 
 			if ( this->messages_out != NULL && !this->messages_out->isEmpty()) 
 			//puede que haya un problema similar al de la cola de entrada al servidor - 
@@ -82,15 +70,7 @@ void ThreadClient::run() {
         } catch (...) {
             if (!keep_running) break;
         } 
-    }
-    //shutdown(peer->get_fd(), SHUT_WR);
-    //dead = true; 
-    
-	//Message m2(TYPE_EXIT_GAME,0,0,this->id); //removeme
-	
-	//this->messages.push(m2);    
-    
-    
+    }    
 }
 
 void ThreadClient::assignToOutQueue(BlockingQueue<Message>* messages_out){

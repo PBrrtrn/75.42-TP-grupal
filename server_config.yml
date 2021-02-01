@@ -33,7 +33,7 @@ Server:
   Hostname: localhost
   Port: 9000
 Maps:
-  Location: ../maps
+  Location: ../maps/
 MapsSequence:
   - map1.yml
   - map2.yml

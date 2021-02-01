@@ -3,7 +3,7 @@
 
 struct MapListItem {
     int mapId;
-    char location[30];
+    char name[30];
     int maxPlayers;
     int minPlayers;
 };

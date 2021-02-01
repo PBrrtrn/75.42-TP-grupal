@@ -93,7 +93,7 @@ class ThreadGame: public Thread {
 
     public:
         ThreadGame(int gameId, BlockingQueue<Message>* m,
-            std::unordered_map<int,GameListItem>& list, const char* map_location);
+            std::unordered_map<int,GameListItem>& list, std::string map_location);
         virtual void run() override;
 
         /**

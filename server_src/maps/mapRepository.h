@@ -11,14 +11,17 @@
 
 class MapRepository {
 	private:
+		const YAML::Node& config;
         int map_id_counter;
         /*key: map id, value: clase Map*/
         std::unordered_map<int, MapListItem> maps;
+        
 
 	public:
 		MapRepository();
         bool validMap(int mapId);
         MapListItem getMap(int mapId);
+        std::string getMapLocation(int mapId);
 		~MapRepository();
 
 };

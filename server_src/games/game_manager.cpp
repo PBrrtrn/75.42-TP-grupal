@@ -37,12 +37,15 @@ void GameManager:: _parse_message(Message message) {
 
 void GameManager::startGame(int clientIdStarter, int mapId) {
     if (this->mapsRepo.validMap(mapId)) {
-        MapListItem map = this->mapsRepo.getMap(mapId);
+        //MapListItem map = this->mapsRepo.getMap(mapId);
         BlockingQueue<Message>* queue = new BlockingQueue<Message>();
+        std::cout << "map location:" << this->mapsRepo.getMapLocation(mapId) << std::endl;
         this->games.insert({ this->games_counter, 
-            new ThreadGame(this->games_counter, queue, this->games_list, map.location) });
+            new ThreadGame(this->games_counter, queue, this->games_list, this->mapsRepo.getMapLocation(mapId)) });
         this->clientsInGames.insert({clientIdStarter,this->games_counter});
         this->queues.insert(std::make_pair(this->games_counter, queue));
+        
+        
         std::cout << "id de cliente arrancando juego:" << clientIdStarter << std::endl;
         this->joinGame(clientIdStarter, this->games_counter);
         this->games.at(this->games_counter)->start();

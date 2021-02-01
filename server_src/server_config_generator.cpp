@@ -97,7 +97,7 @@ int main(const int argc, const char* argv[]) {
 		out << YAML::Key << "Maps";
 			out << YAML::BeginMap;
 				out << YAML::Key << "Location";
-				out << YAML::Value << "../maps" ;
+				out << YAML::Value << "../maps/" ;
 			out << YAML::EndMap;
 
 		out << YAML::Key << "MapsSequence";
