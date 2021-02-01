@@ -25,8 +25,8 @@ void GameLoop::run() {
   int fps_cap = this->config["FPS_cap"].as<int>();
 
   std::atomic<bool> in_game = false;
-  MenuStatusMonitor menu_status_monitor(in_game);
-  GameStatusMonitor game_status_monitor();
+  MenuStatus menu_status(in_game);
+  GameStatusMonitor game_status_monitor;
 
   UpdateQueue update_queue;
 

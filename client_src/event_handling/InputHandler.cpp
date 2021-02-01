@@ -18,7 +18,6 @@ void InputHandler::process(SDL_Event event) {
         this->keyboard_state.toggleKeyUp(user_event.key.keysym.sym);
         break;
     }
-
     // Procesar keyboard_state y enviar evento por socket
 	} else if (user_event.type == SDL_KEYDOWN) {
 		switch (user_event.key.keysym.sym) {
