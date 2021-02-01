@@ -18,7 +18,8 @@ void ThreadClient::run() {
 
 	while(choosing_game){	
 		this->peer.socket_receive(buffer, sizeof(char)*2);
-		std::cout << "evento: "<< buffer[0] <<", mapId o gameId:"<< std::to_string(buffer[1]) << std::endl;
+		std::cout << "evento: "<< buffer[0] <<", mapId o gameId:" 
+			<< std::to_string(buffer[1]) << std::endl;
 		Message m(buffer[0], buffer[1], this->id);
 		this->messages.push(m);
 		Message answer = this->messages_out->pop();
@@ -90,7 +91,8 @@ void ThreadClient::sendGamesList() {
 }
 
 void ThreadClient::sendMapsList() {
-	std::vector<MapListItem> list = this->serverStatus.getMapsList();
+	//TODO chequear valgrind
+	const std::vector<MapListItem>& list = this->serverStatus.getMapsList();
 	char size = list.size()*sizeof(MapListItem);
 	this->peer.socket_send(&size, sizeof(char));
 	for (auto& it: list) {
@@ -109,8 +111,10 @@ void ThreadClient::sendJoinRefused() {
 }
 
 void ThreadClient::shutdown(){
+	std::cout << "---EN SHUTDOWN TH CLIENT--" << std::endl;
 	this->keep_running = false;
 	this->choosing_game = false;
+	this->peer.close_socket();
 }
 
-ThreadClient:: ~ThreadClient(){}
+ThreadClient:: ~ThreadClient(){	std::cout << "---EN destructor TH CLIENT--" << std::endl;}

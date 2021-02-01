@@ -21,7 +21,7 @@ std::vector<GameListItem> ServerStatus::getGamesList() {
 
 }	
 
-std::vector<MapListItem> ServerStatus::getMapsList() {
+const std::vector<MapListItem>& ServerStatus::getMapsList() {
 	return this->mapRepo.getMapVector();
 }
 

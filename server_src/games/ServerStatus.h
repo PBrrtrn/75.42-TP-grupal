@@ -20,7 +20,7 @@ class ServerStatus {
         char getGameListSize();
         
         std::vector<GameListItem> getGamesList();
-        std::vector<MapListItem> getMapsList();
+        const std::vector<MapListItem>& getMapsList();
         
         void getGameListItem(char id,GameListItem& game);
         

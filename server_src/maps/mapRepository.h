@@ -21,7 +21,7 @@ class MapRepository {
         MapListItem getMap(int mapId);
         std::string getMapLocation(int mapId);
         int getAmount();
-        std::vector<MapListItem> getMapVector();
+        const std::vector<MapListItem>& getMapVector();
 		~MapRepository();
 
 };

@@ -36,7 +36,7 @@ std::string MapRepository::getMapLocation(int mapId) {
     return maps_location + std::string(this->maps.at(mapId).name);
 }
 
-std::vector<MapListItem> MapRepository:: getMapVector() {
+const std::vector<MapListItem>& MapRepository:: getMapVector() {
     return this->maps;
 }
 
