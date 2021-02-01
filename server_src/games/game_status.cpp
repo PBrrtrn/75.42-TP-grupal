@@ -20,6 +20,10 @@ Vector GameStatus::getPosition(int playerID) {
 	return this->playersPositions[playerID];
 }
 
+int GameStatus::getMaxPlayers() {
+	return this->map.getMaxPlayers();
+}
+
 void GameStatus::addPlayer(int playerID, Vector &position, Vector &direction) {
     this->playersPositions[playerID] = position;
     this->playersDirections[playerID] = direction;

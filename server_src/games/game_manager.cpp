@@ -1,6 +1,6 @@
 #include "game_manager.h"
 
-GameManager::GameManager() : serverStatus(this->games_list){
+GameManager::GameManager() : serverStatus(this->games_list, this->mapsRepo){
 	std::cout << "game manager constructor"  << std::endl;
 	this->clients_counter = 0;
     this->games_counter = 0;
@@ -25,6 +25,9 @@ void GameManager:: _parse_message(Message message) {
     case TYPE_REFRESH_GAMES_LIST:
         this->informAvailableGames(message.getClientId());
         break;
+    case TYPE_SEND_MAPS_LIST:
+        this->sendMapsList(message.getClientId());
+        break;
     
     /*si el cliente mando un mensaje que esta asociado al juego donde 
      * esta jugando*/
@@ -40,8 +43,14 @@ void GameManager::startGame(int clientIdStarter, int mapId) {
         //MapListItem map = this->mapsRepo.getMap(mapId);
         BlockingQueue<Message>* queue = new BlockingQueue<Message>();
         std::cout << "map location:" << this->mapsRepo.getMapLocation(mapId) << std::endl;
-        this->games.insert({ this->games_counter, 
-            new ThreadGame(this->games_counter, queue, this->games_list, this->mapsRepo.getMapLocation(mapId)) });
+        this->games.insert({ 
+                            this->games_counter, 
+                            new ThreadGame(this->games_counter, 
+                                            queue, 
+                                            this->games_list, 
+                                            this->mapsRepo.getMapLocation(mapId),
+                                            mapId) 
+                            });
         this->clientsInGames.insert({clientIdStarter,this->games_counter});
         this->queues.insert(std::make_pair(this->games_counter, queue));
         
@@ -81,7 +90,11 @@ void GameManager::acceptClient(Socket&& socket, BlockingQueue<Message>& qClients
 }
 
 void GameManager::informAvailableGames(int clientId){
-	this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAMES_LIST,0,clientId));
+	this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAMES_LIST, 0, clientId));
+}
+
+void GameManager::sendMapsList(int clientId) {
+    this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_MAP_LIST, 0, clientId));
 }
 
 void GameManager::cleanUpDeadGames(){

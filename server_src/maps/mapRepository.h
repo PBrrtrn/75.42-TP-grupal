@@ -1,7 +1,7 @@
 #ifndef _MAP_REPOSITORY_H__
 #define _MAP_REPOSITORY_H__
 
-#include <unordered_map>
+#include <vector>
 #include <string>
 #include <cstring>
 
@@ -13,15 +13,15 @@ class MapRepository {
 	private:
 		const YAML::Node& config;
         int map_id_counter;
-        /*key: map id, value: clase Map*/
-        std::unordered_map<int, MapListItem> maps;
-        
+        std::vector<MapListItem> maps;
 
 	public:
 		MapRepository();
         bool validMap(int mapId);
         MapListItem getMap(int mapId);
         std::string getMapLocation(int mapId);
+        int getAmount();
+        std::vector<MapListItem> getMapVector();
 		~MapRepository();
 
 };

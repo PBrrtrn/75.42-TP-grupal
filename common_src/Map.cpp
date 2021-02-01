@@ -13,6 +13,10 @@ Map::Map() { }
 												- Pablo (25/12/2020)													*/
 
 Map::Map(const char* file_location) {
+	//-------TODO levantar max y min players del yml----
+	this->maxPlayers = 16;
+	this->minPlayers = 8;
+	//--------------------------------------------------
 	File file(file_location);
 
 	std::stringstream stream;
@@ -49,12 +53,18 @@ Map::Map(const char* file_location) {
 	}
 }
 
-Map::~Map() { }
-
 Map::Map(const std::string& file_location): Map(file_location.c_str()){ }
 
 std::vector<int>& Map::operator[](int x) {
 	return this->grid[x];
+}
+
+int Map::getMaxPlayers() {
+	return this->maxPlayers;
+}
+
+int Map::getMinPlayers() {
+	return this->minPlayers;
 }
 
 int Map::getGridValue(int x, int y) {
@@ -72,3 +82,5 @@ int Map::getWidth() {
 int Map::getHeight() {
 	return this->height;
 }
+
+Map::~Map() { }

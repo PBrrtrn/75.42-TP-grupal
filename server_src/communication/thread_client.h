@@ -9,6 +9,7 @@
 #include "message.h"
 #include "../../common_src/GameListItem.h"
 #include "../games/ServerStatus.h"
+#include "../maps/mapListItem.h"
 
 #include <unistd.h>  //removeme
 
@@ -50,6 +51,11 @@ public:
      * activos en el momento en el que pidió el refresh
      */
     void sendGamesList();
+
+    /**
+     * @brief Envia al cliente la lista de mapas disponibles
+     */
+    void sendMapsList();
 
     /**
      * @brief Envia al cliente su numero

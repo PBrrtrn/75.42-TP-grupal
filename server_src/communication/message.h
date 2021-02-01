@@ -6,6 +6,7 @@
 #define TYPE_START_GAME 'n'
 #define TYPE_JOIN_GAME 'j'
 #define TYPE_REFRESH_GAMES_LIST 'r'
+#define TYPE_SEND_MAPS_LIST 'm'
 #define TYPE_MOVE_FORWARD 'w'
 #define TYPE_MOVE_BACKWARD 's'
 #define TYPE_MOVE_LEFT 'a'

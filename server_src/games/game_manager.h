@@ -99,6 +99,14 @@ public:
 	 */
 	void informAvailableGames(int clientId);
 
+	/**
+	 * @brief Envia al cliente la lista de mapas
+	 * disponibles para crear partidas
+	 * @param clientId: id del cliente al que 
+	 * hay que mandarle la lista
+	 */
+	void sendMapsList(int clientId);
+
 	~GameManager();
 };
 

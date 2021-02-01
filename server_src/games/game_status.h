@@ -44,6 +44,7 @@ public:
 	void addBulletShooted(int playerID);
 	void addPointTreasure(int playerID);
 	int getAlivePlayers();
+	int getMaxPlayers();
     
 	Statistics showStatistics();
     

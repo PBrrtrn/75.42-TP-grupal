@@ -35,6 +35,11 @@ void ThreadClient::run() {
 		case TYPE_SERVER_JOIN_REFUSED:
 			this->sendJoinRefused();
 			break;
+		case TYPE_SERVER_SEND_MAP_LIST:
+			this->sendMapsList();
+			break;
+		case TYPE_SERVER_SEND_MAP:
+			break;
 		default:
 			break;
 		}
@@ -53,13 +58,6 @@ void ThreadClient::run() {
 					" of type: " << m.getType() << std::endl; 
 				switch (m.getType())
 				{
-				case TYPE_SERVER_SEND_GAMES_LIST:
-					this->sendGamesList();
-					break;
-				case TYPE_SERVER_SEND_MAP_LIST:
-					break;
-				case TYPE_SERVER_SEND_MAP:
-					break;
 				case TYPE_SERVER_SEND_GAME_UPDATE:
 					break;
 				default:
@@ -88,6 +86,15 @@ void ThreadClient::sendGamesList() {
 	this->peer.socket_send(&size, sizeof(char));
 	for (auto& it: list) {
 		this->peer.socket_send((char*)(&it), sizeof(GameListItem));
+	}
+}
+
+void ThreadClient::sendMapsList() {
+	std::vector<MapListItem> list = this->serverStatus.getMapsList();
+	char size = list.size()*sizeof(MapListItem);
+	this->peer.socket_send(&size, sizeof(char));
+	for (auto& it: list) {
+		this->peer.socket_send((char*)(&it), sizeof(MapListItem));
 	}
 }
 

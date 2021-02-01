@@ -9,6 +9,8 @@ private:
 	std::vector<std::vector<int>> grid; // Usar arrays
 	int width;
 	int height;
+	int minPlayers;
+	int maxPlayers;
 public:
 	Map();
 	Map(const char *file_location);
@@ -19,6 +21,8 @@ public:
 	int isWall(int x, int y);
 	int getWidth();
 	int getHeight();
+	int getMaxPlayers();
+	int getMinPlayers();
 };
 
 #endif

@@ -3,12 +3,13 @@
 #define PREFERRED_PLAYERS 3
 
 ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m, 
-	std::unordered_map<int,GameListItem>& list, std::string map_location) : 
-id(gameId), messages(m), gameStatus(map_location), gameList(list) {
-	this->remaining_time = 60 * 1000;
-	this->waiting_time_to_start = 60 * 60; 
-	this->start_running = true;
-	this->is_dead = false;
+	std::unordered_map<int,GameListItem>& list, std::string map_location, int mapId) : 
+	id(gameId), messages(m), gameStatus(map_location), gameList(list),
+	map_id(mapId) {
+		this->remaining_time = 60 * 1000;
+		this->waiting_time_to_start = 60 * 60; 
+		this->start_running = true;
+		this->is_dead = false;
 }
 
 void ThreadGame:: run() {
@@ -18,8 +19,8 @@ void ThreadGame:: run() {
 	GameListItem game;
 	game.gameId = this->id;
 	game.players = this->clients.size();
-	game.maxPlayers = 32; //TODO sacar de config
-	game.mapId = 1; //TODO sacar del mapa cargado
+	game.maxPlayers = this->gameStatus.getMaxPlayers();
+	game.mapId = this->map_id;
 	
 	this->gameList.insert({this->id,game});
 

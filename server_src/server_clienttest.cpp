@@ -3,6 +3,7 @@
 
 #include "../common_src/Socket.h"
 #include "../common_src/GameListItem.h"
+#include "./maps/mapListItem.h"
 #include "./communication/message.h"
 
 #define BUF_SIZE 64
@@ -38,10 +39,42 @@ void getAndPrintGameList(Socket& socket){
 	}	
 }
 
+void getAndPrintMapList(Socket& socket){
+	char buffer[BUF_SIZE];
+	int length = 1;
+
+	socket.socket_receive(buffer,length);
+	buffer[length] = '\0';	
+	std::string MapListSize = std::to_string(buffer[0]);
+	std::cout << "size of map list:" << MapListSize << std::endl;	
+	
+	MapListItem list_item;
+	
+	std::cout << "iterations:" << buffer[0]/sizeof(MapListItem) << std::endl;
+	
+	for (int i = 0; i < buffer[0]/sizeof(MapListItem); i++ ){
+		std::cout << "receiving maps in list" << std::endl;
+		socket.socket_receive((char*)(&list_item),sizeof(MapListItem));
+		std::cout << "map index:" << i << ", map id:" <<  std::to_string(list_item.mapId) 
+			<< ",players:" << std::to_string(list_item.minPlayers)<< 
+			",maxPlayers:" << std::to_string(list_item.maxPlayers)<< 
+			", map name:" << std::string(list_item.name) << std::endl;	
+	}	
+}
+
 void askForGameList(Socket& socket){
 	char buffer[BUF_SIZE];
 	int length = 2;
 	buffer[0] = TYPE_REFRESH_GAMES_LIST;
+	buffer[1] = 0;
+	
+	socket.socket_send(buffer,length);
+}
+
+void askForMapList(Socket& socket){
+	char buffer[BUF_SIZE];
+	int length = 2;
+	buffer[0] = TYPE_SEND_MAPS_LIST;
 	buffer[1] = 0;
 	
 	socket.socket_send(buffer,length);
@@ -91,6 +124,12 @@ int main(const int argc, const char* argv[]) {
 		if (line[0] == TYPE_REFRESH_GAMES_LIST) {
 			askForGameList(socket);
 			getAndPrintGameList(socket);
+			
+		}	
+				
+		if (line[0] == TYPE_SEND_MAPS_LIST) {
+			askForMapList(socket);
+			getAndPrintMapList(socket);
 			
 		}			
 		
