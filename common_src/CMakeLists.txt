@@ -1,6 +1,6 @@
 project(TPGrupal)
 
-add_library(common_classes SHARED
+add_library(common-classes SHARED
 	Socket.cpp
 	blocking_queue.h
 	File.cpp

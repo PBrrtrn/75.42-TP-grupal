@@ -1,6 +1,6 @@
 project(TPGrupal)
 
-add_library(server_classes SHARED
+add_library(server-classes SHARED
   ./actions/action.cpp
   ./actions/move_backward.cpp
   ./actions/move_forward.cpp
