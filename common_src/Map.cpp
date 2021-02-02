@@ -13,6 +13,20 @@ Map::Map() { }
 												- Pablo (25/12/2020)													*/
 
 Map::Map(const char* file_location) {
+	
+	YAML::Node mapa = YAML::LoadFile(std::string(file_location));
+	
+	std::cout << "opening map file:" << std::string(file_location) << std::endl;
+	
+	this->width = mapa["width"].as<int>();
+	this->height = mapa["height"].as<int>();	
+	this->grid = mapa["grid"].as<std::vector<std::vector<int>>>();
+	this->minPlayers = mapa["minPlayers"].as<int>();
+	this->maxPlayers = mapa["maxPlayers"].as<int>();
+
+	
+	
+	/*
 	//-------TODO levantar max y min players del yml----
 	this->maxPlayers = 16;
 	this->minPlayers = 8;
@@ -41,6 +55,7 @@ Map::Map(const char* file_location) {
 		  ya venga resuelto el problema por nosotros y no sea necesario.
 		  																- Pablo (27/12/2020)								 */
 
+   /*
 		std::vector<int> row;
 		for (int i = 0; i < this->width; i++) {
 			int value;
@@ -50,7 +65,7 @@ Map::Map(const char* file_location) {
 
 		this->grid.push_back(row);
 		stream.clear();
-	}
+	} */
 }
 
 Map::Map(const std::string& file_location): Map(file_location.c_str()){ }

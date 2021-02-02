@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
+#include <yaml-cpp/yaml.h>
 
 class Map {
 private:

@@ -1,12 +1,15 @@
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
+#include <vector>
 
 #include "server.h"
 
 int main(const int argc, const char* argv[]) {
 
 	YAML::Emitter out;	
+	
+	std::cout << "generate config file..." << std::endl;
 	
 	out << YAML::BeginMap;
 
@@ -110,6 +113,49 @@ int main(const int argc, const char* argv[]) {
 	std::ofstream fout("../server_config.yml");
 	fout << out.c_str();
 	fout.close();
+	
+	std::cout << "generate example map..." << std::endl;
+	
+	//Generacion de un mapa:
+	
+	YAML::Emitter outMap;	
+	
+	std::vector<std::vector<int>> datos;
+	
+	for (int i = 0; i < 16; i++)
+		datos.push_back(std::vector<int>(16, i));
+	
+	outMap << YAML::BeginMap;
+		outMap << YAML::Key << "minPlayers";
+		outMap << YAML::Value << "2" ;	
+		outMap << YAML::Key << "maxPlayers";
+		outMap << YAML::Value << "20" ;	
+		outMap << YAML::Key << "width";
+		outMap << YAML::Value << "16" ;			
+		outMap << YAML::Key << "height";
+		outMap << YAML::Value << "16" ;		
+		outMap << YAML::Key << "grid";
+		outMap << YAML::Value << YAML::Flow << datos;		
+
+	outMap << YAML::EndMap;
+	
+	std::ofstream foutMap("../maps/map-test.yml");
+	foutMap << outMap.c_str();
+	foutMap.close();
+
+	std::cout << "reload example map and print grid..." << std::endl;
+	YAML::Node config = YAML::LoadFile("../maps/map-test.yml");
+	
+	std::vector<std::vector<int>> datosFile = config["grid"].as<std::vector<std::vector<int>>>();
+	
+	for (auto x: datosFile){
+		for (auto y: x){
+				std::cout << y << "," ;
+			}
+		std::cout << std::endl;
+	}
+	
+	//std::cout << outMap.c_str() << std::endl;
 
     return 0;
 }
