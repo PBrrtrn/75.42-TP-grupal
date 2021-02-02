@@ -4,10 +4,13 @@
 #include <SDL2/SDL.h>
 
 #include "GameLoop.h"
-#include "ServerListener.h"
-#include "GameStatus.h"
-#include "GameStatusMonitor.h"
-#include "Renderer.h"
+
+#include "game_status/MenuStatus.h"
+#include "game_status/GameStatusMonitor.h"
+#include "event_handling/UpdateQueue.h"
+#include "event_handling/InputHandler.h"
+#include "event_handling/StatusUpdater.h"
+#include "rendering/Renderer.h"
 
 GameLoop::GameLoop(YAML::Node& config) : config(config) {
   if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -24,21 +27,23 @@ GameLoop::~GameLoop() {
 void GameLoop::run() {
   int fps_cap = this->config["FPS_cap"].as<int>();
 
-  std::atomic<bool> in_game = false;
-  MenuStatus menu_status(in_game);
+  MenuStatus menu_status;
   GameStatusMonitor game_status_monitor;
 
+  std::atomic<bool> in_game(false);
   UpdateQueue update_queue;
 
   InputHandler user_input_handler(in_game, update_queue);
   // Pasar socket/ServerConnection más adelante para poder enviar el input al server
 
-  StatusUpdater status_updater(in_game, update_queue,
-                               menu_status_monitor,
+  StatusUpdater status_updater(in_game, update_queue, 
+                               menu_status, 
                                game_status_monitor);
   // Pasar socket/ServerConnection más adelante para recibir los updates
 
-  Renderer renderer(this->config, menu_status_monitor, game_status_monitor);
+  Renderer renderer(this->config, in_game, 
+                    game_status_monitor, 
+                    menu_status);
 
   status_updater.start();
   renderer.start();

@@ -2,31 +2,37 @@
 #define __RENDERER_H__
 
 #include <vector>
+#include <atomic>
 #include <yaml-cpp/yaml.h>
 #include <SDL2/SDL.h>
 
-#include "GameStatusMonitor.h"
-#include "GameStatus.h"
+#include "../game_status/GameStatusMonitor.h"
+#include "../game_status/MenuStatus.h"
 #include "Window.h"
 #include "Animation.h"
 #include "Texture.h"
 #include "MapDrawer.h"
-#include "../common_src/Map.h"
-#include "../common_src/Thread.h"
+#include "../../common_src/Map.h"
+#include "../../common_src/Thread.h"
 
 class Renderer : public Thread {
 private:
   SDL_Renderer* renderer;
   YAML::Node& config;
   Window window;
+  std::atomic<bool>& in_game;
   GameStatusMonitor& game_status_monitor;
+  MenuStatus& menu_status;
+  int fps_cap;
   std::vector<Animation*> animations;
   std::vector<Texture*> wall_textures;
   void load();
-  void render(GameStatusUpdate& status_update, 
-              MapDrawer& map_drawer, Map& map);
+  void renderMenu();
+  void renderMatch(MapDrawer& map_drawer, Map& map);
 public:
-  Renderer(YAML::Node& config, GameStatusMonitor& game_status_monitor);
+  Renderer(YAML::Node& config, std::atomic<bool>& in_game, 
+           GameStatusMonitor& game_status_monitor,
+           MenuStatus& menu_status);
   ~Renderer();
   void run();
 };

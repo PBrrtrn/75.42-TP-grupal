@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <SDL2/SDL.h>
 
-enum KeyState { UP, DOWN };
+enum KeyState { UP = false, DOWN = true };
 
 class KeyboardState {
 private:
@@ -14,7 +14,7 @@ public:
   ~KeyboardState();
   void toggleKeyDown(int key);
   void toggleKeyUp(int key);
-  KeyState isDown(int key);
+  bool isDown(int key);
 };
 
 #endif

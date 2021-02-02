@@ -1,8 +1,8 @@
 #ifndef __GAME_STATUS_H__
 #define __GAME_STATUS_H__
 
-#include "../common_src/Map.h"
-#include "../common_src/Vector.h"
+#include "../../common_src/Map.h"
+#include "../../common_src/Vector.h"
 
 struct GameStatusUpdate {
 	Vector player_position;

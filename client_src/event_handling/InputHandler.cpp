@@ -1,5 +1,6 @@
 #include "InputHandler.h"
-#include "enums/UpdateType.h"
+
+#include "../enums/UpdateType.h"
 
 InputHandler::InputHandler(std::atomic<bool>& in_game, 
 													 UpdateQueue& update_queue)
@@ -7,7 +8,7 @@ InputHandler::InputHandler(std::atomic<bool>& in_game,
 
 InputHandler::~InputHandler() { }
 
-void InputHandler::process(SDL_Event event) {
+void InputHandler::process(SDL_Event user_event) {
 	// TODO: Mappear controles en config
 	if (this->in_game) {
 		switch (user_event.type) {

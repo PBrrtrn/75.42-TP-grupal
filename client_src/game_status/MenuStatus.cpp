@@ -1,11 +1,10 @@
 #include "MenuStatus.h"
 
-MenuStatus::MenuStatus(std::atomic<bool>& in_game) 
-: in_game(in_game), selected_option(0) { } 
+MenuStatus::MenuStatus() : selected_option(0) { }
 
 MenuStatus::~MenuStatus() { }
 
-std::vector<GameOption>& MenuStatus::getGameOptions() {
+std::vector<GameOption> MenuStatus::getGameOptions() {
 	std::unique_lock<std::mutex> lock(this->mutex);
 	return this->game_options;
 }

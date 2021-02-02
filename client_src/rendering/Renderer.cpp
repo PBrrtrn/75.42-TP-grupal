@@ -8,9 +8,12 @@
 
 static const int FOV = 1.0472;
 
-Renderer::Renderer(YAML::Node& config, GameStatusMonitor& game_status_monitor)
+Renderer::Renderer(YAML::Node& config, std::atomic<bool>& in_game, 
+                   GameStatusMonitor& game_status_monitor,
+                   MenuStatus& menu_status)
 : renderer(NULL), config(config), window(config["window"]),
-  game_status_monitor(game_status_monitor) {
+  in_game(in_game), game_status_monitor(game_status_monitor),
+  menu_status(menu_status), fps_cap(config["FPS_cap"].as<int>()) {
   this->renderer = this->window.getRenderer();
   if (this->renderer == NULL) throw RendererConstructorError(SDL_GetError());
 
@@ -31,6 +34,32 @@ Renderer::~Renderer() {
   this->join();
 }
 
+void Renderer::run() {
+  while (true) {
+    while (!this->in_game) renderMenu();
+
+    Map map = this->game_status_monitor.getMap();
+    MapDrawer map_drawer(this->config, this->wall_textures);
+    while (this->in_game) renderMatch(map_drawer, map);
+  }
+}
+
+void Renderer::renderMenu() {
+  SDL_RenderClear(this->renderer);
+  std::vector<GameOption> game_options = this->menu_status.getGameOptions();
+  int selected_option = this->menu_status.getSelectedOption();
+
+  std::cout << game_options.size() << std::endl;
+  SDL_RenderPresent(this->renderer);
+}
+
+void Renderer::renderMatch(MapDrawer& map_drawer, Map& map) {
+  SDL_RenderClear(this->renderer);
+
+  SDL_RenderPresent(this->renderer);
+}
+
+/*
 void Renderer::run() {
   Map map = this->game_status_monitor.getMap();
   MapDrawer map_drawer(this->config, this->wall_textures);
@@ -65,6 +94,7 @@ void Renderer::render(GameStatusUpdate& status_update,
 
   SDL_RenderPresent(this->renderer);
 }
+*/
 
 void Renderer::load() {
   std::string dir = config["walls"]["directory"].as<std::string>();

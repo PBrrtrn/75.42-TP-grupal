@@ -1,6 +1,6 @@
 #include "StatusUpdater.h"
 
-#include "enums/UpdateType.h"
+#include "../enums/UpdateType.h"
 
 StatusUpdater::StatusUpdater(std::atomic<bool>& in_game,
 														 UpdateQueue& update_queue,
@@ -11,7 +11,7 @@ StatusUpdater::StatusUpdater(std::atomic<bool>& in_game,
 
 StatusUpdater::~StatusUpdater() { }
 
-StatusUpdater::run() {
+void StatusUpdater::run() {
 	while (true) {
 		if (this->in_game) {
 			// Recibir un update del server por socket y actualizar GameStatus
@@ -21,7 +21,7 @@ StatusUpdater::run() {
 			que generalice los tipos de update, y que cada update
 			se sepa aplicar a sí mismo al MenuStatus.	 				 */
 
-			std::vector<GameOption>& options = this->menu_status.getGameOptions();
+			std::vector<GameOption> options = this->menu_status.getGameOptions();
 
 			if (options.empty()) {
 				// Fetch options, actualizar menu_status

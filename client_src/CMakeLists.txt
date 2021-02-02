@@ -1,14 +1,9 @@
 project(TPGrupal)
 
-add_library(client_classes SHARED
-	Animation.cpp
-	GameLoop.cpp
-	GameStatus.cpp
-	GameStatusMonitor.cpp
-	KeyboardState.cpp
-	MapDrawer.cpp
-	Renderer.cpp
-	ServerListener.cpp
-	Texture.cpp
-	Window.cpp
-)
+add_library(client-classes SHARED GameLoop.cpp)
+
+add_subdirectory(event_handling)
+add_subdirectory(game_status)
+add_subdirectory(rendering)
+
+target_link_libraries(client-classes event-handling game-status rendering)

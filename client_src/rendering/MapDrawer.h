@@ -7,9 +7,9 @@
 #include <SDL2/SDL_image.h>
 
 #include "Texture.h"
-#include "../common_src/RayCaster.h"
-#include "../common_src/Map.h"
-#include "../common_src/Vector.h"
+#include "../../common_src/RayCaster.h"
+#include "../../common_src/Map.h"
+#include "../../common_src/Vector.h"
 
 class MapDrawer {
 private:

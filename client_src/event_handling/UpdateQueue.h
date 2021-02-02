@@ -6,7 +6,7 @@
 #include <queue>
 #include <vector>
 
-#include "enums/UpdateType.h"
+#include "../enums/UpdateType.h"
 
 class UpdateQueue {
 private:

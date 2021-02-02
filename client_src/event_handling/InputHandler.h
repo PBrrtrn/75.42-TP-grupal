@@ -5,7 +5,7 @@
 #include <SDL2/SDL.h>
 
 #include "KeyboardState.h"
-#include "InputQueue.h"
+#include "UpdateQueue.h"
 
 class InputHandler {
 private:
@@ -15,7 +15,7 @@ private:
 public:
 	InputHandler(std::atomic<bool>& in_game, UpdateQueue& update_queue);
 	~InputHandler();
-	void process(SDL_Event event);
-}
+	void process(SDL_Event user_event);
+};
 
 #endif

@@ -4,8 +4,9 @@
 #include <atomic>
 
 #include "UpdateQueue.h"
-#include "../common_src/Thread.h"
-#include "../enums/UpdateType.h"
+#include "../game_status/MenuStatus.h"
+#include "../game_status/GameStatusMonitor.h"
+#include "../../common_src/Thread.h"
 
 class StatusUpdater : public Thread {
 private:
@@ -20,6 +21,6 @@ public:
 								GameStatusMonitor& game_status_monitor);
 	~StatusUpdater();
 	void run();
-}
+};
 
 #endif

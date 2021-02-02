@@ -8,4 +8,4 @@ add_subdirectory(common_src)
 
 set(CMAKE_BUILD_TYPE Debug)
 
-target_link_libraries(Client client_classes common_classes yaml-cpp SDL2 SDL2_image)
+target_link_libraries(Client client-classes common-classes yaml-cpp SDL2 SDL2_image)
