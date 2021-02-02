@@ -44,6 +44,10 @@ Vector Vector::operator+(const Vector& another) {
   return Vector(this->x + another.x, this->y + another.y);
 }
 
+Vector Vector::operator-(const Vector &another){
+  return Vector(this->x - another.x, this->y - another.y);
+}
+
 Vector& Vector::operator=(const Vector& another){
   this->x = another.x;
   this->y = another.y;

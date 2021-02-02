@@ -13,6 +13,7 @@ struct Vector {
   float getXCoordinate();
   Vector operator*(float scalar);
   Vector operator+(const Vector &another);
+  Vector operator-(const Vector &another);
   Vector& operator=(const Vector &another);
   float x;
   float y;

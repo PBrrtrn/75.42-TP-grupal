@@ -1,0 +1,39 @@
+Player:
+  StartingHealth: 20
+  MaxLives: 3
+  MaxBullets: 100
+  StartingBullets: 8
+Ametralladora:
+  Precision: 10
+  Cadencia: 0.1
+  Nombre: AMETRALLADORA
+  AttackRange: 1000000
+  Idx: 2
+CanionDeCadena:
+  Nombre: CANION_DE_CADENA
+  AttackRange: 1000000
+  Idx: 3
+Cuchillo:
+  Nombre: CUCHILLO
+  AttackRange: 1000000
+  Idx: 0
+LanzaCohetes:
+  Nombre: LANZA_COHETES
+  AttackRange: 1000000
+  Idx: 4
+Pistola:
+  Nombre: PISTOLA
+  AttackRange: 1000000
+  Idx: 1
+Moves:
+  Step: 5
+  RotationLeft: 15
+  RotationRight: -15
+Server:
+  Hostname: localhost
+  Port: 9000
+Maps:
+  Location: ../maps/
+MapsSequence:
+  - map1.yml
+  - map2.yml
