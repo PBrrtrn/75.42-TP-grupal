@@ -9,6 +9,7 @@
 #include "../game_status/GameStatusMonitor.h"
 #include "../game_status/MenuStatus.h"
 #include "Window.h"
+#include "Font.h"
 #include "Animation.h"
 #include "Texture.h"
 #include "MapDrawer.h"
@@ -26,6 +27,8 @@ private:
   int fps_cap;
   std::vector<Animation*> animations;
   std::vector<Texture*> wall_textures;
+  Font* menu_font;
+  Texture* menu_background;
   void load();
   void renderMenu();
   void renderMatch(MapDrawer& map_drawer, Map& map);

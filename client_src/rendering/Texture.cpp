@@ -7,7 +7,7 @@ Texture::Texture(SDL_Renderer* renderer, const char *filepath)
 : texture(NULL) {
   SDL_Surface* surface = NULL; // Usar la clase surface
   surface = IMG_Load(filepath);
-  if (surface == NULL) throw 1;
+  if (surface == NULL) throw 1; // Lanzar un error apropiado
 
   this->texture = SDL_CreateTextureFromSurface(renderer, surface);
   if (this->texture == NULL) throw TextureConstructorError(SDL_GetError());
