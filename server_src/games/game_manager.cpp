@@ -28,6 +28,9 @@ void GameManager:: _parse_message(Message message) {
     case TYPE_SEND_MAPS_LIST:
         this->sendMapsList(message.getClientId());
         break;
+    case TYPE_EXIT_GAME:
+        this->expelClient(message.getClientId());
+        break;        
     
     /*si el cliente mando un mensaje que esta asociado al juego donde 
      * esta jugando*/
@@ -36,6 +39,20 @@ void GameManager:: _parse_message(Message message) {
 		this->queues.at(gameId)->push(message);	
         break;
     }
+}
+
+void GameManager::expelClient(int expelledClientId){
+	std::cout << "enter expelclient " << expelledClientId << std::endl;
+	if (this->clientsInGames.find(expelledClientId) != this->clientsInGames.end()) {
+		std::cout << "expelclient threadgame, clientId: " << expelledClientId << std::endl;
+		this->games.at(this->clientsInGames.at(expelledClientId))->expelClient(expelledClientId);
+	} else {
+		std::cout << "clients: " << this->clientsThreads.size() << std::endl;
+		this->clientsThreads.at(expelledClientId)->shutdown();
+		this->clientsThreads.erase(expelledClientId);
+		std::cout << "clients: " << this->clientsThreads.size() << std::endl;
+	}
+	
 }
 
 void GameManager::startGame(int clientIdStarter, int mapId) {
@@ -66,7 +83,9 @@ void GameManager::startGame(int clientIdStarter, int mapId) {
 }
 
 void GameManager::joinGame(int clientId, int gameId) {
-    if (this->games.at(gameId)->addClient(this->clientsThreads.at(clientId), clientId)) {
+	//Si el juego EXISTE y logra realizar addClient
+    if (this->games.find(gameId) != this->games.end() && 
+	 this->games.at(gameId)->addClient(this->clientsThreads.at(clientId), clientId)) {
 		this->clientsInGames.insert({clientId, gameId});
         this->out_queues.at(clientId)->push(Message(TYPE_SERVER_JOIN_OK, 0, clientId));
 	} else {

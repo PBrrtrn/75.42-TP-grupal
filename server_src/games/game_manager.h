@@ -66,6 +66,8 @@ private:
 	 * @param Message: mensaje compuesto recibido 
 	 */
 	void _parse_message(Message m);
+	
+	void expelClient(int expelledClientId);
 
 public:
 

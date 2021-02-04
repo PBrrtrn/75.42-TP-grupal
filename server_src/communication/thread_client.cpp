@@ -17,36 +17,45 @@ void ThreadClient::run() {
 	this->choosing_game = true;
 
 	while(choosing_game){	
-		this->peer.socket_receive(buffer, sizeof(char)*2);
-		std::cout << "evento: "<< buffer[0] <<", mapId o gameId:" 
-			<< std::to_string(buffer[1]) << std::endl;
-		Message m(buffer[0], buffer[1], this->id);
-		this->messages.push(m);
-		try{
-			Message answer = this->messages_out->pop();
-			//char result_join;
-			switch (answer.getType())
-			{
-			case TYPE_SERVER_SEND_GAMES_LIST:
-				this->sendGamesList();
-				break;			
-			case TYPE_SERVER_JOIN_OK:
-				this->choosing_game = false;
-				this->sendJoinOk();
-				break;
-			case TYPE_SERVER_JOIN_REFUSED:
-				this->sendJoinRefused();
-				break;
-			case TYPE_SERVER_SEND_MAP_LIST:
-				this->sendMapsList();
-				break;
-			case TYPE_SERVER_SEND_MAP:
-				break;
-			default:
-				break;
-			}			
-		} catch (...) {
+		int received = this->peer.socket_receive(buffer, sizeof(char)*2);
+		std::cout <<  "received:" << received << std::endl ;
+		if (received < sizeof(char)*2){
+			std::cout << "recv fallo, no recibi nada! (cerro el socket?)" << std::endl;
 			this->shutdown();
+		} else {
+			std::cout << "evento: "<< buffer[0] <<", mapId o gameId:" 
+				<< std::to_string(buffer[1]) << std::endl;
+			Message m(buffer[0], buffer[1], this->id);
+			this->messages.push(m);
+			try{
+				Message answer = this->messages_out->pop();
+				//char result_join;
+				switch (answer.getType())
+				{
+				case TYPE_SERVER_SEND_GAMES_LIST:
+					this->sendGamesList();
+					break;			
+				case TYPE_SERVER_JOIN_OK:
+					this->choosing_game = false;
+					this->sendJoinOk();
+					break;
+				case TYPE_SERVER_JOIN_REFUSED:
+					this->sendJoinRefused();
+					break;
+				case TYPE_SERVER_SEND_MAP_LIST:
+					this->sendMapsList();
+					break;
+				case TYPE_SERVER_SEND_MAP:
+					break;
+				case TYPE_SERVER_SHUTDOWN_CLIENT:
+					this->shutdown();
+					break;				
+				default:
+					break;
+				}			
+			} catch (...) {
+				this->shutdown();
+			}
 		}
 
 	} 
