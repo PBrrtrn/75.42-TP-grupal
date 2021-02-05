@@ -1,10 +1,11 @@
 #include "thread_client.h"
 
 ThreadClient::ThreadClient(int id, BlockingQueue<Message>& messages, 
-	BlockingQueue<Message>* messagesOut, Socket&& socket, ServerStatus& serverStatus) : 
+	BlockingQueue<Message>* messagesOut, Socket&& socket, ServerStatus& serverStatus, 
+	LobbyStatus& lobbyStatus) : 
 		id(id), messages(messages), messages_out(messagesOut), 
 		peer(std::move(socket)), keep_running(true), 
-		dead(false), serverStatus(serverStatus) {
+		dead(false), serverStatus(serverStatus), lobbyStatus(lobbyStatus) {
 }
 
 void ThreadClient::run() {
@@ -73,6 +74,10 @@ void ThreadClient::run() {
 					" of type: " << m.getType() << std::endl; 
 				switch (m.getType())
 				{
+				case TYPE_LOBBY_STATUS_UPDATE:
+					std::cout << "antes de funcon send lobby status "<< std::endl;
+					this->sendLobbyStatus(m.getEntity());
+					break;
 				case TYPE_SERVER_SEND_GAME_UPDATE:
 					break;
 				default:
@@ -102,6 +107,17 @@ void ThreadClient::sendGamesList() {
 	for (auto& it: list) {
 		this->peer.socket_send((char*)(&it), sizeof(GameListItem));
 	}
+}
+
+void ThreadClient::sendLobbyStatus(int gameID) {
+	std::cout << "empezando send lobby status "<< std::endl;
+	LobbyStatusData lobbyStatus = this->lobbyStatus.getLobbyStatus(gameID);
+	std::cout << "----LOBBY STATUS----" << std::endl;
+	std::cout << "players: " << lobbyStatus.players << std::endl;
+	std::cout << "remaining time: " << lobbyStatus.remainingTime << std::endl;
+	std::cout << "--------------------" << std::endl;
+	this->peer.socket_send((char*)(&lobbyStatus), sizeof(LobbyStatus));
+	std::cout << "terminando send lobby status "<< std::endl;
 }
 
 void ThreadClient::sendMapsList() {

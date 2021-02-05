@@ -26,10 +26,13 @@
 #include "../actions/use_door.h"
 
 #include "../../common_src/GameListItem.h"
+#include "../../common_src/LobbyStatusData.h"
 
 class ThreadGame: public Thread {
         int id; /*numero de partida*/
         int map_id; /*id del mapa de la partida*/
+        LobbyStatus& lobbyStatus;
+        LobbyStatusData lobbyData;
         BlockingQueue<Message>* messages;
         std::unordered_map<int, BlockingQueue<Message>*> out_queues;
 
@@ -91,7 +94,7 @@ class ThreadGame: public Thread {
     public:
         ThreadGame(int gameId, BlockingQueue<Message>* m,
             std::unordered_map<int,GameListItem>& list, std::string map_location,
-            int mapId);
+            int mapId, LobbyStatus& lobbyStatus);
         virtual void run() override;
 
         /**
