@@ -121,4 +121,12 @@ bool Player::changeWeapon(int weapon_idx){
 	return true;
 }
 
+int Player::getSelectedWeaponIndex(){
+	return this->selected_weapon_idx;
+}
+
+bool Player::hasKey(){
+	return this->has_key;
+}
+
 Player::~Player(){}

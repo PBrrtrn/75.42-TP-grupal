@@ -45,7 +45,9 @@ public:
     int getWeaponAttackRange();
     int getCurrentBullets();
     int getPoints();
+    bool hasKey();
     bool changeWeapon(int weapon_idx);
+    int getSelectedWeaponIndex();
 	~Player();
 };
 

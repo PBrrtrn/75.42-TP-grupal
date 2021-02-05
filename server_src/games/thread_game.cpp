@@ -172,10 +172,11 @@ bool ThreadGame::addClient(ThreadClient* client, int id){
 	BlockingQueue<Message>* queue_out = new BlockingQueue<Message>();
     this->out_queues.insert(std::make_pair(id, queue_out));
     client->assignToOutQueue(queue_out);
-	
+    
 	Vector position(3,4);
 	Vector direction(1,0);
 	this->gameStatus.addPlayer(id, position, direction);
+	this->clientGameStatuses.insert({id,ClientGameStatus(this->gameStatus,id)});
 	return true;
 }
 
