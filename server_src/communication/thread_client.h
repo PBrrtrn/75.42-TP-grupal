@@ -8,6 +8,7 @@
 #include "../games/game_status.h"
 #include "message.h"
 #include "../../common_src/GameListItem.h"
+#include "../games/client_game_status.h"
 #include "../games/lobbyStatus.h"
 #include "../games/ServerStatus.h"
 #include "../maps/mapListItem.h"
@@ -27,6 +28,7 @@ private:
     std::atomic<bool> dead{false};
     ServerStatus serverStatus;
     LobbyStatus& lobbyStatus;
+    ClientGameStatus* game_status;
     bool choosing_game;
     
 	void sendJoinOk();
@@ -48,6 +50,13 @@ public:
      * game manager
      */
     void assignToOutQueue(BlockingQueue<Message>* messages_out);
+
+    /**
+     * @brief Guarda un puntero al gameStatus correspondiente
+     * al juego en el que esta el cliente
+     * @param gs: clase game status compartida con th game
+     */
+    void assignToGameStatus(ClientGameStatus* gs);
 
     /**
      * @brief Envia al cliente la lista de juegos disponibles

@@ -20,7 +20,6 @@ bool Action:: is_colision(int clientID, Vector& next_position, GameStatus& gs) {
     modf(next_position.getYCoordinate() / map.getHeight(), &y_grid);
     
     if (map.isWall((int) x_grid, (int) y_grid)) {
-		
         std::cout << "Wall detected - invalid move" << '\n';
         //TODO como imprimir mensaje en pantalla
         return true;

@@ -46,7 +46,7 @@ class ThreadGame: public Thread {
         /*diccionario de clientes en partida*/
         std::unordered_map<int,ThreadClient*> clients;
         
-        std::unordered_map<int,ClientGameStatus> clientGameStatuses;
+        std::unordered_map<int,ClientGameStatus*> clientGameStatuses;
         
         GameStatus gameStatus;
 

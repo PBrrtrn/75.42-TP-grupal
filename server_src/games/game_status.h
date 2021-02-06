@@ -60,9 +60,6 @@ public:
     friend class ClientGameStatus;
     
 	~GameStatus();
-	
-	
-	
 };
 
 #endif //GAMESTATUS_H

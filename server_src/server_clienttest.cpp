@@ -6,6 +6,7 @@
 #include "./maps/mapListItem.h"
 #include "./communication/message.h"
 #include "../common_src/LobbyStatusData.h"
+#include "./games/client_game_status.h"
 
 #define BUF_SIZE 64
 
@@ -109,9 +110,15 @@ int main(const int argc, const char* argv[]) {
 			if (buffer[0] == 0) {
 				std::cout << "join successful" << std::endl;
 				LobbyStatusData ls;
-				while(socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData))) {
+				ls.gameStarted = false;
+				while(!ls.gameStarted && socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData))) {
 					std::cout << "lobby status: players:" << (int)ls.players<< "remaining time: " << 
 					(int)ls.remainingTime << std::endl;
+				}
+				while (ls.gameStarted) {
+					PlayerStatus ps;
+					socket.socket_receive((char*)(&ps), sizeof(PlayerStatus));
+					std::cout << "player status: ID--> " << std::to_string(ps.clientId) << std::endl;
 				}
 			}
 		}
@@ -127,8 +134,21 @@ int main(const int argc, const char* argv[]) {
 			socket.socket_send(buffer,length);
 			length = 1;
 			socket.socket_receive(buffer,length);
-			if (buffer[0] == 0)
-				std::cout << "start successful" << std::endl;			
+			if (buffer[0] == 0) {
+				std::cout << "start successful" << std::endl;
+				LobbyStatusData ls;
+				ls.gameStarted = false;
+				while(!ls.gameStarted && socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData))) {
+					std::cout << "lobby status: players:" << (int)ls.players<< "remaining time: " << 
+					(int)ls.remainingTime << std::endl;
+				}
+				while (ls.gameStarted) {
+					PlayerStatus ps;
+					socket.socket_receive((char*)(&ps), sizeof(PlayerStatus));
+					std::cout << "player status: ID--> " << std::to_string(ps.clientId) << std::endl;
+				}
+			}
+							
 		}		
 		
 		//se escribio "e"
