@@ -8,8 +8,6 @@
 #include <vector>
 ////#include "thread_game.h"
 
-
-
 class ServerStatus {
     MapRepository& mapRepo;
     public:

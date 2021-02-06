@@ -1,10 +1,11 @@
 #include "thread_client.h"
 
 ThreadClient::ThreadClient(int id, BlockingQueue<Message>& messages, 
-	BlockingQueue<Message>* messagesOut, Socket&& socket, ServerStatus& serverStatus) : 
+	BlockingQueue<Message>* messagesOut, Socket&& socket, ServerStatus& serverStatus, 
+	LobbyStatus& lobbyStatus) : 
 		id(id), messages(messages), messages_out(messagesOut), 
 		peer(std::move(socket)), keep_running(true), 
-		dead(false), serverStatus(serverStatus) {
+		dead(false), serverStatus(serverStatus), lobbyStatus(lobbyStatus) {
 }
 
 void ThreadClient::run() {
@@ -17,36 +18,45 @@ void ThreadClient::run() {
 	this->choosing_game = true;
 
 	while(choosing_game){	
-		this->peer.socket_receive(buffer, sizeof(char)*2);
-		std::cout << "evento: "<< buffer[0] <<", mapId o gameId:" 
-			<< std::to_string(buffer[1]) << std::endl;
-		Message m(buffer[0], buffer[1], this->id);
-		this->messages.push(m);
-		try{
-			Message answer = this->messages_out->pop();
-			//char result_join;
-			switch (answer.getType())
-			{
-			case TYPE_SERVER_SEND_GAMES_LIST:
-				this->sendGamesList();
-				break;			
-			case TYPE_SERVER_JOIN_OK:
-				this->choosing_game = false;
-				this->sendJoinOk();
-				break;
-			case TYPE_SERVER_JOIN_REFUSED:
-				this->sendJoinRefused();
-				break;
-			case TYPE_SERVER_SEND_MAP_LIST:
-				this->sendMapsList();
-				break;
-			case TYPE_SERVER_SEND_MAP:
-				break;
-			default:
-				break;
-			}			
-		} catch (...) {
+		int received = this->peer.socket_receive(buffer, sizeof(char)*2);
+		std::cout <<  "received:" << received << std::endl ;
+		if (received < sizeof(char)*2){
+			std::cout << "recv fallo, no recibi nada! (cerro el socket?)" << std::endl;
 			this->shutdown();
+		} else {
+			std::cout << "evento: "<< buffer[0] <<", mapId o gameId:" 
+				<< std::to_string(buffer[1]) << std::endl;
+			Message m(buffer[0], buffer[1], this->id);
+			this->messages.push(m);
+			try{
+				Message answer = this->messages_out->pop();
+				//char result_join;
+				switch (answer.getType())
+				{
+				case TYPE_SERVER_SEND_GAMES_LIST:
+					this->sendGamesList();
+					break;			
+				case TYPE_SERVER_JOIN_OK:
+					this->choosing_game = false;
+					this->sendJoinOk();
+					break;
+				case TYPE_SERVER_JOIN_REFUSED:
+					this->sendJoinRefused();
+					break;
+				case TYPE_SERVER_SEND_MAP_LIST:
+					this->sendMapsList();
+					break;
+				case TYPE_SERVER_SEND_MAP:
+					break;
+				case TYPE_SERVER_SHUTDOWN_CLIENT:
+					this->shutdown();
+					break;				
+				default:
+					break;
+				}			
+			} catch (...) {
+				this->shutdown();
+			}
 		}
 
 	} 
@@ -64,7 +74,12 @@ void ThreadClient::run() {
 					" of type: " << m.getType() << std::endl; 
 				switch (m.getType())
 				{
+				case TYPE_LOBBY_STATUS_UPDATE:
+					std::cout << "antes de funcon send lobby status "<< std::endl;
+					this->sendLobbyStatus(m.getEntity());
+					break;
 				case TYPE_SERVER_SEND_GAME_UPDATE:
+					this->sendGameUpdate();
 					break;
 				default:
 					break;
@@ -75,6 +90,12 @@ void ThreadClient::run() {
             if (!keep_running) break;
         } 
     }
+}
+
+void ThreadClient::sendGameUpdate() {
+	std::cout << "sending game status update (mock)" << std::endl;
+	return;
+	
 }
 
 void ThreadClient::assignToOutQueue(BlockingQueue<Message>* messages_out){
@@ -93,6 +114,17 @@ void ThreadClient::sendGamesList() {
 	for (auto& it: list) {
 		this->peer.socket_send((char*)(&it), sizeof(GameListItem));
 	}
+}
+
+void ThreadClient::sendLobbyStatus(int gameID) {
+	std::cout << "empezando send lobby status "<< std::endl;
+	LobbyStatusData lobbyStatus = this->lobbyStatus.getLobbyStatus(gameID);
+	std::cout << "----LOBBY STATUS----" << std::endl;
+	std::cout << "players: " << lobbyStatus.players << std::endl;
+	std::cout << "remaining time: " << lobbyStatus.remainingTime << std::endl;
+	std::cout << "--------------------" << std::endl;
+	this->peer.socket_send((char*)(&lobbyStatus), sizeof(LobbyStatusData));
+	std::cout << "terminando send lobby status "<< std::endl;
 }
 
 void ThreadClient::sendMapsList() {

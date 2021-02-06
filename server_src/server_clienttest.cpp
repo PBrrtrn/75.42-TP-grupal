@@ -5,6 +5,7 @@
 #include "../common_src/GameListItem.h"
 #include "./maps/mapListItem.h"
 #include "./communication/message.h"
+#include "../common_src/LobbyStatusData.h"
 
 #define BUF_SIZE 64
 
@@ -14,6 +15,7 @@ void connectAndGetClientId(Socket& socket){
 	int length = 1;
 	//recibo el clientId
 	socket.socket_receive(buffer,length);
+	//socket.socket_send(("r"),sizeof(("r"))); //prueba, a ver que hace
 	std::string clientId = std::to_string(buffer[0]);
 	std::cout << "client id:" << clientId << std::endl;
 	
@@ -90,7 +92,7 @@ int main(const int argc, const char* argv[]) {
 	getAndPrintGameList(socket);
 	    
     std::string line;
-    while (std::getline(std::cin, line)) {
+    while (socket.get_fd() != -1 && std::getline(std::cin, line)) {
 		if (line == "q" || line == "quit") break;
 		
 		if (line[0] == TYPE_JOIN_GAME) {
@@ -100,11 +102,18 @@ int main(const int argc, const char* argv[]) {
 			buffer[1] = gameId;
 			length = 2;
 			//envio el evento join game, ej: j 3
+			std::cout << "send join game" << std::endl;	
 			socket.socket_send(buffer,length);
 			length = 1;
 			socket.socket_receive(buffer,length);
-			if (buffer[0] == 0)
+			if (buffer[0] == 0) {
 				std::cout << "join successful" << std::endl;
+				LobbyStatusData ls;
+				while(socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData))) {
+					std::cout << "lobby status: players:" << (int)ls.players<< "remaining time: " << 
+					(int)ls.remainingTime << std::endl;
+				}
+			}
 		}
 
 		if (line[0] == TYPE_START_GAME) {
@@ -114,6 +123,7 @@ int main(const int argc, const char* argv[]) {
 			buffer[1] = mapId;
 			length = 2;
 			//envio el evento new game, ej: n 10
+			std::cout << "send start game" << std::endl;			
 			socket.socket_send(buffer,length);
 			length = 1;
 			socket.socket_receive(buffer,length);
@@ -121,13 +131,32 @@ int main(const int argc, const char* argv[]) {
 				std::cout << "start successful" << std::endl;			
 		}		
 		
+		//se escribio "e"
+		if (line[0] == TYPE_EXIT_GAME) {
+			int length;
+			buffer[0] = TYPE_EXIT_GAME;
+			buffer[1] = 0;
+			length = 2;
+			//envio el evento new game, ej: n 10
+			std::cout << "send exit game" << std::endl;			
+			socket.socket_send(buffer,length);
+			length = 1;
+			//socket.socket_receive(buffer,length);
+			//if (buffer[0] == 0)
+			std::cout << "exit successful" << std::endl;	
+			socket.close_socket();
+			break;
+		}			
+		
 		if (line[0] == TYPE_REFRESH_GAMES_LIST) {
+			std::cout << "send request game list" << std::endl;	
 			askForGameList(socket);
 			getAndPrintGameList(socket);
 			
 		}	
 				
 		if (line[0] == TYPE_SEND_MAPS_LIST) {
+			std::cout << "send request maps list" << std::endl;	
 			askForMapList(socket);
 			getAndPrintMapList(socket);
 			

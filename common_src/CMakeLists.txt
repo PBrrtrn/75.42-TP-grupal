@@ -9,4 +9,5 @@ add_library(common-classes SHARED
 	Vector.cpp
 	Thread.cpp
 	GameListItem.h
+	LobbyStatusData.h
 )

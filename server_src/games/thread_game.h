@@ -26,10 +26,15 @@
 #include "../actions/use_door.h"
 
 #include "../../common_src/GameListItem.h"
+#include "../../common_src/LobbyStatusData.h"
+
+#include "client_game_status.h"
 
 class ThreadGame: public Thread {
         int id; /*numero de partida*/
         int map_id; /*id del mapa de la partida*/
+        LobbyStatus& lobbyStatus;
+        LobbyStatusData lobbyData;
         BlockingQueue<Message>* messages;
         std::unordered_map<int, BlockingQueue<Message>*> out_queues;
 
@@ -40,6 +45,8 @@ class ThreadGame: public Thread {
         /*clave: id del cliente, value: th cliente*/
         /*diccionario de clientes en partida*/
         std::unordered_map<int,ThreadClient*> clients;
+        
+        std::unordered_map<int,ClientGameStatus> clientGameStatuses;
         
         GameStatus gameStatus;
 
@@ -61,11 +68,7 @@ class ThreadGame: public Thread {
         int remaining_time;
         int waiting_time_to_start;
         
-        /**
-         * @brief Elimina un jugador de la partida
-         * @param id: id del cliente a eliminar
-         */
-        void expelClient(int id);
+
         
         void checkNews();
 		void checkPlayerPickups();
@@ -95,7 +98,7 @@ class ThreadGame: public Thread {
     public:
         ThreadGame(int gameId, BlockingQueue<Message>* m,
             std::unordered_map<int,GameListItem>& list, std::string map_location,
-            int mapId);
+            int mapId, LobbyStatus& lobbyStatus);
         virtual void run() override;
 
         /**
@@ -106,6 +109,12 @@ class ThreadGame: public Thread {
          * @param id: id asociado al cliente
          */
         bool addClient(ThreadClient* client, int id);
+
+        /**
+         * @brief Elimina un jugador de la partida
+         * @param id: id del cliente a eliminar
+         */
+        void expelClient(int id);
 
         /**
          * @brief Metodos encargados de efectuar

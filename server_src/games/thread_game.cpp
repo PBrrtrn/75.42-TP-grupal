@@ -3,9 +3,10 @@
 #define PREFERRED_PLAYERS 3
 
 ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m, 
-	std::unordered_map<int,GameListItem>& list, std::string map_location, int mapId) : 
+	std::unordered_map<int,GameListItem>& list, std::string map_location, int mapId, 
+	LobbyStatus& lobbyStatus) : 
 	id(gameId), messages(m), gameStatus(map_location), gameList(list),
-	map_id(mapId) {
+	map_id(mapId), lobbyStatus(lobbyStatus) {
 		this->remaining_time = 60 * 1000;
 		this->waiting_time_to_start = 60 * 60; 
 		this->start_running = true;
@@ -142,9 +143,11 @@ void ThreadGame::checkNews() {
 }
 
 void ThreadGame::sendLobbyStatus() {
+	this->lobbyStatus.updateLobbyData(this->id, this->remaining_time, this->clients.size(),
+            this->getMaxPlayers(), !this->start_running);
 	for (auto& it: this->out_queues) {
         int clientId = it.first;
-        this->out_queues.at(clientId)->push(Message(TYPE_LOBBY_STATUS_UPDATE,0,clientId)); 
+        this->out_queues.at(clientId)->push(Message(TYPE_LOBBY_STATUS_UPDATE, this->id ,clientId)); 
     }
 }
 
@@ -172,10 +175,11 @@ bool ThreadGame::addClient(ThreadClient* client, int id){
 	BlockingQueue<Message>* queue_out = new BlockingQueue<Message>();
     this->out_queues.insert(std::make_pair(id, queue_out));
     client->assignToOutQueue(queue_out);
-	
+    
 	Vector position(3,4);
 	Vector direction(1,0);
 	this->gameStatus.addPlayer(id, position, direction);
+	this->clientGameStatuses.insert({id,ClientGameStatus(this->gameStatus,id)});
 	return true;
 }
 

@@ -9,6 +9,7 @@
 #include "../communication/message.h"
 #include "ServerStatus.h"
 #include "../../common_src/GameListItem.h"
+#include "./lobbyStatus.h"
 #include "../maps/mapRepository.h"
 
 class GameManager{
@@ -19,6 +20,7 @@ private:
 	std::unordered_map<int, GameListItem> games_list;
 
 	ServerStatus serverStatus;
+	LobbyStatus lobbyStatus;
 	MapRepository mapsRepo;
 
 	/* clave: clientId value: thClient*/
@@ -66,6 +68,8 @@ private:
 	 * @param Message: mensaje compuesto recibido 
 	 */
 	void _parse_message(Message m);
+	
+	void expelClient(int expelledClientId);
 
 public:
 
