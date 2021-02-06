@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <unistd.h>
 #include <array>
 #include <SDL2/SDL_image.h>
@@ -101,8 +102,47 @@ void Renderer::renderMenu() {
   std::vector<GameOption> game_options = this->menu_status.getGameOptions();
   int selected_option = this->menu_status.getSelectedOption();
 
-  SDL_Color text_color { 255, 255, 255 };
-  this->menu_font->render(this->renderer, "HOLA JORGE", 100, 100, 1, text_color);
+  int text_y = box_y + 25;
+  int i = 0;
+  while ((i < game_options.size()) && (text_y < box_y + box_h) ) {
+    std::stringstream match_stream;
+    match_stream << game_options[i].map_name;
+    match_stream << " (";
+    match_stream << game_options[i].current_players;
+    match_stream << "/";
+    match_stream << game_options[i].max_players;
+    match_stream << ")";
+
+    std::string match_text = match_stream.str();
+
+    SDL_Color match_text_color { 255, 255, 255 };
+    if (selected_option - 2 == i) {
+      match_text_color.g = 69;
+      match_text_color.b = 0;
+    }
+
+    this->menu_font->render(this->renderer, match_text.c_str(), 220,
+                            text_y, 1, match_text_color);
+
+    i++;
+    text_y += 35;
+  }
+
+  SDL_Color new_game_text_color { 255, 255, 255 };
+  if (selected_option == 0) {
+    new_game_text_color.g = 69;
+    new_game_text_color.b = 0;
+  }
+  this->menu_font->render(this->renderer, "HOST NEW", 200, 
+                          420, 1, new_game_text_color);
+
+  SDL_Color refresh_text_color { 255, 255, 255 };
+  if (selected_option == 1) {
+    refresh_text_color.g = 69;
+    refresh_text_color.b = 0;
+  }
+  this->menu_font->render(this->renderer, "REFRESH", 400, 
+                          420, 1, refresh_text_color);
 
   SDL_RenderPresent(this->renderer);
 }

@@ -1,6 +1,6 @@
 #include "Font.h"
 
-#define PTSIZE 24
+#define PTSIZE 36
 
 Font::Font(std::string filepath) : font(NULL) {
 	this->font = TTF_OpenFont(filepath.c_str(), PTSIZE);

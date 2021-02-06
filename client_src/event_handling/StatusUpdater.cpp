@@ -1,3 +1,4 @@
+#include <iostream>
 #include "StatusUpdater.h"
 
 #include "../enums/UpdateType.h"
@@ -24,21 +25,29 @@ void StatusUpdater::run() {
 			std::vector<GameOption> options = this->menu_status.getGameOptions();
 
 			if (options.empty()) {
-				// Fetch options, actualizar menu_status
+				// Hacer fetch de las opciones y actualizar el menu_status
+				GameOption game_option { std::string("Mapin el mapa"), 4, 1 };
+				options.push_back(game_option);
+
+				this->menu_status.updateGameOptions(options);
 			} else {
 				int selected_option = this->menu_status.getSelectedOption();
 
 				if (update == MENU_SELECT_OPTION) {
-					if (selected_option = 0) {
+					if (selected_option == 0) {
 						// Fetch options, actualizar menu_status
+					} else if (selected_option == 1) {
+						// Mostrar los mapas disponibles
 					} else {
 						// Pedir al server que te agregue a la partida
 						in_game = true;
 					}
-				} else if (update != MENU_NONE) {
-					int n_options = options.size() + 1;
+				} else {
+					int n_options = options.size() + 2;
 					int move_direction = ((update == MENU_MOVE_UP) ? 1 : -1);
 					int new_selection = (selected_option + move_direction) % n_options;
+					if (new_selection < 0) new_selection = - new_selection;
+					// Aca se rompe algo, revisar
 
 					this->menu_status.updateSelectedOption(new_selection);
 				}

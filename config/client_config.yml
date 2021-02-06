@@ -14,7 +14,7 @@ menu_ui:
     height: 300
     gilding: 3
   directory: ../assets/menu_ui/
-  font: font.ttf
+  font: wolfenstein.ttf
   background: background.png
 walls:
   directory: ../assets/textures/walls/
