@@ -4,7 +4,7 @@
 struct GameListItem {
 	char gameId;
 	char players;
-	char maxPlayers;
+	char maxPlayers; //TODO es necesario pasarlo aca??
 	char mapId;
 };
 

@@ -66,7 +66,7 @@ void GameManager::startGame(int clientIdStarter, int mapId) {
                                             queue, 
                                             this->games_list, 
                                             this->mapsRepo.getMapLocation(mapId),
-                                            mapId) 
+                                            mapId, this->lobbyStatus) 
                             });
         this->clientsInGames.insert({clientIdStarter,this->games_counter});
         this->queues.insert(std::make_pair(this->games_counter, queue));
@@ -101,7 +101,8 @@ void GameManager::acceptClient(Socket&& socket, BlockingQueue<Message>& qClients
 
     this->clientsThreads.insert({this->clients_counter, 
         new ThreadClient(this->clients_counter, qClientsProcessor , 
-        this->out_queues.at(this->clients_counter), std::move(socket), this->serverStatus)});
+        this->out_queues.at(this->clients_counter), std::move(socket), this->serverStatus, 
+        this->lobbyStatus)});
     
     this->clientsThreads.at(this->clients_counter)->start();
 

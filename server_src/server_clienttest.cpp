@@ -5,6 +5,7 @@
 #include "../common_src/GameListItem.h"
 #include "./maps/mapListItem.h"
 #include "./communication/message.h"
+#include "../common_src/LobbyStatusData.h"
 
 #define BUF_SIZE 64
 
@@ -105,8 +106,14 @@ int main(const int argc, const char* argv[]) {
 			socket.socket_send(buffer,length);
 			length = 1;
 			socket.socket_receive(buffer,length);
-			if (buffer[0] == 0)
+			if (buffer[0] == 0) {
 				std::cout << "join successful" << std::endl;
+				LobbyStatusData ls;
+				while(socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData))) {
+					std::cout << "lobby status: players:" << (int)ls.players<< "remaining time: " << 
+					(int)ls.remainingTime << std::endl;
+				}
+			}
 		}
 
 		if (line[0] == TYPE_START_GAME) {
