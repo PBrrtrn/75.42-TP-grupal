@@ -52,4 +52,8 @@ void ClientGameStatus::updateThisGameStatus(){
 		}	
 }
 
+std::string ClientGameStatus::getEntireMap(){
+	return this->gameStatus.getEntireMap();
+}
+
 ClientGameStatus::~ClientGameStatus() {}

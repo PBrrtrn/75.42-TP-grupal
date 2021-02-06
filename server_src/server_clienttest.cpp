@@ -109,6 +109,14 @@ int main(const int argc, const char* argv[]) {
 			socket.socket_receive(buffer,length);
 			if (buffer[0] == 0) {
 				std::cout << "join successful" << std::endl;
+				
+				int mapSize;
+				socket.socket_receive((char*)(&mapSize), sizeof(mapSize));
+				char mapa[mapSize];
+				socket.socket_receive(mapa, mapSize);	
+				//mapa[mapSize] = 0;	
+				std::cout << "mapa:" << std::string(mapa) << std::endl;
+				
 				LobbyStatusData ls;
 				ls.gameStarted = false;
 				while(!ls.gameStarted && socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData))) {
@@ -167,6 +175,15 @@ int main(const int argc, const char* argv[]) {
 			socket.socket_receive(buffer,length);
 			if (buffer[0] == 0) {
 				std::cout << "start successful" << std::endl;
+				
+				int mapSize;
+				socket.socket_receive((char*)(&mapSize), sizeof(mapSize));
+				char mapa[mapSize];
+				socket.socket_receive(mapa, mapSize);	
+				//mapa[mapSize] = 0;	
+				std::cout << "mapa:" << std::string(mapa) << std::endl;
+				
+								
 				LobbyStatusData ls;
 				ls.gameStarted = false;
 				while(!ls.gameStarted && socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData))) {

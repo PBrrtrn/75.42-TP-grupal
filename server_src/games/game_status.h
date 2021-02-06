@@ -25,6 +25,8 @@ private:
 	std::vector<Item> items;
 	Vector angle;
 	MapServer map;
+	std::string mapLocation;
+	std::string entireMap;
 	
 public:
 	
@@ -45,6 +47,8 @@ public:
 	void addPointTreasure(int playerID);
 	int getAlivePlayers();
 	int getMaxPlayers();
+	
+	std::string getEntireMap();
     
 	Statistics showStatistics();
     

@@ -81,6 +81,12 @@ public:
      * de jugador asignado a través del socket.
      */
     void informClientId();
+    
+     /**
+     * @brief Envia por socket el mapa actual donde va a jugar
+     */   
+    
+    void sendCurrentGameMap();
 
     virtual ~ThreadClient() override;
 };

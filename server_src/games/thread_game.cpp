@@ -22,6 +22,12 @@ void ThreadGame:: run() {
 	game.mapId = this->map_id;
 	
 	this->gameList.insert({this->id,game});
+	
+	
+	for (auto& it: this->out_queues) {
+        int clientId = it.first;
+        this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_MAP, 0, clientId));
+    }
 
 	while(start_running) {
 		//std::cout << "players now:" << this->gameStatus.getAlivePlayers() << std::endl;

@@ -47,8 +47,7 @@ void ThreadClient::run() {
 				case TYPE_SERVER_SEND_MAP_LIST:
 					this->sendMapsList();
 					break;
-				case TYPE_SERVER_SEND_MAP:
-					break;
+
 				case TYPE_SERVER_SHUTDOWN_CLIENT:
 					this->shutdown();
 					break;				
@@ -75,6 +74,9 @@ void ThreadClient::run() {
 				//	" of type: " << m.getType() << std::endl; 
 				switch (m.getType())
 				{
+				case TYPE_SERVER_SEND_MAP:
+					this->sendCurrentGameMap();
+					break;					
 				case TYPE_LOBBY_STATUS_UPDATE:
 					this->sendLobbyStatus(m.getEntity());
 					break;
@@ -90,6 +92,18 @@ void ThreadClient::run() {
             if (!keep_running) break;
         } 
     }
+}
+
+void ThreadClient::sendCurrentGameMap(){
+   std::string mapa = this->game_status->getEntireMap();
+   int size = mapa.length() + 1;
+   
+   std::cout << "tamanio del mapa:" << std::to_string(size) << std::endl;
+   
+   this->peer.socket_send((char*)(&size), sizeof(size));
+   this->peer.socket_send(mapa.c_str(), size - 1);
+   char endOfFile = 0;
+   this->peer.socket_send((&endOfFile), sizeof(char));
 }
 
 void ThreadClient::sendGameUpdate() {
