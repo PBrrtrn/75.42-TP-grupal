@@ -11,11 +11,11 @@ void ThreadAcceptor:: run() {
 	std::string host = c["Hostname"].as<std::string>();
 	std::string port = c["Port"].as<std::string>();
 	
-	std::cout << "Running server on: " << host << ":" << port << std::endl;
+	std::cout << "Running server on host: " << host << ",port: " << port << std::endl;
 	
 	bool resultado = this->socket.socket_bind_and_listen(host.c_str(),port.c_str());
 	
-	std::cout << "Acceptor socket opened:" << (resultado ? 0 : -1) << std::endl;
+	std::cout << "Acceptor socket opened:" << (resultado ? "OK" : "ERROR!") << std::endl;
 	
     while (this->keep_running) {
         this->acceptConnection();

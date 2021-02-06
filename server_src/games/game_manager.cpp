@@ -1,7 +1,6 @@
 #include "game_manager.h"
 
 GameManager::GameManager() : serverStatus(this->games_list, this->mapsRepo){
-	std::cout << "game manager constructor"  << std::endl;
 	this->clients_counter = 0;
     this->games_counter = 0;
 }
@@ -42,15 +41,11 @@ void GameManager:: _parse_message(Message message) {
 }
 
 void GameManager::expelClient(int expelledClientId){
-	std::cout << "enter expelclient " << expelledClientId << std::endl;
 	if (this->clientsInGames.find(expelledClientId) != this->clientsInGames.end()) {
-		std::cout << "expelclient threadgame, clientId: " << expelledClientId << std::endl;
 		this->games.at(this->clientsInGames.at(expelledClientId))->expelClient(expelledClientId);
 	} else {
-		std::cout << "clients: " << this->clientsThreads.size() << std::endl;
 		this->clientsThreads.at(expelledClientId)->shutdown();
 		this->clientsThreads.erase(expelledClientId);
-		std::cout << "clients: " << this->clientsThreads.size() << std::endl;
 	}
 	
 }
@@ -70,9 +65,6 @@ void GameManager::startGame(int clientIdStarter, int mapId) {
                             });
         this->clientsInGames.insert({clientIdStarter,this->games_counter});
         this->queues.insert(std::make_pair(this->games_counter, queue));
-        
-        
-        std::cout << "id de cliente arrancando juego:" << clientIdStarter << std::endl;
         this->joinGame(clientIdStarter, this->games_counter);
         this->games.at(this->games_counter)->start();
         this->games_counter++;
@@ -94,7 +86,7 @@ void GameManager::joinGame(int clientId, int gameId) {
 }
 
 void GameManager::acceptClient(Socket&& socket, BlockingQueue<Message>& qClientsProcessor){
-	std::cout << "Game manager accepted new Client:"<< this->clients_counter << std::endl;
+	std::cout << "Game manager accepted new Client. ClientId:"<< this->clients_counter << std::endl;
 	
 	int clientId = this->clients_counter;
 	this->out_queues.insert({clientId, new BlockingQueue<Message>()} );

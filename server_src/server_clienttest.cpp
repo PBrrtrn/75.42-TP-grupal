@@ -122,11 +122,34 @@ int main(const int argc, const char* argv[]) {
 				
 				while (ls.gameStarted) {
 					PlayerStatus ps;
-					//char a = 'x';
 					socket.socket_receive((char*)(&ps), sizeof(PlayerStatus));
-					//socket.socket_receive((char*)(&a), sizeof(char));
-					std::cout << "player status: ID--> " << std::to_string(ps.clientId) << std::endl;
-					//std::cout << "player status: ID--> " << a << std::endl;
+					std::cout << "this player status - ID:" << std::to_string(ps.clientId) << std::endl;
+					
+					int size;
+					socket.socket_receive((char*)(&size), sizeof(int));
+					
+					PlayerListItem player;
+					for (int i = 0; i < size/sizeof(PlayerListItem); i++ ){
+						std::cout << "receiving player in list" << std::endl;
+						socket.socket_receive((char*)(&player),sizeof(PlayerListItem));
+						std::cout << "player id:" << std::to_string(player.clientId) << std::endl;	
+					}						
+
+					socket.socket_receive((char*)(&size), sizeof(int));
+					DoorListItem door;
+					for (int i = 0; i < size/sizeof(DoorListItem); i++ ){
+						std::cout << "receiving door in list" << std::endl;
+						socket.socket_receive((char*)(&door),sizeof(DoorListItem));
+						std::cout << "door is open:" << std::to_string(door.isOpen ? 1 : 0) << std::endl;	
+					}							
+
+					socket.socket_receive((char*)(&size), sizeof(int));
+					ItemListElement item;
+					for (int i = 0; i < size/sizeof(ItemListElement); i++ ){
+						std::cout << "receiving item in list" << std::endl;
+						socket.socket_receive((char*)(&item),sizeof(ItemListElement));
+						std::cout << "item is visible:" << std::to_string(item.isVisible? 1 : 0) << std::endl;	
+					}	
 				}
 			}
 		}
@@ -158,7 +181,33 @@ int main(const int argc, const char* argv[]) {
 				while (ls.gameStarted) {
 					PlayerStatus ps;
 					socket.socket_receive((char*)(&ps), sizeof(PlayerStatus));
-					std::cout << "player status: ID--> " << std::to_string(ps.clientId) << std::endl;
+					std::cout << "this player status - ID:" << std::to_string(ps.clientId) << std::endl;
+					
+					int size;
+					socket.socket_receive((char*)(&size), sizeof(int));
+					
+					PlayerListItem player;
+					for (int i = 0; i < size/sizeof(PlayerListItem); i++ ){
+						std::cout << "receiving player in list" << std::endl;
+						socket.socket_receive((char*)(&player),sizeof(PlayerListItem));
+						std::cout << "player id:" << std::to_string(player.clientId) << std::endl;	
+					}						
+
+					socket.socket_receive((char*)(&size), sizeof(int));
+					DoorListItem door;
+					for (int i = 0; i < size/sizeof(DoorListItem); i++ ){
+						std::cout << "receiving door in list" << std::endl;
+						socket.socket_receive((char*)(&door),sizeof(DoorListItem));
+						std::cout << "door is open:" << std::to_string(door.isOpen ? 1 : 0) << std::endl;	
+					}							
+
+					socket.socket_receive((char*)(&size), sizeof(int));
+					ItemListElement item;
+					for (int i = 0; i < size/sizeof(ItemListElement); i++ ){
+						std::cout << "receiving item in list" << std::endl;
+						socket.socket_receive((char*)(&item),sizeof(ItemListElement));
+						std::cout << "item is visible:" << std::to_string(item.isVisible? 1 : 0) << std::endl;	
+					}	
 				}
 			}
 							

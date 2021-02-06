@@ -43,15 +43,17 @@ class ClientGameStatus {
 
 	private:
 		GameStatus& gameStatus;
+		int assignedClientId;
 
 	public:
 
 		ClientGameStatus(GameStatus& gameStatus,int assignedClientId);
+		void updateThisGameStatus();
 		~ClientGameStatus();
 
 		PlayerStatus thisPlayerStatus;
-		std::vector<PlayerListItem> players; //incluye PlayersPositions y PlayersDirections
-		std::vector<DoorListItem> doors;
+		std::unordered_map<int,PlayerListItem> players; //incluye PlayersPositions y PlayersDirections
+		std::unordered_map<int,DoorListItem> doors;
 		std::vector<ItemListElement> items;
 };
 

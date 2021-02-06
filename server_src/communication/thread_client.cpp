@@ -20,13 +20,13 @@ void ThreadClient::run() {
 
 	while(choosing_game){	
 		int received = this->peer.socket_receive(buffer, sizeof(char)*2);
-		std::cout <<  "received:" << received << std::endl ;
+		//std::cout <<  "received:" << received << std::endl ;
 		if (received < sizeof(char)*2){
-			std::cout << "recv fallo, no recibi nada! (cerro el socket?)" << std::endl;
+			std::cout << "recv en threadclient fallo, no recibi nada! (cerro el socket?)" << std::endl;
 			this->shutdown();
 		} else {
-			std::cout << "evento: "<< buffer[0] <<", mapId o gameId:" 
-				<< std::to_string(buffer[1]) << std::endl;
+			//std::cout << "evento: "<< buffer[0] <<", mapId o gameId:" 
+			//	<< std::to_string(buffer[1]) << std::endl;
 			Message m(buffer[0], buffer[1], this->id);
 			this->messages.push(m);
 			try{
@@ -71,8 +71,8 @@ void ThreadClient::run() {
 			//y luego desbloquear
 			{
 				Message m = this->messages_out->pop();
-				std::cout << "got a new event in outgoing queue in client " << this->id << 
-					" of type: " << m.getType() << std::endl; 
+				//std::cout << "got a new event in outgoing queue in client " << this->id << 
+				//	" of type: " << m.getType() << std::endl; 
 				switch (m.getType())
 				{
 				case TYPE_LOBBY_STATUS_UPDATE:
@@ -94,32 +94,30 @@ void ThreadClient::run() {
 
 void ThreadClient::sendGameUpdate() {
 	if (this->game_status == NULL) {
-		std::cout << "gs NULL" << std::endl;
+		std::cout << "gameStatus pointer in client is NULL!" << std::endl;
 		return;
 	}
-	std::cout << "antes de send playerstatus: ID--> " << std::to_string(this->game_status->thisPlayerStatus.clientId) << std::endl;
-	//PlayerStatus ps = this->game_status->thisPlayerStatus;
-	int sent = this->peer.socket_send((char*)(&this->game_status->thisPlayerStatus), sizeof(PlayerStatus));
-	//int sent = this->peer.socket_send("a", 1);
-	//std::cout << "sent bytes: " << std::to_string(sent) << std::endl;
-/*
-	char player_size = this->game_status->players.size()*sizeof(PlayerListItem);
-	this->peer.socket_send(&player_size, sizeof(char));
+	this->peer.socket_send((char*)(&this->game_status->thisPlayerStatus), sizeof(PlayerStatus));
+
+	int size = this->game_status->players.size()*sizeof(PlayerListItem);
+	this->peer.socket_send((char*)(&size), sizeof(size));
 	for (auto& it: this->game_status->players) {
 		this->peer.socket_send((char*)(&it), sizeof(PlayerListItem));
 	}
 
-	char door_size = this->game_status->doors.size()*sizeof(DoorListItem);
-	this->peer.socket_send(&door_size, sizeof(char));
+	//char door_
+	size = this->game_status->doors.size()*sizeof(DoorListItem);
+	this->peer.socket_send((char*)(&size), sizeof(size));
 	for (auto& it: this->game_status->doors) {
 		this->peer.socket_send((char*)(&it), sizeof(DoorListItem));
 	}
 
-	char item_size = this->game_status->items.size()*sizeof(ItemListElement);
-	this->peer.socket_send(&item_size, sizeof(char));
+	//char item_
+	size = this->game_status->items.size()*sizeof(ItemListElement);
+	this->peer.socket_send((char*)(&size), sizeof(size));
 	for (auto& it: this->game_status->items) {
 		this->peer.socket_send((char*)(&it), sizeof(ItemListElement));
-	}*/
+	}
 }
 
 void ThreadClient::assignToOutQueue(BlockingQueue<Message>* messages_out){
