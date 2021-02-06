@@ -28,6 +28,8 @@
 #include "../../common_src/GameListItem.h"
 #include "../../common_src/LobbyStatusData.h"
 
+#include "client_game_status.h"
+
 class ThreadGame: public Thread {
         int id; /*numero de partida*/
         int map_id; /*id del mapa de la partida*/
@@ -43,6 +45,8 @@ class ThreadGame: public Thread {
         /*clave: id del cliente, value: th cliente*/
         /*diccionario de clientes en partida*/
         std::unordered_map<int,ThreadClient*> clients;
+        
+        std::unordered_map<int,ClientGameStatus> clientGameStatuses;
         
         GameStatus gameStatus;
 

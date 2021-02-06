@@ -79,6 +79,7 @@ void ThreadClient::run() {
 					this->sendLobbyStatus(m.getEntity());
 					break;
 				case TYPE_SERVER_SEND_GAME_UPDATE:
+					this->sendGameUpdate();
 					break;
 				default:
 					break;
@@ -89,6 +90,12 @@ void ThreadClient::run() {
             if (!keep_running) break;
         } 
     }
+}
+
+void ThreadClient::sendGameUpdate() {
+	std::cout << "sending game status update (mock)" << std::endl;
+	return;
+	
 }
 
 void ThreadClient::assignToOutQueue(BlockingQueue<Message>* messages_out){

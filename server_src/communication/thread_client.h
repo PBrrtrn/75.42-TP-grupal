@@ -31,7 +31,8 @@ private:
     
 	void sendJoinOk();
 	void sendJoinRefused();
-
+	void sendGameUpdate();
+	
 public:
 
     ThreadClient(int id, BlockingQueue<Message>& messages, 

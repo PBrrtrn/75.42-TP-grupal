@@ -20,8 +20,8 @@ private:
 	Statistics statistics;
 	std::unordered_map<int, Vector> playersPositions;
 	std::unordered_map<int, Vector> playersDirections;
-	std::unordered_map<int,Player> players;
-	std::unordered_map<int,Door> doors;
+	std::unordered_map<int, Player> players;
+	std::unordered_map<int, Door> doors;
 	std::vector<Item> items;
 	Vector angle;
 	Map map;
@@ -57,7 +57,12 @@ public:
 	friend class ChangeWeaponLanzaCohetes;
 	friend class UseDoor;
     
+    friend class ClientGameStatus;
+    
 	~GameStatus();
+	
+	
+	
 };
 
 #endif //GAMESTATUS_H
