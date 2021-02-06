@@ -1,3 +1,4 @@
+#include <iostream>
 #include "InputHandler.h"
 
 #include "../enums/UpdateType.h"
@@ -23,12 +24,15 @@ void InputHandler::process(SDL_Event user_event) {
 	} else if (user_event.type == SDL_KEYDOWN) {
 		switch (user_event.key.keysym.sym) {
 			case (SDLK_w) :
+				std::cout << "pressed W" << std::endl;
 				this->update_queue.pushUpdate(MENU_MOVE_UP);
 				break;
 			case (SDLK_s) :
+				std::cout << "pressed S" << std::endl;
 				this->update_queue.pushUpdate(MENU_MOVE_DOWN);
 				break;
 			case (SDLK_SPACE) :
+				std::cout << "pressed Spacebar" << std::endl;
 				this->update_queue.pushUpdate(MENU_SELECT_OPTION);
 				break;
 		}

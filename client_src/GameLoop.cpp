@@ -33,7 +33,7 @@ void GameLoop::run() {
   std::atomic<bool> in_game(false);
   UpdateQueue update_queue;
 
-  InputHandler user_input_handler(in_game, update_queue);
+  InputHandler input_handler(in_game, update_queue);
   // Pasar socket/ServerConnection más adelante para poder enviar el input al server
 
   StatusUpdater status_updater(in_game, update_queue, 
@@ -57,8 +57,7 @@ void GameLoop::run() {
       // TODO: Salir de forma ordenada
       throw 1;
     }
-
-    user_input_handler.process(user_event);
+    input_handler.process(user_event);
 
     auto t = std::chrono::steady_clock::now() - start_t;
     auto sleep_t = std::chrono::duration_cast<std::chrono::microseconds>(t);
