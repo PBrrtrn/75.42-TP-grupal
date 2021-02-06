@@ -98,8 +98,10 @@ void ThreadClient::sendGameUpdate() {
 		return;
 	}
 	std::cout << "antes de send playerstatus: ID--> " << std::to_string(this->game_status->thisPlayerStatus.clientId) << std::endl;
-	this->peer.socket_send((char*)(&this->game_status->thisPlayerStatus), 
-		sizeof(PlayerStatus));
+	//PlayerStatus ps = this->game_status->thisPlayerStatus;
+	int sent = this->peer.socket_send((char*)(&this->game_status->thisPlayerStatus), sizeof(PlayerStatus));
+	//int sent = this->peer.socket_send("a", 1);
+	//std::cout << "sent bytes: " << std::to_string(sent) << std::endl;
 /*
 	char player_size = this->game_status->players.size()*sizeof(PlayerListItem);
 	this->peer.socket_send(&player_size, sizeof(char));

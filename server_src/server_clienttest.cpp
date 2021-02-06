@@ -115,10 +115,18 @@ int main(const int argc, const char* argv[]) {
 					std::cout << "lobby status: players:" << (int)ls.players<< "remaining time: " << 
 					(int)ls.remainingTime << std::endl;
 				}
+				
+				socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData));
+				
+				std::cout << "last lobby status: players:" << (int)ls.players << std::endl;
+				
 				while (ls.gameStarted) {
 					PlayerStatus ps;
+					//char a = 'x';
 					socket.socket_receive((char*)(&ps), sizeof(PlayerStatus));
+					//socket.socket_receive((char*)(&a), sizeof(char));
 					std::cout << "player status: ID--> " << std::to_string(ps.clientId) << std::endl;
+					//std::cout << "player status: ID--> " << a << std::endl;
 				}
 			}
 		}
@@ -142,6 +150,11 @@ int main(const int argc, const char* argv[]) {
 					std::cout << "lobby status: players:" << (int)ls.players<< "remaining time: " << 
 					(int)ls.remainingTime << std::endl;
 				}
+				
+				socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData));
+				
+				std::cout << "last lobby status: players:" << (int)ls.players << std::endl;				
+				
 				while (ls.gameStarted) {
 					PlayerStatus ps;
 					socket.socket_receive((char*)(&ps), sizeof(PlayerStatus));
