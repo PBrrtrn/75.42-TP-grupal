@@ -27,6 +27,7 @@ add_library(server_classes SHARED
   ./games/ServerStatus.cpp
   ./games/lobbyStatus.cpp
   ./games/client_game_status.cpp
+  ./games/MapServer.cpp
   ./server_main.cpp
   ./server.cpp
   ./weapons/arma.cpp

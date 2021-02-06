@@ -1,20 +1,28 @@
 #ifndef __MAP_H__
 #define __MAP_H__
 
+#include <iostream>
+#include <sstream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <iostream>
 #include <yaml-cpp/yaml.h>
+////#include "../server_src/items/item.h"
+////#include "../server_src/games/door.h"
+////#include "Vector.h"
+#include "File.h"
+////#include "../server_src/items/food.h"
 
 class Map {
 private:
-	std::vector<std::vector<int>> grid; // Usar arrays
+	std::vector<std::vector<int>> grid; 
 	int width;
 	int height;
-	int minPlayers;
-	int maxPlayers;
+	
 public:
 	Map();
+	Map(char* file_content);
 	Map(const char *file_location);
 	Map(const std::string& file_location);
 	~Map();
@@ -23,8 +31,6 @@ public:
 	int isWall(int x, int y);
 	int getWidth();
 	int getHeight();
-	int getMaxPlayers();
-	int getMinPlayers();
 };
 
 #endif

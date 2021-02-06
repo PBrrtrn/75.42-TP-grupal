@@ -1,7 +1,7 @@
 #include "game_status.h"
 
-GameStatus::GameStatus(std::string mapLocation) {
-	this->map = Map(mapLocation);
+GameStatus::GameStatus(std::string mapLocation) : map(mapLocation) {
+	//this->map = MapServer(mapLocation);
 }
 
 void GameStatus::setPosition(int playerID, float pos_x, float pos_y) {

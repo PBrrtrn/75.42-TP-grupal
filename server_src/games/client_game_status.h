@@ -35,6 +35,7 @@ struct PlayerListItem {
 
 //listado de items asociados a este 
 struct ItemListElement {
+	char type;
 	Vector pos;
 	bool isVisible;
 };

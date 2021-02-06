@@ -12,7 +12,7 @@ Action::Action(){
 void Action::tryAction(GameStatus& gs, int clientID) {}
 
 bool Action:: is_colision(int clientID, Vector& next_position, GameStatus& gs) {
-	Map& map = gs.map;
+	MapServer& map = gs.map;
 
     double x_grid;
     modf(next_position.getXCoordinate() / map.getWidth(), &x_grid);
