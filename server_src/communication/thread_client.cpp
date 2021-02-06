@@ -116,7 +116,7 @@ void ThreadClient::sendLobbyStatus(int gameID) {
 	std::cout << "players: " << lobbyStatus.players << std::endl;
 	std::cout << "remaining time: " << lobbyStatus.remainingTime << std::endl;
 	std::cout << "--------------------" << std::endl;
-	this->peer.socket_send((char*)(&lobbyStatus), sizeof(LobbyStatus));
+	this->peer.socket_send((char*)(&lobbyStatus), sizeof(LobbyStatusData));
 	std::cout << "terminando send lobby status "<< std::endl;
 }
 
