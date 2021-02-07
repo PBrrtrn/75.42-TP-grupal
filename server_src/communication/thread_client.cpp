@@ -83,6 +83,8 @@ void ThreadClient::run() {
 				case TYPE_SERVER_SEND_GAME_UPDATE:
 					this->sendGameUpdate();
 					break;
+				case TYPE_SERVER_SEND_GAME_STATISTICS:
+					break;
 				default:
 					break;
 				}
@@ -159,6 +161,11 @@ void ThreadClient::sendGamesList() {
 void ThreadClient::sendLobbyStatus(int gameID) {
 	LobbyStatusData lobbyStatus = this->lobbyStatus.getLobbyStatus(gameID);
 	this->peer.socket_send((char*)(&lobbyStatus), sizeof(LobbyStatusData));
+}
+
+void ThreadClient::sendGameStatistics(int gameID) {
+	GameStatistics gs = this->game_status->getStatistics();
+	this->peer.socket_send((char*)(&gs), sizeof(GameStatistics));
 }
 
 void ThreadClient::sendMapsList() {

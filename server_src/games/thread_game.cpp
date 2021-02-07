@@ -80,7 +80,12 @@ void ThreadGame::checkPlayerPickups(){
 	this->gameStatus.checkPlayerPickups();
 }
 
-void ThreadGame::sendGameStatistics(){}
+void ThreadGame::sendGameStatistics(){
+	for (auto& it: this->out_queues) {
+        int clientId = it.first;
+        this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAME_STATISTICS, this->id, clientId));
+    }
+}
 
 void ThreadGame::checkNews() {
 	this->messages->lock();
@@ -157,7 +162,6 @@ void ThreadGame::sendLobbyStatus() {
 }
 
 void ThreadGame::sendGameUpdates(){
-	//TODO actualizar el client game status aqui
 	for (auto& it: this->clientGameStatuses) {
         int clientId = it.first;
         this->clientGameStatuses.at(clientId)->updateThisGameStatus();

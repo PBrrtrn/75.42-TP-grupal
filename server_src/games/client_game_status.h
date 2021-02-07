@@ -1,9 +1,10 @@
 #ifndef __CLIENT_GAME_STATUS_H
 #define __CLIENT_GAME_STATUS_H
-#include <vector>
 #include "../../common_src/Vector.h"
 #include "./game_status.h"
 #include <vector>
+#include <algorithm>
+#define TOP_STATISTICS 10
 
 //estatus del player asociado a este GameStatus
 struct PlayerStatus{
@@ -40,6 +41,27 @@ struct ItemListElement {
 	bool isVisible;
 };
 
+struct ClientKills {
+	char clientId;
+	int kills;
+};
+
+struct ClientPoints {
+	char clientId;
+	int puntaje;
+};
+
+struct ClientShootedBullets {
+	char clientId;
+	int bullets_shooted;
+};
+
+struct GameStatistics {
+	ClientKills kills[TOP_STATISTICS];
+	ClientPoints points[TOP_STATISTICS];
+	ClientShootedBullets bullets[TOP_STATISTICS];
+};
+
 class ClientGameStatus {
 
 	private:
@@ -51,6 +73,7 @@ class ClientGameStatus {
 		ClientGameStatus(GameStatus& gameStatus,int assignedClientId);
 		void updateThisGameStatus();
 		std::string getEntireMap();
+		GameStatistics getStatistics();
 		~ClientGameStatus();
 
 		PlayerStatus thisPlayerStatus;

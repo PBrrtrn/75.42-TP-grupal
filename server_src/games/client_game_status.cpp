@@ -1,5 +1,11 @@
 #include "./client_game_status.h"
 
+static bool comp(std::pair<int, int>& a,
+         std::pair<int, int>& b)
+{
+    return a.second < b.second;
+}
+
 ClientGameStatus::ClientGameStatus(GameStatus& gameStatus, int assignedClientId): gameStatus(gameStatus), assignedClientId(assignedClientId){
 	this->updateThisGameStatus();
 }
@@ -54,6 +60,46 @@ void ClientGameStatus::updateThisGameStatus(){
 
 std::string ClientGameStatus::getEntireMap(){
 	return this->gameStatus.getEntireMap();
+}
+
+GameStatistics ClientGameStatus::getStatistics() {
+	GameStatistics gs;
+
+	Statistics s = this->gameStatus.showStatistics();
+
+	std::vector<std::pair<int, int>> kills(s.enemigos_matados.begin(), s.enemigos_matados.end());
+	std::sort(kills.begin(), kills.end(), comp);
+
+	std::vector<std::pair<int, int>> points(s.puntos_tesoro.begin(), s.puntos_tesoro.end());
+	std::sort(points.begin(), points.end(), comp);
+
+	std::vector<std::pair<int, int>> bullets(s.balas_disparadas.begin(), s.balas_disparadas.end());
+	std::sort(bullets.begin(), bullets.end(), comp);
+
+	for (int i = 0; i < TOP_STATISTICS; i++) {
+		if (i < kills.size()) {
+			ClientKills gs_kills;
+			gs_kills.clientId = kills[i].first;
+			gs_kills.kills = kills[i].second;
+			gs.kills[i] = gs_kills;
+		}
+		
+		if (i < points.size()) {
+			ClientPoints gs_points;
+			gs_points.clientId = points[i].first;
+			gs_points.puntaje = points[i].second;
+			gs.points[i] = gs_points;
+		}
+
+		if (i < kills.size()) {
+			ClientShootedBullets gs_bullets;
+			gs_bullets.clientId = bullets[i].first;
+			gs_bullets.bullets_shooted = bullets[i].second;
+			gs.bullets[i] = gs_bullets;
+		}
+
+	}
+	return gs;
 }
 
 ClientGameStatus::~ClientGameStatus() {}

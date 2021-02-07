@@ -77,14 +77,20 @@ public:
     void sendLobbyStatus(int gameID);
 
     /**
+     * @brief Envia las estadisticas de la
+     * partida al finalizar
+     */
+    void sendGameStatistics(int gameID);
+
+    /**
      * @brief Envia al cliente su numero
      * de jugador asignado a través del socket.
      */
     void informClientId();
     
-     /**
-     * @brief Envia por socket el mapa actual donde va a jugar
-     */   
+    /**
+    * @brief Envia por socket el mapa actual donde va a jugar
+    */   
     
     void sendCurrentGameMap();
 
