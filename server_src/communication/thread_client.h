@@ -87,6 +87,10 @@ public:
      */   
     
     void sendCurrentGameMap();
+    
+    void informNothingToReport();
+    
+    void informSomethingToReport();
 
     virtual ~ThreadClient() override;
 };

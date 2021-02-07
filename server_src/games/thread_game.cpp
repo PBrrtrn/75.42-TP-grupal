@@ -24,10 +24,7 @@ void ThreadGame:: run() {
 	this->gameList.insert({this->id,game});
 	
 	
-	for (auto& it: this->out_queues) {
-        int clientId = it.first;
-        this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_MAP, 0, clientId));
-    }
+
 
 	while(start_running) {
 		//std::cout << "players now:" << this->gameStatus.getAlivePlayers() << std::endl;
@@ -51,6 +48,13 @@ void ThreadGame:: run() {
 	
 	std::cout << "Game started!" << std::endl;
 	this->sendLobbyStatus();
+	
+	std::cout << "Sending map to each client" << std::endl;
+	for (auto& it: this->out_queues) {
+        int clientId = it.first;
+        this->sendMapToClient(clientId);
+    }	
+	
     while (keep_running) {
 		this->checkNews();
         this->checkPlayerPickups();
@@ -66,6 +70,10 @@ void ThreadGame:: run() {
     
     this->sendGameStatistics();
 	this->is_dead = true;
+}
+
+void ThreadGame::sendMapToClient(int clientId){
+	this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_MAP, 0, clientId));
 }
 
 void ThreadGame::respawnItems(){

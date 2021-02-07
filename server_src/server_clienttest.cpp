@@ -106,27 +106,38 @@ int main(const int argc, const char* argv[]) {
 			std::cout << "send join game" << std::endl;	
 			socket.socket_send(buffer,length);
 			length = 1;
+			std::cout << "receive client id" << std::endl;	
 			socket.socket_receive(buffer,length);
 			if (buffer[0] == 0) {
 				std::cout << "join successful" << std::endl;
 				
-				int mapSize;
-				socket.socket_receive((char*)(&mapSize), sizeof(mapSize));
-				char mapa[mapSize];
-				socket.socket_receive(mapa, mapSize);	
-				//mapa[mapSize] = 0;	
-				std::cout << "mapa:" << std::string(mapa) << std::endl;
-				
 				LobbyStatusData ls;
 				ls.gameStarted = false;
-				while(!ls.gameStarted && socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData))) {
-					std::cout << "lobby status: players:" << (int)ls.players<< "remaining time: " << 
-					(int)ls.remainingTime << std::endl;
+				char clientEvent[2];
+				clientEvent[0] = TYPE_CLIENT_PING;
+				clientEvent[1] = 0;
+				while(!ls.gameStarted) {
+					char report;
+					socket.socket_receive(&report, sizeof(char));
+					if (report){
+						std::cout << "server has a lobby to send!" << std::endl;
+						socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData));
+						std::cout << "lobby status: players:" << (int)ls.players<< "remaining time: " << 
+						(int)ls.remainingTime << std::endl;					
+					}
+					socket.socket_send(clientEvent, sizeof(clientEvent));
+					
 				}
 				
 				socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData));
 				
 				std::cout << "last lobby status: players:" << (int)ls.players << std::endl;
+				
+				int mapSize;
+				socket.socket_receive((char*)(&mapSize), sizeof(mapSize));
+				char mapa[mapSize];
+				socket.socket_receive(mapa, mapSize);	
+				std::cout << "mapa:" << std::string(mapa) << std::endl;				
 				
 				while (ls.gameStarted) {
 					PlayerStatus ps;
@@ -158,6 +169,12 @@ int main(const int argc, const char* argv[]) {
 						socket.socket_receive((char*)(&item),sizeof(ItemListElement));
 						std::cout << "item is visible:" << std::to_string(item.isVisible? 1 : 0) << std::endl;	
 					}	
+					
+					char clientEvent[2];
+					clientEvent[0] = TYPE_CLIENT_PING;
+					clientEvent[1] = 0;
+					socket.socket_send(clientEvent, sizeof(clientEvent));					
+					
 				}
 			}
 		}
@@ -175,25 +192,34 @@ int main(const int argc, const char* argv[]) {
 			socket.socket_receive(buffer,length);
 			if (buffer[0] == 0) {
 				std::cout << "start successful" << std::endl;
+								
+				LobbyStatusData ls;
+				ls.gameStarted = false;
+				char clientEvent[2];
+				clientEvent[0] = TYPE_CLIENT_PING;
+				clientEvent[1] = 0;
+				while(!ls.gameStarted) {
+					char report;
+					socket.socket_receive(&report, sizeof(char));
+					if (report){
+						std::cout << "server has a lobby to send!" << std::endl;
+						socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData));
+						std::cout << "lobby status: players:" << (int)ls.players<< "remaining time: " << 
+						(int)ls.remainingTime << std::endl;					
+					}
+					socket.socket_send(clientEvent, sizeof(clientEvent));
+					
+				}
+				
+				socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData));
+				
+				std::cout << "last lobby status: players:" << (int)ls.players << std::endl;		
 				
 				int mapSize;
 				socket.socket_receive((char*)(&mapSize), sizeof(mapSize));
 				char mapa[mapSize];
 				socket.socket_receive(mapa, mapSize);	
-				//mapa[mapSize] = 0;	
-				std::cout << "mapa:" << std::string(mapa) << std::endl;
-				
-								
-				LobbyStatusData ls;
-				ls.gameStarted = false;
-				while(!ls.gameStarted && socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData))) {
-					std::cout << "lobby status: players:" << (int)ls.players<< "remaining time: " << 
-					(int)ls.remainingTime << std::endl;
-				}
-				
-				socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData));
-				
-				std::cout << "last lobby status: players:" << (int)ls.players << std::endl;				
+				std::cout << "mapa:" << std::string(mapa) << std::endl;		
 				
 				while (ls.gameStarted) {
 					PlayerStatus ps;
@@ -224,7 +250,13 @@ int main(const int argc, const char* argv[]) {
 						std::cout << "receiving item in list" << std::endl;
 						socket.socket_receive((char*)(&item),sizeof(ItemListElement));
 						std::cout << "item is visible:" << std::to_string(item.isVisible? 1 : 0) << std::endl;	
-					}	
+					}
+					
+					char clientEvent[2];
+					clientEvent[0] = TYPE_CLIENT_PING;
+					clientEvent[1] = 0;
+					socket.socket_send(clientEvent, sizeof(clientEvent));
+						
 				}
 			}
 							
