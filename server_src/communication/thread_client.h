@@ -11,7 +11,8 @@
 #include "../games/client_game_status.h"
 #include "../games/lobbyStatus.h"
 #include "../games/ServerStatus.h"
-#include "../maps/mapListItem.h"
+#include "../../common_src/MapListItem.h"
+#include "../../common_src/ClientMessage.h"
 
 #include <unistd.h>  //removeme
 

@@ -3,9 +3,10 @@
 
 #include "../common_src/Socket.h"
 #include "../common_src/GameListItem.h"
-#include "./maps/mapListItem.h"
+#include "../common_src/MapListItem.h"
 #include "./communication/message.h"
 #include "../common_src/LobbyStatusData.h"
+#include "../common_src/ClientMessage.h"
 #include "./games/client_game_status.h"
 
 #define BUF_SIZE 64
@@ -13,10 +14,9 @@
 void connectAndGetClientId(Socket& socket){
 	char buffer[BUF_SIZE];
 	bool resultado = socket.socket_connect("localhost","9000");
-	int length = 1;
+	int length = sizeof(char);
 	//recibo el clientId
 	socket.socket_receive(buffer,length);
-	//socket.socket_send(("r"),sizeof(("r"))); //prueba, a ver que hace
 	std::string clientId = std::to_string(buffer[0]);
 	std::cout << "client id:" << clientId << std::endl;
 	
@@ -65,38 +65,46 @@ void getAndPrintMapList(Socket& socket){
 	}	
 }
 
-void askForGameList(Socket& socket){
-	char buffer[BUF_SIZE];
-	int length = 2;
-	buffer[0] = TYPE_REFRESH_GAMES_LIST;
-	buffer[1] = 0;
+void askForGameList(Socket& socket){	
+	ClientMessage m;
 	
-	socket.socket_send(buffer,length);
+	m.type = TYPE_REFRESH_GAMES_LIST;
+	m.entityId = 0;
+	
+	socket.socket_send((char*)(&m),sizeof(m));
 }
 
-void askForMapList(Socket& socket){
-	char buffer[BUF_SIZE];
-	int length = 2;
-	buffer[0] = TYPE_SEND_MAPS_LIST;
-	buffer[1] = 0;
+void askForMapList(Socket& socket){	
+	ClientMessage m;
 	
-	socket.socket_send(buffer,length);
+	m.type = TYPE_SEND_MAPS_LIST;
+	m.entityId = 0;
+	
+	socket.socket_send((char*)(&m),sizeof(m));	
+	
 }
 
-void joinOrStartGame(Socket& socket,char caracter,char mapOrGameId) {
+void joinOrStartGame(Socket& socket,MessageType caracter,char mapOrGameId) {
 char buffer[BUF_SIZE];			
 int length;
-buffer[0] = caracter;
-buffer[1] = mapOrGameId;
-length = 2;
+//buffer[0] = caracter;
+//buffer[1] = mapOrGameId;
+//length = 2;
+
+ClientMessage m;
+
+m.type = caracter;
+m.entityId = mapOrGameId;
+
 //envio el evento join game, ej: j 3
 if (caracter == TYPE_JOIN_GAME)
 	std::cout << "send join game" << std::endl;	
 if (caracter == TYPE_START_GAME)
 	std::cout << "send start game" << std::endl;	
-socket.socket_send(buffer,length);
+//socket.socket_send(buffer,length);
+socket.socket_send((char*)(&m),sizeof(m));	
 length = 1;
-std::cout << "receive client id" << std::endl;	
+std::cout << "receive join confirmation" << std::endl;	
 socket.socket_receive(buffer,length);
 if (buffer[0] == 0) {
 	std::cout << "join successful" << std::endl;
@@ -155,11 +163,27 @@ if (buffer[0] == 0) {
 		}
 		if (report == TYPE_SERVER_SEND_GAME_STATISTICS){
 				std::cout << "statistics - implement me!!!!!" << std::endl;
-		}					
-		socket.socket_send(clientEvent, sizeof(clientEvent));
+		}	
+		
+		m.type = m.type == TYPE_CLIENT_PING ? TYPE_MOVE_FORWARD : TYPE_CLIENT_PING ;
+		m.entityId = 0;
+		
+		
+		//alterno entre caminar hacia adelante y un ping
+		//clientEvent[0] = clientEvent[0] == TYPE_CLIENT_PING ? TYPE_MOVE_FORWARD : TYPE_CLIENT_PING ;
+		//clientEvent[1] = 0;				
+		//socket.socket_send(clientEvent, sizeof(clientEvent));
+		int size = sizeof(ClientMessage);
+		socket.socket_send((char*)(&size),sizeof(size));
+		socket.socket_send((char*)(&m),sizeof(m));	
 		
 	}
+} else {
+	std::cout << "join unsuccessful" << std::endl;
 }
+
+
+
 }
 
 int main(const int argc, const char* argv[]) {
@@ -169,19 +193,22 @@ int main(const int argc, const char* argv[]) {
 	Socket socket;
 	
 	connectAndGetClientId(socket);
-	getAndPrintGameList(socket);
 	    
     std::string line;
     while (socket.get_fd() != -1 && std::getline(std::cin, line)) {
 		if (line == "q" || line == "quit") break;
 		
-		if (line[0] == TYPE_JOIN_GAME || line[0] == TYPE_START_GAME) {
-			
-			char mapOrGameId = line[2];
-			
-			joinOrStartGame(socket,line[0],mapOrGameId);
+		if (line[0] == 'j' ) {
+			char mapOrGameId = std::stoi(line.substr(2,1));
+			joinOrStartGame(socket,TYPE_JOIN_GAME,mapOrGameId);
 			
 		}	
+
+		if (line[0] == 'n') {
+			char mapOrGameId = std::stoi(line.substr(2,1));
+			joinOrStartGame(socket,TYPE_START_GAME,mapOrGameId);
+			
+		}
 		
 		//se escribio "e"
 		if (line[0] == TYPE_EXIT_GAME) {
