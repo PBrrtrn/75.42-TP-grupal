@@ -161,7 +161,7 @@ void ThreadGame::checkNews() {
 }
 
 void ThreadGame::sendLobbyStatus() {
-	this->lobbyStatus.updateLobbyData(this->id, this->remaining_time, this->clients.size(),
+	this->lobbyStatus.updateLobbyData(this->id, this->waiting_time_to_start, this->clients.size(),
             this->getMaxPlayers(), !this->start_running);
 	for (auto& it: this->out_queues) {
         int clientId = it.first;

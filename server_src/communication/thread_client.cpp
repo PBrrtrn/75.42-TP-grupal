@@ -97,7 +97,7 @@ void ThreadClient::run() {
 				this->informNothingToReport();
 			}
 			
-			std::cout << "Escuchando eventos de cliente remoto o ping" << std::endl;
+			//std::cout << "Escuchando eventos de cliente remoto o ping" << std::endl;
 			
 			int size;
 			int received = this->peer.socket_receive((char*)(&size), sizeof(size));
@@ -121,13 +121,13 @@ void ThreadClient::run() {
 
 void ThreadClient::informNothingToReport(){
 	char message = TYPE_SERVER_NOTHING_TO_REPORT;
-	std::cout << "informando que no hay nada que reportar" << std::endl;
+	//std::cout << "informando que no hay nada que reportar" << std::endl;
 	this->peer.socket_send(&message, sizeof(char));
 }
 
 void ThreadClient::informSomethingToReport(int type){
 	char message = type;
-	std::cout << "informando que hay algo que reportar" << std::endl;
+	//std::cout << "informando que hay algo que reportar" << std::endl;
 	this->peer.socket_send(&message, sizeof(char));
 }
 

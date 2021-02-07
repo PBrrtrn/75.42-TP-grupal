@@ -69,8 +69,16 @@ class ThreadGame: public Thread {
         int waiting_time_to_start;
         
 
-        
+        /**
+         * @brief Hace un pop de la cola bloqueante
+         * para recibir un mensaje y hacer lo que corresponda
+         */
         void checkNews();
+
+        /**
+         * @brief Metodos que llaman a los metodos 
+         * correspondientes del game status
+         */
 		void checkPlayerPickups();
         void respawnItems();
 		void checkPlayerBullets();   
@@ -143,8 +151,6 @@ class ThreadGame: public Thread {
 
         bool isDead();
         void shutdown();
-        
-        
         
         virtual ~ThreadGame() override;
 };
