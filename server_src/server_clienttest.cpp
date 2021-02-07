@@ -165,14 +165,9 @@ if (buffer[0] == 0) {
 				std::cout << "statistics - implement me!!!!!" << std::endl;
 		}	
 		
-		m.type = m.type == TYPE_CLIENT_PING ? TYPE_MOVE_FORWARD : TYPE_CLIENT_PING ;
+		//alterno entre hacer "use" y un ping
+		m.type = m.type == TYPE_CLIENT_PING ? TYPE_USE_DOOR : TYPE_CLIENT_PING ;
 		m.entityId = 0;
-		
-		
-		//alterno entre caminar hacia adelante y un ping
-		//clientEvent[0] = clientEvent[0] == TYPE_CLIENT_PING ? TYPE_MOVE_FORWARD : TYPE_CLIENT_PING ;
-		//clientEvent[1] = 0;				
-		//socket.socket_send(clientEvent, sizeof(clientEvent));
 		int size = sizeof(ClientMessage);
 		socket.socket_send((char*)(&size),sizeof(size));
 		socket.socket_send((char*)(&m),sizeof(m));	

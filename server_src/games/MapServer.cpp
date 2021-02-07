@@ -18,11 +18,7 @@ MapServer::MapServer(const std::string& file_location): map(file_location.c_str(
 	
 	//TODO: levantar de YML
 	this->items.push_back(Food(Vector(10,10),true));
-	this->items.push_back(Food(Vector(12,9),true));
-	this->items.push_back(Food(Vector(15,11),true));
 	this->doors.push_back(Door(false,5,4));
-	this->doors.push_back(Door(false,4,4));
-	this->doors.push_back(Door(false,7,4));
 	this->respawnPoints.push_back(Vector(6,6));
 	this->respawnPoints.push_back(Vector(11,6));	
 	
