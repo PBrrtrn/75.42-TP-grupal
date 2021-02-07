@@ -1,6 +1,6 @@
 #include "message.h"
 
-Message::Message(int t,int e, int clientId) : type(t), entity(e), clientId(clientId){}
+Message::Message(MessageType t,int e, int clientId) : type(t), entity(e), clientId(clientId){}
 
 int Message::getClientId(){
 	return this->clientId;

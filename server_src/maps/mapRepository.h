@@ -7,7 +7,7 @@
 
 #include "../server_config.h"
 #include "../../common_src/Map.h"
-#include "mapListItem.h"
+#include "../../common_src/MapListItem.h"
 
 class MapRepository {
 	private:

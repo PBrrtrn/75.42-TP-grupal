@@ -1,7 +1,5 @@
 #include "thread_game.h"
 
-#define PREFERRED_PLAYERS 3
-
 ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m, 
 	std::unordered_map<int,GameListItem>& list, std::string map_location, int mapId, 
 	LobbyStatus& lobbyStatus) : 
@@ -15,7 +13,7 @@ ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m,
 
 void ThreadGame:: run() {
 	
-	std::cout << "Game waiting for more players!" << std::endl;
+	std::cout << "Game " << std::to_string(this->id) << " waiting for more players!" << std::endl;
 	
 	GameListItem game;
 	game.gameId = this->id;
@@ -24,10 +22,13 @@ void ThreadGame:: run() {
 	game.mapId = this->map_id;
 	
 	this->gameList.insert({this->id,game});
+	
+	
+
 
 	while(start_running) {
-		std::cout << "players now:" << this->gameStatus.getAlivePlayers() << std::endl;
-		if ( (this->gameStatus.getAlivePlayers() == PREFERRED_PLAYERS) || 
+		//std::cout << "players now:" << this->gameStatus.getAlivePlayers() << std::endl;
+		if ( (this->gameStatus.getAlivePlayers() == this->gameStatus.getMaxPlayers()) || 
 		 (this->gameStatus.getAlivePlayers() > 2 && this->waiting_time_to_start == 0)) {
 			this->keep_running = true;
 			this->start_running = false;
@@ -46,6 +47,14 @@ void ThreadGame:: run() {
 	this->gameList.erase(this->id);
 	
 	std::cout << "Game started!" << std::endl;
+	this->sendLobbyStatus();
+	
+	std::cout << "Sending map to each client" << std::endl;
+	for (auto& it: this->out_queues) {
+        int clientId = it.first;
+        this->sendMapToClient(clientId);
+    }	
+	
     while (keep_running) {
 		this->checkNews();
         this->checkPlayerPickups();
@@ -53,7 +62,7 @@ void ThreadGame:: run() {
         this->checkPlayerBullets();
         this->sendGameUpdates();
         
-        usleep(1000000/60); //todo: hacer variable respecto a tiempo 
+        usleep(1000000); //todo: hacer variable respecto a tiempo 
 		//demorado en ejecutar checkNews y sendUpdates
         this->remaining_time--;
 		this->keep_running = this->gameStatus.getAlivePlayers() > 1 && this->remaining_time != 0 && !this->is_dead;
@@ -61,6 +70,10 @@ void ThreadGame:: run() {
     
     this->sendGameStatistics();
 	this->is_dead = true;
+}
+
+void ThreadGame::sendMapToClient(int clientId){
+	this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_MAP, 0, clientId));
 }
 
 void ThreadGame::respawnItems(){
@@ -75,15 +88,20 @@ void ThreadGame::checkPlayerPickups(){
 	this->gameStatus.checkPlayerPickups();
 }
 
-void ThreadGame::sendGameStatistics(){}
+void ThreadGame::sendGameStatistics(){
+	for (auto& it: this->out_queues) {
+        int clientId = it.first;
+        this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAME_STATISTICS, this->id, clientId));
+    }
+}
 
 void ThreadGame::checkNews() {
 	this->messages->lock();
 	while (!this->messages->isEmptySync()) {
 		Message m = this->messages->popSync();
 
-		std::cout << "en el game: " << (char)m.getType() << ", client:" 
-			<< m.getClientId() << std::endl;
+		//std::cout << "en el game: " << (char)m.getType() << ", client:" 
+		//	<< m.getClientId() << std::endl;
 		
 		switch (m.getType())
 		{
@@ -143,7 +161,7 @@ void ThreadGame::checkNews() {
 }
 
 void ThreadGame::sendLobbyStatus() {
-	this->lobbyStatus.updateLobbyData(this->id, this->remaining_time, this->clients.size(),
+	this->lobbyStatus.updateLobbyData(this->id, this->waiting_time_to_start, this->clients.size(),
             this->getMaxPlayers(), !this->start_running);
 	for (auto& it: this->out_queues) {
         int clientId = it.first;
@@ -152,9 +170,13 @@ void ThreadGame::sendLobbyStatus() {
 }
 
 void ThreadGame::sendGameUpdates(){
+	for (auto& it: this->clientGameStatuses) {
+        int clientId = it.first;
+        this->clientGameStatuses.at(clientId)->updateThisGameStatus();
+    }	
 	for (auto& it: this->out_queues) {
         int clientId = it.first;
-        this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAME_UPDATE,0,clientId));
+        this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAME_UPDATE, 0, clientId));
     }
 }
 
@@ -168,8 +190,6 @@ void ThreadGame::expelClient(int id){
 bool ThreadGame::addClient(ThreadClient* client, int id){
 	if (!this->start_running) return false; //si el juego esta iniciado, no se pueden agregar
 									//mas jugadores a la partida
-	
-	std::cout << "en el game: " << this->id << ", client:" << id << " se inserto en este game." << std::endl;
 	this->clients.insert({id,client});
 	
 	BlockingQueue<Message>* queue_out = new BlockingQueue<Message>();
@@ -179,7 +199,8 @@ bool ThreadGame::addClient(ThreadClient* client, int id){
 	Vector position(3,4);
 	Vector direction(1,0);
 	this->gameStatus.addPlayer(id, position, direction);
-	this->clientGameStatuses.insert({id,ClientGameStatus(this->gameStatus,id)});
+	this->clientGameStatuses.insert({id, new ClientGameStatus(this->gameStatus,id)});
+	client->assignToGameStatus(this->clientGameStatuses.at(id));
 	return true;
 }
 

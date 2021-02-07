@@ -46,6 +46,7 @@ public:
     int getCurrentBullets();
     int getPoints();
     bool hasKey();
+    int getLives();
     bool changeWeapon(int weapon_idx);
     int getSelectedWeaponIndex();
 	~Player();

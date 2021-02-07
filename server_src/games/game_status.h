@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include "../../common_src/Vector.h"
-#include "../../common_src/Map.h"
+#include "MapServer.h"
 #include <unordered_map>
 #include "player.h"
 #include "../items/item.h"
@@ -24,7 +24,9 @@ private:
 	std::unordered_map<int, Door> doors;
 	std::vector<Item> items;
 	Vector angle;
-	Map map;
+	MapServer map;
+	std::string mapLocation;
+	std::string entireMap;
 	
 public:
 	
@@ -45,6 +47,8 @@ public:
 	void addPointTreasure(int playerID);
 	int getAlivePlayers();
 	int getMaxPlayers();
+	
+	std::string getEntireMap();
     
 	Statistics showStatistics();
     
@@ -60,9 +64,6 @@ public:
     friend class ClientGameStatus;
     
 	~GameStatus();
-	
-	
-	
 };
 
 #endif //GAMESTATUS_H

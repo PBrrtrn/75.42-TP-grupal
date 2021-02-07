@@ -34,7 +34,7 @@ class ThreadGame: public Thread {
         int id; /*numero de partida*/
         int map_id; /*id del mapa de la partida*/
         LobbyStatus& lobbyStatus;
-        LobbyStatusData lobbyData;
+        //LobbyStatusData lobbyData; TODO
         BlockingQueue<Message>* messages;
         std::unordered_map<int, BlockingQueue<Message>*> out_queues;
 
@@ -46,7 +46,7 @@ class ThreadGame: public Thread {
         /*diccionario de clientes en partida*/
         std::unordered_map<int,ThreadClient*> clients;
         
-        std::unordered_map<int,ClientGameStatus> clientGameStatuses;
+        std::unordered_map<int,ClientGameStatus*> clientGameStatuses;
         
         GameStatus gameStatus;
 
@@ -69,8 +69,16 @@ class ThreadGame: public Thread {
         int waiting_time_to_start;
         
 
-        
+        /**
+         * @brief Hace un pop de la cola bloqueante
+         * para recibir un mensaje y hacer lo que corresponda
+         */
         void checkNews();
+
+        /**
+         * @brief Metodos que llaman a los metodos 
+         * correspondientes del game status
+         */
 		void checkPlayerPickups();
         void respawnItems();
 		void checkPlayerBullets();   
@@ -139,6 +147,7 @@ class ThreadGame: public Thread {
 		char getMapId();
 		char getCurrentPlayers();
         char getMaxPlayers();
+		void sendMapToClient(int clientId);
 
         bool isDead();
         void shutdown();

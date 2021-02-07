@@ -1,7 +1,16 @@
 #include "game_status.h"
 
-GameStatus::GameStatus(std::string mapLocation) {
-	this->map = Map(mapLocation);
+GameStatus::GameStatus(std::string mapLocation) : map(mapLocation) {
+	this->mapLocation = mapLocation;
+	
+	File mapaArchivo(mapLocation.c_str());
+	
+	while (mapaArchivo.hasLine()) {
+		this->entireMap += mapaArchivo.getLine() + '\n';
+	}
+	
+	std::cout << "mapa completo:" << this->entireMap << std::endl;
+	
 }
 
 void GameStatus::setPosition(int playerID, float pos_x, float pos_y) {
@@ -97,6 +106,10 @@ void GameStatus::respawnItems(){
 		Item& item = it;
 		item.tick();
 	}
+}
+
+std::string GameStatus::getEntireMap(){
+	return this->entireMap;
 }
 
 GameStatus::~GameStatus() {}

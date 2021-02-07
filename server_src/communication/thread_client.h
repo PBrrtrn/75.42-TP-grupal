@@ -8,9 +8,11 @@
 #include "../games/game_status.h"
 #include "message.h"
 #include "../../common_src/GameListItem.h"
+#include "../games/client_game_status.h"
 #include "../games/lobbyStatus.h"
 #include "../games/ServerStatus.h"
-#include "../maps/mapListItem.h"
+#include "../../common_src/MapListItem.h"
+#include "../../common_src/ClientMessage.h"
 
 #include <unistd.h>  //removeme
 
@@ -27,6 +29,7 @@ private:
     std::atomic<bool> dead{false};
     ServerStatus serverStatus;
     LobbyStatus& lobbyStatus;
+    ClientGameStatus* game_status;
     bool choosing_game;
     
 	void sendJoinOk();
@@ -50,6 +53,13 @@ public:
     void assignToOutQueue(BlockingQueue<Message>* messages_out);
 
     /**
+     * @brief Guarda un puntero al gameStatus correspondiente
+     * al juego en el que esta el cliente
+     * @param gs: clase game status compartida con th game
+     */
+    void assignToGameStatus(ClientGameStatus* gs);
+
+    /**
      * @brief Envia al cliente la lista de juegos disponibles
      * activos en el momento en el que pidió el refresh
      */
@@ -68,10 +78,25 @@ public:
     void sendLobbyStatus(int gameID);
 
     /**
+     * @brief Envia las estadisticas de la
+     * partida al finalizar
+     */
+    void sendGameStatistics(int gameID);
+
+    /**
      * @brief Envia al cliente su numero
      * de jugador asignado a través del socket.
      */
     void informClientId();
+    
+    /**
+    * @brief Envia por socket el mapa actual donde va a jugar
+    */   
+    void sendCurrentGameMap();
+    
+    void informNothingToReport();
+    
+    void informSomethingToReport(int type);
 
     virtual ~ThreadClient() override;
 };

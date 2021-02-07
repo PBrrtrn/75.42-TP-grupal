@@ -4,7 +4,7 @@
 #include <unordered_map>
 
 class Statistics {
-    private:
+    public:
 
         /*key: player_id, value: cantidad de enemigos matados*/
 	    std::unordered_map<int, int> enemigos_matados;
@@ -12,8 +12,6 @@ class Statistics {
         std::unordered_map<int,int> puntos_tesoro;
         /*key: player_id, value: balas disparadas*/
         std::unordered_map<int,int> balas_disparadas;
-
-    public:
 
         Statistics();
         void addEnemyDead(int playerID);

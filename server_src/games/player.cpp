@@ -129,4 +129,8 @@ bool Player::hasKey(){
 	return this->has_key;
 }
 
+int Player::getLives(){
+	return this->vidas;
+}
+
 Player::~Player(){}
