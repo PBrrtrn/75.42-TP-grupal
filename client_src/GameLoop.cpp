@@ -35,7 +35,7 @@ void GameLoop::run() {
   UpdateQueue update_queue;
 
   ServerConnection server_connection;
-  InputHandler input_handler(in_game, update_queue);
+  InputHandler input_handler(in_game, update_queue, server_connection);
 
   StatusUpdater status_updater(in_game, update_queue, server_connection,
                                menu_status, game_status_monitor);
