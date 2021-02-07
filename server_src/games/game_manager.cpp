@@ -30,6 +30,8 @@ void GameManager:: _parse_message(Message message) {
     case TYPE_EXIT_GAME:
         this->expelClient(message.getClientId());
         break;        
+    case TYPE_CLIENT_PING:
+        break;     
     
     /*si el cliente mando un mensaje que esta asociado al juego donde 
      * esta jugando*/

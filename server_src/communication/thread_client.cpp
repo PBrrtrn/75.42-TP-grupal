@@ -61,6 +61,8 @@ void ThreadClient::run() {
 
 	} 
 
+	std::cout << "ThreadClient: voy a ingresar loop de juego" << std::endl;
+
     while (keep_running){
         try {
 
@@ -70,6 +72,7 @@ void ThreadClient::run() {
 			//y luego desbloquear
 			{
 				Message m = this->messages_out->pop();
+				this->informSomethingToReport();
 				//std::cout << "got a new event in outgoing queue in client " << this->id << 
 				//	" of type: " << m.getType() << std::endl; 
 				switch (m.getType())
@@ -88,13 +91,46 @@ void ThreadClient::run() {
 				default:
 					break;
 				}
+			} else {
+				this->informNothingToReport();
 			}
+			
+			std::cout << "Escuchando eventos de cliente remoto o ping" << std::endl;
+			
+			int received = this->peer.socket_receive(buffer, sizeof(char)*2);
+			if (received < sizeof(char)*2){
+				std::cout << "recv en threadclient fallo, no recibi nada! (cerro el socket?)" << std::endl;
+				this->shutdown();
+			} else {
+				Message m(buffer[0], buffer[1], this->id);
+				this->messages.push(m);				
+			}
+			
+
+			
+			
 
         } catch (...) {
             if (!keep_running) break;
-        } 
+        }
+        
+        
+         
     }
 }
+
+void ThreadClient::informNothingToReport(){
+	char message = 0;
+	std::cout << "informando que no hay nada que reportar" << std::endl;
+	this->peer.socket_send(&message, sizeof(char));
+}
+
+void ThreadClient::informSomethingToReport(){
+	char message = 1;
+	std::cout << "informando que hay algo que reportar" << std::endl;
+	this->peer.socket_send(&message, sizeof(char));
+}
+
 
 void ThreadClient::sendCurrentGameMap(){
    std::string mapa = this->game_status->getEntireMap();

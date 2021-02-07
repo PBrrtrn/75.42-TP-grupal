@@ -139,9 +139,12 @@ class ThreadGame: public Thread {
 		char getMapId();
 		char getCurrentPlayers();
         char getMaxPlayers();
+		void sendMapToClient(int clientId);
 
         bool isDead();
         void shutdown();
+        
+        
         
         virtual ~ThreadGame() override;
 };
