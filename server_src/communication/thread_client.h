@@ -96,7 +96,7 @@ public:
     
     void informNothingToReport();
     
-    void informSomethingToReport();
+    void informSomethingToReport(int type);
 
     virtual ~ThreadClient() override;
 };

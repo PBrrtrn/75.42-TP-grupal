@@ -72,7 +72,7 @@ void ThreadClient::run() {
 			//y luego desbloquear
 			{
 				Message m = this->messages_out->pop();
-				this->informSomethingToReport();
+				this->informSomethingToReport(m.getType());
 				//std::cout << "got a new event in outgoing queue in client " << this->id << 
 				//	" of type: " << m.getType() << std::endl; 
 				switch (m.getType())
@@ -120,13 +120,13 @@ void ThreadClient::run() {
 }
 
 void ThreadClient::informNothingToReport(){
-	char message = 0;
+	char message = TYPE_SERVER_NOTHING_TO_REPORT;
 	std::cout << "informando que no hay nada que reportar" << std::endl;
 	this->peer.socket_send(&message, sizeof(char));
 }
 
-void ThreadClient::informSomethingToReport(){
-	char message = 1;
+void ThreadClient::informSomethingToReport(int type){
+	char message = type;
 	std::cout << "informando que hay algo que reportar" << std::endl;
 	this->peer.socket_send(&message, sizeof(char));
 }
