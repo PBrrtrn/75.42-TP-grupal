@@ -5,6 +5,7 @@
 
 #include "GameLoop.h"
 
+#include "ServerConnection.h"
 #include "game_status/MenuStatus.h"
 #include "game_status/GameStatusMonitor.h"
 #include "event_handling/UpdateQueue.h"
@@ -33,13 +34,11 @@ void GameLoop::run() {
   std::atomic<bool> in_game(false);
   UpdateQueue update_queue;
 
+  ServerConnection server_connection;
   InputHandler input_handler(in_game, update_queue);
-  // Pasar socket/ServerConnection más adelante para poder enviar el input al server
 
-  StatusUpdater status_updater(in_game, update_queue, 
-                               menu_status, 
-                               game_status_monitor);
-  // Pasar socket/ServerConnection más adelante para recibir los updates
+  StatusUpdater status_updater(in_game, update_queue, server_connection,
+                               menu_status, game_status_monitor);
 
   Renderer renderer(this->config, in_game, 
                     game_status_monitor, 

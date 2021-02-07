@@ -1,6 +1,9 @@
 project(TPGrupal)
 
-add_library(client-classes SHARED GameLoop.cpp)
+add_library(client-classes SHARED 
+	GameLoop.cpp
+	ServerConnection.cpp
+)
 
 add_subdirectory(event_handling)
 add_subdirectory(game_status)

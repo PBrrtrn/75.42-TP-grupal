@@ -4,6 +4,8 @@ add_library(event-handling SHARED
 	InputHandler.cpp
 	KeyboardState.cpp
 	StatusUpdater.cpp
+	GameStatusUpdater.cpp
+	MenuStatusUpdater.cpp
 	UpdateQueue.cpp
 )
 
