@@ -92,7 +92,6 @@ public:
     /**
     * @brief Envia por socket el mapa actual donde va a jugar
     */   
-    
     void sendCurrentGameMap();
     
     void informNothingToReport();
