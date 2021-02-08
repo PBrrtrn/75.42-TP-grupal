@@ -122,6 +122,16 @@ int main(const int argc, const char* argv[]) {
 	
 	std::vector<std::vector<int>> datos;
 	
+	std::vector<std::string> items;
+	
+	std::string itemSerialized = "abc";
+	
+	items.push_back(itemSerialized);
+	
+	itemSerialized = "d,ef";
+	
+	items.push_back(itemSerialized);	
+	
 	for (int i = 0; i < 16; i++)
 		datos.push_back(std::vector<int>(16, i));
 	
@@ -136,6 +146,9 @@ int main(const int argc, const char* argv[]) {
 		outMap << YAML::Value << "16" ;		
 		outMap << YAML::Key << "grid";
 		outMap << YAML::Value << YAML::Flow << datos;		
+		
+		outMap << YAML::Key << "items";
+		outMap << YAML::Value << YAML::Flow << items;		
 
 	outMap << YAML::EndMap;
 	
@@ -154,6 +167,14 @@ int main(const int argc, const char* argv[]) {
 			}
 		std::cout << std::endl;
 	}
+	
+	std::vector<std::string> itemsReleidos = config["items"].as<std::vector<std::string>>();
+	
+	for (auto x: itemsReleidos){
+		std::cout << x ;
+		std::cout << std::endl;
+	}
+		
 	
 	//std::cout << outMap.c_str() << std::endl;
 

@@ -1,6 +1,7 @@
 #ifndef __CLIENT_GAME_STATUS_ELEMENTS_H
 #define __CLIENT_GAME_STATUS_ELEMENTS_H
 #include "Vector.h"
+#include "ItemType.h"
 #define TOP_STATISTICS 10
 
 //estatus del player asociado a este GameStatus
@@ -33,7 +34,7 @@ struct PlayerListItem {
 
 //listado de items asociados a este 
 struct ItemListElement {
-	char type;
+	ItemType type;
 	Vector pos;
 	bool isVisible;
 };

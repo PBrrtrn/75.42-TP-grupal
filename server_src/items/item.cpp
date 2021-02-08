@@ -69,5 +69,9 @@ bool Item::hasVolume(){
 	return has_volume;
 }
 
+ItemType Item::getType(){
+	return this->type;
+}
+
 
 Item::~Item() {}
