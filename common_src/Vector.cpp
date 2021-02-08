@@ -53,3 +53,7 @@ Vector& Vector::operator=(const Vector& another){
   this->y = another.y;
   return *this;
 }
+
+bool Vector::operator==(const Vector& another){
+  return ((this->x == another.x) && (this->y = another.y));
+}

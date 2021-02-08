@@ -11,16 +11,14 @@ ThreadClient::ThreadClient(int id, BlockingQueue<Message>& messages,
 
 void ThreadClient::run() {
     char buffer[BUF_SIZE];
-    ssize_t bytes_received = 0;
 
 	this->informClientId(); 
-	//this->sendGamesList(); //TODO removeme --> para pruebas con server_clienttest.cpp
 
 	this->choosing_game = true;
 
 	while(choosing_game){
 		ClientMessage cMessage;
-		int received = this->peer.socket_receive((char*)(&cMessage), sizeof(cMessage));
+		size_t received = this->peer.socket_receive((char*)(&cMessage), sizeof(cMessage));
 		//std::cout <<  "received:" << received << std::endl ;
 		if (received < sizeof(cMessage)){
 			std::cout << "recv en threadclient fallo, no recibi nada! (cerro el socket?)" << std::endl;
@@ -99,7 +97,7 @@ void ThreadClient::run() {
 			
 			//std::cout << "Escuchando eventos de cliente remoto o ping" << std::endl;
 			
-			int size;
+			size_t size;
 			int received = this->peer.socket_receive((char*)(&size), sizeof(size));
 			
 			ClientMessage cMessage;
@@ -134,7 +132,7 @@ void ThreadClient::informSomethingToReport(int type){
 
 void ThreadClient::sendCurrentGameMap(){
    std::string mapa = this->game_status->getEntireMap();
-   int size = mapa.length() + 1;
+   size_t size = mapa.length() + 1;
    
    std::cout << "tamanio del mapa:" << std::to_string(size) << std::endl;
    
@@ -151,7 +149,7 @@ void ThreadClient::sendGameUpdate() {
 	}
 	this->peer.socket_send((char*)(&this->game_status->thisPlayerStatus), sizeof(PlayerStatus));
 
-	int size = this->game_status->players.size()*sizeof(PlayerListItem);
+	size_t size = this->game_status->players.size()*sizeof(PlayerListItem);
 	this->peer.socket_send((char*)(&size), sizeof(size));
 	for (auto& it: this->game_status->players) {
 		this->peer.socket_send((char*)(&it), sizeof(PlayerListItem));
@@ -190,8 +188,8 @@ void ThreadClient::informClientId() {
 
 void ThreadClient::sendGamesList() {
 	std::vector<GameListItem> list = this->serverStatus.getGamesList();
-	char size = list.size()*sizeof(GameListItem);
-	this->peer.socket_send(&size, sizeof(char));
+	size_t size = list.size()*sizeof(GameListItem);
+	this->peer.socket_send((char*)(&size), sizeof(size));
 	for (auto& it: list) {
 		this->peer.socket_send((char*)(&it), sizeof(GameListItem));
 	}
@@ -210,8 +208,8 @@ void ThreadClient::sendGameStatistics(int gameID) {
 void ThreadClient::sendMapsList() {
 	//TODO chequear valgrind
 	const std::vector<MapListItem>& list = this->serverStatus.getMapsList();
-	char size = list.size()*sizeof(MapListItem);
-	this->peer.socket_send(&size, sizeof(char));
+	size_t size = list.size()*sizeof(MapListItem);
+	this->peer.socket_send((char*)(&size), sizeof(size));
 	for (auto& it: list) {
 		this->peer.socket_send((char*)(&it), sizeof(MapListItem));
 	}
