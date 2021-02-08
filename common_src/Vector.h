@@ -15,6 +15,7 @@ struct Vector {
   Vector operator+(const Vector &another);
   Vector operator-(const Vector &another);
   Vector& operator=(const Vector &another);
+  bool operator==(const Vector& another);
   float x;
   float y;
 };
