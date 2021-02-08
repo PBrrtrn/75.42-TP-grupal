@@ -38,8 +38,9 @@ void MenuStatusUpdater::handleStartGameScreen(int selected_option,
 			// Pedir empezar un juego con ese mapa
 		}
 	} else {
-		int n_options = maps.size() + 2;
+		int n_options = maps.size() + 1;
 		int move_direction = ((update == MENU_MOVE_UP) ? 1 : -1);
+		// updatear selected_option a new_selection como en handleLobbyScreen
 	}
 }
 
