@@ -51,6 +51,16 @@ int MapServer::isWall(int x, int y) {
 	return (this->map.getGridValue(x,y) > 0);
 }
 
+bool MapServer::isObstacle(Vector position) {
+	for (std::vector<Item>::iterator it = this->items.begin() ; it != this->items.end(); ++it) {
+		if ((*it).getPosition() == position) return true;
+	}
+	for (std::vector<Door>::iterator it = this->doors.begin() ; it != this->doors.end(); ++it) {
+		if ((*it).getLocation() == position && (*it).isLocked()) return true;
+	}
+	return false;
+}
+
 int MapServer::getWidth() {
 	return this->map.getWidth();
 }

@@ -40,6 +40,7 @@ public:
 	std::vector<int>& operator[](int x);
 	int getGridValue(int x, int y);
 	int isWall(int x, int y);
+	bool isObstacle(Vector position);
 	int getWidth();
 	int getHeight();
 	int getMaxPlayers();
