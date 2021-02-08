@@ -2,6 +2,7 @@
 
 Blood::Blood(Vector pos_inicial,bool respawns) : Item(pos_inicial,respawns) {
     this->amount = 1; //TODO pasar a config
+    this->type = TYPE_BLOOD;
 }
 
 bool Blood::pickUpAction(Player& p) {

@@ -3,10 +3,12 @@
 
 #include "../games/player.h"
 #include "../../common_src/Vector.h"
+#include "../../common_src/ItemType.h"
 
 class Item {
 
 protected:
+	ItemType type;
 	bool canBePicked;
 	int timeToRespawn;
 	int amount;
@@ -17,7 +19,7 @@ protected:
 
 public:
 
-	char item_type_id;
+	//char item_type_id;
 
 	Item(Vector pos_inicial,bool respawns);
 
@@ -37,8 +39,12 @@ public:
 	bool isVisible();
 	
 	bool hasVolume();
+	
+	ItemType getType();
 
 	virtual ~Item();
+	
+	friend class ItemSerializer;
 
 };
 

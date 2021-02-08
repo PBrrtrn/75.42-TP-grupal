@@ -4,7 +4,8 @@ Door::Door(bool is_locked,int xGridLocation,int yGridLocation){
 	this->locked = is_locked;
 	this->open = false;
 	this->time_to_close = 0;
-	this->location = Vector(xGridLocation*64,yGridLocation*64);
+	//this->location = Vector(xGridLocation*64,yGridLocation*64); //el problema es que cuando se vuelve a serializar, se vuelve a multiplicar por 64, es imposible de resolver en el constructor
+	this->location = Vector(xGridLocation,yGridLocation);
 }
 
 bool Door::isLocked(){

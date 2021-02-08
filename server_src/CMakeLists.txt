@@ -28,6 +28,9 @@ add_library(server-classes SHARED
   ./games/lobbyStatus.cpp
   ./games/client_game_status.cpp
   ./games/MapServer.cpp
+  ./games/DoorSerializer.cpp
+  ./games/SpawnPoint.cpp
+  ./games/SpawnPointSerializer.cpp
   ./server_main.cpp
   ./server.cpp
   ./weapons/arma.cpp
@@ -45,6 +48,11 @@ add_library(server-classes SHARED
   ./items/food.cpp
   ./items/key.cpp
   ./items/medkit.cpp
+  ./items/corpse.cpp
   ./items/treasure.cpp
+  ./items/table.cpp
+  ./items/water.cpp
+  ./items/barrel.cpp
+  ./items/ItemSerializer.cpp
   ./maps/mapRepository.cpp
 )

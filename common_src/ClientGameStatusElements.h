@@ -2,6 +2,7 @@
 #define __CLIENT_GAME_STATUS_ELEMENTS_H
 
 #include "Vector.h"
+#include "ItemType.h"
 
 #define TOP_STATISTICS 10
 
@@ -34,7 +35,7 @@ struct PlayerListItem {
 
 //listado de items asociados a este 
 struct ItemListElement {
-	char type;
+	ItemType type;
 	Vector pos;
 	bool isVisible;
 };

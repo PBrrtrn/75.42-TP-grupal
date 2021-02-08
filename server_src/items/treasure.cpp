@@ -2,6 +2,7 @@
 
 Treasure::Treasure(Vector pos_inicial,bool respawns) : Item(pos_inicial,respawns) {
     this->amount = 50; //TODO pasar a config -- VARIA EL VALOR OJO
+    this->type = TYPE_TREASURE;
 }
 
 bool Treasure::pickUpAction(Player& p) {

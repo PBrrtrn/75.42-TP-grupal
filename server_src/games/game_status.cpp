@@ -9,8 +9,24 @@ GameStatus::GameStatus(std::string mapLocation) : map(mapLocation) {
 		this->entireMap += mapaArchivo.getLine() + '\n';
 	}
 	
+	this->loadDoors();
+	this->loadItems();
+	
 	std::cout << "mapa completo:" << this->entireMap << std::endl;
 	
+}
+
+void GameStatus::loadItems(){
+	this->items = map.getItems();
+}
+
+void GameStatus::loadDoors() {
+	std::vector<Door> map_doors = this->map.getDoors();
+	int doors_amount = 0;
+	for (std::vector<Door>::iterator it = map_doors.begin() ; it != map_doors.end(); ++it) {
+		this->doors.insert({doors_amount, (*it)});
+		doors_amount++;
+	}
 }
 
 void GameStatus::setPosition(int playerID, float pos_x, float pos_y) {

@@ -2,6 +2,10 @@
 #include <fstream>
 #include <stdexcept>
 #include <vector>
+#include "./items/ItemSerializer.h"
+#include "./games/DoorSerializer.h"
+#include "./games/SpawnPointSerializer.h"
+//#include "./items/food.h"
 
 #include "server.h"
 
@@ -122,6 +126,37 @@ int main(const int argc, const char* argv[]) {
 	
 	std::vector<std::vector<int>> datos;
 	
+	ItemSerializer serializer;
+	DoorSerializer doorSerializer;
+	SpawnPointSerializer SPSerializer;
+	std::vector<std::string> items;
+	
+	std::vector<std::string> doors;
+	
+	Food f(Vector(1,10),false);
+	
+	std::string itemSerialized = serializer.serialize(f);
+	
+	items.push_back(itemSerialized);
+	
+	Bullets b(Vector(5,1),false);
+	itemSerialized = serializer.serialize(b);
+	
+	items.push_back(itemSerialized);	
+	
+	Door d(true,5,4);
+	
+	std::string doorSerialized = doorSerializer.serialize(d);
+	
+	doors.push_back(doorSerialized);
+	
+	Door d2(false,8,4);
+	
+	doorSerialized = doorSerializer.serialize(d2);
+	
+	doors.push_back(doorSerialized);	
+	
+	
 	for (int i = 0; i < 16; i++)
 		datos.push_back(std::vector<int>(16, i));
 	
@@ -136,6 +171,12 @@ int main(const int argc, const char* argv[]) {
 		outMap << YAML::Value << "16" ;		
 		outMap << YAML::Key << "grid";
 		outMap << YAML::Value << YAML::Flow << datos;		
+		
+		outMap << YAML::Key << "items";
+		outMap << YAML::Value << YAML::Flow << items;		
+		
+		outMap << YAML::Key << "doors";
+		outMap << YAML::Value << YAML::Flow << doors;			
 
 	outMap << YAML::EndMap;
 	
@@ -143,6 +184,8 @@ int main(const int argc, const char* argv[]) {
 	foutMap << outMap.c_str();
 	foutMap.close();
 
+	
+	//reabro el mapa para asegurarme que no meti basura
 	std::cout << "reload example map and print grid..." << std::endl;
 	YAML::Node config = YAML::LoadFile("../maps/map-test.yml");
 	
@@ -155,7 +198,44 @@ int main(const int argc, const char* argv[]) {
 		std::cout << std::endl;
 	}
 	
-	//std::cout << outMap.c_str() << std::endl;
+	std::vector<std::string> itemsReleidos = config["items"].as<std::vector<std::string>>();
+	
+	for (auto x: itemsReleidos){
+		std::cout << "elemento YML leido:" << x ;
+		std::cout << std::endl;
+		Item item(serializer.deserialize(x));
+		
+		std::string mensaje = "no reconoci el item!!";
+		
+		if (item.getType() == TYPE_FOOD){
+			mensaje = "era un food!!";
+		} 
+
+		if (item.getType() == TYPE_BULLETS){
+			mensaje = "eran bullets!!";
+		} 
+		
+		std::cout << mensaje << std::endl;
+		
+	}
+	
+	std::vector<std::string> doorsReleidas = config["doors"].as<std::vector<std::string>>();
+	
+	for (auto x: doorsReleidas){
+		std::cout << "elemento YML leido:" << x ;
+		std::cout << std::endl;
+		Door door(doorSerializer.deserialize(x));
+		
+		if (door.isLocked()) {
+			std::cout << "es una puerta cerrada" << std::endl;
+		}
+		
+		std::cout << "pos puerta: "
+			<< std::to_string(door.getLocation().getXCoordinate()) << " - "
+			<< std::to_string(door.getLocation().getYCoordinate()) << std::endl;
+
+	}	
+		
 
     return 0;
 }
