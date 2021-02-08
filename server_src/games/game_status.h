@@ -27,6 +27,9 @@ private:
 	MapServer map;
 	std::string mapLocation;
 	std::string entireMap;
+
+	void loadItems();
+	void loadDoors();
 	
 public:
 	

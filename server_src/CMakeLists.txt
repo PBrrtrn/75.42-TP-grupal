@@ -48,7 +48,11 @@ add_library(server_classes SHARED
   ./items/food.cpp
   ./items/key.cpp
   ./items/medkit.cpp
+  ./items/corpse.cpp
   ./items/treasure.cpp
+  ./items/table.cpp
+  ./items/water.cpp
+  ./items/barrel.cpp
   ./items/ItemSerializer.cpp
   ./maps/mapRepository.cpp
 )
