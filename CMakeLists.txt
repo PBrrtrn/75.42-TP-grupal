@@ -14,5 +14,5 @@ set(CMAKE_BUILD_TYPE Debug)
 
 target_link_libraries(Client client_classes common_classes yaml-cpp SDL2 SDL2_image)
 target_link_libraries(Server server_classes common_classes yaml-cpp pthread)
-target_link_libraries(ServerConfigGenerator yaml-cpp)
+target_link_libraries(ServerConfigGenerator server_classes common_classes pthread yaml-cpp)
 target_link_libraries(ServerClientTest common_classes yaml-cpp pthread)

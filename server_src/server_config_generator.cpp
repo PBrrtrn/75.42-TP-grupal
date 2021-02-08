@@ -2,6 +2,8 @@
 #include <fstream>
 #include <stdexcept>
 #include <vector>
+#include "./items/ItemSerializer.h"
+//#include "./items/food.h"
 
 #include "server.h"
 
@@ -122,15 +124,23 @@ int main(const int argc, const char* argv[]) {
 	
 	std::vector<std::vector<int>> datos;
 	
+	ItemSerializer serializer;
 	std::vector<std::string> items;
 	
-	std::string itemSerialized = "abc";
+	Food f(Vector(1,10),false);
+	
+	std::string itemSerialized = serializer.serialize(f);
 	
 	items.push_back(itemSerialized);
 	
-	itemSerialized = "d,ef";
+	Bullets b(Vector(5,1),false);
+	itemSerialized = serializer.serialize(b);
 	
 	items.push_back(itemSerialized);	
+	
+	//itemSerialized = "d,ef";
+	
+	//items.push_back(itemSerialized);	
 	
 	for (int i = 0; i < 16; i++)
 		datos.push_back(std::vector<int>(16, i));
@@ -171,8 +181,22 @@ int main(const int argc, const char* argv[]) {
 	std::vector<std::string> itemsReleidos = config["items"].as<std::vector<std::string>>();
 	
 	for (auto x: itemsReleidos){
-		std::cout << x ;
+		std::cout << "elemento YML leido:" << x ;
 		std::cout << std::endl;
+		Item item(serializer.deserialize(x));
+		
+		std::string mensaje = "no reconoci el item!!";
+		
+		if (item.getType() == TYPE_FOOD){
+			std::cout << "era un food!!" << std::endl;
+		} 
+
+		if (item.getType() == TYPE_BULLETS){
+			std::cout << "eran bullets!!" << std::endl;
+		} 
+		
+		std::cout << mensaje << std::endl;
+		
 	}
 		
 	
