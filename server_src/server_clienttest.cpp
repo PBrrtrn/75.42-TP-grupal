@@ -14,7 +14,7 @@
 void connectAndGetClientId(Socket& socket){
 	char buffer[BUF_SIZE];
 	bool resultado = socket.socket_connect("localhost","9000");
-	int length = sizeof(char);
+	size_t length = sizeof(char);
 	//recibo el clientId
 	socket.socket_receive(buffer,length);
 	std::string clientId = std::to_string(buffer[0]);
@@ -23,19 +23,20 @@ void connectAndGetClientId(Socket& socket){
 }
 
 void getAndPrintGameList(Socket& socket){
-	char buffer[BUF_SIZE];
-	int length = 1;
+	//char buffer[BUF_SIZE];
+	//size_t length = 1;
 	//recibo el size del game list	
-	socket.socket_receive(buffer,length);
-	buffer[length] = '\0';	
-	std::string gameListSize = std::to_string(buffer[0]);
+	size_t size;
+	socket.socket_receive((char*)(&size),sizeof(size));
+	//buffer[length] = '\0';	
+	std::string gameListSize = std::to_string(size);
 	std::cout << "size of game list:" << gameListSize << std::endl;	
 	
 	GameListItem list_item;
 	
-	std::cout << "iterations:" << buffer[0]/sizeof(GameListItem) << std::endl;
+	std::cout << "iterations:" << size/sizeof(GameListItem) << std::endl;
 	
-	for (int i = 0; i < buffer[0]/sizeof(GameListItem); i++ ){
+	for (int i = 0; i < size/sizeof(GameListItem); i++ ){
 		std::cout << "receiving game in list" << std::endl;
 		socket.socket_receive((char*)(&list_item),sizeof(GameListItem));
 		std::cout << "game index:" << i << ", gameId:" <<  std::to_string(list_item.gameId) << ",players:" << std::to_string(list_item.players)<< ",maxPlayers:" << std::to_string(list_item.maxPlayers)<< ",mapId:" << std::to_string(list_item.mapId) << std::endl;	
@@ -43,19 +44,22 @@ void getAndPrintGameList(Socket& socket){
 }
 
 void getAndPrintMapList(Socket& socket){
-	char buffer[BUF_SIZE];
-	int length = 1;
+	//char buffer[BUF_SIZE];
+	//int length = 1;
 
-	socket.socket_receive(buffer,length);
-	buffer[length] = '\0';	
-	std::string MapListSize = std::to_string(buffer[0]);
+	size_t size;
+	//size_t length;
+
+	socket.socket_receive((char*)(&size),sizeof(size));
+	//buffer[length] = '\0';	
+	std::string MapListSize = std::to_string(size);
 	std::cout << "size of map list:" << MapListSize << std::endl;	
 	
 	MapListItem list_item;
 	
-	std::cout << "iterations:" << buffer[0]/sizeof(MapListItem) << std::endl;
+	std::cout << "iterations:" << size/sizeof(MapListItem) << std::endl;
 	
-	for (int i = 0; i < buffer[0]/sizeof(MapListItem); i++ ){
+	for (int i = 0; i < size/sizeof(MapListItem); i++ ){
 		std::cout << "receiving maps in list" << std::endl;
 		socket.socket_receive((char*)(&list_item),sizeof(MapListItem));
 		std::cout << "map index:" << i << ", map id:" <<  std::to_string(list_item.mapId) 
@@ -111,9 +115,9 @@ if (buffer[0] == 0) {
 	
 	LobbyStatusData ls;
 	ls.gameStarted = false;
-	char clientEvent[2];
-	clientEvent[0] = TYPE_CLIENT_PING;
-	clientEvent[1] = 0;
+	//char clientEvent[2];
+	//clientEvent[0] = TYPE_CLIENT_PING;
+	//clientEvent[1] = 0;
 	char report;				
 	while(true) {
 		char report;
@@ -124,7 +128,7 @@ if (buffer[0] == 0) {
 			std::cout << "lobby status: players:" << (int)ls.players<< "remaining time: " << (int)ls.remainingTime << std::endl;					
 		}
 		if (report == TYPE_SERVER_SEND_MAP){
-			int mapSize;
+			size_t mapSize;
 			socket.socket_receive((char*)(&mapSize), sizeof(mapSize));
 			char mapa[mapSize];
 			socket.socket_receive(mapa, mapSize);	
@@ -135,8 +139,8 @@ if (buffer[0] == 0) {
 			socket.socket_receive((char*)(&ps), sizeof(PlayerStatus));
 			std::cout << "this player status - ID:" << std::to_string(ps.clientId) << std::endl;
 			
-			int size;
-			socket.socket_receive((char*)(&size), sizeof(int));
+			size_t size;
+			socket.socket_receive((char*)(&size), sizeof(size));
 			
 			PlayerListItem player;
 			for (int i = 0; i < size/sizeof(PlayerListItem); i++ ){
@@ -145,7 +149,7 @@ if (buffer[0] == 0) {
 				std::cout << "player id:" << std::to_string(player.clientId) << std::endl;	
 			}						
 
-			socket.socket_receive((char*)(&size), sizeof(int));
+			socket.socket_receive((char*)(&size), sizeof(size));
 			DoorListItem door;
 			for (int i = 0; i < size/sizeof(DoorListItem); i++ ){
 				std::cout << "receiving door in list" << std::endl;
@@ -153,7 +157,7 @@ if (buffer[0] == 0) {
 				std::cout << "door is open:" << std::to_string(door.isOpen ? 1 : 0) << std::endl;	
 			}							
 
-			socket.socket_receive((char*)(&size), sizeof(int));
+			socket.socket_receive((char*)(&size), sizeof(size));
 			ItemListElement item;
 			for (int i = 0; i < size/sizeof(ItemListElement); i++ ){
 				std::cout << "receiving item in list" << std::endl;
@@ -168,7 +172,7 @@ if (buffer[0] == 0) {
 		//alterno entre hacer "use" y un ping
 		m.type = m.type == TYPE_CLIENT_PING ? TYPE_USE_DOOR : TYPE_CLIENT_PING ;
 		m.entityId = 0;
-		int size = sizeof(ClientMessage);
+		size_t size = sizeof(ClientMessage);
 		socket.socket_send((char*)(&size),sizeof(size));
 		socket.socket_send((char*)(&m),sizeof(m));	
 		
@@ -207,14 +211,20 @@ int main(const int argc, const char* argv[]) {
 		
 		//se escribio "e"
 		if (line[0] == TYPE_EXIT_GAME) {
-			int length;
-			buffer[0] = TYPE_EXIT_GAME;
-			buffer[1] = 0;
-			length = 2;
+			//size_t length;
+			//buffer[0] = TYPE_EXIT_GAME;
+			//buffer[1] = 0;
+			//length = 2;
+			
+			ClientMessage m;
+
+			m.type = TYPE_EXIT_GAME;
+			m.entityId = 0;			
+			
 			//envio el evento new game, ej: n 10
 			std::cout << "send exit game" << std::endl;			
-			socket.socket_send(buffer,length);
-			length = 1;
+			socket.socket_send((char*)(&m),sizeof(m));	
+			//length = 1;
 			//socket.socket_receive(buffer,length);
 			//if (buffer[0] == 0)
 			std::cout << "exit successful" << std::endl;	

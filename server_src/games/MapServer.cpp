@@ -1,14 +1,5 @@
 #include "MapServer.h"
 
-//MapServer::MapServer(const char* file_location) {
-	
-	//YAML::Node mapa = YAML::LoadFile(std::string(file_location));
-	
-	//this->width = mapa["width"].as<int>();
-	//this->height = mapa["height"].as<int>();	
-	//this->grid = mapa["grid"].as<std::vector<std::vector<int>>>();
-//}
-
 MapServer::MapServer(const std::string& file_location): map(file_location.c_str()){
 	
 	YAML::Node mapa = YAML::LoadFile(file_location);
@@ -16,17 +7,15 @@ MapServer::MapServer(const std::string& file_location): map(file_location.c_str(
 	this->minPlayers = mapa["minPlayers"].as<int>();
 	this->maxPlayers = mapa["maxPlayers"].as<int>();
 	
-	this->items_yml = mapa["items"].as<std::vector<std::string>>();
-	this->loadItems();
-	this->doors_yml = mapa["doors"].as<std::vector<std::string>>();
-	this->loadDoors();
-
-	/*
-	this->items.push_back(Food(Vector(10,10),true));
-	this->doors.push_back(Door(false,5,4));
-	this->respawnPoints.push_back(SpawnPoint(Vector(6,6),Vector(1,0)));
-	this->respawnPoints.push_back(SpawnPoint(Vector(11,6),Vector(1,0)));
-	*/	
+	
+	if (mapa["items"]){
+		this->items_yml = mapa["items"].as<std::vector<std::string>>();
+		this->loadItems();
+	}
+	if (mapa["doors"]){
+		this->doors_yml = mapa["doors"].as<std::vector<std::string>>();
+		this->loadDoors();
+	}
 	
 }
 
