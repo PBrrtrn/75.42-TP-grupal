@@ -1,89 +1,186 @@
 #include <iostream>
+
 #include "ServerConnection.h"
+#include "../common_src/ClientMessage.h"
+#include "../common_src/ClientGameStatusElements.h"
 
 ServerConnection::ServerConnection(std::string host, std::string service) {
-	if (!this->socket.socket_connect(host.c_str(), service.c_str())) {
+	if (!this->socket.socket_connect(host.c_str(), service.c_str()))
 		throw ServerConnectionError("Failed to connect");
-	} else {
-		char buffer[1];
-		socket.socket_receive(buffer, sizeof(char));
+		
+	char buffer;
+	socket.socket_receive(&buffer, sizeof(char));
 
-		this->client_id = int(buffer[0]);
-		std::cout << client_id << std::endl;
-	}
+	this->client_id = buffer;
+	std::cout << (int)client_id << std::endl;
 }
 
 
 ServerConnection::~ServerConnection() { }
 
-std::vector<MapItem> ServerConnection::fetchAvailableMaps() {
+std::vector<MapListItem> ServerConnection::fetchAvailableMaps() {
 	std::unique_lock<std::mutex> lock(this->mutex);
-	/* Enviar un MessageType TYPE_SEND_MAP_LIST
-		 Se va a recibir un header de tipo int/uint con el número de bytes
-		 que se van a recibir. El número de items es nBytes/sizeof(MapListItem)
 
-		 Luego del header se recibe una cierta cantidad de structs MapListItem
-	*/
+	ClientMessage message { TYPE_SEND_MAPS_LIST, 0 };
+	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
+
+	char buffer[sizeof(size_t)];
+	socket.socket_receive(buffer, sizeof(size_t));
+	size_t response_size = *((size_t*)buffer);
+	size_t n_maps = response_size/sizeof(MapListItem);
+
+	std::vector<MapListItem> maps;
+	maps.reserve(n_maps);
+	for (int i = 0; i < n_maps; i++) {
+		MapListItem item;
+		socket.socket_receive((char*)&item, sizeof(MapListItem));
+
+		maps.push_back(item);
+	}
+	return maps;
 }
 
-std::vector<GameOption> ServerConnection::fetchGameOptions() {
+std::vector<GameListItem> ServerConnection::fetchGameOptions() {
 	std::unique_lock<std::mutex> lock(this->mutex);
-	/* Enviar un MessageType TYPE_SEND_GAME_LIST
-		 Se va a recibir un header de tipo int/uint con el número de bytes
-		 que se van a recibir. El número de items es nBytes/sizeof(GameListItem)
 
-		 Luego del header se recibe una cierta cantidad de structs GameListItem
-	*/
+	ClientMessage message { TYPE_REFRESH_GAMES_LIST, 0 };
+	this->socket.socket_send((char*)&message, sizeof(ClientMessage) - 1);
 
-	std::vector<GameOption> options;
-	GameOption game_option { std::string("Mapin el mapa"), 4, 1 };
-	options.push_back(game_option);
+	char buffer[sizeof(size_t)];
+	this->socket.socket_receive(buffer, sizeof(size_t)); // ACA SE TRABA
+	size_t response_size = *((size_t*)buffer);
+	size_t n_games = response_size/sizeof(GameListItem);
 
+	std::cout << "Fetching game options" << std::endl;
+	std::vector<GameListItem> options;
+	options.reserve(n_games);
+	for (int i = 0; i < n_games; i++) {
+		GameListItem item;
+		socket.socket_receive((char*)&item, sizeof(GameListItem));
+
+		options.push_back(item);
+	}
 	return options;
 }
 
-bool ServerConnection::joinGame(int game_id) {
-	/* 
-		Enviar un MessageType TYPE_JOIN_GAME seguido del id del juego al que 
-		quiero que me agreguen.
-		Voy a recibir un bool que me indica si se pudo agregarme a la partida.
-	*/
+bool ServerConnection::joinGame(char game_id) {
+	std::unique_lock<std::mutex> lock(this->mutex);
+
+	ClientMessage message { TYPE_JOIN_GAME, game_id };
+	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
+
+	char buffer;
+	this->socket.socket_receive(&buffer, 1);
+
+	return bool(buffer);
 }
 
 LobbyStatus ServerConnection::fetchLobbyStatus() {
-	/*
-		Recibe un mensaje del servidor con un LobbyStatusData.
-		Una vez que joinGame resulta exitoso (devuelve true), se va a recibir
-		un lobbyStatus desde el lado del MenuStatusUpdater hasta que pase una de
-		dos cosas:
-			* El cliente envíe un mensaje ExitLobby en cuyo caso se vuelve al menu
-			* Se recibe un LobbyStatusData con el campo game_started en true, en cuyo
-			caso se debe inicializar el juego
-	*/
+	std::unique_lock<std::mutex> lock(this->mutex);
+
+	MessageType message_type;
+	this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
+	if (message_type != TYPE_LOBBY_STATUS_UPDATE) {
+		throw ServerConnectionError("Expected lobby update");
+	}
+
+	LobbyStatus lobby_status;
+	this->socket.socket_receive((char*)&lobby_status, sizeof(LobbyStatus));
+
+	return lobby_status;
 }
 
 void ServerConnection::exitLobby() {
-	// Se envia un MessageType TYPE_EXIT_GAME
+	std::unique_lock<std::mutex> lock(this->mutex);
+
+	ClientMessage message { TYPE_EXIT_GAME, 0 };
+	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
 }
 
 Map ServerConnection::fetchMap() {
-	/* Se recibe un header con el tamaño en bytes del archivo YML, seguido
-	de la data del archivo. Debe castearse el YML a un YAML::Node y pasarse
-	al constructor de Map y devolver el mapa.														 */
+	std::unique_lock<std::mutex> lock(this->mutex);
+
+	MessageType message_type;
+	this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
+	if (message_type != TYPE_SERVER_SEND_MAP) {
+		throw ServerConnectionError("Expected map");
+	}
+
+	size_t map_data_size;
+	this->socket.socket_receive((char*)&map_data_size, sizeof(size_t));
+
+	char map_data[map_data_size];
+	this->socket.socket_receive(map_data, map_data_size);
+
+	// TODO: Construir el mapa con la data y devolverlo
+	Map map("../maps/map1.yml");
+	return map;
 }
 
-void ServerConnection::sendEvents() {
-	
+void ServerConnection::sendEvents(std::vector<MessageType> events) {
+	std::unique_lock<std::mutex> lock(this->mutex);
+
+	size_t message_size = events.size()*sizeof(ClientMessage);
+	this->socket.socket_send((char*)&message_size, sizeof(size_t));
+
+	for (MessageType event : events) {
+		ClientMessage message { event, 0 };
+		this->socket.socket_send((char*)&message, sizeof(ClientMessage));
+	}
 }
 
 GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
-	/* Se recibe un struct PlayerStatus.
-	Luego se recibe un header int con el	número de bytes en la lista de 
-	jugadores que se enviará, seguido de un número de structs PlayerListItem.
-	Luego se recibe un header int con el número de bytes en la lista de puertas a
-	recibir, seguido de un número de structs DoorListItem.
-	Luego se recibe un header int con el número de bytes en la lista de items a
-	recibir, seguiro de un número de structs ItemListElement									 */
+	std::unique_lock<std::mutex> lock(this->mutex);
+
+	MessageType message_type;
+	this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
+	if (message_type != TYPE_SERVER_SEND_GAME_UPDATE) {
+		throw ServerConnectionError("Expected game update");
+	}
+
+	PlayerStatus player_status;
+	this->socket.socket_receive((char*)&player_status, sizeof(PlayerStatus));
+
+	std::vector<PlayerListItem> players_list;
+	size_t player_list_size;
+	this->socket.socket_receive((char*)&player_list_size, sizeof(size_t));
+	size_t n_players = player_list_size/sizeof(PlayerListItem);
+	players_list.reserve(n_players);
+	for (int i = 0; i < n_players; i++) {
+		PlayerListItem player;
+
+		this->socket.socket_receive((char*)&player, sizeof(PlayerListItem));
+		players_list.push_back(player);
+	}
+
+	std::vector<DoorListItem> doors_list;
+	size_t door_list_size;
+	this->socket.socket_receive((char*)&door_list_size, sizeof(size_t));
+	size_t n_doors = door_list_size/sizeof(DoorListItem);
+	doors_list.reserve(n_doors);
+	for (int i = 0; i < n_doors; i++) {
+		DoorListItem door;
+
+		this->socket.socket_receive((char*)&door, sizeof(DoorListItem));
+		doors_list.push_back(door);
+	}
+
+	std::vector<ItemListElement> items_list;
+	size_t item_list_size;
+	this->socket.socket_receive((char*)&item_list_size, sizeof(size_t));
+	size_t n_items = item_list_size/sizeof(ItemListElement);
+	items_list.reserve(n_items);
+	for (int i = 0; i < n_items; i++) {
+		ItemListElement item;
+
+		this->socket.socket_receive((char*)&item, sizeof(ItemListElement));
+		items_list.push_back(item);
+	}
+
+	// TODO: Procesar las tres listas para armar un GameStatusUpdate
+
+	GameStatusUpdate update { this->client_id, Vector(1.5,1.5), 100, 0, 0, 0, true };
+	return update;
 }
 
 ServerConnectionError::ServerConnectionError(const char *error) noexcept {

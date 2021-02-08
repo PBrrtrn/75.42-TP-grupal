@@ -3,8 +3,8 @@
 
 struct GameListItem {
 	char gameId;
-	char players;
-	char maxPlayers; //TODO es necesario pasarlo aca??
+	uint8_t players;
+	uint8_t maxPlayers;
 	char mapId;
 };
 

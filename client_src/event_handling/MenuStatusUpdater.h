@@ -8,6 +8,7 @@
 #include "../game_status/MenuStatus.h"
 #include "../ServerConnection.h"
 #include "../enums/UpdateType.h"
+#include "../../common_src/GameListItem.h"
 
 class MenuStatusUpdater {
 private:
@@ -16,7 +17,7 @@ private:
 	ServerConnection& server_connection;
 	std::atomic<bool>& in_game;
 	void refresh();
-	void applyUpdate(std::vector<GameOption>& options);
+	void applyUpdate(std::vector<GameListItem>& options);
 public:
 	MenuStatusUpdater(UpdateQueue& update_queue, 
 										MenuStatus& menu_status,

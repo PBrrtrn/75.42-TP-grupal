@@ -99,30 +99,14 @@ void Renderer::renderMenu() {
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
   SDL_RenderFillRect(renderer, &matches_box);
 
-  std::vector<GameOption> game_options = this->menu_status.getGameOptions();
+  std::vector<GameListItem> game_options = this->menu_status.getGameOptions();
   int selected_option = this->menu_status.getSelectedOption();
 
   int text_y = box_y + 25;
   int i = 0;
   while ((i < game_options.size()) && (text_y < box_y + box_h) ) {
-    std::stringstream match_stream;
-    match_stream << game_options[i].map_name;
-    match_stream << " (";
-    match_stream << game_options[i].current_players;
-    match_stream << "/";
-    match_stream << game_options[i].max_players;
-    match_stream << ")";
-
-    std::string match_text = match_stream.str();
-
-    SDL_Color match_text_color { 255, 255, 255 };
-    if (selected_option - 2 == i) {
-      match_text_color.g = 69;
-      match_text_color.b = 0;
-    }
-
-    this->menu_font->render(this->renderer, match_text.c_str(), 220,
-                            text_y, 1, match_text_color);
+    bool highlight = (selected_option - 2 == i);
+    renderGameOption(game_options[i], text_y, highlight);
 
     i++;
     text_y += 35;
@@ -145,6 +129,26 @@ void Renderer::renderMenu() {
                           420, 1, refresh_text_color);
 
   SDL_RenderPresent(this->renderer);
+}
+
+void Renderer::renderGameOption(GameListItem& option, int y, bool highlight) {
+  std::stringstream stream;
+  // Agregar al stream el nombre del mapa
+  stream << "(";
+  stream << int(option.players);
+  stream << "/";
+  stream << int(option.maxPlayers);
+  stream << ")";
+  std::string text = stream.str();
+
+  SDL_Color match_text_color { 255, 255, 255 };
+  if (highlight) {
+    match_text_color.g = 69;
+    match_text_color.b = 0;
+  }
+
+  this->menu_font->render(this->renderer, text.c_str(), 
+                          220, y, 1, match_text_color);
 }
 
 void Renderer::renderMatch(MapDrawer& map_drawer, Map& map) {

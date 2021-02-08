@@ -133,7 +133,7 @@ if (buffer[0] == 0) {
 		if (report == TYPE_SERVER_SEND_GAME_UPDATE){
 			PlayerStatus ps;
 			socket.socket_receive((char*)(&ps), sizeof(PlayerStatus));
-			std::cout << "this player status - ID:" << std::to_string(ps.clientId) << std::endl;
+			// std::cout << "this player status - ID:" << std::to_string(ps.clientId) << std::endl;
 			
 			int size;
 			socket.socket_receive((char*)(&size), sizeof(int));

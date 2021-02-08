@@ -12,18 +12,18 @@ MenuStatusUpdater::MenuStatusUpdater(UpdateQueue& update_queue,
 MenuStatusUpdater::~MenuStatusUpdater() { }
 
 void MenuStatusUpdater::updateStatus() {
-	std::vector<GameOption> options = this->menu_status.getGameOptions();
+	std::vector<GameListItem> options = this->menu_status.getGameOptions();
 
 	options.empty() ? refresh() : applyUpdate(options);
 }
 
 void MenuStatusUpdater::refresh() {
-	std::vector<GameOption> options = this->server_connection.fetchGameOptions();
+	std::vector<GameListItem> games = this->server_connection.fetchGameOptions();
 
-	this->menu_status.updateGameOptions(options);
+	this->menu_status.updateGameOptions(games);
 }
 
-void MenuStatusUpdater::applyUpdate(std::vector<GameOption>& options) {
+void MenuStatusUpdater::applyUpdate(std::vector<GameListItem>& options) {
 	UpdateType update = this->update_queue.popUpdate();
 
 	int selected_option = this->menu_status.getSelectedOption();

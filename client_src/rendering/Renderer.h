@@ -32,6 +32,7 @@ private:
   void load();
   void renderMenu();
   void renderMatch(MapDrawer& map_drawer, Map& map);
+  void renderGameOption(GameListItem& option, int y, bool highlight);
 public:
   Renderer(YAML::Node& config, std::atomic<bool>& in_game, 
            GameStatusMonitor& game_status_monitor,

@@ -1,17 +1,18 @@
 #ifndef __CLIENT_GAME_STATUS_ELEMENTS_H
 #define __CLIENT_GAME_STATUS_ELEMENTS_H
+
 #include "Vector.h"
+
 #define TOP_STATISTICS 10
 
 //estatus del player asociado a este GameStatus
 struct PlayerStatus{
-	char clientId;
 	Vector position;
 	Vector direction;
 	char selectedWeapon;
-	char health;
-	char bullets;
-	char lives;
+	uint8_t health;
+	uint8_t bullets;
+	uint8_t lives;
 	bool hasKey;
 };
 
@@ -27,7 +28,7 @@ struct PlayerListItem {
 	char clientId;
 	Vector position;
 	Vector direction;
-	char selectedWeapon;
+	uint8_t selectedWeapon;
 	bool isAlive;
 };
 

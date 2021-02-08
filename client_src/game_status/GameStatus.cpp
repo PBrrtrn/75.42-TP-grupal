@@ -1,6 +1,6 @@
 #include "GameStatus.h"
 
-GameStatus::GameStatus() : running(false) { }
+GameStatus::GameStatus() { }
 
 GameStatus::~GameStatus() { }
 
@@ -9,13 +9,15 @@ void GameStatus::initialize(Map new_map) {
 }
 
 void GameStatus::update(GameStatusUpdate& status_update) {
-	PlayerStatus new_player_status { status_update.player_position,
-																	 status_update.player_health,
-																	 status_update.player_weapon,
-																	 status_update.player_ammo,
-																	 status_update.player_angle };
+	PlayerStatus new_player_status { status_update.position,
+	 																 status_update.direction,
+	 																 status_update.selected_weapon,
+	 																 status_update.health,
+	 																 status_update.bullets,
+	 																 status_update.lives,
+	 																 status_update.has_key };
+
 	this->player_status = new_player_status;
-	this->running = status_update.running;
 }
 
 Map& GameStatus::getMap() {
@@ -24,15 +26,18 @@ Map& GameStatus::getMap() {
 
 GameStatusUpdate GameStatus::getUpdate() {
 	GameStatusUpdate update { this->player_status.position,
-														this->player_status.health,
-														this->player_status.current_weapon,
-														this->player_status.current_weapon_ammo,
-														this->player_status.angle,
-														this->running };
+										 				this->player_status.direction,
+										 				this->player_status.selectedWeapon,
+										 				this->player_status.health,
+										 				this->player_status.bullets,
+										 				this->player_status.lives,
+										 				this->player_status.hasKey };
 
 	return update;
 }
 
+/*
 bool GameStatus::isRunning() {
 	return this->running;
 }
+*/

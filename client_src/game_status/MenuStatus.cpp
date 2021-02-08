@@ -4,7 +4,7 @@ MenuStatus::MenuStatus() : selected_option(0) { }
 
 MenuStatus::~MenuStatus() { }
 
-std::vector<GameOption> MenuStatus::getGameOptions() {
+std::vector<GameListItem> MenuStatus::getGameOptions() {
 	std::unique_lock<std::mutex> lock(this->mutex);
 	return this->game_options;
 }
@@ -14,7 +14,7 @@ int MenuStatus::getSelectedOption() {
 	return this->selected_option;
 }
 
-void MenuStatus::updateGameOptions(std::vector<GameOption>& new_options) {
+void MenuStatus::updateGameOptions(std::vector<GameListItem>& new_options) {
 	std::unique_lock<std::mutex> lock(this->mutex);
 	this->game_options = new_options;
 }

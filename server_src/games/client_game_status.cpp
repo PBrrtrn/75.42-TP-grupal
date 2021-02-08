@@ -11,7 +11,7 @@ ClientGameStatus::ClientGameStatus(GameStatus& gameStatus, int assignedClientId)
 }
 
 void ClientGameStatus::updateThisGameStatus(){
-		this->thisPlayerStatus.clientId = assignedClientId;
+		// this->thisPlayerStatus.clientId = assignedClientId;
 		this->thisPlayerStatus.position = this->gameStatus.playersPositions.at(assignedClientId);
 		this->thisPlayerStatus.direction = this->gameStatus.playersDirections.at(assignedClientId);
 		this->thisPlayerStatus.selectedWeapon = this->gameStatus.players.at(assignedClientId).getSelectedWeaponIndex();

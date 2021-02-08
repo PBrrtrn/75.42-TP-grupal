@@ -34,8 +34,10 @@ void GameLoop::run() {
   std::atomic<bool> in_game(false);
   UpdateQueue update_queue;
 
-  ServerConnection server_connection(std::string("localhost"),
-                                     std::string("9000"));
+  std::string host = this->config["server"]["host"].as<std::string>();
+  std::string port = this->config["server"]["port"].as<std::string>();
+  ServerConnection server_connection(host, port);
+
   InputHandler input_handler(in_game, update_queue, server_connection);
 
   StatusUpdater status_updater(in_game, update_queue, server_connection,

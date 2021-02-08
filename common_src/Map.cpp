@@ -2,20 +2,11 @@
 
 Map::Map() { }
 
-Map::Map(char* file_content){
-	
-	//YAML::Node mapa = YAML::LoadFile(file_content);
-	
-	//this->width = mapa["width"].as<int>();
-	//this->height = mapa["height"].as<int>();	
-	//this->grid = mapa["grid"].as<std::vector<std::vector<int>>>();	
-}
-
 Map::Map(const char* file_location) {
-	YAML::Node mapa = YAML::LoadFile(std::string(file_location));
-	this->width = mapa["width"].as<int>();
-	this->height = mapa["height"].as<int>();	
-	this->grid = mapa["grid"].as<std::vector<std::vector<int>>>();	
+	YAML::Node map = YAML::LoadFile(std::string(file_location));
+	this->width = map["width"].as<int>();
+	this->height = map["height"].as<int>();	
+	this->grid = map["grid"].as<std::vector<std::vector<int>>>();	
 }
 
 Map::Map(const std::string& file_location): Map(file_location.c_str()){ }

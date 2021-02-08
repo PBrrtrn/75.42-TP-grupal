@@ -3,29 +3,22 @@
 
 #include "../../common_src/Map.h"
 #include "../../common_src/Vector.h"
+#include "../../common_src/ClientGameStatusElements.h"
 
 struct GameStatusUpdate {
-	Vector player_position;
-	int player_health;
-	int player_weapon;
-	int player_ammo;
-	float player_angle;
-	bool running;
-};
-
-struct PlayerStatus {
 	Vector position;
-	int health;
-	int current_weapon;
-	int current_weapon_ammo;
-	float angle;
+	Vector direction;
+	char selected_weapon;
+	uint8_t health;
+	uint8_t bullets;
+	uint8_t lives;
+	bool has_key;
 };
 
 class GameStatus {
 private:
 	Map map;
 	PlayerStatus player_status;
-	bool running;
 public:
 	GameStatus();
 	~GameStatus();
@@ -33,7 +26,7 @@ public:
 	void update(GameStatusUpdate& status_update);
 	Map& getMap();
 	GameStatusUpdate getUpdate();
-	bool isRunning();
+	// bool isRunning();
 };
 
 #endif
