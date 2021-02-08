@@ -6,27 +6,28 @@
 #include <mutex>
 
 #include "../../common_src/GameListItem.h"
+#include "../../common_src/MapListItem.h"
 
-/*
-struct GameOption {
-	std::string map_name;
-	int max_players;
-	int current_players;
-};
-*/
+enum Screen { LOBBY, START_GAME };
 
 class MenuStatus {
 private:
 	std::mutex mutex;
 	std::vector<GameListItem> game_options;
+	std::vector<MapListItem> map_options;
+	Screen current_screen;
 	int selected_option;
 public:
 	MenuStatus();
 	~MenuStatus();
 	std::vector<GameListItem> getGameOptions();
+	std::vector<MapListItem> getMapOptions();
+	Screen getCurrentScreen();
 	int getSelectedOption();
 	void updateGameOptions(std::vector<GameListItem>& new_options);
+	void updateMapOptions(std::vector<MapListItem>& new_options);
 	void updateSelectedOption(int new_selected_option);
+	void updateCurrentScreen(Screen new_screen);
 };
 
 #endif

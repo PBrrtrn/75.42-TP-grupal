@@ -44,14 +44,13 @@ std::vector<GameListItem> ServerConnection::fetchGameOptions() {
 	std::unique_lock<std::mutex> lock(this->mutex);
 
 	ClientMessage message { TYPE_REFRESH_GAMES_LIST, 0 };
-	this->socket.socket_send((char*)&message, sizeof(ClientMessage) - 1);
+	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
 
 	char buffer[sizeof(size_t)];
 	this->socket.socket_receive(buffer, sizeof(size_t)); // ACA SE TRABA
 	size_t response_size = *((size_t*)buffer);
 	size_t n_games = response_size/sizeof(GameListItem);
 
-	std::cout << "Fetching game options" << std::endl;
 	std::vector<GameListItem> options;
 	options.reserve(n_games);
 	for (int i = 0; i < n_games; i++) {

@@ -189,7 +189,7 @@ void ThreadClient::informClientId() {
 void ThreadClient::sendGamesList() {
 	std::vector<GameListItem> list = this->serverStatus.getGamesList();
 	size_t size = list.size()*sizeof(GameListItem);
-	this->peer.socket_send((char*)(&size), sizeof(size));
+	this->peer.socket_send((char*)(&size), sizeof(size_t));
 	for (auto& it: list) {
 		this->peer.socket_send((char*)(&it), sizeof(GameListItem));
 	}
