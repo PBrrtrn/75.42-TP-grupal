@@ -28,6 +28,9 @@ add_library(server_classes SHARED
   ./games/lobbyStatus.cpp
   ./games/client_game_status.cpp
   ./games/MapServer.cpp
+  ./games/DoorSerializer.cpp
+  ./games/SpawnPoint.cpp
+  ./games/SpawnPointSerializer.cpp
   ./server_main.cpp
   ./server.cpp
   ./weapons/arma.cpp

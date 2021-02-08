@@ -6,8 +6,8 @@ Item ItemSerializer::deserialize(const std::string& serializedItem){
 	std::stringstream ss(serializedItem);
 	std::string word;
 	ItemType type;
-	int positionX;
-	int positionY;
+	float positionX;
+	float positionY;
 	
 	ss >> word;
 	type = (ItemType)std::stoi(word);

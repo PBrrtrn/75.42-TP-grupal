@@ -15,14 +15,3 @@ class ItemSerializer {
 };
 
 #endif
-
-/*
-
-	bool canBePicked;
-	int timeToRespawn;
-	int amount;
-	Vector pos;
-	bool respawns;
-	bool isDecoration;
-	bool has_volume;
-*/

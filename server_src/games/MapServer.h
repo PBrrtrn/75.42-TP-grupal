@@ -13,6 +13,7 @@
 #include "../games/door.h"
 #include "../../common_src/Vector.h"
 #include "../items/food.h"
+#include "./SpawnPoint.h"
 
 
 class MapServer {
@@ -23,7 +24,7 @@ private:
 	
 	std::vector<Item> items;
 	std::vector<Door> doors;
-	std::vector<Vector> respawnPoints;
+	std::vector<SpawnPoint> respawnPoints;
 public:
 	MapServer(const std::string& file_location);
 	~MapServer();
@@ -37,7 +38,7 @@ public:
 	
 	std::vector<Item> getItems();
 	std::vector<Door> getDoor();
-	std::vector<Vector> getRespawnPoints();
+	std::vector<SpawnPoint> getRespawnPoints();
 	
 };
 
