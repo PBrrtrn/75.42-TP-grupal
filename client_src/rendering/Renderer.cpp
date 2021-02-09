@@ -5,7 +5,6 @@
 #include <SDL2/SDL_image.h>
 
 #include "Renderer.h"
-#include "Texture.h"
 
 Renderer::Renderer(YAML::Node& config, std::atomic<bool>& in_game, 
                    GameStatusMonitor& game_status_monitor,
@@ -22,56 +21,52 @@ Renderer::Renderer(YAML::Node& config, std::atomic<bool>& in_game,
 
   if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
     std::cout << "Warning: Could not set SDL hints" << std::endl;
-
-  this->load();
 }
 
 Renderer::~Renderer() {
-  for (Animation* animation : this->animations) delete animation;
-  for (Texture* texture : this->wall_textures) delete texture;
-
   SDL_DestroyRenderer(this->renderer);
   TTF_Quit();
   IMG_Quit();
   this->join();
 }
 
-void Renderer::load() {
-  std::string walls_dir = config["walls"]["directory"].as<std::string>();
-
-  for (int i = 0; i < this->config["walls"]["files"].size(); i++) {
-    std::string filename = this->config["walls"]["files"][i].as<std::string>();
-    std::string filepath = walls_dir + filename;
-
-    Texture* texture = new Texture(this->renderer, filepath.c_str());
-    this->wall_textures.push_back(texture);
-  }
-}
-
 void Renderer::run() {
   while (true) {
-    MenuRenderer menu_renderer(this->config["menu_ui"], 
-                               this->menu_status,
-                               this->renderer);
-    while (!this->in_game) {
-      menu_renderer.render();
+    {
+      MenuRenderer menu_renderer(this->config["menu_ui"], 
+                                 this->menu_status,
+                                 this->renderer);
+      while (!this->in_game) menu_renderer.render();
     }
 
-    Map map = this->game_status_monitor.getMap();
-    MapDrawer map_drawer(this->config, this->wall_textures);
-    while (this->in_game) {
-      renderMatch(map_drawer, map);
+    {
+      GameRenderer game_renderer(this->renderer, this->config,
+                                 this->game_status_monitor);
+      while (this->in_game) {
+        auto start_t = std::chrono::steady_clock::now();
+
+        game_renderer.render();
+
+        auto t = std::chrono::steady_clock::now() - start_t;
+        auto sleep_t = std::chrono::duration_cast<std::chrono::microseconds>(t);
+        usleep((1000000/fps_cap) - sleep_t.count());
+      } 
     }
   }
 }
 
-void Renderer::renderMatch(MapDrawer& map_drawer, Map& map) {
+/*
+void Renderer::renderMatch(MapDrawer& map_drawer, Map& map,
+                           GameStatusUpdate& game_status_update) {
   SDL_RenderClear(this->renderer);
+
+  std::vector<float> z_buffer = map_drawer.draw(this->renderer, map,
+                                                status_update.player_position,
+                                                status_update.player_angle);
 
   SDL_RenderPresent(this->renderer);
 }
 
-/*
 void Renderer::run() {
   Map map = this->game_status_monitor.getMap();
   MapDrawer map_drawer(this->config, this->wall_textures);

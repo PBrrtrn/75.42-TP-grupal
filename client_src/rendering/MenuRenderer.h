@@ -2,7 +2,6 @@
 #define __MENU_RENDERER_H__
 
 #include <vector>
-#include <atomic>
 #include <yaml-cpp/yaml.h>
 #include <SDL2/SDL.h>
 

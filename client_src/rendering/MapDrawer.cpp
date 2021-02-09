@@ -4,17 +4,17 @@
 
 #define WALL_HEIGHT 1.5
 
-MapDrawer::MapDrawer(YAML::Node& config, std::vector<Texture*>& wall_textures)
+MapDrawer::MapDrawer(YAML::Node& config)
 	: screen_width(config["window"]["width"].as<int>()), 
 		screen_height(config["window"]["height"].as<int>()), 
 		fov(config["graphics"]["FOV"].as<float>()),
-		wall_height(config["graphics"]["wall_height"].as<float>()),
-		wall_textures(wall_textures) { }
+		wall_height(config["graphics"]["wall_height"].as<float>()) { }
 
 MapDrawer::~MapDrawer() { }
 
 std::vector<float> MapDrawer::draw(SDL_Renderer* renderer, Map& map,
-										 							 Vector position, float view_angle) {
+										 							 Vector position, float view_angle,
+										 							 std::vector<Texture*>& wall_textures) {
 	SDL_Rect top_half { 0, 0, this->screen_width, (this->screen_height)/2 };
 	SDL_SetRenderDrawColor(renderer, 130, 130, 130, 255);
 	SDL_RenderFillRect(renderer, &top_half);
@@ -43,7 +43,7 @@ std::vector<float> MapDrawer::draw(SDL_Renderer* renderer, Map& map,
 			así no hay que hacer std::abs a lo bruto.
 																			- Pablo (14/01/2020)				*/
 
-		Texture* wall_texture = this->wall_textures[0];
+		Texture* wall_texture = wall_textures[0];
 		wall_texture->renderTexel(renderer, x, hit.texel, 
 														  this->screen_height, l, hit.side);
 

@@ -6,15 +6,11 @@
 #include <yaml-cpp/yaml.h>
 #include <SDL2/SDL.h>
 
+#include "MenuRenderer.h"
+#include "GameRenderer.h"
 #include "../game_status/GameStatusMonitor.h"
 #include "../game_status/MenuStatus.h"
-#include "MenuRenderer.h"
 #include "Window.h"
-#include "Font.h"
-#include "Animation.h"
-#include "Texture.h"
-#include "MapDrawer.h"
-#include "../../common_src/Map.h"
 #include "../../common_src/Thread.h"
 
 class Renderer : public Thread {
@@ -26,9 +22,6 @@ private:
   GameStatusMonitor& game_status_monitor;
   MenuStatus& menu_status;
   int fps_cap;
-  std::vector<Animation*> animations;
-  std::vector<Texture*> wall_textures;
-  void load();
   void renderMatch(MapDrawer& map_drawer, Map& map);
 public:
   Renderer(YAML::Node& config, std::atomic<bool>& in_game, 
