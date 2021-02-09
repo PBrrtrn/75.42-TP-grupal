@@ -16,6 +16,10 @@ MapServer::MapServer(const std::string& file_location): map(file_location.c_str(
 		this->doors_yml = mapa["doors"].as<std::vector<std::string>>();
 		this->loadDoors();
 	}
+	if(mapa["spawnpoints"]) {
+		this->spawnpoints_yml = mapa["spawnpoints"].as<std::vector<std::string>>();
+
+	}
 	
 }
 
@@ -29,6 +33,12 @@ void MapServer::loadDoors(){
 	for (std::vector<std::string>::iterator it = this->doors_yml.begin() ; it != this->doors_yml.end(); ++it) {
 		this->doors.push_back(this->door_serializer.deserialize(*it));
 	}
+}
+
+void MapServer::loadSpawnPoints() {
+	for (std::vector<std::string>::iterator it = this->spawnpoints_yml.begin() ; it != this->spawnpoints_yml.end(); ++it) {
+		this->respawnPoints.push_back(this->spawnpoints_serializer.deserialize(*it));
+	}	
 }
 
 std::vector<int>& MapServer::operator[](int x) {

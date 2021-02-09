@@ -29,11 +29,15 @@ private:
 	std::vector<std::string> doors_yml;
 	std::vector<Door> doors;
 	std::vector<SpawnPoint> respawnPoints;
+	std::vector<std::string> spawnpoints_yml;
 
 	void loadItems();
 	void loadDoors();
+	void loadSpawnPoints();
 	ItemSerializer item_serializer;
 	DoorSerializer door_serializer;
+	SpawnPointSerializer spawnpoints_serializer;
+
 public:
 	MapServer(const std::string& file_location);
 	~MapServer();

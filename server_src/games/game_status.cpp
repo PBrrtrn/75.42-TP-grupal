@@ -16,8 +16,12 @@ GameStatus::GameStatus(std::string mapLocation) : map(mapLocation) {
 	
 }
 
+std::vector<SpawnPoint> GameStatus::getSpawnPoints() {
+	return this->map.getRespawnPoints();
+}
+
 void GameStatus::loadItems(){
-	this->items = map.getItems();
+	this->items = this->map.getItems();
 }
 
 void GameStatus::loadDoors() {

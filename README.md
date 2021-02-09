@@ -9,6 +9,7 @@
 
 **Paquetes a instalar:**
 ```sudo apt install libyaml-cpp-dev```
+```sudo apt install libsdl2-ttf-dev```
 
 **Comandos para compilar el programa:**
 ```

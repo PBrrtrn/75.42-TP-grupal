@@ -6,6 +6,8 @@
 #include <list>
 #include <atomic>
 #include <iostream>
+#include<stdlib.h>
+#include<time.h>
 
 #include "../communication/thread_client.h"
 #include "../../common_src/Thread.h"

@@ -132,6 +132,7 @@ int main(const int argc, const char* argv[]) {
 	std::vector<std::string> items;
 	
 	std::vector<std::string> doors;
+	std::vector<std::string> spawnpoints;
 	
 	Food f(Vector(1,10),false);
 	
@@ -154,8 +155,18 @@ int main(const int argc, const char* argv[]) {
 	
 	doorSerialized = doorSerializer.serialize(d2);
 	
-	doors.push_back(doorSerialized);	
-	
+	doors.push_back(doorSerialized);
+
+	SpawnPoint sp1(Vector(24,50), Vector(1,0));	
+	std::string sp1Serialized = SPSerializer.serialize(sp1);
+	SpawnPoint sp2(Vector(67,29), Vector(1,0));
+	std::string sp2Serialized = SPSerializer.serialize(sp2);
+	SpawnPoint sp3(Vector(115, 10), Vector(1,0));
+	std::string sp3Serialized = SPSerializer.serialize(sp3);
+
+	spawnpoints.push_back(sp1Serialized);
+	spawnpoints.push_back(sp2Serialized);
+	spawnpoints.push_back(sp3Serialized);
 	
 	for (int i = 0; i < 16; i++)
 		datos.push_back(std::vector<int>(16, i));
@@ -176,7 +187,10 @@ int main(const int argc, const char* argv[]) {
 		outMap << YAML::Value << YAML::Flow << items;		
 		
 		outMap << YAML::Key << "doors";
-		outMap << YAML::Value << YAML::Flow << doors;			
+		outMap << YAML::Value << YAML::Flow << doors;	
+		
+		outMap << YAML::Key << "spawnpoints";
+		outMap << YAML::Value << YAML::Flow << spawnpoints;	
 
 	outMap << YAML::EndMap;
 	
