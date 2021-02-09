@@ -54,7 +54,6 @@ void GameManager::expelClient(int expelledClientId){
 
 void GameManager::startGame(int clientIdStarter, int mapId) {
     if (this->mapsRepo.validMap(mapId)) {
-        //MapListItem map = this->mapsRepo.getMap(mapId);
         BlockingQueue<Message>* queue = new BlockingQueue<Message>();
         std::cout << "map location:" << this->mapsRepo.getMapLocation(mapId) << std::endl;
         this->games.insert({ 

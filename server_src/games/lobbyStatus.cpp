@@ -18,7 +18,6 @@ void LobbyStatus::updateLobbyData(int gameID, int remainingTime, int players,
 }
 
 LobbyStatusData LobbyStatus::getLobbyStatus(int gameID) {
-    //if (this->lobbysData.find(gameID) == this->lobbysData.end()) TODO VER SI FALTA CHEQUEO
     return this->lobbysData.at(gameID);
 }
         

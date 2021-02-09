@@ -1,6 +1,6 @@
 server:
   host: localhost
-  port: 9000
+  port: 9006
 FPS_cap: 29
 graphics:
   FOV: 1.0472

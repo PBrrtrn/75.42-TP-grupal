@@ -98,7 +98,7 @@ int main(const int argc, const char* argv[]) {
 				out << YAML::Key << "Hostname";
 				out << YAML::Value << "localhost" ;
 				out << YAML::Key << "Port";
-				out << YAML::Value << "9000" ;		
+				out << YAML::Value << "9006" ;		
 			out << YAML::EndMap;
 
 		out << YAML::Key << "Maps";

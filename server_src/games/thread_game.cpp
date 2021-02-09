@@ -6,13 +6,12 @@ ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m,
 	id(gameId), messages(m), gameStatus(map_location), gameList(list),
 	map_id(mapId), lobbyStatus(lobbyStatus) {
 		this->remaining_time = 60 * 1000;
-		this->waiting_time_to_start = 60 * 60; 
+		this->waiting_time_to_start = 60; 
 		this->start_running = true;
 		this->is_dead = false;
 }
 
 void ThreadGame:: run() {
-	
 	std::cout << "Game " << std::to_string(this->id) << " waiting for more players!" << std::endl;
 	
 	GameListItem game;
@@ -22,17 +21,13 @@ void ThreadGame:: run() {
 	game.mapId = this->map_id;
 	
 	this->gameList.insert({this->id,game});
-	
-	
-
 
 	while(start_running) {
-		//std::cout << "players now:" << this->gameStatus.getAlivePlayers() << std::endl;
 		if ( (this->gameStatus.getAlivePlayers() == this->gameStatus.getMaxPlayers()) || 
-		 (this->gameStatus.getAlivePlayers() > 2 && this->waiting_time_to_start == 0)) {
+		 (this->gameStatus.getAlivePlayers() >= this->gameStatus.getMinPlayers() && this->waiting_time_to_start == 0)) {
 			this->keep_running = true;
 			this->start_running = false;
-		} else if (this->gameStatus.getAlivePlayers() < 2 && this->waiting_time_to_start == 0) {
+		} else if (this->gameStatus.getAlivePlayers() < this->gameStatus.getMinPlayers() && this->waiting_time_to_start == 0) {
 			this->keep_running = false;
 			this->start_running = false;
 		}
@@ -42,7 +37,6 @@ void ThreadGame:: run() {
 		if (!start_running)
 			break;
 		this->sendLobbyStatus();
-		//this->sendLobbyStatus();
 		usleep(1000000);
 		this->waiting_time_to_start--;
 	}
@@ -106,9 +100,6 @@ void ThreadGame::checkNews() {
 	this->messages->lock();
 	while (!this->messages->isEmptySync()) {
 		Message m = this->messages->popSync();
-
-		//std::cout << "en el game: " << (char)m.getType() << ", client:" 
-		//	<< m.getClientId() << std::endl;
 		
 		switch (m.getType())
 		{
@@ -256,14 +247,11 @@ void ThreadGame::useDoor(int id){
 	this->use_door.tryAction(this->gameStatus,id);
 }
 
-char ThreadGame::getMapId(){
-	return 1; //TODO devolver map Id real
-}
 char ThreadGame::getCurrentPlayers(){
 	return this->clients.size();
 }
 char ThreadGame::getMaxPlayers(){
-	return 32; //TODO devolver max players real
+	return this->gameStatus.getMaxPlayers();
 }
 
 bool ThreadGame:: isDead() {

@@ -13,7 +13,7 @@
 
 void connectAndGetClientId(Socket& socket){
 	char buffer[BUF_SIZE];
-	bool resultado = socket.socket_connect("localhost","9000");
+	bool resultado = socket.socket_connect("localhost","9006");
 	size_t length = sizeof(char);
 	//recibo el clientId
 	socket.socket_receive(buffer,length);
