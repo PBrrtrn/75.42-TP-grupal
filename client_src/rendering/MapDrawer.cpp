@@ -1,20 +1,23 @@
 #include <iostream>
+#include <math.h>
 
 #include "MapDrawer.h"
 
 #define WALL_HEIGHT 1.5
 
-MapDrawer::MapDrawer(YAML::Node& config, std::vector<Texture*>& wall_textures)
+MapDrawer::MapDrawer(YAML::Node& config, std::vector<Texture*>& wall_textures,
+										 std::vector<Animation*>& enemy_animations)
 	: screen_width(config["window"]["width"].as<int>()), 
 		screen_height(config["window"]["height"].as<int>()), 
 		fov(config["graphics"]["FOV"].as<float>()),
 		wall_height(config["graphics"]["wall_height"].as<float>()),
-		wall_textures(wall_textures) { }
+		wall_textures(wall_textures), enemy_animations(enemy_animations) { }
 
 MapDrawer::~MapDrawer() { }
 
-std::vector<float> MapDrawer::draw(SDL_Renderer* renderer, Map& map,
-										 							 Vector position, float view_angle) {
+void MapDrawer::draw(SDL_Renderer* renderer, Map& map,
+										 Vector position, float view_angle,
+										 std::vector<PlayerListItem>& enemies) {
 	SDL_Rect top_half { 0, 0, this->screen_width, (this->screen_height)/2 };
 	SDL_SetRenderDrawColor(renderer, 130, 130, 130, 255);
 	SDL_RenderFillRect(renderer, &top_half);
@@ -50,5 +53,18 @@ std::vector<float> MapDrawer::draw(SDL_Renderer* renderer, Map& map,
 		z_buffer[x] = hit.distance;
 		x++;
 	}
-	return z_buffer;
+
+	for (PlayerListItem& enemy : enemies) {
+		Vector enemy_direction = position - enemy.position;
+		float angle = enemy_direction.getAngle();
+		std::cout << angle << std::endl;
+		if ((view_angle - this->fov/2 < angle) && (view_angle + this->fov/2 > angle)) {
+			int enemy_screen_x = tan(angle) * projection_distance;
+			float enemy_distance = enemy_direction.norm();
+			int animation = enemy.selectedWeapon;
+			enemy_animations[animation]->renderNextFrame(renderer, 100/enemy_distance,
+																				  				 enemy_screen_x, 
+																				  				 this->screen_height/2);
+		}
+	}
 }

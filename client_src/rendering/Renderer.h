@@ -25,7 +25,7 @@ private:
   GameStatusMonitor& game_status_monitor;
   MenuStatus& menu_status;
   int fps_cap;
-  std::vector<Animation*> animations;
+  std::vector<Animation*> enemy_animations;
   std::vector<Texture*> wall_textures;
   void load();
   void renderMatch(MapDrawer& map_drawer, Map& map);

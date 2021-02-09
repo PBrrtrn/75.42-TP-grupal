@@ -6,7 +6,7 @@ Animation::Animation(SDL_Renderer* renderer, const char* sheet_filepath,
   frame_width(frame_width), frame_height(frame_height) {
   this->frames.reserve(n_frames);
   for (int i = 0; i < n_frames; i++) {
-    SDL_Rect frame { i*frame_width, 0, frame_width, frame_height };
+    SDL_Rect frame { 0, i*frame_height, frame_width, frame_height };
     this->frames.push_back(frame);
   }
 }

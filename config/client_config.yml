@@ -43,25 +43,25 @@ consumables:
   directory: ../assets/textures/consumables/
 animations:
   enemies:
-    directory: ../assets/sprites/enemies
+    directory: ../assets/sprites/enemies/
     sprites:
-      - file: dog.png
-        frames: 2
-        frame_width: 100
-        frame_height: 100
-      - file: guard.png
-        frames: 2
-        frame_width: 100
-        frame_height: 100
       - file: ss.png
-        frames: 2
-        frame_width: 100
-        frame_height: 100
-      - file: official.png
-        frames: 2
-        frame_width: 100
-        frame_height: 100
-      - file: mutant.png
-        frames: 2
-        frame_width: 100
-        frame_height: 100
+        frames: 5
+        frame_width: 64
+        frame_height: 64
+      - file: ss.png
+        frames: 5
+        frame_width: 64
+        frame_height: 64
+      - file: ss.png
+        frames: 5
+        frame_width: 64
+        frame_height: 64
+      - file: ss.png
+        frames: 5
+        frame_width: 64
+        frame_height: 64
+      - file: ss.png
+        frames: 5
+        frame_width: 64
+        frame_height: 64

@@ -27,7 +27,7 @@ Renderer::Renderer(YAML::Node& config, std::atomic<bool>& in_game,
 }
 
 Renderer::~Renderer() {
-  for (Animation* animation : this->animations) delete animation;
+  for (Animation* animation : this->enemy_animations) delete animation;
   for (Texture* texture : this->wall_textures) delete texture;
 
   SDL_DestroyRenderer(this->renderer);
@@ -46,6 +46,22 @@ void Renderer::load() {
     Texture* texture = new Texture(this->renderer, filepath.c_str());
     this->wall_textures.push_back(texture);
   }
+
+  YAML::Node config_node = config["animations"]["enemies"];
+  std::string enemies_dir = config_node["directory"].as<std::string>();
+
+  for (auto sprite : config_node["sprites"]) {
+    std::string filename = sprite["file"].as<std::string>();
+    std::string filepath = enemies_dir + filename;
+
+    Animation* animation = new Animation(this->renderer, filepath.c_str(),
+                                         sprite["frame_width"].as<int>(),
+                                         sprite["frame_height"].as<int>(),
+                                         sprite["frames"].as<int>());
+
+    this->enemy_animations.push_back(animation);
+  }
+
 }
 
 void Renderer::run() {
@@ -56,7 +72,8 @@ void Renderer::run() {
     while (!this->in_game) menu_renderer.render();
 
     Map map = this->game_status_monitor.getMap();
-    MapDrawer map_drawer(this->config, this->wall_textures);
+    MapDrawer map_drawer(this->config, this->wall_textures, 
+                         this->enemy_animations);
     while (this->in_game) renderMatch(map_drawer, map);
   }
 }
@@ -64,11 +81,12 @@ void Renderer::run() {
 void Renderer::renderMatch(MapDrawer& map_drawer, Map& map) {
   SDL_RenderClear(this->renderer);
 
-  GameStatusUpdate u = this->game_status_monitor.getUpdate();
+  GameStatusUpdate status_update = this->game_status_monitor.getUpdate();
 
-  std::vector<float> z_buffer = map_drawer.draw(this->renderer, map,
-                                                u.position,
-                                                u.direction.getAngle());
+  map_drawer.draw(this->renderer, map, 
+                  status_update.position, 
+                  status_update.direction.getAngle(),
+                  status_update.enemies);
 
   SDL_RenderPresent(this->renderer);
 }
