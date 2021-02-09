@@ -50,6 +50,7 @@ public:
 	void addPointTreasure(int playerID);
 	int getAlivePlayers();
 	int getMaxPlayers();
+	std::vector<SpawnPoint> getSpawnPoints();
 	
 	std::string getEntireMap();
     

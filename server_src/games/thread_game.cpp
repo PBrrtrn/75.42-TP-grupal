@@ -59,14 +59,18 @@ void ThreadGame:: run() {
     }	
 	
     while (keep_running) {
+		auto start_t = std::chrono::steady_clock::now();
+
 		this->checkNews();
         this->checkPlayerPickups();
         this->respawnItems();
         this->checkPlayerBullets();
         this->sendGameUpdates();
         
-        usleep(1000000); //todo: hacer variable respecto a tiempo 
-		//demorado en ejecutar checkNews y sendUpdates
+		auto t = std::chrono::steady_clock::now() - start_t;
+    	auto sleep_t = std::chrono::duration_cast<std::chrono::microseconds>(t);
+    	usleep((1000000/29) - sleep_t.count());
+
         this->remaining_time--;
 		this->keep_running = this->gameStatus.getAlivePlayers() > 1 && this->remaining_time != 0 && !this->is_dead;
     }
@@ -199,8 +203,10 @@ bool ThreadGame::addClient(ThreadClient* client, int id){
     this->out_queues.insert(std::make_pair(id, queue_out));
     client->assignToOutQueue(queue_out);
     
-	Vector position(3,4);
-	Vector direction(1,0);
+	std::vector<SpawnPoint> spawnpoints = this->gameStatus.getSpawnPoints();
+	int sp_idx = rand()% (spawnpoints.size());
+	Vector position = spawnpoints.at(sp_idx).getPosition();
+	Vector direction = spawnpoints.at(sp_idx).getDirection();
 	this->gameStatus.addPlayer(id, position, direction);
 	this->clientGameStatuses.insert({id, new ClientGameStatus(this->gameStatus,id)});
 	client->assignToGameStatus(this->clientGameStatuses.at(id));
