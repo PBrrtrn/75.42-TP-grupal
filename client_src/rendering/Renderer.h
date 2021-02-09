@@ -8,6 +8,7 @@
 
 #include "../game_status/GameStatusMonitor.h"
 #include "../game_status/MenuStatus.h"
+#include "MenuRenderer.h"
 #include "Window.h"
 #include "Font.h"
 #include "Animation.h"
@@ -27,12 +28,8 @@ private:
   int fps_cap;
   std::vector<Animation*> animations;
   std::vector<Texture*> wall_textures;
-  Font* menu_font;
-  Texture* menu_background;
   void load();
-  void renderMenu();
   void renderMatch(MapDrawer& map_drawer, Map& map);
-  void renderGameOption(GameListItem& option, int y, bool highlight);
 public:
   Renderer(YAML::Node& config, std::atomic<bool>& in_game, 
            GameStatusMonitor& game_status_monitor,
