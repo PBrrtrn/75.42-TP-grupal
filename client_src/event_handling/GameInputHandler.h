@@ -11,9 +11,10 @@ class GameInputHandler {
 private:
 	KeyboardState keyboard_state;
 	ServerConnection& server_connection;
-	BlockingQueue<MessageType>& blockingQueue;
+	BlockingQueue<MessageType>& message_queue;
 public:
-	GameInputHandler(ServerConnection& server_connection, BlockingQueue<MessageType>& blockingQueue);
+	GameInputHandler(ServerConnection& server_connection,
+									 BlockingQueue<MessageType>& message_queue);
 	~GameInputHandler();
 	void handle(SDL_Event input);
 };

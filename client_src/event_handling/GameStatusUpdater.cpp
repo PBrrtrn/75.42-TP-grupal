@@ -1,38 +1,32 @@
 #include "GameStatusUpdater.h"
 
 GameStatusUpdater::GameStatusUpdater(GameStatusMonitor& game_status_monitor,
-						ServerConnection& server_connection,BlockingQueue<MessageType>& blockingQueue) 
-: game_status_monitor(game_status_monitor), 
-	server_connection(server_connection),
-	blockingQueue(blockingQueue)  { 
-		this->hasMap = false;
-	}
+																		 ServerConnection& server_connection,
+																		 BlockingQueue<MessageType>& message_queue) 
+: game_status_monitor(game_status_monitor), server_connection(server_connection),
+	message_queue(message_queue), has_map(false) { }
 
 GameStatusUpdater::~GameStatusUpdater() { }
 
-void GameStatusUpdater::updateStatus() { 
-	
-	
-	if (!this->hasMap) {
-		std::cout << "voy a obtener el mapa" << std::endl;
+void GameStatusUpdater::updateStatus() { 	
+	if (!this->has_map) {
 		Map map = this->server_connection.fetchMap();
-		std::cout << "obtuve el mapa" << std::endl;
 		this->game_status_monitor.initializeMap(map);
-		this->hasMap = true;
+		this->has_map = true;
 		this->server_connection.sendPing();
 	}
 	
-	GameStatusUpdate gsu = this->server_connection.fetchGameStatusUpdate();
+	GameStatusUpdate update = this->server_connection.fetchGameStatusUpdate();
 	
-	this->game_status_monitor.updateGameStatus(gsu);
+	this->game_status_monitor.updateGameStatus(update);
 	std::vector<MessageType> events;
 	
-	this->blockingQueue.lock();
-	while (!this->blockingQueue.isEmptySync()) {
-		MessageType mt = this->blockingQueue.popSync();
-		events.push_back(mt);
+	this->message_queue.lock();
+	while (!this->message_queue.isEmptySync()) {
+		MessageType message = this->message_queue.popSync();
+		events.push_back(message);
 	}
-	this->blockingQueue.unlock();
+	this->message_queue.unlock();
 	
 	this->server_connection.sendEvents(events);
 

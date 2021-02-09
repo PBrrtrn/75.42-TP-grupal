@@ -7,13 +7,14 @@
 
 class GameStatusUpdater {
 private:
-	bool hasMap;
 	GameStatusMonitor& game_status_monitor;
 	ServerConnection& server_connection;
-	BlockingQueue<MessageType>& blockingQueue;
+	BlockingQueue<MessageType>& message_queue;
+	bool has_map;
 public:
 	GameStatusUpdater(GameStatusMonitor& game_status_monitor,
-										ServerConnection& server_connection,BlockingQueue<MessageType>& blockingQueue);
+										ServerConnection& server_connection,
+										BlockingQueue<MessageType>& message_queue);
 	~GameStatusUpdater();
 	void updateStatus();
 };

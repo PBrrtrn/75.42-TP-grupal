@@ -8,8 +8,6 @@ Texture::Texture(SDL_Renderer* renderer, const char *filepath)
   SDL_Surface* surface = NULL; // Usar la clase surface
   surface = IMG_Load(filepath);
   if (surface == NULL) {
-    std::cout << "bad texture" << std::endl;
-    std::cout << filepath << std::endl;
     throw 1; // Lanzar un error apropiado
   }
 
