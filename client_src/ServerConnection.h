@@ -11,12 +11,15 @@
 #include "../common_src/MessageType.h"
 #include "../common_src/LobbyStatusData.h"
 #include "game_status/GameStatus.h"
+#include <condition_variable>
 
 class ServerConnection {
 private:
 	Socket socket;
 	char client_id;
 	std::mutex mutex;
+	bool receiving;
+	std::condition_variable cv;
 public:
 	ServerConnection(std::string host, std::string service);
 	~ServerConnection();

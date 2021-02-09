@@ -65,8 +65,11 @@ void Renderer::run() {
   while (true) {
     while (!this->in_game) renderMenu();
 
+	std::cout << "Renderer: termine de hacer renderMenu" << std::endl;
+
     Map map = this->game_status_monitor.getMap();
     MapDrawer map_drawer(this->config, this->wall_textures);
+    std::cout << "Renderer: arranco a hacer rendermatch" << std::endl;
     while (this->in_game) renderMatch(map_drawer, map);
   }
 }
@@ -154,6 +157,10 @@ void Renderer::renderGameOption(GameListItem& option, int y, bool highlight) {
 
 void Renderer::renderMatch(MapDrawer& map_drawer, Map& map) {
   SDL_RenderClear(this->renderer);
+
+  std::vector<float> z_buffer = map_drawer.draw(this->renderer, map,
+                                                Vector(4,4),
+                                                3 * M_PI/2);
 
   SDL_RenderPresent(this->renderer);
 }

@@ -103,12 +103,17 @@ void ThreadClient::run() {
 			
 			//std::cout << "Escuchando eventos de cliente remoto o ping" << std::endl;
 			//if (this->game_started){
+			
+				std::cout << "ThreadClient: estoy por recibir eventos del cliente: "<< this->id << std::endl;
+				
 				size_t size;
-				int received = this->peer.socket_receive((char*)(&size), sizeof(size));
+				int received = this->peer.socket_receive((char*)(&size), sizeof(size_t));
 				
 				ClientMessage cMessage;
+				std::cout << "ThreadClient: " << this->id << "voy a recibir bytes: "<< size << std::endl;
 				for (int i = 0; i < size / sizeof(cMessage); i++ ){				
 					int received = this->peer.socket_receive((char*)(&cMessage), sizeof(cMessage));
+					std::cout << "ThreadClient: " << this->id << " - recibi un mensaje: "<< std::to_string(cMessage.type) << std::endl;
 					if (received < sizeof(cMessage)){
 						std::cout << "recv en threadclient fallo, no recibi nada! (cerro el socket?)" << std::endl;
 						this->shutdown();

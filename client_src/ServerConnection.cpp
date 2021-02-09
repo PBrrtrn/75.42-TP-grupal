@@ -13,6 +13,9 @@ ServerConnection::ServerConnection(std::string host, std::string service) {
 
 	this->client_id = buffer;
 	std::cout << (int)client_id << std::endl;
+	
+	this->receiving = true;
+	
 }
 
 
@@ -20,6 +23,7 @@ ServerConnection::~ServerConnection() { }
 
 MessageType ServerConnection::receiveIncomingEvent(){
 	std::unique_lock<std::mutex> lock(this->mutex);
+	std::cout << "receiveIncomingEvent" << std::endl;
 	MessageType message_type;
 	this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
 	
@@ -29,6 +33,7 @@ MessageType ServerConnection::receiveIncomingEvent(){
 
 std::vector<MapListItem> ServerConnection::fetchAvailableMaps() {
 	std::unique_lock<std::mutex> lock(this->mutex);
+	std::cout << "fetchAvailableMaps" << std::endl;
 
 	ClientMessage message { TYPE_SEND_MAPS_LIST, 0 };
 	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
@@ -51,6 +56,7 @@ std::vector<MapListItem> ServerConnection::fetchAvailableMaps() {
 
 std::vector<GameListItem> ServerConnection::fetchGameOptions() {
 	std::unique_lock<std::mutex> lock(this->mutex);
+	std::cout << "fetchGameOptions" << std::endl;
 
 	ClientMessage message { TYPE_REFRESH_GAMES_LIST, 0 };
 	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
@@ -73,6 +79,7 @@ std::vector<GameListItem> ServerConnection::fetchGameOptions() {
 
 bool ServerConnection::joinGame(char game_id) {
 	std::unique_lock<std::mutex> lock(this->mutex);
+	std::cout << "joinGame" << std::endl;
 
 	ClientMessage message { TYPE_JOIN_GAME, game_id };
 	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
@@ -85,7 +92,7 @@ bool ServerConnection::joinGame(char game_id) {
 
 LobbyStatusData ServerConnection::fetchLobbyStatus() {
 	std::unique_lock<std::mutex> lock(this->mutex);
-
+std::cout << "fetchLobbyStatus" << std::endl;
 	//MessageType message_type;
 	//this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
 	LobbyStatusData lobby_status;
@@ -101,6 +108,7 @@ LobbyStatusData ServerConnection::fetchLobbyStatus() {
 
 void ServerConnection::exitLobby() {
 	std::unique_lock<std::mutex> lock(this->mutex);
+	std::cout << "exitLobby" << std::endl;
 
 	ClientMessage message { TYPE_EXIT_GAME, 0 };
 	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
@@ -108,6 +116,7 @@ void ServerConnection::exitLobby() {
 
 Map ServerConnection::fetchMap() {
 	std::unique_lock<std::mutex> lock(this->mutex);
+	std::cout << "fetchMap" << std::endl;
 
 	//MessageType message_type;
 	//this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
@@ -128,18 +137,34 @@ Map ServerConnection::fetchMap() {
 
 void ServerConnection::sendEvents(std::vector<MessageType> events) {
 	std::unique_lock<std::mutex> lock(this->mutex);
+	std::cout << "sendEvents antes de cv" << std::endl;
+	while (this->receiving) this->cv.wait(lock);
+
+	std::cout << "sendEvents" << std::endl;
+
+	if (events.size() == 0) {
+		events.push_back(TYPE_CLIENT_PING);
+	}
 
 	size_t message_size = events.size()*sizeof(ClientMessage);
-	this->socket.socket_send((char*)&message_size, sizeof(size_t));
+	ssize_t sent = this->socket.socket_send((char*)&message_size, sizeof(size_t));
+	
+	std::cout << "sendEvents sent bytes:" << std::to_string(sent) << std::endl;
 
 	for (MessageType event : events) {
 		ClientMessage message { event, 0 };
 		this->socket.socket_send((char*)&message, sizeof(ClientMessage));
 	}
+	
+	std::cout << "end sendEvents" << std::endl;
+	this->receiving = true;
+	cv.notify_one();
+	
 }
 
 void ServerConnection::sendPing() {
 	std::unique_lock<std::mutex> lock(this->mutex);
+	std::cout << "sendPing" << std::endl;
 
 	ClientMessage message { TYPE_CLIENT_PING, 0 };
 
@@ -153,6 +178,9 @@ void ServerConnection::sendPing() {
 
 GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 	std::unique_lock<std::mutex> lock(this->mutex);
+	std::cout << "fetchGameStatusUpdate antes de cv" << std::endl;
+	while (!this->receiving) this->cv.wait(lock);
+	std::cout << "fetchGameStatusUpdate" << std::endl;
 
 	MessageType message_type;
 	this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
@@ -162,6 +190,9 @@ GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 
 	PlayerStatus player_status;
 	this->socket.socket_receive((char*)&player_status, sizeof(PlayerStatus));
+
+	std::cout << "fetchGameStatusUpdate health:"<< std::to_string(player_status.health) << std::endl;
+	;
 
 	std::vector<PlayerListItem> players_list;
 	size_t player_list_size;
@@ -202,6 +233,9 @@ GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 	// TODO: Procesar las tres listas para armar un GameStatusUpdate
 
 	GameStatusUpdate update { this->client_id, Vector(1.5,1.5), 100, 0, 0, 0, true };
+	std::cout << "fetchGameStatusUpdate end" << std::endl;
+	this->receiving = false;
+	cv.notify_one();
 	return update;
 }
 
