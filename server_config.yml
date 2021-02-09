@@ -31,7 +31,7 @@ Moves:
   RotationRight: -0.1
 Server:
   Hostname: localhost
-  Port: 9000
+  Port: 9006
 Maps:
   Location: ../maps/
 MapsSequence:

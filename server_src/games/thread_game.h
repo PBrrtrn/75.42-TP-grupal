@@ -146,7 +146,6 @@ class ThreadGame: public Thread {
 		
 		void useDoor(int id);
 		
-		char getMapId();
 		char getCurrentPlayers();
         char getMaxPlayers();
 		void sendMapToClient(int clientId);

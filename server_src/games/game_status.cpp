@@ -53,6 +53,10 @@ int GameStatus::getMaxPlayers() {
 	return this->map.getMaxPlayers();
 }
 
+int GameStatus::getMinPlayers() {
+	return this->map.getMinPlayers();
+}
+
 void GameStatus::addPlayer(int playerID, Vector &position, Vector &direction) {
     this->playersPositions[playerID] = position;
     this->playersDirections[playerID] = direction;

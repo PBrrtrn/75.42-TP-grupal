@@ -6,7 +6,6 @@
 #include "../../common_src/MapListItem.h"
 #include "../maps/mapRepository.h"
 #include <vector>
-////#include "thread_game.h"
 
 class ServerStatus {
     MapRepository& mapRepo;
