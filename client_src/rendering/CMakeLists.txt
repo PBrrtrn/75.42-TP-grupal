@@ -5,6 +5,8 @@ add_library(rendering SHARED
 	Font.cpp
 	MapDrawer.cpp
 	Renderer.cpp
+	MenuRenderer.cpp
+	GameRenderer.cpp
 	Texture.cpp
 	Window.cpp
 )

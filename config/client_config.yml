@@ -16,6 +16,12 @@ menu_ui:
     width: 440
     height: 300
     gilding: 3
+  maps_box:
+    x_pos: 100
+    y_pos: 100
+    width: 440
+    height: 300
+    gilding: 3
   directory: ../assets/menu_ui/
   font: wolfenstein.ttf
   background: background.png
