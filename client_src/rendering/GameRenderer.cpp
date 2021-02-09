@@ -1,4 +1,4 @@
-#include "GameRenderer.h"
+/*#include "GameRenderer.h"
 
 GameRenderer::GameRenderer(SDL_Renderer* renderer, YAML::Node config,
 													 GameStatusMonitor& game_status_monitor) 
@@ -36,4 +36,4 @@ void GameRenderer::render() {
 																								this->wall_textures);
 
 	SDL_RenderPresent(this->renderer);
-}
+}*/

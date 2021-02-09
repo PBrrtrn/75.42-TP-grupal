@@ -1,3 +1,4 @@
+#include <iostream>
 #include "GameStatus.h"
 
 GameStatus::GameStatus() { }
@@ -18,6 +19,7 @@ void GameStatus::update(GameStatusUpdate& status_update) {
 	 																 status_update.has_key };
 
 	this->player_status = new_player_status;
+	this->enemies = status_update.enemies;
 }
 
 Map& GameStatus::getMap() {
@@ -31,7 +33,8 @@ GameStatusUpdate GameStatus::getUpdate() {
 										 				this->player_status.health,
 										 				this->player_status.bullets,
 										 				this->player_status.lives,
-										 				this->player_status.hasKey };
+										 				this->player_status.hasKey,
+										 				this->enemies };
 
 	return update;
 }

@@ -168,7 +168,6 @@ void ServerConnection::sendEvents(std::vector<MessageType> events) {
 
 void ServerConnection::sendPing() {
 	std::unique_lock<std::mutex> lock(this->mutex);
-	std::cout << "sendPing" << std::endl;
 
 	ClientMessage message { TYPE_CLIENT_PING, 0 };
 
@@ -182,9 +181,7 @@ void ServerConnection::sendPing() {
 
 GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 	std::unique_lock<std::mutex> lock(this->mutex);
-	//std::cout << "fetchGameStatusUpdate antes de cv" << std::endl;
 	while (!this->receiving) this->cv.wait(lock);
-	//std::cout << "fetchGameStatusUpdate" << std::endl;
 
 	MessageType message_type;
 	this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
@@ -195,8 +192,6 @@ GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 	PlayerStatus player_status;
 	this->socket.socket_receive((char*)&player_status, sizeof(PlayerStatus));
 
-	//std::cout << "fetchGameStatusUpdate health:"<< std::to_string(player_status.health) << std::endl;
-
 	std::vector<PlayerListItem> players_list;
 	size_t player_list_size;
 	this->socket.socket_receive((char*)&player_list_size, sizeof(size_t));
@@ -206,7 +201,7 @@ GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 		PlayerListItem player;
 
 		this->socket.socket_receive((char*)&player, sizeof(PlayerListItem));
-		players_list.push_back(player);
+		if (player.clientId != this->client_id) players_list.push_back(player);
 	}
 
 	std::vector<DoorListItem> doors_list;
@@ -233,22 +228,11 @@ GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 		items_list.push_back(item);
 	}
 
-	// TODO: Procesar las tres listas para armar un GameStatusUpdate
-
-	//GameStatusUpdate update { this->client_id, Vector(1.5,1.5), 100, 0, 0, 0, true };
 	GameStatusUpdate update;
 	update.position = player_status.position;
 	update.direction = player_status.direction;
-	
-/*		Vector position;
-	Vector direction;
-	char selected_weapon;
-	uint8_t health;
-	uint8_t bullets;
-	uint8_t lives;
-	bool has_key;*/
-	
-	//std::cout << "fetchGameStatusUpdate end" << std::endl;
+	update.enemies = players_list;
+
 	this->receiving = false;
 	cv.notify_one();
 	return update;

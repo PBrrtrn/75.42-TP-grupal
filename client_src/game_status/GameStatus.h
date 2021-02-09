@@ -13,12 +13,14 @@ struct GameStatusUpdate {
 	uint8_t bullets;
 	uint8_t lives;
 	bool has_key;
+	std::vector<PlayerListItem> enemies;
 };
 
 class GameStatus {
 private:
 	Map map;
 	PlayerStatus player_status;
+	std::vector<PlayerListItem> enemies;
 public:
 	GameStatus();
 	~GameStatus();

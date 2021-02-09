@@ -1,4 +1,4 @@
-#ifndef __GAME_RENDERER_H__
+/*#ifndef __GAME_RENDERER_H__
 #define __GAME_RENDERER_H__
 
 #include <vector>
@@ -30,4 +30,4 @@ public:
 
 };
 
-#endif
+#endif*/

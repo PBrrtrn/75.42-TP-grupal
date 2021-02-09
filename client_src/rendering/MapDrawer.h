@@ -17,13 +17,13 @@ private:
 	int screen_height;
 	float fov;
 	float wall_height;
+	std::vector<Texture*>& wall_textures;
 	RayCaster ray_caster;
 public:
-	MapDrawer(YAML::Node& config);
+	MapDrawer(YAML::Node& config, std::vector<Texture*>& wall_textures);
 	~MapDrawer();
 	std::vector<float> draw(SDL_Renderer* renderer, Map& map, 
-													Vector position, float view_angle,
-													std::vector<Texture*>& wall_textures);
+													Vector position, float view_angle);
 };
 
 #endif
