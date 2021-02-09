@@ -14,7 +14,6 @@ void MessageProcessor::checkNews() {
 	this->messages.lock();
 	while (!this->messages.isEmptySync()) {
 		Message m = this->messages.popSync();
-		//std::cout << "En processor. Mensaje:"<< (char)m.getType()<< ", cliente:" << m.getClientId() << std::endl;
 		this->gameManager.newMessage(m);
 	}
 	this->messages.unlock();

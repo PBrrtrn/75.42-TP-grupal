@@ -65,6 +65,11 @@ float GameStatus::getAngle(int playerID) {
     return this->playersDirections[playerID].getAngle();
 }
 
+
+Vector GameStatus::getDirection(int playerID) {
+    return this->playersDirections[playerID];
+}
+
 void GameStatus::checkPlayerPickups(){
 	for (auto& item: this->items) {
 		Vector item_position = item.getPosition();

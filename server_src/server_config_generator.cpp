@@ -86,11 +86,11 @@ int main(const int argc, const char* argv[]) {
 		out << YAML::Key << "Moves" ;
 			out << YAML::BeginMap;
 				out << YAML::Key << "Step";
-				out << YAML::Value << 5 ;
+				out << YAML::Value << 0.1 ;
 				out << YAML::Key << "RotationLeft";
-				out << YAML::Value << 15 ;	
+				out << YAML::Value << 0.1 ;	
 				out << YAML::Key << "RotationRight";
-				out << YAML::Value << -15 ;			
+				out << YAML::Value << -0.1 ;			
 		out << YAML::EndMap;
 
 		out << YAML::Key << "Server" ;
@@ -157,11 +157,11 @@ int main(const int argc, const char* argv[]) {
 	
 	doors.push_back(doorSerialized);
 
-	SpawnPoint sp1(Vector(24,50), Vector(1,0));	
+	SpawnPoint sp1(Vector(3,3), Vector(1,0));	
 	std::string sp1Serialized = SPSerializer.serialize(sp1);
-	SpawnPoint sp2(Vector(67,29), Vector(1,0));
+	SpawnPoint sp2(Vector(5,5), Vector(1,0));
 	std::string sp2Serialized = SPSerializer.serialize(sp2);
-	SpawnPoint sp3(Vector(115, 10), Vector(1,0));
+	SpawnPoint sp3(Vector(10, 10), Vector(1,0));
 	std::string sp3Serialized = SPSerializer.serialize(sp3);
 
 	spawnpoints.push_back(sp1Serialized);

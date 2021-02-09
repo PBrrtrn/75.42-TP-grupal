@@ -7,9 +7,10 @@ MoveForward::MoveForward() {}
 
 void MoveForward::tryAction(GameStatus& gs, int clientID){
     Vector pos = gs.getPosition(clientID);
-	Vector angle = gs.getAngle(clientID);
-    angle.turnUnitary();
-    Vector next_position = pos + (angle * this->step);
+	Vector direction = gs.getDirection(clientID);
+    direction.turnUnitary();
+    Vector next_position = pos + (direction * this->step);
+    std::cout << next_position.x << "," << next_position.y << std::endl;
     is_colision(clientID, next_position, gs);
 }
 

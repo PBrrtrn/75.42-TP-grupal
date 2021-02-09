@@ -5,13 +5,15 @@
 
 #include "KeyboardState.h"
 #include "../ServerConnection.h"
+#include "../../common_src/blocking_queue.h"
 
 class GameInputHandler {
 private:
 	KeyboardState keyboard_state;
 	ServerConnection& server_connection;
+	BlockingQueue<MessageType>& blockingQueue;
 public:
-	GameInputHandler(ServerConnection& server_connection);
+	GameInputHandler(ServerConnection& server_connection, BlockingQueue<MessageType>& blockingQueue);
 	~GameInputHandler();
 	void handle(SDL_Event input);
 };

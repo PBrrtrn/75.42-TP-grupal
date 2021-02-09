@@ -17,7 +17,8 @@ private:
 public:
 	InputHandler(std::atomic<bool>& in_game, 
 							 UpdateQueue& update_queue,
-							 ServerConnection& server_connection);
+							 ServerConnection& server_connection,
+							 BlockingQueue<MessageType>& blockingQueue);
 	~InputHandler();
 	void process(SDL_Event user_event);
 };

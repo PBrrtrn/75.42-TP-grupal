@@ -147,25 +147,25 @@ if (buffer[0] == 0) {
 			
 			PlayerListItem player;
 			for (int i = 0; i < size/sizeof(PlayerListItem); i++ ){
-				std::cout << "receiving player in list" << std::endl;
+				//std::cout << "receiving player in list" << std::endl;
 				socket.socket_receive((char*)(&player),sizeof(PlayerListItem));
-				std::cout << "player id:" << std::to_string(player.clientId) << std::endl;	
+				//std::cout << "player id:" << std::to_string(player.clientId) << std::endl;	
 			}						
 
 			socket.socket_receive((char*)(&size), sizeof(size));
 			DoorListItem door;
 			for (int i = 0; i < size/sizeof(DoorListItem); i++ ){
-				std::cout << "receiving door in list" << std::endl;
+				//std::cout << "receiving door in list" << std::endl;
 				socket.socket_receive((char*)(&door),sizeof(DoorListItem));
-				std::cout << "door is open:" << std::to_string(door.isOpen ? 1 : 0) << std::endl;	
+				//std::cout << "door is open:" << std::to_string(door.isOpen ? 1 : 0) << std::endl;	
 			}							
 
 			socket.socket_receive((char*)(&size), sizeof(size));
 			ItemListElement item;
 			for (int i = 0; i < size/sizeof(ItemListElement); i++ ){
-				std::cout << "receiving item in list" << std::endl;
+				//std::cout << "receiving item in list" << std::endl;
 				socket.socket_receive((char*)(&item),sizeof(ItemListElement));
-				std::cout << "item is visible:" << std::to_string(item.isVisible? 1 : 0) << std::endl;	
+				//std::cout << "item is visible:" << std::to_string(item.isVisible? 1 : 0) << std::endl;	
 			}
 		}
 		if (report == TYPE_SERVER_SEND_GAME_STATISTICS){

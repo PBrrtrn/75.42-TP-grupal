@@ -21,7 +21,8 @@ public:
 								UpdateQueue& update_queue,
 								ServerConnection& server_connection,
 								MenuStatus& menu_status,
-								GameStatusMonitor& game_status_monitor);
+								GameStatusMonitor& game_status_monitor,
+								BlockingQueue<MessageType>& blockingQueue);
 	~StatusUpdater();
 	void run();
 };

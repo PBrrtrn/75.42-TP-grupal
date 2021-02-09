@@ -1,9 +1,10 @@
 #include "GameStatusUpdater.h"
 
 GameStatusUpdater::GameStatusUpdater(GameStatusMonitor& game_status_monitor,
-																		 ServerConnection& server_connection) 
+						ServerConnection& server_connection,BlockingQueue<MessageType>& blockingQueue) 
 : game_status_monitor(game_status_monitor), 
-	server_connection(server_connection)  { 
+	server_connection(server_connection),
+	blockingQueue(blockingQueue)  { 
 		this->hasMap = false;
 	}
 
@@ -21,13 +22,19 @@ void GameStatusUpdater::updateStatus() {
 		this->server_connection.sendPing();
 	}
 	
+	GameStatusUpdate gsu = this->server_connection.fetchGameStatusUpdate();
 	
-	//std::cout << "voy a recibir game status update" << std::endl;
+	this->game_status_monitor.updateGameStatus(gsu);
+	std::vector<MessageType> events;
 	
-	//while (true) {
-	this->server_connection.fetchGameStatusUpdate();
-	//this->server_connection.sendPing();
-		
-		//}
+	this->blockingQueue.lock();
+	while (!this->blockingQueue.isEmptySync()) {
+		MessageType mt = this->blockingQueue.popSync();
+		events.push_back(mt);
+	}
+	this->blockingQueue.unlock();
+	
+	this->server_connection.sendEvents(events);
+
 	
 	}

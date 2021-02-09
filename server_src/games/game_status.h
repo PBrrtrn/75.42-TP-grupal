@@ -35,9 +35,10 @@ public:
 	
 	GameStatus(std::string mapLocation);
 	Vector getPosition();
-	float getAngle();
+	//float getAngle();
 	void addPlayer(int playerID, Vector &position, Vector &direction);
 	Vector getPosition(int playerID);
+	Vector getDirection(int playerID);
 	float getAngle(int playerID);
 	void setPosition(int playerID, Vector &position);
     void setPosition(int playerID, float x, float y);

@@ -137,10 +137,10 @@ Map ServerConnection::fetchMap() {
 
 void ServerConnection::sendEvents(std::vector<MessageType> events) {
 	std::unique_lock<std::mutex> lock(this->mutex);
-	std::cout << "sendEvents antes de cv" << std::endl;
+	//std::cout << "sendEvents antes de cv" << std::endl;
 	while (this->receiving) this->cv.wait(lock);
 
-	std::cout << "sendEvents" << std::endl;
+	//std::cout << "sendEvents" << std::endl;
 
 	if (events.size() == 0) {
 		events.push_back(TYPE_CLIENT_PING);
@@ -149,14 +149,18 @@ void ServerConnection::sendEvents(std::vector<MessageType> events) {
 	size_t message_size = events.size()*sizeof(ClientMessage);
 	ssize_t sent = this->socket.socket_send((char*)&message_size, sizeof(size_t));
 	
-	std::cout << "sendEvents sent bytes:" << std::to_string(sent) << std::endl;
+	//std::cout << "sendEvents sent bytes:" << std::to_string(sent) << std::endl;
+	
+	
 
 	for (MessageType event : events) {
 		ClientMessage message { event, 0 };
 		this->socket.socket_send((char*)&message, sizeof(ClientMessage));
+		//if (message.type != TYPE_CLIENT_PING)
+			//std::cout << "sendEvents sent msg:" << std::to_string(message.type) << std::endl;
 	}
 	
-	std::cout << "end sendEvents" << std::endl;
+	//std::cout << "end sendEvents" << std::endl;
 	this->receiving = true;
 	cv.notify_one();
 	
@@ -178,9 +182,9 @@ void ServerConnection::sendPing() {
 
 GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 	std::unique_lock<std::mutex> lock(this->mutex);
-	std::cout << "fetchGameStatusUpdate antes de cv" << std::endl;
+	//std::cout << "fetchGameStatusUpdate antes de cv" << std::endl;
 	while (!this->receiving) this->cv.wait(lock);
-	std::cout << "fetchGameStatusUpdate" << std::endl;
+	//std::cout << "fetchGameStatusUpdate" << std::endl;
 
 	MessageType message_type;
 	this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
@@ -191,8 +195,7 @@ GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 	PlayerStatus player_status;
 	this->socket.socket_receive((char*)&player_status, sizeof(PlayerStatus));
 
-	std::cout << "fetchGameStatusUpdate health:"<< std::to_string(player_status.health) << std::endl;
-	;
+	//std::cout << "fetchGameStatusUpdate health:"<< std::to_string(player_status.health) << std::endl;
 
 	std::vector<PlayerListItem> players_list;
 	size_t player_list_size;
@@ -232,8 +235,20 @@ GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 
 	// TODO: Procesar las tres listas para armar un GameStatusUpdate
 
-	GameStatusUpdate update { this->client_id, Vector(1.5,1.5), 100, 0, 0, 0, true };
-	std::cout << "fetchGameStatusUpdate end" << std::endl;
+	//GameStatusUpdate update { this->client_id, Vector(1.5,1.5), 100, 0, 0, 0, true };
+	GameStatusUpdate update;
+	update.position = player_status.position;
+	update.direction = player_status.direction;
+	
+/*		Vector position;
+	Vector direction;
+	char selected_weapon;
+	uint8_t health;
+	uint8_t bullets;
+	uint8_t lives;
+	bool has_key;*/
+	
+	//std::cout << "fetchGameStatusUpdate end" << std::endl;
 	this->receiving = false;
 	cv.notify_one();
 	return update;

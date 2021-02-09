@@ -18,7 +18,7 @@ MapServer::MapServer(const std::string& file_location): map(file_location.c_str(
 	}
 	if(mapa["spawnpoints"]) {
 		this->spawnpoints_yml = mapa["spawnpoints"].as<std::vector<std::string>>();
-
+		this->loadSpawnPoints();
 	}
 	
 }

@@ -158,9 +158,13 @@ void Renderer::renderGameOption(GameListItem& option, int y, bool highlight) {
 void Renderer::renderMatch(MapDrawer& map_drawer, Map& map) {
   SDL_RenderClear(this->renderer);
 
+  GameStatusUpdate u = this->game_status_monitor.getUpdate();
+
+  //std::cout << "x:" << std::to_string(u.position.getXCoordinate()) << "y:" << std::to_string(u.position.getYCoordinate()) << std::endl;
+
   std::vector<float> z_buffer = map_drawer.draw(this->renderer, map,
-                                                Vector(4,4),
-                                                3 * M_PI/2);
+                                                u.position,
+                                                u.direction.getAngle());
 
   SDL_RenderPresent(this->renderer);
 }

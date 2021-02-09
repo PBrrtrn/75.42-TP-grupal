@@ -6,9 +6,9 @@
 
 class Action {
 protected:
-    int step;
-    int rotation_left;
-    int rotation_right;
+    float step;
+    float rotation_left;
+    float rotation_right;
     
 public:
     explicit Action();

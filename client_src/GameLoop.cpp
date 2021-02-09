@@ -38,10 +38,12 @@ void GameLoop::run() {
   std::string port = this->config["server"]["port"].as<std::string>();
   ServerConnection server_connection(host, port);
 
-  InputHandler input_handler(in_game, update_queue, server_connection);
+  BlockingQueue<MessageType> blockingQueue;
+
+  InputHandler input_handler(in_game, update_queue, server_connection, blockingQueue);
 
   StatusUpdater status_updater(in_game, update_queue, server_connection,
-                               menu_status, game_status_monitor);
+                               menu_status, game_status_monitor,blockingQueue);
 
   Renderer renderer(this->config, in_game, 
                     game_status_monitor, 
