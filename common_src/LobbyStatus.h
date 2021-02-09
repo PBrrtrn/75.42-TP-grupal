@@ -1,4 +1,4 @@
-#ifndef __LOBBY_STATUS_H_
+/*#ifndef __LOBBY_STATUS_H_
 #define __LOBBY_STATUS_H_
 
 struct LobbyStatus{
@@ -9,3 +9,4 @@ struct LobbyStatus{
 };
 
 #endif
+*/

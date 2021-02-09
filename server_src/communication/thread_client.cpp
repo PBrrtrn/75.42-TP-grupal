@@ -7,6 +7,7 @@ ThreadClient::ThreadClient(int id, BlockingQueue<Message>& messages,
 		peer(std::move(socket)), keep_running(true), 
 		dead(false), serverStatus(serverStatus), lobbyStatus(lobbyStatus) {
 			this->game_status = NULL;
+			this->game_started = false;
 }
 
 void ThreadClient::run() {
@@ -61,16 +62,16 @@ void ThreadClient::run() {
 
 	} 
 
-	std::cout << "ThreadClient: voy a ingresar loop de juego" << std::endl;
+	std::cout << "ThreadClient "<< this->id <<": voy a ingresar loop de juego" << std::endl;
 
     while (keep_running){
         try {
 
-			if ( this->messages_out != NULL && !this->messages_out->isEmpty()) 
+			//if ( this->messages_out != NULL && !this->messages_out->isEmpty()) 
 			//puede que haya un problema similar al de la cola de entrada al servidor - 
 			//hay que bloquear la cola, desencolar TODOS los game status pendientes de envio, 
 			//y luego desbloquear
-			{
+			//{
 				Message m = this->messages_out->pop();
 				this->informSomethingToReport(m.getType());
 				//std::cout << "got a new event in outgoing queue in client " << this->id << 
@@ -78,39 +79,45 @@ void ThreadClient::run() {
 				switch (m.getType())
 				{
 				case TYPE_SERVER_SEND_MAP:
+					std::cout << "ThreadClient "<< this->id <<": voy a enviar mapa" << std::endl;
 					this->sendCurrentGameMap();
 					break;					
 				case TYPE_LOBBY_STATUS_UPDATE:
+					std::cout << "ThreadClient "<< this->id <<": voy a enviar lobby status" << std::endl;
 					this->sendLobbyStatus(m.getEntity());
 					break;
 				case TYPE_SERVER_SEND_GAME_UPDATE:
+					std::cout << "ThreadClient "<< this->id <<": voy a enviar game update" << std::endl;
 					this->sendGameUpdate();
 					break;
 				case TYPE_SERVER_SEND_GAME_STATISTICS:
+					std::cout << "ThreadClient "<< this->id <<": voy a mandar statistics" << std::endl;
 					break;
 				default:
+					std::cout << "ThreadClient "<< this->id <<": no se donde estoy! no procese este evento!" << std::endl;
 					break;
 				}
-			} else {
-				this->informNothingToReport();
-			}
+			//} else {
+			//	this->informNothingToReport();
+			//}
 			
 			//std::cout << "Escuchando eventos de cliente remoto o ping" << std::endl;
-			
-			size_t size;
-			int received = this->peer.socket_receive((char*)(&size), sizeof(size));
-			
-			ClientMessage cMessage;
-			for (int i = 0; i < size / sizeof(cMessage); i++ ){				
-				int received = this->peer.socket_receive((char*)(&cMessage), sizeof(cMessage));
-				if (received < sizeof(cMessage)){
-					std::cout << "recv en threadclient fallo, no recibi nada! (cerro el socket?)" << std::endl;
-					this->shutdown();
-				} else {
-					Message m(cMessage.type, cMessage.entityId, this->id);
-					this->messages.push(m);				
+			//if (this->game_started){
+				size_t size;
+				int received = this->peer.socket_receive((char*)(&size), sizeof(size));
+				
+				ClientMessage cMessage;
+				for (int i = 0; i < size / sizeof(cMessage); i++ ){				
+					int received = this->peer.socket_receive((char*)(&cMessage), sizeof(cMessage));
+					if (received < sizeof(cMessage)){
+						std::cout << "recv en threadclient fallo, no recibi nada! (cerro el socket?)" << std::endl;
+						this->shutdown();
+					} else {
+						Message m(cMessage.type, cMessage.entityId, this->id);
+						this->messages.push(m);				
+					}
 				}
-			}
+			//}
         } catch (...) {
             if (!keep_running) break;
         }
@@ -118,15 +125,15 @@ void ThreadClient::run() {
 }
 
 void ThreadClient::informNothingToReport(){
-	char message = TYPE_SERVER_NOTHING_TO_REPORT;
+	MessageType message = TYPE_SERVER_NOTHING_TO_REPORT;
 	//std::cout << "informando que no hay nada que reportar" << std::endl;
-	this->peer.socket_send(&message, sizeof(char));
+	this->peer.socket_send((char*)&message, sizeof(MessageType));
 }
 
-void ThreadClient::informSomethingToReport(int type){
-	char message = type;
+void ThreadClient::informSomethingToReport(MessageType type){
+	MessageType message = type;
 	//std::cout << "informando que hay algo que reportar" << std::endl;
-	this->peer.socket_send(&message, sizeof(char));
+	this->peer.socket_send((char*)&message, sizeof(MessageType));
 }
 
 
@@ -198,6 +205,7 @@ void ThreadClient::sendGamesList() {
 void ThreadClient::sendLobbyStatus(int gameID) {
 	LobbyStatusData lobbyStatus = this->lobbyStatus.getLobbyStatus(gameID);
 	this->peer.socket_send((char*)(&lobbyStatus), sizeof(LobbyStatusData));
+	this->game_started = lobbyStatus.gameStarted;
 }
 
 void ThreadClient::sendGameStatistics(int gameID) {

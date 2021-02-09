@@ -6,7 +6,7 @@ int Message::getClientId(){
 	return this->clientId;
 }
 
-int Message::getType(){
+MessageType Message::getType(){
 	return this->type;
 }
 int Message::getEntity(){

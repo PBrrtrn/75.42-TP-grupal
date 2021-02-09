@@ -18,6 +18,15 @@ ServerConnection::ServerConnection(std::string host, std::string service) {
 
 ServerConnection::~ServerConnection() { }
 
+MessageType ServerConnection::receiveIncomingEvent(){
+	std::unique_lock<std::mutex> lock(this->mutex);
+	MessageType message_type;
+	this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
+	
+	return message_type;
+	
+}
+
 std::vector<MapListItem> ServerConnection::fetchAvailableMaps() {
 	std::unique_lock<std::mutex> lock(this->mutex);
 
@@ -74,18 +83,19 @@ bool ServerConnection::joinGame(char game_id) {
 	return bool(buffer);
 }
 
-LobbyStatus ServerConnection::fetchLobbyStatus() {
+LobbyStatusData ServerConnection::fetchLobbyStatus() {
 	std::unique_lock<std::mutex> lock(this->mutex);
 
-	MessageType message_type;
-	this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
-	if (message_type != TYPE_LOBBY_STATUS_UPDATE) {
-		throw ServerConnectionError("Expected lobby update");
-	}
-
-	LobbyStatus lobby_status;
-	this->socket.socket_receive((char*)&lobby_status, sizeof(LobbyStatus));
-
+	//MessageType message_type;
+	//this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
+	LobbyStatusData lobby_status;
+	//if (message_type != TYPE_LOBBY_STATUS_UPDATE) {
+	//	std::cout << "esto no era un lobby status update:" << message_type << std::endl;
+		//throw ServerConnectionError("Expected lobby update");
+	//} else {
+		this->socket.socket_receive((char*)&lobby_status, sizeof(LobbyStatusData));
+		std::cout << "recibi un lobby status update" << std::endl;
+	//}
 	return lobby_status;
 }
 
@@ -99,18 +109,18 @@ void ServerConnection::exitLobby() {
 Map ServerConnection::fetchMap() {
 	std::unique_lock<std::mutex> lock(this->mutex);
 
-	MessageType message_type;
-	this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
-	if (message_type != TYPE_SERVER_SEND_MAP) {
-		throw ServerConnectionError("Expected map");
-	}
+	//MessageType message_type;
+	//this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
+	//if (message_type != TYPE_SERVER_SEND_MAP) {
+	//	std::cout << "esto no era obtener el mapa." << message_type << std::endl;
+		//throw ServerConnectionError("Expected map");
+	//} else {
+		size_t map_data_size;
+		this->socket.socket_receive((char*)&map_data_size, sizeof(size_t));
 
-	size_t map_data_size;
-	this->socket.socket_receive((char*)&map_data_size, sizeof(size_t));
-
-	char map_data[map_data_size];
-	this->socket.socket_receive(map_data, map_data_size);
-
+		char map_data[map_data_size];
+		this->socket.socket_receive(map_data, map_data_size);		
+	//}
 	// TODO: Construir el mapa con la data y devolverlo
 	Map map("../maps/map1.yml");
 	return map;
@@ -126,6 +136,19 @@ void ServerConnection::sendEvents(std::vector<MessageType> events) {
 		ClientMessage message { event, 0 };
 		this->socket.socket_send((char*)&message, sizeof(ClientMessage));
 	}
+}
+
+void ServerConnection::sendPing() {
+	std::unique_lock<std::mutex> lock(this->mutex);
+
+	ClientMessage message { TYPE_CLIENT_PING, 0 };
+
+	size_t message_size = sizeof(ClientMessage);
+	this->socket.socket_send((char*)&message_size, sizeof(message_size));
+
+	
+	this->socket.socket_send((char*)&message, sizeof(message));
+	
 }
 
 GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {

@@ -39,7 +39,10 @@ void ThreadGame:: run() {
 		
 		this->gameList.at(this->id).players = this->clients.size();
 		
+		if (!start_running)
+			break;
 		this->sendLobbyStatus();
+		//this->sendLobbyStatus();
 		usleep(1000000);
 		this->waiting_time_to_start--;
 	}

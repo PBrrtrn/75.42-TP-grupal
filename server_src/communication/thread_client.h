@@ -31,6 +31,7 @@ private:
     LobbyStatus& lobbyStatus;
     ClientGameStatus* game_status;
     bool choosing_game;
+    bool game_started;
     
 	void sendJoinOk();
 	void sendJoinRefused();
@@ -96,7 +97,7 @@ public:
     
     void informNothingToReport();
     
-    void informSomethingToReport(int type);
+    void informSomethingToReport(MessageType type);
 
     virtual ~ThreadClient() override;
 };

@@ -60,6 +60,7 @@ void Renderer::load() {
   }
 }
 
+/*
 void Renderer::run() {
   while (true) {
     while (!this->in_game) renderMenu();
@@ -68,7 +69,7 @@ void Renderer::run() {
     MapDrawer map_drawer(this->config, this->wall_textures);
     while (this->in_game) renderMatch(map_drawer, map);
   }
-}
+}*/
 
 void Renderer::renderMenu() {
   SDL_RenderClear(this->renderer);
@@ -157,7 +158,7 @@ void Renderer::renderMatch(MapDrawer& map_drawer, Map& map) {
   SDL_RenderPresent(this->renderer);
 }
 
-/*
+
 void Renderer::run() {
   Map map = this->game_status_monitor.getMap();
   MapDrawer map_drawer(this->config, this->wall_textures);
@@ -168,7 +169,7 @@ void Renderer::run() {
     auto start_t = std::chrono::steady_clock::now();
 
     GameStatusUpdate status_update = this->game_status_monitor.getUpdate();
-    if (!status_update.running) break;
+    //if (!status_update.running) break;
 
     this->render(status_update, map_drawer, map);
 
@@ -192,7 +193,7 @@ void Renderer::render(GameStatusUpdate& status_update,
 
   SDL_RenderPresent(this->renderer);
 }
-*/
+
 
 RendererConstructorError::RendererConstructorError
                 (const char *sdl_error) noexcept {

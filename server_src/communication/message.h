@@ -15,7 +15,7 @@ class Message {
 		
 		Message(MessageType type,int entity,int clientId);
 		
-		int getType();
+		MessageType getType();
 		int getEntity();
 		int getClientId();
 		

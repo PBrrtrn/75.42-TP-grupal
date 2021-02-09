@@ -9,7 +9,7 @@
 #include "../common_src/MapListItem.h"
 #include "../common_src/GameListItem.h"
 #include "../common_src/MessageType.h"
-#include "../common_src/LobbyStatus.h"
+#include "../common_src/LobbyStatusData.h"
 #include "game_status/GameStatus.h"
 
 class ServerConnection {
@@ -23,11 +23,13 @@ public:
 	std::vector<MapListItem> fetchAvailableMaps();
 	std::vector<GameListItem> fetchGameOptions();
 	bool joinGame(char game_id);
-	LobbyStatus fetchLobbyStatus();
+	LobbyStatusData fetchLobbyStatus();
 	void exitLobby();
 	Map fetchMap();
 	void sendEvents(std::vector<MessageType> events);
 	GameStatusUpdate fetchGameStatusUpdate();
+	MessageType receiveIncomingEvent();
+	void sendPing();
 };
 
 #define ERROR_BUF_LEN 256

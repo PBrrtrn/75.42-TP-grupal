@@ -118,14 +118,17 @@ if (buffer[0] == 0) {
 	//char clientEvent[2];
 	//clientEvent[0] = TYPE_CLIENT_PING;
 	//clientEvent[1] = 0;
-	char report;				
+	MessageType report;				
+	bool gameStarted = false;
 	while(true) {
-		char report;
-		socket.socket_receive(&report, sizeof(char));
+		//MessageType report;
+		socket.socket_receive((char*)&report, sizeof(report));
 		if (report == TYPE_LOBBY_STATUS_UPDATE){
 			std::cout << "server has a lobby to send!" << std::endl;
 			socket.socket_receive((char*)(&ls), sizeof(LobbyStatusData));
 			std::cout << "lobby status: players:" << (int)ls.players<< "remaining time: " << (int)ls.remainingTime << std::endl;					
+			gameStarted = ls.gameStarted;
+				
 		}
 		if (report == TYPE_SERVER_SEND_MAP){
 			size_t mapSize;
@@ -170,11 +173,14 @@ if (buffer[0] == 0) {
 		}	
 		
 		//alterno entre hacer "use" y un ping
-		m.type = m.type == TYPE_CLIENT_PING ? TYPE_USE_DOOR : TYPE_CLIENT_PING ;
-		m.entityId = 0;
-		size_t size = sizeof(ClientMessage);
-		socket.socket_send((char*)(&size),sizeof(size));
-		socket.socket_send((char*)(&m),sizeof(m));	
+		//if (gameStarted){
+			//m.type = m.type == TYPE_CLIENT_PING ? TYPE_USE_DOOR : TYPE_CLIENT_PING ;
+			m.type = TYPE_CLIENT_PING  ;
+			m.entityId = 0;
+			size_t size = sizeof(ClientMessage);
+			socket.socket_send((char*)(&size),sizeof(size));
+			socket.socket_send((char*)(&m),sizeof(m));	
+		//}
 		
 	}
 } else {

@@ -48,6 +48,7 @@ void MenuStatusUpdater::handleLobbyScreen(int selected_option,
 																				  UpdateType update) {
 	std::vector<GameListItem> games = this->menu_status.getGameOptions();
 
+	/* opcion 0 esta reservada para host game, opcion 1 para refrescar*/
 	if (update == MENU_SELECT_OPTION) {
 		if (selected_option == 0) {
 			this->menu_status.updateCurrentScreen(START_GAME);
@@ -55,7 +56,48 @@ void MenuStatusUpdater::handleLobbyScreen(int selected_option,
 			refresh();
 		} else {
 			// Pedir al server que te agregue a la partida
-			this->in_game = true;
+			/*si pidieron entrar a un juego, index = opcion - 2 */
+			//this->in_game = 
+			
+
+			
+			if (!this->server_connection.joinGame(games.at(selected_option - 2).gameId)) {
+			std::cout << "entre al juego! GameId:" << games.at(selected_option - 2).gameId << std::endl;	
+				LobbyStatusData l;
+				l.gameStarted = false;
+				MessageType message;
+				message = TYPE_LOBBY_STATUS_UPDATE;
+				
+				while (message == TYPE_LOBBY_STATUS_UPDATE) {
+					
+					std::cout << "voy a recibir un incoming event" << std::endl;
+					
+					MessageType message = this->server_connection.receiveIncomingEvent();
+					
+					std::cout << "llego un incoming event:" << message << std::endl;
+					
+					this->server_connection.sendPing();
+					
+					if (message == TYPE_LOBBY_STATUS_UPDATE) {
+						std::cout << "hay que entrar a lobby update" << std::endl;
+						l = this->server_connection.fetchLobbyStatus();	
+					}
+					if (message == TYPE_SERVER_SEND_MAP) {
+						std::cout << "hay que salir del menu e ir a obtener el mapa" << std::endl;
+						break;
+					}					
+					
+					
+					//else {
+					//	std::cout << "ya empezo el juego" << std::endl;
+					//	l.gameStarted = true;
+						
+					//}
+				}
+				//std::cout << "hay que obtener el mapa" << std::endl;
+				this->in_game = true;
+			}
+			
 		}
 	} else {
 		int n_options = games.size() + 2;

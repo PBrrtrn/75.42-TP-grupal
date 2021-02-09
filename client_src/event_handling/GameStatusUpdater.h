@@ -6,6 +6,7 @@
 
 class GameStatusUpdater {
 private:
+	bool hasMap;
 	GameStatusMonitor& game_status_monitor;
 	ServerConnection& server_connection;
 public:
