@@ -5,18 +5,19 @@
 
 #define WALL_HEIGHT 1.5
 
-MapDrawer::MapDrawer(YAML::Node& config, std::vector<Texture*>& wall_textures,
+MapDrawer::MapDrawer(YAML::Node& config, Map& map,
+										 std::vector<Texture*>& wall_textures,
 										 std::vector<Animation*>& enemy_animations)
-	: screen_width(config["window"]["width"].as<int>()), 
-		screen_height(config["window"]["height"].as<int>()), 
-		fov(config["graphics"]["FOV"].as<float>()),
-		wall_height(config["graphics"]["wall_height"].as<float>()),
-		wall_textures(wall_textures), enemy_animations(enemy_animations) { }
+: screen_width(config["window"]["width"].as<int>()), 
+	screen_height(config["window"]["height"].as<int>()), 
+	fov(config["graphics"]["FOV"].as<float>()),
+	wall_height(config["graphics"]["wall_height"].as<float>()),
+	wall_textures(wall_textures), enemy_animations(enemy_animations), 
+	map(map) { }
 
 MapDrawer::~MapDrawer() { }
 
-void MapDrawer::draw(SDL_Renderer* renderer, Map& map,
-										 Vector position, float view_angle,
+void MapDrawer::draw(SDL_Renderer* renderer, Vector position, float view_angle,
 										 std::vector<PlayerListItem>& enemies) {
 	SDL_Rect top_half { 0, 0, this->screen_width, (this->screen_height)/2 };
 	SDL_SetRenderDrawColor(renderer, 130, 130, 130, 255);
@@ -38,7 +39,7 @@ void MapDrawer::draw(SDL_Renderer* renderer, Map& map,
 
 	int x = 0;
 	for (float a = initial_angle; a > final_angle; a -= a_increment) {
-		RayHit hit = this->ray_caster.castRay(map, position, a);
+		RayHit hit = this->ray_caster.castRay(this->map, position, a);
 
 		float distance = cos(a - view_angle) * hit.distance;
 		int l = std::abs(this->wall_height * projection_distance / distance);

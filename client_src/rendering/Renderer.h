@@ -13,6 +13,7 @@
 #include "Animation.h"
 #include "Texture.h"
 #include "MapDrawer.h"
+#include "UIDrawer.h"
 #include "../../common_src/Map.h"
 #include "../../common_src/Thread.h"
 
@@ -28,7 +29,7 @@ private:
   std::vector<Animation*> enemy_animations;
   std::vector<Texture*> wall_textures;
   void load();
-  void renderMatch(MapDrawer& map_drawer, Map& map);
+  void renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer);
 public:
   Renderer(YAML::Node& config, std::atomic<bool>& in_game, 
            GameStatusMonitor& game_status_monitor,

@@ -5,8 +5,8 @@ ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m,
 	LobbyStatus& lobbyStatus) : 
 	id(gameId), messages(m), gameStatus(map_location), gameList(list),
 	map_id(mapId), lobbyStatus(lobbyStatus) {
-		this->remaining_time = 60 * 1000;
-		this->waiting_time_to_start = 60; 
+		this->remaining_time = 30 * 1000; // Fijar por config
+		this->waiting_time_to_start = 30; 
 		this->start_running = true;
 		this->is_dead = false;
 }

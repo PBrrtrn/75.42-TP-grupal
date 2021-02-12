@@ -72,21 +72,26 @@ void Renderer::run() {
     while (!this->in_game) menu_renderer.render();
 
     Map map = this->game_status_monitor.getMap();
-    MapDrawer map_drawer(this->config, this->wall_textures, 
+    MapDrawer map_drawer(this->config, map, 
+                         this->wall_textures, 
                          this->enemy_animations);
-    while (this->in_game) renderMatch(map_drawer, map);
+    UIDrawer ui_drawer(this->renderer, this->config["game_ui"]);
+    while (this->in_game) renderMatch(map_drawer, ui_drawer);
   }
 }
 
-void Renderer::renderMatch(MapDrawer& map_drawer, Map& map) {
+void Renderer::renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer) {
   SDL_RenderClear(this->renderer);
 
   GameStatusUpdate status_update = this->game_status_monitor.getUpdate();
 
-  map_drawer.draw(this->renderer, map, 
-                  status_update.position, 
+  map_drawer.draw(this->renderer, status_update.position, 
                   status_update.direction.getAngle(),
                   status_update.enemies);
+
+  ui_drawer.draw(this->renderer, status_update.health, 
+                 status_update.enemies.size(), status_update.bullets,
+                 status_update.lives, status_update.has_key);
 
   SDL_RenderPresent(this->renderer);
 }

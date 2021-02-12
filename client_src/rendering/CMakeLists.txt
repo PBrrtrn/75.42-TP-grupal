@@ -4,6 +4,7 @@ add_library(rendering SHARED
 	Animation.cpp
 	Font.cpp
 	MapDrawer.cpp
+	UIDrawer.cpp
 	Renderer.cpp
 	MenuRenderer.cpp
 	GameRenderer.cpp

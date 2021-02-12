@@ -25,6 +25,21 @@ menu_ui:
   directory: ../assets/menu_ui/
   font: wolfenstein.ttf
   background: background.png
+game_ui:
+  directory: ../assets/game_ui/
+  key_icon:
+    texture: key_icon.png
+    x_pos: 10
+    y_pos: 300
+    width: 80
+    height: 60
+  font: menufont.ttf
+  bar:
+    x_pos: 0
+    y_pos: 400
+    width: 640
+    height: 80
+    texture: ui_bar.png
 walls:
   directory: ../assets/textures/walls/
   files:

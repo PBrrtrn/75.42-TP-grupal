@@ -29,6 +29,4 @@ void GameStatusUpdater::updateStatus() {
 	this->message_queue.unlock();
 	
 	this->server_connection.sendEvents(events);
-
-	
-	}
+}
