@@ -10,7 +10,6 @@ void MoveLeft::tryAction(GameStatus& gs, int clientID){
 		float angle = gs.getAngle(clientID);
     angle += this->rotation_left;
     gs.setAngle(clientID, angle);
-    std::cout << angle << std::endl;
 }
 
 MoveLeft::~MoveLeft() {}

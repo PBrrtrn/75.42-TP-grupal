@@ -85,10 +85,6 @@ void Renderer::renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer) {
 
   GameStatusUpdate status_update = this->game_status_monitor.getUpdate();
 
-  std::cout << "Position: (" << status_update.position.x << ", " << status_update.position.y << ")" << std::endl;
-  std::cout << "Direction: (" << status_update.direction.x << ", " << status_update.direction.y << ")" << std::endl;
-  std::cout << "Angle: " << status_update.direction.getAngle() << std::endl;
-
   map_drawer.draw(this->renderer, status_update.position, 
                   status_update.direction.getAngle(),
                   status_update.enemies);

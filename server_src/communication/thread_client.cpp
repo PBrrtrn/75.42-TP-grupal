@@ -131,15 +131,6 @@ void ThreadClient::sendGameUpdate() {
 		std::cout << "gameStatus pointer in client is NULL!" << std::endl;
 		return;
 	}
-	if (this->id == 1) {
-		std::cout << "Position: (" << this->game_status->thisPlayerStatus.position.x;
-		std::cout << "," << this->game_status->thisPlayerStatus.position.y << ")" << std::endl;
-
-		std::cout << "Direction: (" << this->game_status->thisPlayerStatus.direction.x;
-		std::cout << "," << this->game_status->thisPlayerStatus.direction.y << ")" << std::endl;
-
-		std::cout << "Angle:" << this->game_status->thisPlayerStatus.direction.getAngle() << std::endl;
-	}
 	this->peer.socket_send((char*)(&this->game_status->thisPlayerStatus), sizeof(PlayerStatus));
 
 	size_t size = this->game_status->players.size()*sizeof(PlayerListItem);

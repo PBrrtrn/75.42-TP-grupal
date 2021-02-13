@@ -10,7 +10,6 @@ void MoveRight::tryAction(GameStatus& gs, int clientID){
     float angle = gs.getAngle(clientID);
     angle += this->rotation_right;
     gs.setAngle(clientID, angle);
-    std::cout << angle << std::endl;
 }
 
 MoveRight::~MoveRight() {}
