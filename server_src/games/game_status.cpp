@@ -169,6 +169,16 @@ std::unordered_map<int,MovementState> GameStatus::getPlayerMovementStates(){
 	return states;		
 }
 
+std::unordered_map<int,MovementState> GameStatus::getPlayerRotationStates(){
+	std::unordered_map<int,MovementState> states;
+	for (auto& p: this->players){
+		if (p.second.getCurrentRotationState() != STATE_NOT_MOVING){
+			states.insert({p.first,p.second.getCurrentRotationState()});
+		}
+	}
+	return states;		
+}
+
 //void GameStatus::updatePlayerPositions(){
 //}
 

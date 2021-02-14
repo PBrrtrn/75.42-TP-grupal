@@ -56,13 +56,13 @@ void GameLoop::run() {
   while (true) {
     auto start_t = std::chrono::steady_clock::now();
 
-    while(SDL_PollEvent(&(user_event))) {
-		if (user_event.type == SDL_QUIT) {
-		  // TODO: Salir de forma ordenada
-		  throw 1;
-		}
-		input_handler.process(user_event);
-	}
+    while (SDL_PollEvent(&user_event)) {
+      if (user_event.type == SDL_QUIT) {
+        // TODO: Salir de forma ordenada
+        throw 1;
+      }
+      input_handler.process(user_event);
+    }
 
     auto t = std::chrono::steady_clock::now() - start_t;
     auto sleep_t = std::chrono::duration_cast<std::chrono::microseconds>(t);

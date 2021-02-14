@@ -1,5 +1,7 @@
 #include "GameInputHandler.h"
 
+const SDL_Keycode mapped_keys[] = { SDLK_w, SDLK_a, SDLK_s, SDLK_d };
+
 GameInputHandler::GameInputHandler(ServerConnection& server_connection,
 																	 BlockingQueue<MessageType>& message_queue)
 // Todo: Sacar message_queue, que ServerConnection haga los bloqueos
@@ -68,4 +70,5 @@ void GameInputHandler::handle(SDL_Event input) {
 	  	}
   
     }
+
 }
