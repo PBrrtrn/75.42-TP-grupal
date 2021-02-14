@@ -138,8 +138,9 @@ class ThreadGame: public Thread {
         void tryShoot(int id);
         
         void changeMovementState(int playerId,MovementState state);
+        void changeRotationState(int playerId,MovementState state);
         void updatePlayerPositions();
-
+		void updatePlayerRotations();
 		
 		void changeWeaponAmetralladora(int id);
 		void changeWeaponCanion(int id);

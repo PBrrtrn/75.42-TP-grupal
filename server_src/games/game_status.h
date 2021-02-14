@@ -59,8 +59,10 @@ public:
 	//void updatePlayerPositions();
 	
 	std::unordered_map<int,MovementState> getPlayerMovementStates();
+	std::unordered_map<int,MovementState> getPlayerRotationStates();
 	
 	bool changeMovementState(int clientId,MovementState state);
+	bool changeRotationState(int clientId,MovementState state);
     
 	Statistics showStatistics();
     

@@ -144,4 +144,13 @@ MovementState Player::getCurrentMovementState(){
 	return this->movement_state;
 }
 
+bool Player::changeRotationState(MovementState state){
+	this->rotation_state = state;
+	return true;
+}
+
+MovementState Player::getCurrentRotationState(){
+	return this->rotation_state;
+}
+
 Player::~Player(){}
