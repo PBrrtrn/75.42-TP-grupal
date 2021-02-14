@@ -13,6 +13,7 @@ class Arma {
 		int attack_range;
 		int indice;
 		std::string nombre;
+		float timeout;
 
 	public:
 		Arma();
@@ -21,6 +22,7 @@ class Arma {
 		int getAttackRange();
 		int getPrecision();
 		int getIndex();
+		float getTimeout();
 		virtual ~Arma();
 };
 

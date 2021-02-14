@@ -50,13 +50,16 @@ void ThreadGame:: run() {
 	for (auto& it: this->out_queues) {
         int clientId = it.first;
         this->sendMapToClient(clientId);
-    }	
+    }
+
+	this->fillTimedEvents();	
 	
     while (keep_running) {
 		auto start_t = std::chrono::steady_clock::now();
 
 		this->checkNews();
 		this->updatePlayerPositions();
+		this->updateShootingTime(1000000/29);
         this->checkPlayerPickups();
         this->respawnItems();
         this->checkPlayerBullets();
@@ -105,22 +108,22 @@ void ThreadGame::checkNews() {
 		switch (m.getType())
 		{
 		case TYPE_MOVE_FORWARD_START:
-			this->changeMovementState(m.getClientId(),STATE_MOVING_FORWARD);
+			this->changeMovementState(m.getClientId(), STATE_MOVING_FORWARD);
 			//this->tryMoveForward(m.getClientId());
 			break;
 
 		case TYPE_MOVE_BACKWARD_START:
-			this->changeMovementState(m.getClientId(),STATE_MOVING_BACKWARDS);
+			this->changeMovementState(m.getClientId(), STATE_MOVING_BACKWARDS);
 			//this->tryMoveBackward(m.getClientId());
 			break;
 		
 		case TYPE_MOVE_LEFT_START:
-			this->changeMovementState(m.getClientId(),STATE_MOVING_LEFT);
+			this->changeMovementState(m.getClientId(), STATE_MOVING_LEFT);
 			//this->tryMoveLeft(m.getClientId());
 			break;
 
 		case TYPE_MOVE_RIGHT_START:
-			this->changeMovementState(m.getClientId(),STATE_MOVING_RIGHT);
+			this->changeMovementState(m.getClientId(), STATE_MOVING_RIGHT);
 			//this->tryMoveRight(m.getClientId());
 			break;
 
@@ -128,15 +131,21 @@ void ThreadGame::checkNews() {
 		case TYPE_MOVE_BACKWARD_STOP:
 		case TYPE_MOVE_LEFT_STOP:
 		case TYPE_MOVE_RIGHT_STOP:
-			this->changeMovementState(m.getClientId(),STATE_NOT_MOVING);
+			this->changeMovementState(m.getClientId(), STATE_NOT_MOVING);
 			break;
 
 		case TYPE_EXIT_GAME:
 			this->expelClient(m.getClientId());
 			break;
 		
-		case TYPE_SHOOT:
-			this->tryShoot(m.getClientId());
+		case TYPE_SHOOT_STOP:
+			this->changeShootingState(m.getClientId(), STATE_NOT_SHOOTING);
+			break;
+
+		case TYPE_SHOOT_START:
+			std::cout << "shoot activate" <<std::endl;
+			//this->tryShoot(m.getClientId());
+			this->changeShootingState(m.getClientId(), STATE_SHOOTING);
 			break;
 		
 		case TYPE_CHANGE_AMETRALLADORA:
@@ -216,8 +225,26 @@ bool ThreadGame::addClient(ThreadClient* client, int id){
 	return true;
 }
 
-void ThreadGame::changeMovementState(int playerId,MovementState state) {
+void ThreadGame::changeMovementState(int playerId, MovementState state) {
 	this->gameStatus.changeMovementState(playerId,state);
+}
+
+void ThreadGame::changeShootingState(int playerId, ShootingState state) {
+	this->gameStatus.changeShootingState(playerId, state);
+	switch (state)
+	{
+	case TYPE_SHOOT_STOP:
+		std::cout << "shoot deactivate" <<std::endl;
+		this->shooting_events.at(playerId)->deactivate();
+		break;
+
+	case TYPE_SHOOT_START:
+		this->shooting_events.at(playerId)->activate(this->gameStatus.getShootTimeout(playerId));
+		break;
+	
+	default:
+		break;
+	}
 }
 
 void ThreadGame::tryMoveForward(int id) {
@@ -291,6 +318,21 @@ void ThreadGame::updatePlayerPositions(){
 			default:
 				break;	
 		}
+	}	
+}
+
+void ThreadGame::fillTimedEvents() {
+	for (auto c: this->clients) {
+		this->shooting_events.insert(std::make_pair(
+			c.first, 
+			new TimedEvent(&shoot, &Shoot::tryAction, c.first, this->gameStatus)
+		));
+	}
+}
+
+void ThreadGame::updateShootingTime(float delta){
+	for (auto te: this->shooting_events) {
+		te.second->update(delta);
 	}	
 }
 

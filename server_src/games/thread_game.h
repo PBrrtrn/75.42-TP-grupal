@@ -32,6 +32,8 @@
 
 #include "client_game_status.h"
 
+#include "../../common_src/timed_event.h"
+
 class ThreadGame: public Thread {
         int id; /*numero de partida*/
         int map_id; /*id del mapa de la partida*/
@@ -49,6 +51,9 @@ class ThreadGame: public Thread {
         std::unordered_map<int,ThreadClient*> clients;
         
         std::unordered_map<int,ClientGameStatus*> clientGameStatuses;
+
+        /*clave: id del cliente, valor: timed event para disparar*/
+        std::unordered_map<int,TimedEvent*> shooting_events;
         
         GameStatus gameStatus;
 
@@ -105,6 +110,13 @@ class ThreadGame: public Thread {
          */
         void sendLobbyStatus();
 
+        /**
+         * @brief Crea un timed event para 
+         * disparar por cada uno de los 
+         * jugadores en la partida
+         */
+        void fillTimedEvents();
+
     public:
         ThreadGame(int gameId, BlockingQueue<Message>* m,
             std::unordered_map<int,GameListItem>& list, std::string map_location,
@@ -140,6 +152,8 @@ class ThreadGame: public Thread {
         void changeMovementState(int playerId,MovementState state);
         void updatePlayerPositions();
 
+        void changeShootingState(int playerId, ShootingState state);
+        void updateShootingTime(float delta);
 		
 		void changeWeaponAmetralladora(int id);
 		void changeWeaponCanion(int id);

@@ -10,4 +10,6 @@ add_library(common-classes SHARED
 	Thread.cpp
 	GameListItem.h
 	LobbyStatusData.h
+	timed_event.h
+	timed_event.cpp
 )

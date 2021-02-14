@@ -52,6 +52,7 @@ public:
 	int getAlivePlayers();
 	int getMaxPlayers();
 	int getMinPlayers();
+	float getShootTimeout(int playerID);
 	std::vector<SpawnPoint> getSpawnPoints();
 	
 	std::string getEntireMap();
@@ -61,6 +62,7 @@ public:
 	std::unordered_map<int,MovementState> getPlayerMovementStates();
 	
 	bool changeMovementState(int clientId,MovementState state);
+	bool changeShootingState(int playerId, ShootingState state);
     
 	Statistics showStatistics();
     

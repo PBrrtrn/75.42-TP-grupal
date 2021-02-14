@@ -3,6 +3,8 @@
 
 enum MessageType { 
 	//tipos de mensaje desde cliente a servidor
+	TYPE_UNDEFINED_KEY = 'x',
+
 	TYPE_START_GAME = 'n',
 	TYPE_JOIN_GAME = 'j',
 	TYPE_REFRESH_GAMES_LIST = 'r',
@@ -18,7 +20,8 @@ enum MessageType {
 	TYPE_MOVE_RIGHT_STOP = 'o',	
 	
 	TYPE_EXIT_GAME = 'e',
-	TYPE_SHOOT = 'l',
+	TYPE_SHOOT_STOP = 'l',
+	TYPE_SHOOT_START = 'p',
 	TYPE_CHANGE_PISTOLA = '1',
 	TYPE_CHANGE_CUCHILLO = '2',
 	TYPE_CHANGE_LANZA_COHETES = '3',

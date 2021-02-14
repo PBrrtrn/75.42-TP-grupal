@@ -14,6 +14,7 @@ Arma::Arma(){
     this->balas = 0;
     this->attack_range = 0;
     this->indice = -1;
+    this->timeout = 10; //TODO poner en cada uno
 }
 
 int Arma::getAttackRange() {
@@ -22,6 +23,10 @@ int Arma::getAttackRange() {
 
 int Arma::getPrecision() {
     return this->precision;
+}
+
+float Arma::getTimeout() {
+    return this->timeout;
 }
 
 bool Arma::is_empty() {

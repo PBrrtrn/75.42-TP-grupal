@@ -141,8 +141,17 @@ std::string GameStatus::getEntireMap(){
 	return this->entireMap;
 }
 
+float GameStatus::getShootTimeout(int playerID) {
+	return this->players.at(playerID).getShootTimeout();
+}
+
 bool GameStatus::changeMovementState(int clientId,MovementState state){
 	return this->players.at(clientId).changeMovementState(state);
+	
+}
+
+bool GameStatus::changeShootingState(int clientId,ShootingState state){
+	return this->players.at(clientId).changeShootingState(state);
 	
 }
 
