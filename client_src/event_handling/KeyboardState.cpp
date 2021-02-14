@@ -6,7 +6,7 @@ KeyboardState::KeyboardState() {
     {SDLK_a, UP},
     {SDLK_s, UP},
     {SDLK_d, UP},
-    {SDLK_p, UP}
+    {SDLK_SPACE, UP}
   };
 }
 

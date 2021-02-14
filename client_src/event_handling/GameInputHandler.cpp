@@ -29,7 +29,7 @@ void GameInputHandler::handle(SDL_Event input) {
 				case SDLK_d:
 					type = TYPE_MOVE_RIGHT_START;
 					break;
-				case SDLK_p:
+				case SDLK_SPACE:
 					type = TYPE_SHOOT_START;
 					break;
 				default:
@@ -56,7 +56,7 @@ void GameInputHandler::handle(SDL_Event input) {
 				case SDLK_d:
 					type = TYPE_MOVE_RIGHT_STOP;
 					break;
-				case SDLK_p:
+				case SDLK_SPACE:
 					type = TYPE_SHOOT_STOP;
 					break;
 				default:

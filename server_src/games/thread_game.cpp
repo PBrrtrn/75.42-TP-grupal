@@ -142,7 +142,6 @@ void ThreadGame::checkNews() {
 			break;
 
 		case TYPE_SHOOT_START:
-			std::cout << "shoot activate" <<std::endl;
 			//this->tryShoot(m.getClientId());
 			this->changeShootingState(m.getClientId(), STATE_SHOOTING);
 			break;
@@ -311,22 +310,6 @@ void ThreadGame::updatePlayerPositions(){
 			case STATE_MOVING_BACKWARDS:
 				this->tryMoveBackward(s.first);
 				break;
-			default:
-				break;	
-		}
-	}	
-}
-
-void ThreadGame::updatePlayerRotations(){
-	std::unordered_map<int, MovementState> states = this->gameStatus.getPlayerRotationStates();
-	for (auto s: states) {
-		switch (s.second) {
-			case STATE_MOVING_LEFT:
-				this->tryMoveLeft(s.first);
-				break;
-			case STATE_MOVING_RIGHT:
-				this->tryMoveRight(s.first);
-				break;					
 			default:
 				break;	
 		}
