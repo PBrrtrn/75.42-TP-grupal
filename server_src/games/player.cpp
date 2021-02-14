@@ -15,6 +15,7 @@ Player::Player(int id){
 	this->armas[0] =  Cuchillo();
 	this->armas[1] = Pistola();
 	this->selected_weapon_idx = 1;
+	this->movement_state = STATE_NOT_MOVING;
 }
 
 int Player::getWeaponPrecision() {
@@ -39,6 +40,7 @@ bool Player::loseHealth(int amount) {
 		this->armas[2] = a;
 		this->armas[3] = a;
 		this->armas[4] = a;
+		this->movement_state = STATE_NOT_MOVING;
 		return true;
 	} else {
 		return false;
@@ -131,6 +133,24 @@ bool Player::hasKey(){
 
 int Player::getLives(){
 	return this->vidas;
+}
+
+bool Player::changeMovementState(MovementState state){
+	this->movement_state = state;
+	return true;
+}
+
+MovementState Player::getCurrentMovementState(){
+	return this->movement_state;
+}
+
+bool Player::changeRotationState(MovementState state){
+	this->rotation_state = state;
+	return true;
+}
+
+MovementState Player::getCurrentRotationState(){
+	return this->rotation_state;
 }
 
 Player::~Player(){}
