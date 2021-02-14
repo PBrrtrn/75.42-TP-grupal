@@ -155,6 +155,10 @@ bool GameStatus::changeShootingState(int clientId,ShootingState state){
 	
 }
 
+bool GameStatus::changeRotationState(int clientId,MovementState state){
+	return this->players.at(clientId).changeRotationState(state);
+}
+
 std::unordered_map<int,MovementState> GameStatus::getPlayerMovementStates(){
 	std::unordered_map<int,MovementState> states;
 	for (auto& p: this->players){

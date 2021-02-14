@@ -59,6 +59,7 @@ void ThreadGame:: run() {
 
 		this->checkNews();
 		this->updatePlayerPositions();
+		this->updatePlayerRotations();
 		this->updateShootingTime(1000000/29);
         this->checkPlayerPickups();
         this->respawnItems();
@@ -109,29 +110,28 @@ void ThreadGame::checkNews() {
 		{
 		case TYPE_MOVE_FORWARD_START:
 			this->changeMovementState(m.getClientId(), STATE_MOVING_FORWARD);
-			//this->tryMoveForward(m.getClientId());
 			break;
 
 		case TYPE_MOVE_BACKWARD_START:
 			this->changeMovementState(m.getClientId(), STATE_MOVING_BACKWARDS);
-			//this->tryMoveBackward(m.getClientId());
 			break;
 		
 		case TYPE_MOVE_LEFT_START:
-			this->changeMovementState(m.getClientId(), STATE_MOVING_LEFT);
-			//this->tryMoveLeft(m.getClientId());
+			this->changeRotationState(m.getClientId(),STATE_MOVING_LEFT);
 			break;
 
 		case TYPE_MOVE_RIGHT_START:
-			this->changeMovementState(m.getClientId(), STATE_MOVING_RIGHT);
-			//this->tryMoveRight(m.getClientId());
+			this->changeRotationState(m.getClientId(),STATE_MOVING_RIGHT);
 			break;
 
 		case TYPE_MOVE_FORWARD_STOP:
 		case TYPE_MOVE_BACKWARD_STOP:
+			this->changeMovementState(m.getClientId(), STATE_NOT_MOVING);
+			break;
+
 		case TYPE_MOVE_LEFT_STOP:
 		case TYPE_MOVE_RIGHT_STOP:
-			this->changeMovementState(m.getClientId(), STATE_NOT_MOVING);
+			this->changeRotationState(m.getClientId(),STATE_NOT_MOVING);
 			break;
 
 		case TYPE_EXIT_GAME:
@@ -229,6 +229,10 @@ void ThreadGame::changeMovementState(int playerId, MovementState state) {
 	this->gameStatus.changeMovementState(playerId,state);
 }
 
+void ThreadGame::changeRotationState(int playerId,MovementState state) {
+	this->gameStatus.changeRotationState(playerId,state);
+}
+
 void ThreadGame::changeShootingState(int playerId, ShootingState state) {
 	this->gameStatus.changeShootingState(playerId, state);
 	switch (state)
@@ -315,6 +319,22 @@ void ThreadGame::updatePlayerPositions(){
 			case STATE_MOVING_RIGHT:
 				this->tryMoveRight(s.first);
 				break;			
+			default:
+				break;	
+		}
+	}	
+}
+
+void ThreadGame::updatePlayerRotations(){
+	std::unordered_map<int, MovementState> states = this->gameStatus.getPlayerRotationStates();
+	for (auto s: states) {
+		switch (s.second) {
+			case STATE_MOVING_LEFT:
+				this->tryMoveLeft(s.first);
+				break;
+			case STATE_MOVING_RIGHT:
+				this->tryMoveRight(s.first);
+				break;					
 			default:
 				break;	
 		}

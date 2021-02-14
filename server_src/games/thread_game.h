@@ -150,7 +150,9 @@ class ThreadGame: public Thread {
         void tryShoot(int id);
         
         void changeMovementState(int playerId,MovementState state);
+        void changeRotationState(int playerId,MovementState state);
         void updatePlayerPositions();
+        void updatePlayerRotations();
 
         void changeShootingState(int playerId, ShootingState state);
         void updateShootingTime(float delta);

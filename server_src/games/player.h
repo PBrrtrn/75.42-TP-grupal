@@ -30,6 +30,7 @@ class Player {
     std::array<Arma,AMOUNT_WEAPONS> armas;
     MovementState movement_state;
     ShootingState shooting_state;
+    MovementState rotation_state;
     bool _addWeapon(int idx, Arma& arma);
 
 public:
@@ -57,6 +58,8 @@ public:
     MovementState getCurrentMovementState();
     bool changeShootingState(ShootingState state);
     ShootingState getCurrentShootingState();
+    bool changeRotationState(MovementState state);
+	MovementState getCurrentRotationState();
 	~Player();
 };
 

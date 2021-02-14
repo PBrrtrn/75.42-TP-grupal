@@ -63,6 +63,7 @@ public:
 	
 	bool changeMovementState(int clientId,MovementState state);
 	bool changeShootingState(int playerId, ShootingState state);
+	bool changeRotationState(int clientId,MovementState state);
     
 	Statistics showStatistics();
     
