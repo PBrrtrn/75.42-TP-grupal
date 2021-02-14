@@ -11,43 +11,64 @@ GameInputHandler::~GameInputHandler() { }
 
 void GameInputHandler::handle(SDL_Event input) {
 	if (input.key.repeat == 0) {
-		SDL_Keycode keycode = input.key.keysym.sym;
-		if (input.type == SDL_KEYDOWN) {
-			if (!this->keyboard_state.isDown(keycode)) {
-				switch (keycode) {
-					case (SDLK_w) : 
-						this->message_queue.push(TYPE_MOVE_FORWARD_START);
-						break;
-					case (SDLK_a) : 
-						this->message_queue.push(TYPE_MOVE_LEFT_START);
-						break;
-					case (SDLK_s) : 
-						this->message_queue.push(TYPE_MOVE_BACKWARD_START);
-						break;
-					case (SDLK_d) : 
-						this->message_queue.push(TYPE_MOVE_RIGHT_START);
-						break;
+		MessageType type;
+		switch (input.type) {
+		case (SDL_KEYDOWN) : 
+			if (!this->keyboard_state.isDown(input.key.keysym.sym)) {
+				switch (input.key.keysym.sym)
+				{
+				case SDLK_w:
+					type = TYPE_MOVE_FORWARD_START;
+					break;
+				case SDLK_a:
+					type = TYPE_MOVE_LEFT_START;
+					break;
+				case SDLK_s:
+					type = TYPE_MOVE_BACKWARD_START;
+					break;
+				case SDLK_d:
+					type = TYPE_MOVE_RIGHT_START;
+					break;
+				case SDLK_p:
+					type = TYPE_SHOOT_START;
+					break;
+				default:
+					type = TYPE_UNDEFINED_KEY;
+					break;
 				}
+				this->message_queue.push(type);
+				this->keyboard_state.toggleKeyDown(input.key.keysym.sym);
 			}
-		  this->keyboard_state.toggleKeyDown(keycode);
-		} else {
-			if (this->keyboard_state.isDown(keycode)) {
-				switch (keycode) {
-					case (SDLK_w) : 
-						this->message_queue.push(TYPE_MOVE_FORWARD_STOP);
-						break;
-					case (SDLK_a) : 
-						this->message_queue.push(TYPE_MOVE_LEFT_STOP);
-						break;
-					case (SDLK_s) : 
-						this->message_queue.push(TYPE_MOVE_BACKWARD_STOP);
-						break;
-					case (SDLK_d) : 
-						this->message_queue.push(TYPE_MOVE_RIGHT_STOP);
-						break;
+		  	break;
+		case (SDL_KEYUP) :
+			if (this->keyboard_state.isDown(input.key.keysym.sym)) {
+				switch (input.key.keysym.sym)
+				{
+				case SDLK_w:
+					type = TYPE_MOVE_FORWARD_STOP;
+					break;
+				case SDLK_a:
+					type = TYPE_MOVE_LEFT_STOP;
+					break;
+				case SDLK_s:
+					type = TYPE_MOVE_BACKWARD_STOP;
+					break;
+				case SDLK_d:
+					type = TYPE_MOVE_RIGHT_STOP;
+					break;
+				case SDLK_p:
+					type = TYPE_SHOOT_STOP;
+					break;
+				default:
+					type = TYPE_UNDEFINED_KEY;
+					break;
 				}
+				this->message_queue.push(type);
+		  		this->keyboard_state.toggleKeyUp(input.key.keysym.sym);
 			}
-		  this->keyboard_state.toggleKeyUp(keycode);
-		}
-  }
+		  	break;
+	  	}
+  
+    }
+
 }

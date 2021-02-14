@@ -22,6 +22,10 @@ int Player::getWeaponPrecision() {
 	return this->armas[this->selected_weapon_idx].getPrecision();
 }
 
+float Player::getShootTimeout() {
+	return this->armas[this->selected_weapon_idx].getTimeout();
+}
+
 int Player::getWeaponAttackRange() {
 	return this->armas[this->selected_weapon_idx].getAttackRange();
 }
@@ -142,6 +146,15 @@ bool Player::changeMovementState(MovementState state){
 
 MovementState Player::getCurrentMovementState(){
 	return this->movement_state;
+}
+
+bool Player::changeShootingState(ShootingState state) {
+	this->shooting_state = state;
+	return true;
+}
+
+ShootingState Player::getCurrentShootingState() {
+	return this->shooting_state;
 }
 
 bool Player::changeRotationState(MovementState state){

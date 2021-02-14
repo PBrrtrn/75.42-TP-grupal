@@ -13,7 +13,7 @@
 #include "../weapons/pistola.h"
 #include "../server_config.h"
 #include "../actions/MovementState.h"
-
+#include "../actions/ShootingState.h"
 
 class Player {
 	int id;
@@ -29,6 +29,7 @@ class Player {
     
     std::array<Arma,AMOUNT_WEAPONS> armas;
     MovementState movement_state;
+    ShootingState shooting_state;
     MovementState rotation_state;
     bool _addWeapon(int idx, Arma& arma);
 
@@ -46,6 +47,7 @@ public:
     bool addWeapon(Arma& arma);
     int getWeaponPrecision();
     int getWeaponAttackRange();
+    float getShootTimeout();
     int getCurrentBullets();
     int getPoints();
     bool hasKey();
@@ -54,9 +56,10 @@ public:
     int getSelectedWeaponIndex();
     bool changeMovementState(MovementState state);
     MovementState getCurrentMovementState();
+    bool changeShootingState(ShootingState state);
+    ShootingState getCurrentShootingState();
     bool changeRotationState(MovementState state);
 	MovementState getCurrentRotationState();
-    
 	~Player();
 };
 
