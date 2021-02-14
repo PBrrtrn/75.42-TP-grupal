@@ -16,11 +16,11 @@ std::vector<int>& Map::operator[](int x) {
 }
 
 int Map::getGridValue(int x, int y) {
-	return this->grid[x][y];
+	return this->grid[y][x];
 }
 
 int Map::isWall(int x, int y) {
-	return (this->grid[x][y] > 0);
+	return (this->grid[y][x] > 0);
 }
 
 int Map::getWidth() {
