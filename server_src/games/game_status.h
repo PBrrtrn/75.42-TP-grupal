@@ -55,6 +55,12 @@ public:
 	std::vector<SpawnPoint> getSpawnPoints();
 	
 	std::string getEntireMap();
+	
+	//void updatePlayerPositions();
+	
+	std::unordered_map<int,MovementState> getPlayerMovementStates();
+	
+	bool changeMovementState(int clientId,MovementState state);
     
 	Statistics showStatistics();
     

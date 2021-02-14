@@ -141,4 +141,22 @@ std::string GameStatus::getEntireMap(){
 	return this->entireMap;
 }
 
+bool GameStatus::changeMovementState(int clientId,MovementState state){
+	return this->players.at(clientId).changeMovementState(state);
+	
+}
+
+std::unordered_map<int,MovementState> GameStatus::getPlayerMovementStates(){
+	std::unordered_map<int,MovementState> states;
+	for (auto& p: this->players){
+		if (p.second.getCurrentMovementState() != STATE_NOT_MOVING){
+			states.insert({p.first,p.second.getCurrentMovementState()});
+		}
+	}
+	return states;		
+}
+
+//void GameStatus::updatePlayerPositions(){
+//}
+
 GameStatus::~GameStatus() {}

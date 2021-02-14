@@ -12,6 +12,7 @@
 #include "../weapons/lanzaCohetes.h"
 #include "../weapons/pistola.h"
 #include "../server_config.h"
+#include "../actions/MovementState.h"
 
 
 class Player {
@@ -27,6 +28,7 @@ class Player {
     int selected_weapon_idx;
     
     std::array<Arma,AMOUNT_WEAPONS> armas;
+    MovementState movement_state;
     bool _addWeapon(int idx, Arma& arma);
 
 public:
@@ -49,6 +51,8 @@ public:
     int getLives();
     bool changeWeapon(int weapon_idx);
     int getSelectedWeaponIndex();
+    bool changeMovementState(MovementState state);
+    MovementState getCurrentMovementState();
 	~Player();
 };
 
