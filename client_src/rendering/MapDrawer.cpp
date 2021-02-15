@@ -57,6 +57,7 @@ void MapDrawer::draw(SDL_Renderer* renderer, Vector position, float view_angle,
 
 	for (PlayerListItem& enemy : enemies) {
 		Vector enemy_direction = position - enemy.position;
+		// std::cout << "Enemy position: (" << enemy.position.x << ", " << enemy.position.y << ")" << std::endl;
 		float angle = enemy_direction.getAngle();
 		if ((view_angle - this->fov/2 < angle) && (view_angle + this->fov/2 > angle)) {
 			int enemy_screen_x = tan(angle) * projection_distance;

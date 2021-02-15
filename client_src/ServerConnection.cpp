@@ -182,7 +182,10 @@ GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 		PlayerListItem player;
 
 		this->socket.socket_receive((char*)&player, sizeof(PlayerListItem));
-		if (player.clientId != this->client_id) players_list.push_back(player);
+		if (player.clientId != this->client_id) {
+			// std::cout << "Enemy position: (" << player.position.x << ", " << player.position.y << ")" << std::endl;
+			players_list.push_back(player);
+		}
 	}
 
 	std::vector<DoorListItem> doors_list;
