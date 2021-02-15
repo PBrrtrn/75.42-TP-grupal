@@ -6,7 +6,7 @@ ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m,
 	id(gameId), messages(m), gameStatus(map_location), gameList(list),
 	map_id(mapId), lobbyStatus(lobbyStatus) {
 		this->remaining_time = 30 * 1000; // Fijar por config
-		this->waiting_time_to_start = 30; 
+		this->waiting_time_to_start = 120; 
 		this->start_running = true;
 		this->is_dead = false;
 }
@@ -138,11 +138,13 @@ void ThreadGame::checkNews() {
 			break;
 		
 		case TYPE_SHOOT_STOP:
+			std::cout << "en type shoot stop th game " << std::endl;
 			this->changeShootingState(m.getClientId(), STATE_NOT_SHOOTING);
 			break;
 
 		case TYPE_SHOOT_START:
 			//this->tryShoot(m.getClientId());
+			std::cout << "en type shoot start th game " << std::endl;
 			this->changeShootingState(m.getClientId(), STATE_SHOOTING);
 			break;
 		
@@ -232,15 +234,18 @@ void ThreadGame::changeRotationState(int playerId,MovementState state) {
 }
 
 void ThreadGame::changeShootingState(int playerId, ShootingState state) {
+	std::cout << "en change shooting state" <<std::endl;
 	this->gameStatus.changeShootingState(playerId, state);
 	switch (state)
 	{
-	case TYPE_SHOOT_STOP:
-		std::cout << "shoot deactivate" <<std::endl;
+	case STATE_NOT_SHOOTING:
+		std::cout << "shoot deactivate en th game" <<std::endl;
 		this->shooting_events.at(playerId)->deactivate();
 		break;
 
-	case TYPE_SHOOT_START:
+	case STATE_SHOOTING:
+		std::cout << "shoot activate en th game" <<std::endl;
+		std::cout << "shoot activate a player id: " << playerId << std::endl;
 		this->shooting_events.at(playerId)->activate(this->gameStatus.getShootTimeout(playerId));
 		break;
 	
@@ -339,9 +344,15 @@ void ThreadGame::fillTimedEvents() {
 			new TimedEvent(&shoot, &Shoot::tryAction, c.first, this->gameStatus)
 		));
 	}
+	std::cout << "---------TIMED EVENTS-----" << std::endl;
+	for (auto c: this->shooting_events) {
+		std::cout << "client id: " << c.first << "te: " << c.second << std::endl;
+	}
+	std::cout << "--------------------------" << std::endl;
 }
 
 void ThreadGame::updateShootingTime(float delta){
+	//std::cout << "en update shooting time" << std::endl;
 	for (auto te: this->shooting_events) {
 		te.second->update(delta);
 	}	

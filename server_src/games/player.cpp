@@ -45,6 +45,7 @@ bool Player::loseHealth(int amount) {
 		this->armas[3] = a;
 		this->armas[4] = a;
 		this->movement_state = STATE_NOT_MOVING;
+		std::cout << "VIDAS: " << this->vidas << std::endl;
 		return true;
 	} else {
 		return false;
