@@ -9,24 +9,22 @@
 
 Arma::Arma(){
 	this->nombre = "VACIA";
-    this->precision = 0;
     this->cadencia = 0;	
     this->balas = 0;
     this->attack_range = 0;
     this->indice = -1;
-    this->timeout = (1000000/29)*30; //TODO poner en cada uno
 }
 
 int Arma::getAttackRange() {
     return this->attack_range;
 }
 
-int Arma::getPrecision() {
-    return this->precision;
+float Arma::getCadencia() {
+    return this->cadencia;
 }
 
-float Arma::getTimeout() {
-    return this->timeout;
+bool Arma::aimWeapon(float target_angle, float shooter_angle, float target_distance) {
+    return false;
 }
 
 bool Arma::is_empty() {

@@ -31,8 +31,6 @@ int main(const int argc, const char* argv[]) {
 
 		out << YAML::Key << "Ametralladora" ;
 			out << YAML::BeginMap;
-				out << YAML::Key << "Precision";
-				out << YAML::Value << 10 ;
 				out << YAML::Key << "Cadencia";
 				out << YAML::Value << 0.1 ;
 				out << YAML::Key << "Nombre";
@@ -41,8 +39,10 @@ int main(const int argc, const char* argv[]) {
 				out << YAML::Value << 1000000 ;	
 				out << YAML::Key << "Idx";
 				out << YAML::Value << 2 ;
-				out << YAML::Key << "Timeout";
-				out << YAML::Value << (1000000/29)*8 ;							
+				out << YAML::Key << "Cadencia";
+				out << YAML::Value << (1000000/29)*8 ;	
+				out << YAML::Key << "Precision";
+				out << YAML::Value << 0.5 ;						
 			out << YAML::EndMap;
 
 		out << YAML::Key << "CanionDeCadena" ;
@@ -53,8 +53,10 @@ int main(const int argc, const char* argv[]) {
 				out << YAML::Value << 1000000 ;	
 				out << YAML::Key << "Idx";
 				out << YAML::Value << 3 ;	
-				out << YAML::Key << "Timeout";
-				out << YAML::Value << (1000000/29)*2 ;		
+				out << YAML::Key << "Cadencia";
+				out << YAML::Value << (1000000/29)*2 ;	
+				out << YAML::Key << "Precision";
+				out << YAML::Value << 0.5 ;		
 			out << YAML::EndMap;
 
 		out << YAML::Key << "Cuchillo" ;
@@ -62,11 +64,13 @@ int main(const int argc, const char* argv[]) {
 				out << YAML::Key << "Nombre";
 				out << YAML::Value << "CUCHILLO" ;
 				out << YAML::Key << "AttackRange";
-				out << YAML::Value << 1000000 ;	
+				out << YAML::Value << 1 ;	
 				out << YAML::Key << "Idx";
 				out << YAML::Value << 0 ;
-				out << YAML::Key << "Timeout";
-				out << YAML::Value << -1 ;			
+				out << YAML::Key << "Cadencia";
+				out << YAML::Value << -1 ;
+				out << YAML::Key << "Precision";
+				out << YAML::Value << 0 ;				
 			out << YAML::EndMap;
 		
 		out << YAML::Key << "LanzaCohetes" ;
@@ -77,8 +81,10 @@ int main(const int argc, const char* argv[]) {
 				out << YAML::Value << 1000000 ;	
 				out << YAML::Key << "Idx";
 				out << YAML::Value << 4 ;
-				out << YAML::Key << "Timeout";
-				out << YAML::Value << -1 ;			
+				out << YAML::Key << "Cadencia";
+				out << YAML::Value << -1 ;	
+				out << YAML::Key << "Precision";
+				out << YAML::Value << 0 ;			
 			out << YAML::EndMap;
 
 		out << YAML::Key << "Pistola" ;
@@ -89,8 +95,10 @@ int main(const int argc, const char* argv[]) {
 				out << YAML::Value << 1000000 ;	
 				out << YAML::Key << "Idx";
 				out << YAML::Value << 1 ;	
-				out << YAML::Key << "Timeout";
-				out << YAML::Value << -1 ;		
+				out << YAML::Key << "Cadencia";
+				out << YAML::Value << -1 ;	
+				out << YAML::Key << "Precision";
+				out << YAML::Value << 0.2 ;		
 			out << YAML::EndMap;
 
 		out << YAML::Key << "Moves" ;
