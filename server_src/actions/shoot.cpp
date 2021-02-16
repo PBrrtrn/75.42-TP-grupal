@@ -6,6 +6,7 @@
 Shoot::Shoot(){}
 
 void Shoot::tryAction(GameStatus& gs, int clientID){
+    std::cout << "En tryAction de shoot" << std::endl;
     for (auto& it: gs.players) {
         int target_id = it.first;
         Player& target = it.second;
@@ -19,9 +20,9 @@ void Shoot::tryAction(GameStatus& gs, int clientID){
                  target_angle > shooter_direction - DELTA && 
                  target_distance <= gs.players.at(clientID).getWeaponAttackRange()) {
 				int precision = gs.players.at(clientID).getWeaponPrecision();
-				int danio = (rand() % 10 + 1) * precision / target_distance;
+				int danio = (rand() % 10 + 1); //* precision / target_distance;
 				if (target.loseHealth(danio) ) {
-					std::cout << "this player has been killed" << std::endl;
+					std::cout << "player "<< target_id <<" has been killed, danio: "<< danio << std::endl;
 					//TODO: El arma a dropear tiene que ser del tipo que llevaba el jugador muerto en ese momento.
 					//TODO: Dropear item falso "cadaver" que no va a ser utilizable pero si visible.
 					gs.items.push_back(ArmaAmetralladora(gs.getPosition(target_id),false));
