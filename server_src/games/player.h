@@ -43,7 +43,7 @@ public:
     bool is_dead();
     bool addScore(int amount);
     bool addBullets(int amount);
-    void loseBullet();
+    bool loseBullet();
     bool gainKey();
     bool useKey();
     bool addWeapon(Arma& arma);

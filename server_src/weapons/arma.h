@@ -7,7 +7,7 @@
 
 class Arma {
 	protected:
-		int precision;
+		float precision;
 		float cadencia; //cuanto dispara por segundo
 		int balas;
 		int attack_range;

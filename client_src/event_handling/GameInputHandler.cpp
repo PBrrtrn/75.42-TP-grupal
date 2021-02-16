@@ -32,6 +32,21 @@ void GameInputHandler::handle(SDL_Event input) {
 				case SDLK_SPACE:
 					this->message_queue.push(TYPE_SHOOT_START);
 					break;
+				case SDLK_1:
+					this->message_queue.push(TYPE_CHANGE_CUCHILLO);
+					break;
+				case SDLK_2:
+					this->message_queue.push(TYPE_CHANGE_PISTOLA);
+					break;
+				case SDLK_3:
+					this->message_queue.push(TYPE_CHANGE_AMETRALLADORA);
+					break;
+				case SDLK_4:
+					this->message_queue.push(TYPE_CHANGE_CANION);
+					break;
+				case SDLK_5:
+					this->message_queue.push(TYPE_CHANGE_LANZA_COHETES);
+					break;
 				default:
 					//type = TYPE_UNDEFINED_KEY;
 					break;

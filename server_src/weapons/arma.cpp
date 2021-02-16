@@ -10,6 +10,7 @@
 Arma::Arma(){
 	this->nombre = "VACIA";
     this->cadencia = 0;	
+    this->precision = 0;
     this->balas = 0;
     this->attack_range = 0;
     this->indice = -1;

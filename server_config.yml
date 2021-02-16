@@ -4,32 +4,36 @@ Player:
   MaxBullets: 100
   StartingBullets: 8
 Ametralladora:
-  Precision: 10
   Cadencia: 0.1
   Nombre: AMETRALLADORA
   AttackRange: 1000000
   Idx: 2
-  Timeout: 275856
+  Cadencia: 275856
+  Precision: 0.5
 CanionDeCadena:
   Nombre: CANION_DE_CADENA
   AttackRange: 1000000
   Idx: 3
-  Timeout: 68964
+  Cadencia: 68964
+  Precision: 0.5
 Cuchillo:
   Nombre: CUCHILLO
-  AttackRange: 1000000
+  AttackRange: 1
   Idx: 0
-  Timeout: -1
+  Cadencia: -1
+  Precision: 0
 LanzaCohetes:
   Nombre: LANZA_COHETES
   AttackRange: 1000000
   Idx: 4
-  Timeout: -1
+  Cadencia: -1
+  Precision: 0
 Pistola:
   Nombre: PISTOLA
   AttackRange: 1000000
   Idx: 1
-  Timeout: -1
+  Cadencia: -1
+  Precision: 0.2
 Moves:
   Step: 0.1
   RotationLeft: 0.1
