@@ -56,6 +56,7 @@ public:
 	std::vector<SpawnPoint> getSpawnPoints();
 	
 	std::string getEntireMap();
+	Map& getMap();
 	
 	//void updatePlayerPositions();
 	

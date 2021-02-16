@@ -1,5 +1,6 @@
 #include "action.h"
 #include "shoot.h"
+#include "../../common_src/RayCaster.h"
 
 #include <iostream>
 
@@ -16,9 +17,13 @@ void Shoot::tryAction(GameStatus& gs, int clientID){
             float target_angle = target_direction.getAngle();
             float target_distance = target_direction.norm();
 
+            RayCaster ray_caster;
+            float wall_distance = ray_caster.castRay(gs.getMap(), gs.getPosition(target_id), target_angle).distance;
+
             if (target_angle < shooter_direction + DELTA && 
                  target_angle > shooter_direction - DELTA && 
-                 target_distance <= gs.players.at(clientID).getWeaponAttackRange()) {
+                 target_distance <= gs.players.at(clientID).getWeaponAttackRange() &&
+                 target_distance < wall_distance) {
 				int precision = gs.players.at(clientID).getWeaponPrecision();
 				int danio = (rand() % 10 + 1); //* precision / target_distance;
 				if (target.loseHealth(danio) ) {

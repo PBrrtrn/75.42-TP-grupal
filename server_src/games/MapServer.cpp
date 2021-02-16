@@ -90,3 +90,7 @@ std::vector<Door> MapServer::getDoors() {
 std::vector<SpawnPoint> MapServer::getRespawnPoints() { 
 	return this->respawnPoints;
 }
+
+Map& MapServer::getMap() {
+	return this->map;
+}
