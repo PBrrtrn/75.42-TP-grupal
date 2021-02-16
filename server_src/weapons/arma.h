@@ -7,22 +7,21 @@
 
 class Arma {
 	protected:
-		int precision;
-		double cadencia; //cuanto dispara por segundo
+		float precision;
+		float cadencia; //cuanto dispara por segundo
 		int balas;
 		int attack_range;
 		int indice;
 		std::string nombre;
-		float timeout;
 
 	public:
 		Arma();
 		bool operator==(const Arma &another);
 		bool is_empty();
 		int getAttackRange();
-		int getPrecision();
 		int getIndex();
-		float getTimeout();
+		virtual bool aimWeapon(float target_angle, float shooter_angle, float target_distance);
+		float getCadencia();
 		virtual ~Arma();
 };
 

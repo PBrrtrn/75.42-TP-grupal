@@ -15,19 +15,20 @@ Player::Player(int id){
 	this->armas[0] =  Cuchillo();
 	this->armas[1] = Pistola();
 	this->selected_weapon_idx = 1;
+	this->previous_weapon_idx = 0;
 	this->movement_state = STATE_NOT_MOVING;
 }
 
-int Player::getWeaponPrecision() {
-	return this->armas[this->selected_weapon_idx].getPrecision();
-}
-
 float Player::getShootTimeout() {
-	return this->armas[this->selected_weapon_idx].getTimeout();
+	return this->armas[this->selected_weapon_idx].getCadencia();
 }
 
 int Player::getWeaponAttackRange() {
 	return this->armas[this->selected_weapon_idx].getAttackRange();
+}
+
+bool Player::aimWeapon(float target_angle, float shooter_angle, float target_distance) {
+	return this->armas[this->selected_weapon_idx].aimWeapon(target_angle, shooter_angle, target_distance);
 }
 
 //si el jugador es muerto como resultado de perder vida, devuelvo true.
@@ -67,6 +68,16 @@ bool Player::gainHealth(int amount) {
 
 bool Player::addScore(int amount) {
 	this->puntaje += amount;
+	return true;
+}
+
+bool Player::loseBullet() {
+	if(this->selected_weapon_idx == 0) return false;
+	if(this->bullets > 0) this->bullets--;
+	if(this->bullets == 0) {
+		this->previous_weapon_idx = this->selected_weapon_idx;
+		this->selected_weapon_idx = 0;
+	}
 	return true;
 }
 
@@ -125,6 +136,7 @@ int Player::getCurrentBullets(){
 bool Player::changeWeapon(int weapon_idx){
 	if (this->armas[weapon_idx].is_empty()) return false;
 	this->selected_weapon_idx = weapon_idx;
+	std::cout << "ahora tengo idx: " << this->selected_weapon_idx << std::endl;
 	return true;
 }
 

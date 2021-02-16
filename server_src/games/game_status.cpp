@@ -182,4 +182,8 @@ std::unordered_map<int,MovementState> GameStatus::getPlayerRotationStates(){
 //void GameStatus::updatePlayerPositions(){
 //}
 
+Map& GameStatus::getMap() {
+	return this->map.getMap();
+}
+
 GameStatus::~GameStatus() {}

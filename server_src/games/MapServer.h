@@ -49,6 +49,7 @@ public:
 	int getHeight();
 	int getMaxPlayers();
 	int getMinPlayers();
+	Map& getMap();
 	
 	std::vector<Item> getItems();
 	std::vector<Door> getDoors();

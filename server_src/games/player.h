@@ -26,6 +26,7 @@ class Player {
     
     bool has_key;
     int selected_weapon_idx;
+    int previous_weapon_idx;
     
     std::array<Arma,AMOUNT_WEAPONS> armas;
     MovementState movement_state;
@@ -42,10 +43,11 @@ public:
     bool is_dead();
     bool addScore(int amount);
     bool addBullets(int amount);
+    bool loseBullet();
     bool gainKey();
     bool useKey();
     bool addWeapon(Arma& arma);
-    int getWeaponPrecision();
+    bool aimWeapon(float target_angle, float shooter_angle, float target_distance);
     int getWeaponAttackRange();
     float getShootTimeout();
     int getCurrentBullets();

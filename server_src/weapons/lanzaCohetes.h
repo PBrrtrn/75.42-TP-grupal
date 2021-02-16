@@ -6,6 +6,7 @@
 class LanzaCohetes : public Arma {
     public:
         LanzaCohetes();
+        bool aimWeapon(float target_angle, float shooter_angle, float target_distance) override;
         virtual ~LanzaCohetes() override;
 };
 
