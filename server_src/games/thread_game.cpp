@@ -68,7 +68,9 @@ void ThreadGame:: run() {
         
 		auto t = std::chrono::steady_clock::now() - start_t;
     	auto sleep_t = std::chrono::duration_cast<std::chrono::microseconds>(t);
-    	usleep((1000000/29) - sleep_t.count());
+    	if ((1000000/29 - sleep_t.count()) > 0) {
+			usleep((1000000/29) - sleep_t.count());
+		}
 
         this->remaining_time--;
 		this->keep_running = this->gameStatus.getAlivePlayers() > 1 && this->remaining_time != 0 && !this->is_dead;
