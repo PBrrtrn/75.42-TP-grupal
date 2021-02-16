@@ -77,6 +77,7 @@ void ThreadClient::run() {
 				break;
 			case TYPE_SERVER_SEND_GAME_STATISTICS:
 				std::cout << "ThreadClient "<< this->id <<": voy a mandar statistics" << std::endl;
+				this->sendGameStatistics();
 				break;
 			default:
 				std::cout << "ThreadClient "<< this->id <<": no se donde estoy! no procese este evento!" << std::endl;
@@ -184,7 +185,7 @@ void ThreadClient::sendLobbyStatus(int gameID) {
 	this->game_started = lobbyStatus.gameStarted;
 }
 
-void ThreadClient::sendGameStatistics(int gameID) {
+void ThreadClient::sendGameStatistics() {
 	GameStatistics gs = this->game_status->getStatistics();
 	this->peer.socket_send((char*)(&gs), sizeof(GameStatistics));
 }

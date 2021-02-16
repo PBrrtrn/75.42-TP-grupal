@@ -16,7 +16,23 @@ void GameStatusUpdater::updateStatus() {
 		this->server_connection.sendPing();
 	}
 	
-	GameStatusUpdate update = this->server_connection.fetchGameStatusUpdate();
+	MessageType message = this->server_connection.receiveIncomingEvent();
+	GameStatusUpdate update;
+	GameStatistics statistics;
+	switch (message)
+	{
+	case TYPE_SERVER_SEND_GAME_UPDATE:
+		update = this->server_connection.fetchGameStatusUpdate();
+		break;
+
+	case TYPE_SERVER_SEND_GAME_STATISTICS:
+		statistics = this->server_connection.receiveStatistics();
+		break;
+	
+	default:
+		break;
+	}
+	
 	
 	this->game_status_monitor.updateGameStatus(update);
 	std::vector<MessageType> events;

@@ -82,7 +82,7 @@ public:
      * @brief Envia las estadisticas de la
      * partida al finalizar
      */
-    void sendGameStatistics(int gameID);
+    void sendGameStatistics();
 
     /**
      * @brief Envia al cliente su numero

@@ -74,7 +74,7 @@ bool Player::addScore(int amount) {
 bool Player::loseBullet() {
 	if(this->selected_weapon_idx == 0) return false;
 	if(this->bullets > 0) this->bullets--;
-	if(this->bullets == 0) {
+	if(this->bullets == 0 && selected_weapon_idx != 0) {
 		this->previous_weapon_idx = this->selected_weapon_idx;
 		this->selected_weapon_idx = 0;
 	}
@@ -82,6 +82,7 @@ bool Player::loseBullet() {
 }
 
 bool Player::addBullets(int amount) {
+	if (this->bullets == 0) this->selected_weapon_idx = this->previous_weapon_idx;
 	if( this->bullets < this->max_bullets) {
 		this->bullets += amount;
 		if(this->bullets > this->max_bullets) this->bullets = this->max_bullets;
@@ -136,7 +137,6 @@ int Player::getCurrentBullets(){
 bool Player::changeWeapon(int weapon_idx){
 	if (this->armas[weapon_idx].is_empty()) return false;
 	this->selected_weapon_idx = weapon_idx;
-	std::cout << "ahora tengo idx: " << this->selected_weapon_idx << std::endl;
 	return true;
 }
 

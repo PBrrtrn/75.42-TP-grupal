@@ -31,6 +31,7 @@ public:
 	Map fetchMap();
 	void sendEvents(std::vector<MessageType> events);
 	GameStatusUpdate fetchGameStatusUpdate();
+	GameStatistics receiveStatistics();
 	MessageType receiveIncomingEvent();
 	void sendPing();
 };
