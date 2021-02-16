@@ -12,11 +12,11 @@ void TimedEvent::activate(float timeout) {
 
 void TimedEvent::deactivate() {
     this->active = false;
+    this->elapsed = 0;
 }
 
 bool TimedEvent::update(float delta) {
-    //std::cout << "empezando update te" << std::endl;
-    if (!this->active) return false;
+    if (!this->active || this->timeout < 0) return false;
     elapsed += delta;
     if (elapsed >= timeout) {
         std::cout << "shoot en te update" <<std::endl;

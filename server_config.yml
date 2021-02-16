@@ -9,22 +9,27 @@ Ametralladora:
   Nombre: AMETRALLADORA
   AttackRange: 1000000
   Idx: 2
+  Timeout: 275856
 CanionDeCadena:
   Nombre: CANION_DE_CADENA
   AttackRange: 1000000
   Idx: 3
+  Timeout: 68964
 Cuchillo:
   Nombre: CUCHILLO
   AttackRange: 1000000
   Idx: 0
+  Timeout: -1
 LanzaCohetes:
   Nombre: LANZA_COHETES
   AttackRange: 1000000
   Idx: 4
+  Timeout: -1
 Pistola:
   Nombre: PISTOLA
   AttackRange: 1000000
   Idx: 1
+  Timeout: -1
 Moves:
   Step: 0.1
   RotationLeft: 0.1
