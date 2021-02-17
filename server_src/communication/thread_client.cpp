@@ -1,11 +1,15 @@
 #include "thread_client.h"
 
-ThreadClient::ThreadClient(int id, BlockingQueue<Message>& messages, 
-	BlockingQueue<Message>* messagesOut, Socket&& socket, ServerStatus& serverStatus, 
-	LobbyStatus& lobbyStatus) : 
-		id(id), messages(messages), messages_out(messagesOut), 
-		peer(std::move(socket)), keep_running(true), 
-		dead(false), serverStatus(serverStatus), lobbyStatus(lobbyStatus) {
+ThreadClient::ThreadClient(int id, BlockingQueue<Message>* messagesOut, 
+	Socket&& socket, ServerStatus& serverStatus, LobbyStatus& lobbyStatus) : 
+		id(id),
+		messages_out(messagesOut), 
+		peer(std::move(socket)), 
+		keep_running(true), 
+		dead(false), 
+		serverStatus(serverStatus), 
+		lobbyStatus(lobbyStatus) 
+		{
 			this->game_status = NULL;
 			this->game_started = false;
 }
@@ -84,20 +88,6 @@ void ThreadClient::run() {
 				break;
 			}
 			
-			size_t size;
-			int received = this->peer.socket_receive((char*)(&size), sizeof(size_t));
-			
-			ClientMessage cMessage;
-			for (int i = 0; i < size / sizeof(cMessage); i++ ){				
-				int received = this->peer.socket_receive((char*)(&cMessage), sizeof(cMessage));
-				if (received < sizeof(cMessage)){
-					std::cout << "recv en threadclient fallo, no recibi nada! (cerro el socket?)" << std::endl;
-					this->shutdown();
-				} else {
-					Message m(cMessage.type, cMessage.entityId, this->id);
-					this->messages.push(m);				
-				}
-			}
         } catch (...) {
             if (!keep_running) break;
         }

@@ -13,6 +13,7 @@
 #include "../../common_src/Thread.h"
 /////#include "../../common_src/socket.h"
 #include "game_status.h"
+#include "../../common_src/protected_queue.h"
 
 #include "../actions/action.h"
 #include "../actions/move_right.h"
@@ -40,6 +41,7 @@ class ThreadGame: public Thread {
         LobbyStatus& lobbyStatus;
         //LobbyStatusData lobbyData; TODO
         BlockingQueue<Message>* messages;
+        ProtectedQueue<Message>* messageReceiver;
         std::unordered_map<int, BlockingQueue<Message>*> out_queues;
 
         /*clave: id game, value: lista de juegos activos en servidor*/
@@ -118,9 +120,9 @@ class ThreadGame: public Thread {
         void fillTimedEvents();
 
     public:
-        ThreadGame(int gameId, BlockingQueue<Message>* m,
-            std::unordered_map<int,GameListItem>& list, std::string map_location,
-            int mapId, LobbyStatus& lobbyStatus);
+        ThreadGame(int gameId, ProtectedQueue<Message>* messageReceiver, 
+        BlockingQueue<Message>* m, std::unordered_map<int,GameListItem>& list, 
+        std::string map_location, int mapId, LobbyStatus& lobbyStatus);
         virtual void run() override;
 
         /**

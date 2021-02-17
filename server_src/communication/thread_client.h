@@ -22,7 +22,6 @@
 class ThreadClient : public Thread {
 private:
 	int id;
-    BlockingQueue<Message>& messages;
     BlockingQueue<Message>* messages_out;
     Socket peer;
     std::atomic<bool> keep_running{true};
@@ -39,9 +38,8 @@ private:
 	
 public:
 
-    ThreadClient(int id, BlockingQueue<Message>& messages, 
-        BlockingQueue<Message>* messagesOut, Socket&& socket, 
-        ServerStatus& serverStatus, LobbyStatus& lobbyStatus);
+    ThreadClient(int id, BlockingQueue<Message>* messagesOut, 
+        Socket&& socket, ServerStatus& serverStatus, LobbyStatus& lobbyStatus);
     virtual void run() override;    
     void shutdown();
 

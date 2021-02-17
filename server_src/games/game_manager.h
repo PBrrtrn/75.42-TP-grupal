@@ -6,15 +6,19 @@
 #include "thread_game.h"
 #include <unordered_map>
 #include "../../common_src/blocking_queue.h"
+#include "../../common_src/protected_queue.h"
 #include "../communication/message.h"
 #include "ServerStatus.h"
 #include "../../common_src/GameListItem.h"
 #include "./lobbyStatus.h"
 #include "../maps/mapRepository.h"
+#include "../communication/ReceiveClientMessages.h"
 
 class GameManager{
 
 private:
+
+	ProtectedQueue<Message> lobby_messages;
 
 	/* clave: gameId value: GameListItem*/
 	std::unordered_map<int, GameListItem> games_list;
@@ -26,17 +30,23 @@ private:
 	/* clave: clientId value: thClient*/
 	std::unordered_map<int, ThreadClient*> clientsThreads;
 
+	/* clave: clientId value: ReceiveClientMessages*/
+	std::unordered_map<int, ReceiveClientMessages*> clientMessageReceiver;
+
 	/* clave: gameId value: thGame*/
 	std::unordered_map<int, ThreadGame*> games;
 
 	/* clave: gameId value: gameQueue*/
-	std::unordered_map<int, BlockingQueue<Message>*> queues;
+	std::unordered_map<int, ProtectedQueue<Message>*> messageReceiver;
 
 	/* clave: clientId value: gameQueue*/
 	std::unordered_map<int, BlockingQueue<Message>*> out_queues;
 	
 	/* clave: clientId value: socket*/
 	std::unordered_map<int, Socket> clientsSockets;	
+
+	/*clientes en lobby*/
+	std::vector<int> clientsInLobby;
 
 	/* clave:clientId, value:gameId*/
 	std::unordered_map<int, int> clientsInGames;
@@ -90,10 +100,8 @@ public:
 	 * correspondiente al contador de clientes
 	 * Le pasa al thread cliente la cola para 
 	 * recibir mensajes (queue in)
-	 * @param q: cola bloqueante para enviar al servidor
-	 * los mensajes enviados por el cliente
 	 */
-	void acceptClient(Socket&& socket,BlockingQueue<Message>& q);
+	void acceptClient(Socket&& socket);
 	
 	/**
 	 * @brief Envia al cliente la lista de las partidas

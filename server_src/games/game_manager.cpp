@@ -36,8 +36,8 @@ void GameManager:: _parse_message(Message message) {
     /*si el cliente mando un mensaje que esta asociado al juego donde 
      * esta jugando*/
     default:
-        int gameId = this->clientsInGames.at(message.getClientId());
-		this->queues.at(gameId)->push(message);	
+        //int gameId = this->clientsInGames.at(message.getClientId());
+		//this->queues.at(gameId)->push(message);
         break;
     }
 }
@@ -54,18 +54,18 @@ void GameManager::expelClient(int expelledClientId){
 
 void GameManager::startGame(int clientIdStarter, int mapId) {
     if (this->mapsRepo.validMap(mapId)) {
-        BlockingQueue<Message>* queue = new BlockingQueue<Message>();
+        ProtectedQueue<Message>* receiver = new ProtectedQueue<Message>();
         std::cout << "map location:" << this->mapsRepo.getMapLocation(mapId) << std::endl;
         this->games.insert({ 
                             this->games_counter, 
-                            new ThreadGame(this->games_counter, 
-                                            queue, 
+                            new ThreadGame(this->games_counter,
+                                            receiver,
                                             this->games_list, 
                                             this->mapsRepo.getMapLocation(mapId),
                                             mapId, this->lobbyStatus) 
                             });
         this->clientsInGames.insert({clientIdStarter,this->games_counter});
-        this->queues.insert(std::make_pair(this->games_counter, queue));
+        this->messageReceiver.insert(std::make_pair(this->games_counter, receiver));
         this->joinGame(clientIdStarter, this->games_counter);
         this->games.at(this->games_counter)->start();
         this->games_counter++;
@@ -86,18 +86,22 @@ void GameManager::joinGame(int clientId, int gameId) {
     }
 }
 
-void GameManager::acceptClient(Socket&& socket, BlockingQueue<Message>& qClientsProcessor){
+void GameManager::acceptClient(Socket&& socket){
 	std::cout << "Game manager accepted new Client. ClientId:"<< this->clients_counter << std::endl;
 	
 	int clientId = this->clients_counter;
 	this->out_queues.insert({clientId, new BlockingQueue<Message>()} );
 
-    this->clientsThreads.insert({this->clients_counter, 
-        new ThreadClient(this->clients_counter, qClientsProcessor , 
-        this->out_queues.at(this->clients_counter), std::move(socket), this->serverStatus, 
-        this->lobbyStatus)});
+    this->clientsThreads.insert({clientId, 
+        new ThreadClient(clientId, this->out_queues.at(clientId), 
+        std::move(socket), this->serverStatus, this->lobbyStatus)});
     
-    this->clientsThreads.at(this->clients_counter)->start();
+    this->clientsThreads.at(clientId)->start();
+
+    this->clientMessageReceiver.insert({clientId, new ReceiveClientMessages(std::move(socket), &this->lobby_messages)});
+    this->clientMessageReceiver.at(clientId)->start();
+
+    this->clientsInLobby.push_back(clientId);
 
     this->clients_counter++;
 }
@@ -131,9 +135,10 @@ GameManager::~GameManager(){
         x.second->join();
         delete x.second;
     }
+    /*
     for (auto x: this->queues) {
         delete x.second;
-    }
+    }*/
     for (auto x: this->out_queues) {
         delete x.second;
     }

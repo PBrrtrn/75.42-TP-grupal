@@ -1,10 +1,16 @@
 #include "thread_game.h"
 
-ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m, 
-	std::unordered_map<int,GameListItem>& list, std::string map_location, int mapId, 
-	LobbyStatus& lobbyStatus) : 
-	id(gameId), messages(m), gameStatus(map_location), gameList(list),
-	map_id(mapId), lobbyStatus(lobbyStatus) {
+ThreadGame:: ThreadGame(int gameId, ProtectedQueue<Message>* messageReceiver, 
+	BlockingQueue<Message>* m, std::unordered_map<int,GameListItem>& list, 
+	std::string map_location, int mapId, LobbyStatus& lobbyStatus) : 
+	id(gameId), 
+	messages(m), 
+	gameStatus(map_location), 
+	gameList(list),
+	map_id(mapId), 
+	lobbyStatus(lobbyStatus), 
+	messageReceiver(messageReceiver) 
+	{
 		this->remaining_time = 30 * 1000; // Fijar por config
 		this->waiting_time_to_start = 120; 
 		this->start_running = true;
