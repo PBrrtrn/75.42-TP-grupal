@@ -2,6 +2,10 @@
 #define __GAME_INPUT_HANDLER_H__
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+//#include <SDL2/SDL_mixer.h>
+//#include "SDL_mixer.h"
+//#include "SDL_mixer.dll"
 
 #include "KeyboardState.h"
 #include "../ServerConnection.h"

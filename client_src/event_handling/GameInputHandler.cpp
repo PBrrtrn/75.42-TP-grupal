@@ -7,7 +7,15 @@ GameInputHandler::GameInputHandler(ServerConnection& server_connection,
 // Todo: Sacar message_queue, que ServerConnection haga los bloqueos
 : server_connection(server_connection), message_queue(message_queue) { }
 
-GameInputHandler::~GameInputHandler() { }
+GameInputHandler::~GameInputHandler() { 
+
+		// Initialize SDL.
+		if (SDL_Init(SDL_INIT_AUDIO) < 0);
+			
+		//Initialize SDL_mixer 
+		if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 );
+
+}
 
 void GameInputHandler::handle(SDL_Event input) {
 	if (input.key.repeat == 0) {
