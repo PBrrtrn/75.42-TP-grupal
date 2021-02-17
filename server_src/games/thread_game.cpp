@@ -1,10 +1,9 @@
 #include "thread_game.h"
 
 ThreadGame:: ThreadGame(int gameId, ProtectedQueue<Message>* messageReceiver, 
-	BlockingQueue<Message>* m, std::unordered_map<int,GameListItem>& list, 
-	std::string map_location, int mapId, LobbyStatus& lobbyStatus) : 
+	std::unordered_map<int,GameListItem>& list, std::string map_location, 
+	int mapId, LobbyStatus& lobbyStatus) : 
 	id(gameId), 
-	messages(m), 
 	gameStatus(map_location), 
 	gameList(list),
 	map_id(mapId), 
@@ -110,81 +109,80 @@ void ThreadGame::sendGameStatistics(){
 }
 
 void ThreadGame::checkNews() {
-	this->messages->lock();
-	while (!this->messages->isEmptySync()) {
-		Message m = this->messages->popSync();
+	std::vector<Message> messages = this->messageReceiver->popAll();
+
+	for (std::vector<Message>::iterator it = messages.begin() ; it != messages.end(); ++it) {
 		
-		switch (m.getType())
+		switch (it->getType())
 		{
 		case TYPE_MOVE_FORWARD_START:
-			this->changeMovementState(m.getClientId(), STATE_MOVING_FORWARD);
+			this->changeMovementState(it->getClientId(), STATE_MOVING_FORWARD);
 			break;
 
 		case TYPE_MOVE_BACKWARD_START:
-			this->changeMovementState(m.getClientId(), STATE_MOVING_BACKWARDS);
+			this->changeMovementState(it->getClientId(), STATE_MOVING_BACKWARDS);
 			break;
 		
 		case TYPE_MOVE_LEFT_START:
-			this->changeRotationState(m.getClientId(),STATE_MOVING_LEFT);
+			this->changeRotationState(it->getClientId(),STATE_MOVING_LEFT);
 			break;
 
 		case TYPE_MOVE_RIGHT_START:
-			this->changeRotationState(m.getClientId(),STATE_MOVING_RIGHT);
+			this->changeRotationState(it->getClientId(),STATE_MOVING_RIGHT);
 			break;
 
 		case TYPE_MOVE_FORWARD_STOP:
 		case TYPE_MOVE_BACKWARD_STOP:
-			this->changeMovementState(m.getClientId(), STATE_NOT_MOVING);
+			this->changeMovementState(it->getClientId(), STATE_NOT_MOVING);
 			break;
 		case TYPE_MOVE_LEFT_STOP:
 		case TYPE_MOVE_RIGHT_STOP:
-			this->changeRotationState(m.getClientId(),STATE_NOT_MOVING);
+			this->changeRotationState(it->getClientId(),STATE_NOT_MOVING);
 			break;
 
 		case TYPE_EXIT_GAME:
-			this->expelClient(m.getClientId());
+			this->expelClient(it->getClientId());
 			break;
 		
 		case TYPE_SHOOT_STOP:
 			std::cout << "en type shoot stop th game " << std::endl;
-			this->changeShootingState(m.getClientId(), STATE_NOT_SHOOTING);
+			this->changeShootingState(it->getClientId(), STATE_NOT_SHOOTING);
 			break;
 
 		case TYPE_SHOOT_START:
-			//this->tryShoot(m.getClientId());
+			//this->tryShoot(it->getClientId());
 			std::cout << "en type shoot start th game " << std::endl;
-			this->changeShootingState(m.getClientId(), STATE_SHOOTING);
+			this->changeShootingState(it->getClientId(), STATE_SHOOTING);
 			break;
 		
 		case TYPE_CHANGE_AMETRALLADORA:
-			this->changeWeaponAmetralladora(m.getClientId());
+			this->changeWeaponAmetralladora(it->getClientId());
 			break;
 		
 		case TYPE_CHANGE_CANION:
-			this->changeWeaponCanion(m.getClientId());
+			this->changeWeaponCanion(it->getClientId());
 			break;
 
 		case TYPE_CHANGE_CUCHILLO:
-			this->changeWeaponCuchillo(m.getClientId());
+			this->changeWeaponCuchillo(it->getClientId());
 			break;
 
 		case TYPE_CHANGE_LANZA_COHETES:
-			this->changeWeaponLanzacohetes(m.getClientId());
+			this->changeWeaponLanzacohetes(it->getClientId());
 			break;
 
 		case TYPE_CHANGE_PISTOLA:
-			this->changeWeaponPistola(m.getClientId());
+			this->changeWeaponPistola(it->getClientId());
 			break;
 			
 		case TYPE_USE_DOOR:
-			this->useDoor(m.getClientId());
+			this->useDoor(it->getClientId());
 			break;		
 
 		default:
 			break;
 		}
 	}
-	this->messages->unlock();
 }
 
 void ThreadGame::sendLobbyStatus() {

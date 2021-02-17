@@ -40,7 +40,7 @@ class ThreadGame: public Thread {
         int map_id; /*id del mapa de la partida*/
         LobbyStatus& lobbyStatus;
         //LobbyStatusData lobbyData; TODO
-        BlockingQueue<Message>* messages;
+        //BlockingQueue<Message>* messages; REMOVEME
         ProtectedQueue<Message>* messageReceiver;
         std::unordered_map<int, BlockingQueue<Message>*> out_queues;
 
@@ -121,8 +121,8 @@ class ThreadGame: public Thread {
 
     public:
         ThreadGame(int gameId, ProtectedQueue<Message>* messageReceiver, 
-        BlockingQueue<Message>* m, std::unordered_map<int,GameListItem>& list, 
-        std::string map_location, int mapId, LobbyStatus& lobbyStatus);
+        std::unordered_map<int,GameListItem>& list, std::string map_location, 
+        int mapId, LobbyStatus& lobbyStatus);
         virtual void run() override;
 
         /**

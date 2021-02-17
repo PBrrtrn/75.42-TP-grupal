@@ -10,37 +10,44 @@ void GameManager:: newMessage(Message message) {
     this->_parse_message(message);
 }
 
-void GameManager:: _parse_message(Message message) {
-    switch (message.getType())
-    {
-    case TYPE_START_GAME:
-        this->startGame(message.getClientId(), message.getEntity());
-        break;
-    
-    case TYPE_JOIN_GAME:
-        this->joinGame(message.getClientId(), message.getEntity());
-        break;
+void GameManager:: _parse_message(Message message){}
 
-    case TYPE_REFRESH_GAMES_LIST:
-        this->informAvailableGames(message.getClientId());
-        break;
-    case TYPE_SEND_MAPS_LIST:
-        this->sendMapsList(message.getClientId());
-        break;
-    case TYPE_EXIT_GAME:
-        this->expelClient(message.getClientId());
-        break;        
-    case TYPE_CLIENT_PING:
-        break;     
-    
-    /*si el cliente mando un mensaje que esta asociado al juego donde 
-     * esta jugando*/
-    default:
-        //int gameId = this->clientsInGames.at(message.getClientId());
-		//this->queues.at(gameId)->push(message);
-        break;
+void GameManager::receiveMessages() {
+    //std::vector<Message> messages = this->lobby_messages.popAll();
+
+	//for (std::vector<Message>::iterator it = messages.begin() ; it != messages.end(); ++it) {
+        Message m = this->lobby_messages.pop();
+        switch (m.getType())
+        {
+        case TYPE_START_GAME:
+            this->startGame(m.getClientId(), m.getEntity());
+            break;
+        
+        case TYPE_JOIN_GAME:
+            this->joinGame(m.getClientId(), m.getEntity());
+            break;
+
+        case TYPE_REFRESH_GAMES_LIST:
+            this->informAvailableGames(m.getClientId());
+            break;
+        case TYPE_SEND_MAPS_LIST:
+            this->sendMapsList(m.getClientId());
+            break;
+        case TYPE_EXIT_GAME:
+            this->expelClient(m.getClientId());
+            break;        
+        case TYPE_CLIENT_PING:
+            break;     
+        
+        /*si el cliente mando un mensaje que esta asociado al juego donde 
+        * esta jugando*/
+        default:
+            //int gameId = this->clientsInGames.at(m.getClientId());
+            //this->queues.at(gameId)->push(m.;
+            break;
+        }
     }
-}
+//}
 
 void GameManager::expelClient(int expelledClientId){
 	if (this->clientsInGames.find(expelledClientId) != this->clientsInGames.end()) {
@@ -80,6 +87,8 @@ void GameManager::joinGame(int clientId, int gameId) {
     if (this->games.find(gameId) != this->games.end() && 
 	 this->games.at(gameId)->addClient(this->clientsThreads.at(clientId), clientId)) {
 		this->clientsInGames.insert({clientId, gameId});
+        std::cout << "cambiando cola" << std::endl;
+        this->clientMessageReceiver.at(clientId)->assignToGameQueue(this->messageReceiver.at(gameId));
         this->out_queues.at(clientId)->push(Message(TYPE_SERVER_JOIN_OK, 0, clientId));
 	} else {
         this->out_queues.at(clientId)->push(Message(TYPE_SERVER_JOIN_REFUSED, 0, clientId));
@@ -92,16 +101,15 @@ void GameManager::acceptClient(Socket&& socket){
 	int clientId = this->clients_counter;
 	this->out_queues.insert({clientId, new BlockingQueue<Message>()} );
 
-    this->clientsThreads.insert({clientId, 
-        new ThreadClient(clientId, this->out_queues.at(clientId), 
-        std::move(socket), this->serverStatus, this->lobbyStatus)});
-    
-    this->clientsThreads.at(clientId)->start();
-
     this->clientMessageReceiver.insert({clientId, new ReceiveClientMessages(std::move(socket), &this->lobby_messages)});
     this->clientMessageReceiver.at(clientId)->start();
 
-    this->clientsInLobby.push_back(clientId);
+    this->clientsThreads.insert({clientId, 
+        new ThreadClient(clientId, this->out_queues.at(clientId), 
+        this->clientMessageReceiver.at(clientId)->getPeerReference(), 
+        this->serverStatus, this->lobbyStatus)});
+    
+    this->clientsThreads.at(clientId)->start();
 
     this->clients_counter++;
 }

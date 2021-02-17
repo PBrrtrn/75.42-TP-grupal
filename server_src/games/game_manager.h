@@ -45,9 +45,6 @@ private:
 	/* clave: clientId value: socket*/
 	std::unordered_map<int, Socket> clientsSockets;	
 
-	/*clientes en lobby*/
-	std::vector<int> clientsInLobby;
-
 	/* clave:clientId, value:gameId*/
 	std::unordered_map<int, int> clientsInGames;
 	int games_counter;
@@ -118,6 +115,8 @@ public:
 	 * hay que mandarle la lista
 	 */
 	void sendMapsList(int clientId);
+
+	void receiveMessages();
 
 	~GameManager();
 };

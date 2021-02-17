@@ -1,10 +1,10 @@
 #include "thread_client.h"
 
 ThreadClient::ThreadClient(int id, BlockingQueue<Message>* messagesOut, 
-	Socket&& socket, ServerStatus& serverStatus, LobbyStatus& lobbyStatus) : 
+	Socket& socket, ServerStatus& serverStatus, LobbyStatus& lobbyStatus) : 
 		id(id),
 		messages_out(messagesOut), 
-		peer(std::move(socket)), 
+		peer(socket), 
 		keep_running(true), 
 		dead(false), 
 		serverStatus(serverStatus), 
@@ -22,43 +22,33 @@ void ThreadClient::run() {
 	this->choosing_game = true;
 
 	while(choosing_game){
-		ClientMessage cMessage;
-		size_t received = this->peer.socket_receive((char*)(&cMessage), sizeof(cMessage));
-		if (received < sizeof(cMessage)){
-			std::cout << "recv en threadclient fallo, no recibi nada! (cerro el socket?)" << std::endl;
-			this->shutdown();
-		} else {
-			Message m(cMessage.type, cMessage.entityId, this->id);
-			this->messages.push(m);
-			try{
-				Message answer = this->messages_out->pop();
-				switch (answer.getType())
-				{
-				case TYPE_SERVER_SEND_GAMES_LIST:
-					this->sendGamesList();
-					break;			
-				case TYPE_SERVER_JOIN_OK:
-					this->choosing_game = false;
-					this->sendJoinOk();
-					break;
-				case TYPE_SERVER_JOIN_REFUSED:
-					this->sendJoinRefused();
-					break;
-				case TYPE_SERVER_SEND_MAP_LIST:
-					this->sendMapsList();
-					break;
+		try{
+			Message answer = this->messages_out->pop();
+			switch (answer.getType())
+			{
+			case TYPE_SERVER_SEND_GAMES_LIST:
+				this->sendGamesList();
+				break;			
+			case TYPE_SERVER_JOIN_OK:
+				this->choosing_game = false;
+				this->sendJoinOk();
+				break;
+			case TYPE_SERVER_JOIN_REFUSED:
+				this->sendJoinRefused();
+				break;
+			case TYPE_SERVER_SEND_MAP_LIST:
+				this->sendMapsList();
+				break;
 
-				case TYPE_SERVER_SHUTDOWN_CLIENT:
-					this->shutdown();
-					break;				
-				default:
-					break;
-				}			
-			} catch (...) {
+			case TYPE_SERVER_SHUTDOWN_CLIENT:
 				this->shutdown();
-			}
+				break;				
+			default:
+				break;
+			}			
+		} catch (...) {
+			this->shutdown();
 		}
-
 	} 
 
 	std::cout << "ThreadClient "<< this->id <<": voy a ingresar loop de juego" << std::endl;

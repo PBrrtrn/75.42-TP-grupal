@@ -9,6 +9,10 @@ void ReceiveClientMessages::assignToGameQueue(ProtectedQueue<Message>* messages)
     this->messages = messages;
 }
 
+Socket& ReceiveClientMessages::getPeerReference() {
+    return this->peer;
+}
+
 void ReceiveClientMessages::run() {
     while (this->keep_running) {
         size_t size;

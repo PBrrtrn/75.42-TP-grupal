@@ -39,6 +39,13 @@ public:
      */
     void assignToGameQueue(ProtectedQueue<Message>* messages);
 
+    /**
+     * @brief Para enviarle una referencia
+     * al peer al thread emisor de mensajes
+     * al cliente
+     */
+    Socket& getPeerReference();
+
     virtual ~ReceiveClientMessages() override;
 };
 
