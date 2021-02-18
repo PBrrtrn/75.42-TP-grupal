@@ -3,9 +3,6 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
-//#include <SDL2/SDL_mixer.h>
-//#include "SDL_mixer.h"
-//#include "SDL_mixer.dll"
 
 #include "KeyboardState.h"
 #include "../ServerConnection.h"
@@ -16,6 +13,10 @@ private:
 	KeyboardState keyboard_state;
 	ServerConnection& server_connection;
 	BlockingQueue<MessageType>& message_queue;
+	Mix_Chunk *sound;
+	Mix_Chunk *background_sound;
+
+	void _playSound(const char* path, int loops);
 public:
 	GameInputHandler(ServerConnection& server_connection,
 									 BlockingQueue<MessageType>& message_queue);

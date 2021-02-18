@@ -3,19 +3,11 @@
 const SDL_Keycode mapped_keys[] = { SDLK_w, SDLK_a, SDLK_s, SDLK_d };
 
 GameInputHandler::GameInputHandler(ServerConnection& server_connection,
-																	 BlockingQueue<MessageType>& message_queue)
-// Todo: Sacar message_queue, que ServerConnection haga los bloqueos
-: server_connection(server_connection), message_queue(message_queue) { }
-
-GameInputHandler::~GameInputHandler() { 
-
-		// Initialize SDL.
-		if (SDL_Init(SDL_INIT_AUDIO) < 0);
-			
-		//Initialize SDL_mixer 
-		if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 );
-
-}
+	BlockingQueue<MessageType>& message_queue) :
+	// Todo: Sacar message_queue, que ServerConnection haga los bloqueos
+		server_connection(server_connection), 
+		message_queue(message_queue) 
+		{ }
 
 void GameInputHandler::handle(SDL_Event input) {
 	if (input.key.repeat == 0) {
@@ -27,18 +19,21 @@ void GameInputHandler::handle(SDL_Event input) {
 				{
 				case SDLK_w:
 					this->message_queue.push(TYPE_MOVE_FORWARD_START);
+					this->_playSound("/home/laptop-hp/Documentos/FACULTAD/Taller de programación I/tp final/SERVER/75.42-TP-grupal/client_src/sound_effects/SOUNDS/M_MOVE.wav", 0);
 					break;
 				case SDLK_a:
 					this->message_queue.push(TYPE_MOVE_LEFT_START);
 					break;
 				case SDLK_s:
 					this->message_queue.push(TYPE_MOVE_BACKWARD_START);
+					this->_playSound("/home/laptop-hp/Documentos/FACULTAD/Taller de programación I/tp final/SERVER/75.42-TP-grupal/client_src/sound_effects/SOUNDS/M_BACK.wav", 0);
 					break;
 				case SDLK_d:
 					this->message_queue.push(TYPE_MOVE_RIGHT_START);
 					break;
 				case SDLK_SPACE:
 					this->message_queue.push(TYPE_SHOOT_START);
+					this->_playSound("/home/laptop-hp/Documentos/FACULTAD/Taller de programación I/tp final/SERVER/75.42-TP-grupal/client_src/sound_effects/SOUNDS/DSSHOT.wav", 0);
 					break;
 				case SDLK_1:
 					this->message_queue.push(TYPE_CHANGE_CUCHILLO);
@@ -93,4 +88,15 @@ void GameInputHandler::handle(SDL_Event input) {
 	  	}
     }
 
+}
+
+void GameInputHandler::_playSound(const char* path, int loops) {
+	int channel; 
+	this->sound = Mix_LoadWAV(path);
+	if (this->sound == NULL) printf("Loading sound error: %s\n", Mix_GetError());
+	channel = Mix_PlayChannel(-1, this->sound, loops); 
+}
+
+GameInputHandler::~GameInputHandler() { 
+	Mix_FreeChunk(this->sound);
 }

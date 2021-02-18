@@ -12,3 +12,4 @@ add_library(event-handling SHARED
 )
 
 target_sources(event-handling PRIVATE ../enums/UpdateType.h)
+target_link_libraries(event-handling SDL2_mixer)
