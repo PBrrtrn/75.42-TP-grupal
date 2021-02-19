@@ -50,6 +50,44 @@ void Renderer::load() {
   YAML::Node config_node = config["animations"]["enemies"];
   std::string enemies_dir = config_node["directory"].as<std::string>();
 
+  //////////////////////////////////////////////////////////////
+  std::vector<std::string> paths;
+  paths.push_back(std::string("../assets/sprites/enemies/ss/idle_front.png"));
+
+  Animation* animation = new Animation(this->renderer, paths);
+  this->enemy_animations.push_back(animation);
+  //////////////////////////////////////////////////////////////
+
+  /*
+  for (auto set_node : config_node["sprite_sets"]) {
+    std::string set_dir = set_node["directory"].as<std::string>();
+
+
+    std::vector<std::string> idle_frames;
+    for (auto sprite : set_node["sprites"]["idle"]) {
+      std::cout << sprite.as<std::string>() << std::endl;
+    }
+
+    std::vector<std::string> move_forward_frames;
+    for (auto sprite : set_node["sprites"]["move_forward"]) {
+      std::cout << sprite.as<std::string>() << std::endl;
+    }
+
+    std::vector<std::string> shooting_frames;
+    for (auto sprite : set_node["sprites"]["shooting"]) {
+      std::cout << sprite.as<std::string>() << std::endl;
+    }
+
+    std::vector<std::string> dying_frames;
+    for (auto sprite : set_node["sprites"]["idle"]) {
+      std::cout << sprite.as<std::string>() << std::endl;
+    }
+  }
+  */
+  /*
+  YAML::Node config_node = config["animations"]["enemies"];
+  std::string enemies_dir = config_node["directory"].as<std::string>();
+
   for (auto sprite : config_node["sprites"]) {
     std::string filename = sprite["file"].as<std::string>();
     std::string filepath = enemies_dir + filename;
@@ -61,7 +99,7 @@ void Renderer::load() {
 
     this->enemy_animations.push_back(animation);
   }
-
+  */
 }
 
 void Renderer::run() {

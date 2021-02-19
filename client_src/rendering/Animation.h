@@ -3,22 +3,22 @@
 
 #include <SDL2/SDL.h>
 #include <vector>
+#include <string>
 
 #include "Texture.h"
 
 class Animation {
 private:
-  Texture sprite_sheet;
-  uint current_frame;
-  std::vector<SDL_Rect> frames;
-  int frame_width;
-  int frame_height;
+  std::vector<Texture*> frames;
+  int current_frame;
 public:
-  Animation(SDL_Renderer* renderer, const char* sheet_filepath, 
-            int frame_width, int frame_height, int n_frames);
+  Animation(SDL_Renderer* renderer, std::vector<std::string> frame_paths);
   ~Animation();
-  void renderNextFrame(SDL_Renderer* renderer, int scale,
-                       int x_pos, int y_pos);
+  void render(SDL_Renderer* renderer, 
+              int x_pos, int y_pos, 
+              int width, int height);
+  void renderTexel(SDL_Renderer* renderer, std::vector<float>& z_buffer,
+                   float z_depth, int x_pos, int y_pos, int width, int height);
 };
 
 #endif

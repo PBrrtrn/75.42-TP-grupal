@@ -214,12 +214,13 @@ bool ThreadGame::addClient(ThreadClient* client, int id){
     client->assignToOutQueue(queue_out);
     
 	std::vector<SpawnPoint> spawnpoints = this->gameStatus.getSpawnPoints();
-	int sp_idx = rand()% (spawnpoints.size());
-	Vector position = spawnpoints.at(sp_idx).getPosition();
-	Vector direction = spawnpoints.at(sp_idx).getDirection();
+	int sp_idx = id % spawnpoints.size(); // idx temporal para conocer siempre el spawn
+	// int sp_idx = rand()% (spawnpoints.size());
+	Vector position = spawnpoints[sp_idx].getPosition();
+	Vector direction = spawnpoints[sp_idx].getDirection();
 	this->gameStatus.addPlayer(id, position, direction);
 	this->clientGameStatuses.insert({id, new ClientGameStatus(this->gameStatus,id)});
-	client->assignToGameStatus(this->clientGameStatuses.at(id));
+	client->assignToGameStatus(this->clientGameStatuses[id]);
 	return true;
 }
 

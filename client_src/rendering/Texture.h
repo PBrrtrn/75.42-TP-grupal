@@ -19,6 +19,8 @@ public:
   void render(SDL_Renderer* renderer, SDL_Rect *clip, SDL_Rect *dst);
   void renderTexel(SDL_Renderer* renderer, int x, float texel, 
                    int screen_height, int length, int side);
+  int getWidth();
+  int getHeight();
 };
 
 #define ERROR_BUF_LEN 256

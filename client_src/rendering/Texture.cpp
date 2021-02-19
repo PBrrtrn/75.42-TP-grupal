@@ -38,6 +38,14 @@ void Texture::renderTexel(SDL_Renderer* renderer, int x, float texel,
   this->render(renderer, &texture_source, &screen_destination);
 }
 
+int Texture::getWidth() {
+  return this->width;
+}
+
+int Texture::getHeight() {
+  return this->height;
+}
+
 TextureConstructorError::TextureConstructorError
                 (const char *sdl_error) noexcept {
   snprintf(this->error_msg, ERROR_BUF_LEN, 

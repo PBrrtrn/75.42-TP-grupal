@@ -1,7 +1,7 @@
 server:
   host: localhost
   port: 9006
-FPS_cap: 29
+FPS_cap: 60
 graphics:
   FOV: 1.0472
   wall_height: 1.5
@@ -59,24 +59,23 @@ consumables:
 animations:
   enemies:
     directory: ../assets/sprites/enemies/
-    sprites:
-      - file: ss.png
-        frames: 5
-        frame_width: 64
-        frame_height: 64
-      - file: ss.png
-        frames: 5
-        frame_width: 64
-        frame_height: 64
-      - file: ss.png
-        frames: 5
-        frame_width: 64
-        frame_height: 64
-      - file: ss.png
-        frames: 5
-        frame_width: 64
-        frame_height: 64
-      - file: ss.png
-        frames: 5
-        frame_width: 64
-        frame_height: 64
+    sprite_sets:
+      - directory: ss/
+        sprites:
+          idle:
+            - idle_front.png
+          move_forward:
+            - moving_front_1.png
+            - moving_front_2.png
+            - moving_front_3.png
+            - moving_front_4.png
+          shooting:
+            - shooting_1.png
+            - shooting_2.png
+            - shooting_3.png
+          dying:
+            - dying_1.png
+            - dying_2.png
+            - dying_3.png
+            - dying_4.png
+            - dying_5.png
