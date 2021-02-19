@@ -7,22 +7,22 @@
 
 template <class T> class BlockingQueue {
 private:
-    bool isClosed;
-    std::mutex m;
-    std::queue<T> queue;
-    std::condition_variable cv;
+  bool isClosed;
+  std::mutex m;
+  std::queue<T> queue;
+  std::condition_variable cv;
 
 public:
-    BlockingQueue() : isClosed(false) {}
+  BlockingQueue() : isClosed(false) {}
 
-    void push(T t){
-        std::unique_lock<std::mutex> lock(m);
-        queue.push(t);
-        cv.notify_all();
-    }
+  void push(T t) {
+    std::unique_lock<std::mutex> lock(m);
+    queue.push(t);
+    cv.notify_all();
+  }
 
-    void lock(){
-		this->m.lock();
+  void lock(){
+	this->m.lock();
 	}
 	
 	T popSync(){
@@ -35,36 +35,36 @@ public:
 		return (queue.empty());
 	}
 
-    void unlock(){
-		this->m.unlock();
+  void unlock(){
+	  this->m.unlock();
 	}
 
-    T pop() {
-        std::unique_lock<std::mutex> lock(m);
-        while (queue.empty()){
-            if (isClosed){
-                //throw ClosedQueueException();
-                throw std::exception(); //TODO HACER EXCEPCION
-            }
-            cv.wait(lock);
-        }
-        T t = queue.front();
-        queue.pop();
-        return t;
+  T pop() {
+    std::unique_lock<std::mutex> lock(m);
+    while (queue.empty()){
+      if (isClosed){
+        //throw ClosedQueueException();
+        throw std::exception(); //TODO HACER EXCEPCION
+      }
+      cv.wait(lock);
     }
+    T t = queue.front();
+    queue.pop();
+    return t;
+  }
     
-    bool isEmpty(){
+  bool isEmpty() {
 		std::unique_lock<std::mutex> lock(m);
 		return (queue.empty());
 	}
 
-    void close() {
-        std::unique_lock<std::mutex> lock(m);
-        isClosed = true;
-        cv.notify_all();
-    }
+  void close() {
+    std::unique_lock<std::mutex> lock(m);
+    isClosed = true;
+    cv.notify_all();
+  }
 
-    ~BlockingQueue() { 
+  ~BlockingQueue() { 
 		this->close();
 	}
 

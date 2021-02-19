@@ -136,7 +136,7 @@ void ThreadClient::sendGameUpdate() {
 	size_t size = this->game_status->players.size()*sizeof(PlayerListItem);
 	this->peer.socket_send((char*)(&size), sizeof(size));
 	for (auto& it: this->game_status->players) {
-		this->peer.socket_send((char*)(&it), sizeof(PlayerListItem));
+		this->peer.socket_send((char*)&(it.second), sizeof(PlayerListItem));
 	}
 
 	//char door_

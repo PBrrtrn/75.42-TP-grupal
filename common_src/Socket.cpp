@@ -146,7 +146,7 @@ void Socket::close_socket(){
 	if (this->fd > -1){
 		shutdown(this->fd, SHUT_RDWR);
 		close(this->fd);
-		this->fd != -1;
+		this->fd == -1;
 	}
 }
 

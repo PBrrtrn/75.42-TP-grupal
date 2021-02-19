@@ -1,26 +1,39 @@
+#include <iostream>
+
 #include "Animation.h"
 
-Animation::Animation(SDL_Renderer* renderer, const char* sheet_filepath,
-                     int frame_width, int frame_height, int n_frames)
-: sprite_sheet(renderer, sheet_filepath), current_frame(0),
-  frame_width(frame_width), frame_height(frame_height) {
-  this->frames.reserve(n_frames);
-  for (int i = 0; i < n_frames; i++) {
-    SDL_Rect frame { 0, i*frame_height, frame_width, frame_height };
-    this->frames.push_back(frame);
+Animation::Animation(SDL_Renderer* renderer, 
+                     std::vector<std::string> frame_paths) : current_frame(0) {
+  this->frames.reserve(frame_paths.size());
+  for (std::string& frame_path : frame_paths) {
+    std::cout << frame_path << std::endl;
+    this->frames.push_back(new Texture(renderer, frame_path.c_str()));
   }
 }
 
-Animation::~Animation() { }
+Animation::~Animation() {
+  for (Texture* frame : this->frames) delete frame;
+}
 
-void Animation::renderNextFrame(SDL_Renderer* renderer, int scale,
-                                int x_pos, int y_pos) {
-  int frame_n = (current_frame + 1) % this->frames.size();
+void Animation::render(SDL_Renderer* renderer, 
+                       int x_pos, int y_pos, 
+                       int width, int height) {
+  SDL_Rect dest { x_pos, y_pos, width, height };
+  this->frames[this->current_frame]->render(renderer, NULL, &dest);
+}
 
-  SDL_Rect dest { x_pos, y_pos, 
-                  this->frame_width*scale,
-                  this->frame_height*scale };
+void Animation::renderTexel(SDL_Renderer* renderer, 
+                            std::vector<float>& z_buffer,
+                            float z_depth, int x_pos, int y_pos, 
+                            int width, int height) {
+  Texture* frame = this->frames[0];
 
-  this->sprite_sheet.render(renderer, &frames[frame_n], &dest);
-  this->current_frame += 1;
+  int start_x = x_pos - (frame->getWidth()/2);
+  int end_x = x_pos + (frame->getWidth()/2);
+  for (int texel_x = start_x; (texel_x < end_x) && (texel_x < 640); texel_x++) {
+    if (z_depth < z_buffer[texel_x]) {
+      float texel = ((float)(texel_x - start_x))/(float(frame->getWidth()));
+      frame->renderTexel(renderer, texel_x, texel, 480, height, 0);
+    }
+  }
 }

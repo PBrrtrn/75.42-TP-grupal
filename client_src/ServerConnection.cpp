@@ -180,8 +180,8 @@ GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 	players_list.reserve(n_players);
 	for (int i = 0; i < n_players; i++) {
 		PlayerListItem player;
-
 		this->socket.socket_receive((char*)&player, sizeof(PlayerListItem));
+
 		if (player.clientId != this->client_id) players_list.push_back(player);
 	}
 

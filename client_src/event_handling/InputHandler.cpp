@@ -8,7 +8,7 @@ InputHandler::InputHandler(std::atomic<bool>& in_game,
 													 ServerConnection& server_connection,
 													 BlockingQueue<MessageType>& blockingQueue)
 : in_game(in_game), menu_input_handler(update_queue),
-	game_input_handler(server_connection,blockingQueue) { }
+	game_input_handler(server_connection, blockingQueue) { }
 
 InputHandler::~InputHandler() { }
 
