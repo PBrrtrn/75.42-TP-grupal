@@ -160,15 +160,28 @@ void ServerConnection::sendPing() {
 	
 }
 
+GameStatistics ServerConnection::receiveStatistics() {
+	std::unique_lock<std::mutex> lock(this->mutex);
+	while (this->receiving) this->cv.wait(lock);
+
+	GameStatistics statistics;
+	this->socket.socket_receive((char*)&statistics, sizeof(GameStatistics));
+
+	this->receiving = false;
+	cv.notify_one();
+	return statistics;
+}
+
 GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 	std::unique_lock<std::mutex> lock(this->mutex);
 	while (!this->receiving) this->cv.wait(lock);
 
+	/*
 	MessageType message_type;
 	this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
 	if (message_type != TYPE_SERVER_SEND_GAME_UPDATE) {
 		throw ServerConnectionError("Expected game update");
-	}
+	}*/ //USING RECEIVE INCOMNING EVENT
 
 	PlayerStatus player_status;
 	this->socket.socket_receive((char*)&player_status, sizeof(PlayerStatus));

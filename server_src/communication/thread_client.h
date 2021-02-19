@@ -22,9 +22,8 @@
 class ThreadClient : public Thread {
 private:
 	int id;
-    BlockingQueue<Message>& messages;
     BlockingQueue<Message>* messages_out;
-    Socket peer;
+    Socket& peer;
     std::atomic<bool> keep_running{true};
     std::atomic<bool> dead{false};
     ServerStatus serverStatus;
@@ -39,9 +38,8 @@ private:
 	
 public:
 
-    ThreadClient(int id, BlockingQueue<Message>& messages, 
-        BlockingQueue<Message>* messagesOut, Socket&& socket, 
-        ServerStatus& serverStatus, LobbyStatus& lobbyStatus);
+    ThreadClient(int id, BlockingQueue<Message>* messagesOut, 
+        Socket& socket, ServerStatus& serverStatus, LobbyStatus& lobbyStatus);
     virtual void run() override;    
     void shutdown();
 
@@ -82,7 +80,7 @@ public:
      * @brief Envia las estadisticas de la
      * partida al finalizar
      */
-    void sendGameStatistics(int gameID);
+    void sendGameStatistics();
 
     /**
      * @brief Envia al cliente su numero
