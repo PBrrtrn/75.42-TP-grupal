@@ -1,0 +1,8 @@
+@startuml game_loop
+    ReceiveClientMessages -> Socket : socket_receive()
+    ReceiveClientMessages -> ProtectedQueue : push()
+    ThreadGame -> ProtectedQueue : popAll()
+    ThreadGame -> BlockingQueue : push()
+    ThreadClient -> BlockingQueue : pop()
+    ThreadClient -> Socket : socket_send()
+@enduml

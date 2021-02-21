@@ -1,0 +1,14 @@
+@startuml start_game
+    Main -> Server : start()
+    Server -> ThreadAcceptor : start()
+    ThreadAcceptor -> ThreadAcceptor : acceptConnection()
+    ReceiveClientMessages -> Socket : socket_receive()
+    ReceiveClientMessages -> ProtectedQueue : push()
+    ThreadAcceptor -> GameManager : receiveMessages()
+    GameManager -> ProtectedQueue : pop()
+    GameManager -> GameManager : startGame()
+    GameManager --> ProtectedQueue : new
+    GameManager --> ThreadGame : new
+    GameManager -> GameManager : joinGame()
+    GameManager -> ReceiveClientMessages : assignToGameQueue()
+@enduml
