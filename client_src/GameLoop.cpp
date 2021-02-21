@@ -42,7 +42,7 @@ void GameLoop::run() {
 
   InputHandler input_handler(in_game, menu_status, request_queue);
 
-  EventSender event_sender(in_game, request_queue, server_connection);
+  EventSender event_sender(request_queue, server_connection);
   UpdateReceiver update_receiver(in_game, server_connection,
                                  game_status_monitor,
                                  menu_status);

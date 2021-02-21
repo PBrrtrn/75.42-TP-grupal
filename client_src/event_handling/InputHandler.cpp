@@ -1,8 +1,6 @@
 #include <iostream>
 #include "InputHandler.h"
 
-#include "../enums/UpdateType.h"
-
 InputHandler::InputHandler(std::atomic<bool>& in_game, MenuStatus& menu_status,
 							 						 BlockingQueue<Request>& request_queue)
 : in_game(in_game), menu_input_handler(request_queue, menu_status),

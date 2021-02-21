@@ -1,5 +1,8 @@
 #include "GameInputHandler.h"
 
+#include <unordered_map>
+#include "../../common_src/MessageType.h"
+
 static std::unordered_map<SDL_Keycode, MessageType> keydown_map = {
 	{ SDLK_w, TYPE_MOVE_FORWARD_START },
 	{ SDLK_a, TYPE_MOVE_LEFT_START },

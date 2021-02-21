@@ -31,6 +31,7 @@ void UpdateReceiver::receiveGameUpdate(MessageType message_type) {
 			break;
 		case (TYPE_SERVER_SEND_GAME_STATISTICS) :
 			GameStatistics statistics = this->connection.getGameStatistics();
+			// Hacer algo con las statistics
 			break;
 	}
 }
@@ -46,11 +47,11 @@ void UpdateReceiver::receiveMenuUpdate(MessageType message_type) {
 			this->menu_status.updateGameOptions(games);
 			break;
 		case (TYPE_SERVER_JOIN_OK) :
-			// this->menu_status.updateCurrentScreen(LOBBY);
+			this->menu_status.updateCurrentScreen(LOBBY);
 		case (TYPE_LOBBY_STATUS_UPDATE) :
 			LobbyStatusData lobby_status = this->connection.getLobbyStatus();
 			if (lobby_status.gameStarted) in_game = true;
-			// this->menu_status
+			// this->menu_status.updateLobbyStatus(lobby_status);
 			break;
 	}
 }

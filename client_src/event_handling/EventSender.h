@@ -11,12 +11,10 @@
 
 class EventSender : public Thread {
 private:
-	std::atomic<bool>& in_game;
 	BlockingQueue<Request>& request_queue;
 	ServerConnection& server_connection;
 public:
-	EventSender(std::atomic<bool>& in_game, 
-							BlockingQueue<Request>& request_queue,
+	EventSender(BlockingQueue<Request>& request_queue,
 							ServerConnection& server_connection);
 	~EventSender();
 	void run();
