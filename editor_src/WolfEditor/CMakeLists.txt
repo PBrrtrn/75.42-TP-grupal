@@ -31,15 +31,39 @@ if(ANDROID)
     main.cpp
     mainwindow.cpp
     mainwindow.h
+    layoutitem.h
+    layoutitem.cpp
+    gamemapgrid.cpp
+    gamemapgrid.h
     mainwindow.ui
+    WolfEditor.qrc
   )
 else()
   add_executable(WolfEditor
     main.cpp
     mainwindow.cpp
     mainwindow.h
+    layoutitem.h
+    layoutitem.cpp
+    gamemapgrid.cpp
+    gamemapgrid.h
+    Map.h
+    Map.cpp
+    texture_list.h
+    appstatus.cpp
+    appstatus.h
+    itemdraggable.cpp
+    itemdraggable.h
+    itemfood.cpp
+    itemfood.h
+    newmapwindow.cpp
+    newmapwindow.h
     mainwindow.ui
+
+    ../../server_src/games/ItemSerializer.h
+    ../../server_src/games/ItemSerializer.cpp
+    WolfEditor.qrc
   )
 endif()
 
-target_link_libraries(WolfEditor PRIVATE Qt5::Widgets)
+target_link_libraries(WolfEditor PRIVATE Qt5::Widgets yaml-cpp)
