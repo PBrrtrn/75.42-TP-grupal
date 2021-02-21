@@ -144,6 +144,9 @@ GameManager::~GameManager(){
         x.second->join();
         delete x.second;
     }
+    for (auto x: this->clientMessageReceiver) {
+        x.second->join();
+    }
     /*
     for (auto x: this->queues) {
         delete x.second;
