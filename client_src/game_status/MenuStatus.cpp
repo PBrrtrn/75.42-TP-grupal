@@ -41,17 +41,15 @@ void MenuStatus::updateCurrentScreen(Screen new_screen) {
 
 void MenuStatus::selectOptionUp() {
 	std::unique_lock<std::mutex> lock(this->mutex);
-
 	this->moveSelectedOption(1);
 }
 
 void MenuStatus::selectOptionDown() {
 	std::unique_lock<std::mutex> lock(this->mutex);
-
 	this->moveSelectedOption(-1);
 }
 
-void moveSelectedOption(int direction) {
+void MenuStatus::moveSelectedOption(int direction) {
 	int n_options;
 	if (this->current_screen == GAME_SELECTION)
 		n_options = this->game_options.size() + 2;

@@ -2,8 +2,8 @@
 
 MenuInputHandler::MenuInputHandler(BlockingQueue<Request>& request_queue,
 																	 MenuStatus& menu_status)
-: request_queue(request_queue) {
-	Request request { CLIENT_REQUEST_MAPS_LIST }
+: request_queue(request_queue), menu_status(menu_status) {
+	Request request { CLIENT_REQUEST_MAPS_LIST };
 	this->request_queue.push(request);
 	this->refresh();
 }
@@ -51,8 +51,10 @@ void MenuInputHandler::handleGameSelection(SDL_Event input) {
 }
 
 void MenuInputHandler::handleLobby(SDL_Event input) {
-	if (input.key.keysym.sym == SDLK_SPACE)
-		Request request { CLIENT_REQUEST_LEAVE_GAME }
+	if (input.key.keysym.sym == SDLK_SPACE) {
+		Request request { CLIENT_REQUEST_LEAVE_GAME };
+		this->request_queue.push(request);
+	}
 }
 
 void MenuInputHandler::handleGameCreation(SDL_Event input) {

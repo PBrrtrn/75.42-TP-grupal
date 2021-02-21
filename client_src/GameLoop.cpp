@@ -9,7 +9,6 @@
 #include "game_status/MenuStatus.h"
 #include "game_status/GameStatusMonitor.h"
 #include "event_handling/InputHandler.h"
-#include "event_handling/StatusUpdater.h"
 #include "event_handling/Request.h"
 #include "rendering/Renderer.h"
 #include "../common_src/blocking_queue.h"
@@ -32,15 +31,14 @@ void GameLoop::run() {
   MenuStatus menu_status;
   GameStatusMonitor game_status_monitor;
 
-  std::atomic<bool> in_game(false);
-
-  BlockingQueue<UserRequest> request_queue;
 
   std::string host = this->config["server"]["host"].as<std::string>();
   std::string port = this->config["server"]["port"].as<std::string>();
   ServerConnection server_connection(host, port);
 
-  InputHandler input_handler(in_game, menu_status, request_queue);
+  BlockingQueue<UserRequest> request_queue;
+
+  std::atomic<bool> in_game(false);
 
   EventSender event_sender(request_queue, server_connection);
   UpdateReceiver update_receiver(in_game, server_connection,
@@ -52,6 +50,8 @@ void GameLoop::run() {
   event_sender.start();
   update_receiver.start();
   renderer.start();
+
+  InputHandler input_handler(in_game, menu_status, request_queue);
 
   SDL_Event user_input;
   while (true) {

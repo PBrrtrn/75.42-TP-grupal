@@ -34,11 +34,11 @@ void GameInputHandler::handle(SDL_Event input) {
 		bool keydown = this->keyboard_state.isDown(keycode);
 		if ((input.type == SDL_KEYDOWN) && (!keydown)) {
 			Request request { keydown_map[keycode] };
-			this->request_queue.push(request)
+			this->request_queue.push(request);
 			this->keyboard_state.toggleKeyDown(keycode);
 		} else if ((input.type == SDL_KEYUP) && (keydown)) {
 			Request request { keydown_map[keycode] };
-			this->request_queue.push(keyup_map[keycode]);
+			this->request_queue.push(request);
 			this->keyboard_state.toggleKeyUp(keycode);
 		}
 	}

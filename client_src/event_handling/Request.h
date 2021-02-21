@@ -6,6 +6,6 @@
 struct Request {
 	MessageType type;
 	int id;
-}
+};
 
 #endif

@@ -27,7 +27,7 @@ void ThreadClient::run() {
 			this->informSomethingToReport(answer.getType());
 			switch (answer.getType())
 			{
-			case TYPE_CLIENT_REQUEST_GAMES_LIST:
+			case CLIENT_REQUEST_GAMES_LIST:
 				this->sendGamesList();
 				break;			
 			case TYPE_SERVER_JOIN_OK:

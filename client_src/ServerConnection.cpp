@@ -148,6 +148,10 @@ GameStatistics ServerConnection::getGameStatistics() {
 	return statistics;
 }
 
+void ServerConnection::sendRequest(Request request) {
+
+}
+
 /*
 
 bool ServerConnection::joinGame(char game_id) {

@@ -6,8 +6,8 @@
 #include "../../common_src/Thread.h"
 
 #include "../ServerConnection.h"
-#include "../GameStatus/GameStatusMonitor.h"
-#include "../GameStatus/MenuStatus.h"
+#include "../game_status/GameStatusMonitor.h"
+#include "../game_status/MenuStatus.h"
 #include "../../common_src/MessageType.h"
 
 class UpdateReceiver : public Thread {
@@ -18,6 +18,12 @@ private:
 	MenuStatus& menu_status;
 	void receiveGameUpdate(MessageType message_type);
 	void receiveMenuUpdate(MessageType message_type);
+	void fetchMap();
+	void fetchGameUpdate();
+	void fetchStatistics();
+	void fetchMapOptions();
+	void fetchGameOptions();
+	void fetchLobbyStatus();
 public:
 	UpdateReceiver(std::atomic<bool>& in_game, 
 								 ServerConnection& connection,

@@ -22,36 +22,60 @@ void UpdateReceiver::run() {
 void UpdateReceiver::receiveGameUpdate(MessageType message_type) {
 	switch (message_type) {
 		case (TYPE_SERVER_SEND_MAP) :
-			Map map = this->connection.getMap();
-			this->game_status_monitor.initializeMap(map);
+			this->fetchMap();
 			break;
 		case (TYPE_SERVER_SEND_GAME_UPDATE) :
-			GameStatusUpdate update = this->connection.getGameStatusUpdate();
-			this->game_status_monitor.updateGameStatus(update);
+			this->fetchGameUpdate();
 			break;
 		case (TYPE_SERVER_SEND_GAME_STATISTICS) :
-			GameStatistics statistics = this->connection.getGameStatistics();
-			// Hacer algo con las statistics
+			this->fetchStatistics();
 			break;
 	}
+}
+
+void UpdateReceiver::fetchMap() {
+	Map map = this->connection.getMap();
+	this->game_status_monitor.initializeMap(map);
+}
+
+void UpdateReceiver::fetchGameUpdate() {
+	GameStatusUpdate update = this->connection.getGameStatusUpdate();
+	this->game_status_monitor.updateGameStatus(update);
+}
+
+void UpdateReceiver::fetchStatistics() {
+	GameStatistics statistics = this->connection.getGameStatistics();
+	// Hacer algo con las statistics
 }
 
 void UpdateReceiver::receiveMenuUpdate(MessageType message_type) {
 	switch (message_type) {
 		case (TYPE_SERVER_SEND_MAP_LIST) :
-			std::vector<MapListItem> maps = this->connection.getMapOptions();
-			this->menu_status.updateMapOptions(maps);
+			this->fetchMapOptions();
 			break;
 		case (TYPE_SERVER_SEND_GAMES_LIST) :
-			std::vector<GameListItem> games =  this->connection.getGameOptions();
-			this->menu_status.updateGameOptions(games);
+			this->fetchGameOptions();
 			break;
 		case (TYPE_SERVER_JOIN_OK) :
 			this->menu_status.updateCurrentScreen(LOBBY);
 		case (TYPE_LOBBY_STATUS_UPDATE) :
-			LobbyStatusData lobby_status = this->connection.getLobbyStatus();
-			if (lobby_status.gameStarted) in_game = true;
-			// this->menu_status.updateLobbyStatus(lobby_status);
+			this->fetchLobbyStatus();
 			break;
 	}
+}
+
+void UpdateReceiver::fetchMapOptions() {
+	std::vector<MapListItem> maps = this->connection.getMapOptions();
+	this->menu_status.updateMapOptions(maps);
+}
+
+void UpdateReceiver::fetchGameOptions() {
+	std::vector<GameListItem> games =  this->connection.getGameOptions();
+	this->menu_status.updateGameOptions(games);
+}
+
+void UpdateReceiver::fetchLobbyStatus() {
+	LobbyStatusData lobby_status = this->connection.getLobbyStatus();
+	if (lobby_status.gameStarted) in_game = true;
+	// this->menu_status.updateLobbyStatus(lobby_status);
 }

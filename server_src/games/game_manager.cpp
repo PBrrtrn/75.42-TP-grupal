@@ -19,21 +19,21 @@ void GameManager::receiveMessages() {
         Message m = this->lobby_messages.pop();
         switch (m.getType())
         {
-        case TYPE_START_GAME:
+        case CLIENT_REQUEST_CREATE_GAME:
             this->startGame(m.getClientId(), m.getEntity());
             break;
         
-        case TYPE_JOIN_GAME:
+        case CLIENT_REQUEST_JOIN_GAME:
             this->joinGame(m.getClientId(), m.getEntity());
             break;
 
-        case TYPE_REFRESH_GAMES_LIST:
+        case CLIENT_REQUEST_GAMES_LIST:
             this->informAvailableGames(m.getClientId());
             break;
-        case TYPE_SEND_MAPS_LIST:
+        case CLIENT_REQUEST_MAPS_LIST:
             this->sendMapsList(m.getClientId());
             break;
-        case TYPE_EXIT_GAME:
+        case CLIENT_REQUEST_LEAVE_GAME:
             this->expelClient(m.getClientId());
             break;        
         case TYPE_CLIENT_PING:

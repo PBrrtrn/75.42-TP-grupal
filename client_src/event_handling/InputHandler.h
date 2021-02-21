@@ -16,7 +16,7 @@ private:
 	MenuInputHandler menu_input_handler;
 	GameInputHandler game_input_handler;
 public:
-	InputHandler(std::atomic<bool>& in_game, MenuStatus menu_status,
+	InputHandler(std::atomic<bool>& in_game, MenuStatus& menu_status,
 							 BlockingQueue<Request>& request_queue);
 	~InputHandler();
 	void process(SDL_Event user_input);

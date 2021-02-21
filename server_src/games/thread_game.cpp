@@ -140,7 +140,7 @@ void ThreadGame::checkNews() {
 			this->changeRotationState(it->getClientId(),STATE_NOT_MOVING);
 			break;
 
-		case TYPE_EXIT_GAME:
+		case CLIENT_REQUEST_LEAVE_GAME:
 			this->expelClient(it->getClientId());
 			break;
 		

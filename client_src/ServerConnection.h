@@ -9,6 +9,7 @@
 #include "../common_src/GameListItem.h"
 #include "../common_src/MessageType.h"
 #include "../common_src/LobbyStatusData.h"
+#include "event_handling/Request.h"
 #include "game_status/GameStatus.h"
 
 class ServerConnection {
@@ -25,6 +26,7 @@ public:
 	Map getMap();
 	GameStatusUpdate getGameStatusUpdate();
 	GameStatistics getGameStatistics();
+	void sendRequest(Request request);
 	/*
 	bool joinGame(char game_id);
 	void exitLobby();

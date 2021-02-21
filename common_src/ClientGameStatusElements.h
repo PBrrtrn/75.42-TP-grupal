@@ -29,6 +29,7 @@ struct PlayerListItem {
 	char clientId;
 	Vector position;
 	Vector direction;
+	MovementState movement_state;
 	uint8_t selectedWeapon;
 	bool isAlive;
 };
