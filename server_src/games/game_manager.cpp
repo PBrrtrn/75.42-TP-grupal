@@ -71,6 +71,7 @@ void GameManager::startGame(int clientIdStarter, int mapId) {
                                             this->mapsRepo.getMapLocation(mapId),
                                             mapId, this->lobbyStatus) 
                             });
+        //TODO check si sigue siendo necesario clientsInGames
         this->clientsInGames.insert({clientIdStarter,this->games_counter});
         this->messageReceiver.insert(std::make_pair(this->games_counter, receiver));
         this->joinGame(clientIdStarter, this->games_counter);
@@ -148,6 +149,9 @@ GameManager::~GameManager(){
         delete x.second;
     }*/
     for (auto x: this->out_queues) {
+        delete x.second;
+    }
+    for (auto x: this->messageReceiver) {
         delete x.second;
     }
 }
