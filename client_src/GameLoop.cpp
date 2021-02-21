@@ -8,10 +8,11 @@
 #include "ServerConnection.h"
 #include "game_status/MenuStatus.h"
 #include "game_status/GameStatusMonitor.h"
-#include "event_handling/UpdateQueue.h"
 #include "event_handling/InputHandler.h"
 #include "event_handling/StatusUpdater.h"
+#include "event_handling/Request.h"
 #include "rendering/Renderer.h"
+#include "../common_src/blocking_queue.h"
 
 GameLoop::GameLoop(YAML::Node& config) : config(config) {
   if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -32,36 +33,36 @@ void GameLoop::run() {
   GameStatusMonitor game_status_monitor;
 
   std::atomic<bool> in_game(false);
-  UpdateQueue update_queue;
+
+  BlockingQueue<UserRequest> request_queue;
 
   std::string host = this->config["server"]["host"].as<std::string>();
   std::string port = this->config["server"]["port"].as<std::string>();
   ServerConnection server_connection(host, port);
 
-  BlockingQueue<MessageType> blockingQueue;
+  InputHandler input_handler(in_game, menu_status, request_queue);
 
-  InputHandler input_handler(in_game, update_queue, server_connection, blockingQueue);
+  EventSender event_sender(in_game, request_queue, server_connection);
+  UpdateReceiver update_receiver(in_game, server_connection,
+                                 game_status_monitor,
+                                 menu_status);
 
-  StatusUpdater status_updater(in_game, update_queue, server_connection,
-                               menu_status, game_status_monitor,blockingQueue);
+  Renderer renderer(this->config, in_game, game_status_monitor, menu_status);
 
-  Renderer renderer(this->config, in_game, 
-                    game_status_monitor, 
-                    menu_status);
-
-  status_updater.start();
+  event_sender.start();
+  update_receiver.start();
   renderer.start();
 
-  SDL_Event user_event;
+  SDL_Event user_input;
   while (true) {
     auto start_t = std::chrono::steady_clock::now();
 
-    while (SDL_PollEvent(&user_event)) {
-      if (user_event.type == SDL_QUIT) {
+    while (SDL_PollEvent(&user_input)) {
+      if (user_input.type == SDL_QUIT) {
         // TODO: Salir de forma ordenada
         throw 1;
       }
-      input_handler.process(user_event);
+      input_handler.process(user_input);
     }
 
     auto t = std::chrono::steady_clock::now() - start_t;

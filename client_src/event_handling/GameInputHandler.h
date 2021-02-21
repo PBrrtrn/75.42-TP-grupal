@@ -4,19 +4,17 @@
 #include <SDL2/SDL.h>
 
 #include "KeyboardState.h"
-#include "../ServerConnection.h"
+#include "Request.h"
 #include "../../common_src/blocking_queue.h"
 
 class GameInputHandler {
 private:
 	KeyboardState keyboard_state;
-	ServerConnection& server_connection;
-	BlockingQueue<MessageType>& message_queue;
+	BlockingQueue<Request>& request_queue;
 public:
-	GameInputHandler(ServerConnection& server_connection,
-									 BlockingQueue<MessageType>& message_queue);
+	GameInputHandler(BlockingQueue<Request>& request_queue);
 	~GameInputHandler();
-	void handle(SDL_Event input);
+	void handle(SDL_Event user_input);
 };
 
 #endif

@@ -1,6 +1,6 @@
 #include "MenuStatus.h"
 
-MenuStatus::MenuStatus() : selected_option(0), current_screen(LOBBY) { }
+MenuStatus::MenuStatus() : selected_option(0), current_screen(GAME_SELECTION) { }
 
 MenuStatus::~MenuStatus() { }
 

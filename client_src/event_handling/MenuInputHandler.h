@@ -3,15 +3,23 @@
 
 #include <SDL2/SDL.h>
 
-#include "UpdateQueue.h"
+#include "Request.h"
+#include "../game_status/MenuStatus.h"
+#include "../../common_src/blocking_queue.h"
 
 class MenuInputHandler {
 private:
-	UpdateQueue& update_queue;
+	BlockingQueue<Request>& request_queue;
+	MenuStatus& menu_status;
+	void handleGameSelection(SDL_Event input);
+	void handleLobby(SDL_Event input);
+	void handleGameCreation(SDL_Event input);
+	void refresh();
 public:
-	MenuInputHandler(UpdateQueue& update_queue);
+	MenuInputHandler(BlockingQueue<Request>& request_queue, 
+									 MenuStatus& menu_status);
 	~MenuInputHandler();
-	void handle(SDL_Event input);
+	void handle(SDL_Event user_input);
 };
 
 #endif

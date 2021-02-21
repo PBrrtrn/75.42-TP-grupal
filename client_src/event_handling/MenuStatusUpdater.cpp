@@ -19,6 +19,7 @@ MenuStatusUpdater::~MenuStatusUpdater() { }
 void MenuStatusUpdater::updateStatus() {
 	int selected_option = this->menu_status.getSelectedOption();
 	UpdateType update = this->update_queue.popUpdate();
+	// Puede que haya que actualizar popUpdate() para que traiga un vector de UpdateType? 
 
 	if (this->menu_status.getCurrentScreen() == LOBBY) {
 		handleLobbyScreen(selected_option, update);

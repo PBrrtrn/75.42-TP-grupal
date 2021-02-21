@@ -8,30 +8,27 @@ ServerConnection::ServerConnection(std::string host, std::string service) {
 	if (!this->socket.socket_connect(host.c_str(), service.c_str()))
 		throw ServerConnectionError("Failed to connect");
 
+	std::cout << "Getting client id" << std::endl;
 	char buffer;
 	socket.socket_receive(&buffer, sizeof(char));
+	std::cout << "Got client id" << std::endl;
 
 	this->client_id = buffer;
-	this->receiving = true; 
-	/* Habría que revisar si está bien este valor, es decir, si el primer turno
-		 para usar el socket realmente debería ser un receive y no un send.		 */
 }
 
 ServerConnection::~ServerConnection() { }
 
-MessageType ServerConnection::receiveIncomingEvent(){
-	std::unique_lock<std::mutex> lock(this->mutex);
+MessageType ServerConnection::receiveMessageType() {
+	std::cout << "Getting incoming event" << std::endl;
 	MessageType message_type;
 	this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
+	std::cout << "Got incoming event" << std::endl;
 	
 	return message_type;
 }
 
-std::vector<MapListItem> ServerConnection::fetchAvailableMaps() {
-	std::unique_lock<std::mutex> lock(this->mutex);
-
-	ClientMessage message { TYPE_SEND_MAPS_LIST, 0 };
-	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
+std::vector<MapListItem> ServerConnection::getMapOptions() {
+	std::cout << "Getting available maps" << std::endl;
 
 	char buffer[sizeof(size_t)];
 	socket.socket_receive(buffer, sizeof(size_t));
@@ -46,14 +43,14 @@ std::vector<MapListItem> ServerConnection::fetchAvailableMaps() {
 
 		maps.push_back(item);
 	}
+
+	std::cout << "Got available maps" << std::endl;
+
 	return maps;
 }
 
-std::vector<GameListItem> ServerConnection::fetchGameOptions() {
-	std::unique_lock<std::mutex> lock(this->mutex);
-
-	ClientMessage message { TYPE_REFRESH_GAMES_LIST, 0 };
-	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
+std::vector<GameListItem> ServerConnection::getGameOptions() {
+	std::cout << "Getting game options" << std::endl;
 
 	char buffer[sizeof(size_t)];
 	this->socket.socket_receive(buffer, sizeof(size_t));
@@ -68,53 +65,21 @@ std::vector<GameListItem> ServerConnection::fetchGameOptions() {
 
 		options.push_back(item);
 	}
+	std::cout << "Got game options" << std::endl;
 	return options;
 }
 
-bool ServerConnection::joinGame(char game_id) {
-	std::unique_lock<std::mutex> lock(this->mutex);
-
-	ClientMessage message { TYPE_JOIN_GAME, game_id };
-	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
-
-	char buffer;
-	this->socket.socket_receive(&buffer, 1);
-
-	return bool(buffer);
-}
-
-LobbyStatusData ServerConnection::fetchLobbyStatus() {
-	std::unique_lock<std::mutex> lock(this->mutex);
-
+LobbyStatusData ServerConnection::getLobbyStatus() {
+	std::cout << "Getting lobby status" << std::endl;
 	LobbyStatusData lobby_status;
 	this->socket.socket_receive((char*)&lobby_status, sizeof(LobbyStatusData));
 
+	std::cout << "Got lobby status" << std::endl;
 	return lobby_status;
 }
 
-void ServerConnection::exitLobby() {
-	std::unique_lock<std::mutex> lock(this->mutex);
-
-	ClientMessage message { TYPE_EXIT_GAME, 0 };
-	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
-}
-
-Map ServerConnection::fetchMap() {
-	std::unique_lock<std::mutex> lock(this->mutex);
-
-	/*
-	MessageType message_type;
-	this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
-	if (message_type != TYPE_SERVER_SEND_MAP) {
-		throw ServerConnectionError("Expected map");
-	} else {
-		size_t map_data_size;
-		this->socket.socket_receive((char*)&map_data_size, sizeof(size_t));
-
-		char map_data[map_data_size];
-		this->socket.socket_receive(map_data, map_data_size);		
-	}
-	*/
+Map ServerConnection::getMap() {
+	std::cout << "Getting map" << std::endl;
 
 	size_t map_data_size;
 	this->socket.socket_receive((char*)&map_data_size, sizeof(size_t));
@@ -122,67 +87,13 @@ Map ServerConnection::fetchMap() {
 	char map_data[map_data_size];
 	this->socket.socket_receive(map_data, map_data_size);
 
+	std::cout << "Got map" << std::endl;
 	// TODO: Construir el mapa con la data y devolverlo
 	Map map("../maps/map1.yml");
 	return map;
 }
 
-void ServerConnection::sendEvents(std::vector<MessageType> events) {
-	std::unique_lock<std::mutex> lock(this->mutex);
-	while (this->receiving) this->cv.wait(lock);
-
-	if (events.size() == 0) {
-		events.push_back(TYPE_CLIENT_PING);
-	}
-
-	size_t message_size = events.size()*sizeof(ClientMessage);
-	this->socket.socket_send((char*)&message_size, sizeof(size_t));
-	
-	for (MessageType event : events) {
-		ClientMessage message { event, 0 };
-		this->socket.socket_send((char*)&message, sizeof(ClientMessage));
-	}
-	
-	this->receiving = true;
-	cv.notify_one();
-}
-
-void ServerConnection::sendPing() {
-	std::unique_lock<std::mutex> lock(this->mutex);
-
-	ClientMessage message { TYPE_CLIENT_PING, 0 };
-
-	size_t message_size = sizeof(ClientMessage);
-	this->socket.socket_send((char*)&message_size, sizeof(message_size));
-
-	
-	this->socket.socket_send((char*)&message, sizeof(message));
-	
-}
-
-GameStatistics ServerConnection::receiveStatistics() {
-	std::unique_lock<std::mutex> lock(this->mutex);
-	while (this->receiving) this->cv.wait(lock);
-
-	GameStatistics statistics;
-	this->socket.socket_receive((char*)&statistics, sizeof(GameStatistics));
-
-	this->receiving = false;
-	cv.notify_one();
-	return statistics;
-}
-
-GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
-	std::unique_lock<std::mutex> lock(this->mutex);
-	while (!this->receiving) this->cv.wait(lock);
-
-	/*
-	MessageType message_type;
-	this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
-	if (message_type != TYPE_SERVER_SEND_GAME_UPDATE) {
-		throw ServerConnectionError("Expected game update");
-	}*/ //USING RECEIVE INCOMNING EVENT
-
+GameStatusUpdate ServerConnection::getGameStatusUpdate() {
 	PlayerStatus player_status;
 	this->socket.socket_receive((char*)&player_status, sizeof(PlayerStatus));
 
@@ -205,8 +116,8 @@ GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 	doors_list.reserve(n_doors);
 	for (int i = 0; i < n_doors; i++) {
 		DoorListItem door;
-
 		this->socket.socket_receive((char*)&door, sizeof(DoorListItem));
+
 		doors_list.push_back(door);
 	}
 
@@ -217,8 +128,8 @@ GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 	items_list.reserve(n_items);
 	for (int i = 0; i < n_items; i++) {
 		ItemListElement item;
-
 		this->socket.socket_receive((char*)&item, sizeof(ItemListElement));
+
 		items_list.push_back(item);
 	}
 
@@ -227,10 +138,63 @@ GameStatusUpdate ServerConnection::fetchGameStatusUpdate() {
 	update.direction = player_status.direction;
 	update.enemies = players_list;
 
-	this->receiving = false;
-	cv.notify_one();
 	return update;
 }
+
+GameStatistics ServerConnection::getGameStatistics() {
+	GameStatistics statistics;
+	this->socket.socket_receive((char*)&statistics, sizeof(GameStatistics));
+
+	return statistics;
+}
+
+/*
+
+bool ServerConnection::joinGame(char game_id) {
+	std::cout << "Joining game" << std::endl;
+	ClientMessage message { TYPE_JOIN_GAME, game_id };
+	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
+
+	char buffer;
+	this->socket.socket_receive(&buffer, 1);
+
+	std::cout << "Joined game" << std::endl;
+	return bool(buffer);
+}
+
+
+void ServerConnection::exitLobby() {
+	ClientMessage message { TYPE_EXIT_GAME, 0 };
+	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
+}
+
+
+void ServerConnection::sendEvents(std::vector<MessageType> events) {
+	if (events.size() == 0) {
+		events.push_back(TYPE_CLIENT_PING);
+	}
+
+	size_t message_size = events.size()*sizeof(ClientMessage);
+	this->socket.socket_send((char*)&message_size, sizeof(size_t));
+	
+	for (MessageType event : events) {
+		ClientMessage message { event, 0 };
+		this->socket.socket_send((char*)&message, sizeof(ClientMessage));
+	}
+}
+
+void ServerConnection::sendPing() {
+	ClientMessage message { TYPE_CLIENT_PING, 0 };
+
+	size_t message_size = sizeof(ClientMessage);
+	this->socket.socket_send((char*)&message_size, sizeof(message_size));
+
+	
+	this->socket.socket_send((char*)&message, sizeof(message));
+	
+}
+
+*/
 
 ServerConnectionError::ServerConnectionError(const char *error) noexcept {
 	snprintf(this->error_msg, ERROR_BUF_LEN, "Connection error: %s", error);

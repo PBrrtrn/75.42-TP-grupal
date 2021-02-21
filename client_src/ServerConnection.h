@@ -2,7 +2,6 @@
 #define __SERVER_CONNECTION_H__
 
 #include <string>
-#include <mutex>
 #include <vector>
 
 #include "../common_src/Socket.h"
@@ -11,29 +10,27 @@
 #include "../common_src/MessageType.h"
 #include "../common_src/LobbyStatusData.h"
 #include "game_status/GameStatus.h"
-#include <condition_variable>
 
 class ServerConnection {
 private:
 	Socket socket;
 	char client_id;
-	std::mutex mutex;
-	bool receiving;
-	std::condition_variable cv;
 public:
 	ServerConnection(std::string host, std::string service);
 	~ServerConnection();
-	std::vector<MapListItem> fetchAvailableMaps();
-	std::vector<GameListItem> fetchGameOptions();
+	MessageType receiveMessageType();
+	std::vector<MapListItem> getMapOptions();
+	std::vector<GameListItem> getGameOptions();
+	LobbyStatusData getLobbyStatus();
+	Map getMap();
+	GameStatusUpdate getGameStatusUpdate();
+	GameStatistics getGameStatistics();
+	/*
 	bool joinGame(char game_id);
-	LobbyStatusData fetchLobbyStatus();
 	void exitLobby();
-	Map fetchMap();
 	void sendEvents(std::vector<MessageType> events);
-	GameStatusUpdate fetchGameStatusUpdate();
-	GameStatistics receiveStatistics();
-	MessageType receiveIncomingEvent();
 	void sendPing();
+	*/
 };
 
 #define ERROR_BUF_LEN 256

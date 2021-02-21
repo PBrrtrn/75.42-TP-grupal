@@ -24,9 +24,10 @@ void ThreadClient::run() {
 	while(choosing_game){
 		try{
 			Message answer = this->messages_out->pop();
+			this->informSomethingToReport(answer.getType());
 			switch (answer.getType())
 			{
-			case TYPE_SERVER_SEND_GAMES_LIST:
+			case TYPE_CLIENT_REQUEST_GAMES_LIST:
 				this->sendGamesList();
 				break;			
 			case TYPE_SERVER_JOIN_OK:

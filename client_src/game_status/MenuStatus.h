@@ -8,7 +8,7 @@
 #include "../../common_src/GameListItem.h"
 #include "../../common_src/MapListItem.h"
 
-enum Screen { LOBBY, START_GAME };
+enum Screen { GAME_SELECTION, LOBBY, GAME_CREATION };
 
 class MenuStatus {
 private:

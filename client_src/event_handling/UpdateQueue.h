@@ -6,18 +6,18 @@
 #include <queue>
 #include <vector>
 
-#include "../enums/UpdateType.h"
+#include "../../common_src/MessageType.h"
 
-class UpdateQueue {
+class EventQueue {
 private:
 	std::mutex mutex;
 	std::condition_variable cv;
-	std::queue<UpdateType> queue;
+	std::queue<MessageType> queue;
 public:
-	UpdateQueue();
-	~UpdateQueue();
-	void pushUpdate(UpdateType update);
-	UpdateType popUpdate();
+	EventQueue();
+	~EventQueue();
+	void push(MessageType event);
+	MessageType pop();
 };
 
 #endif

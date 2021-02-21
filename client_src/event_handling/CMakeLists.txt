@@ -10,5 +10,3 @@ add_library(event-handling SHARED
 	MenuStatusUpdater.cpp
 	UpdateQueue.cpp
 )
-
-target_sources(event-handling PRIVATE ../enums/UpdateType.h)
