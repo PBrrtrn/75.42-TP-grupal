@@ -18,6 +18,7 @@ add_library(server-classes SHARED
   ./communication/message.cpp
   ./communication/message_processor.cpp
   ./communication/thread_client.cpp
+  ./communication/ReceiveClientMessages.cpp
   ./communication/thread_acceptor.cpp
   ./games/player.cpp
   ./games/game_status.cpp

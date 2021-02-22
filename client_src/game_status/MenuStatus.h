@@ -8,7 +8,7 @@
 #include "../../common_src/GameListItem.h"
 #include "../../common_src/MapListItem.h"
 
-enum Screen { LOBBY, START_GAME };
+enum Screen { GAME_SELECTION, LOBBY, GAME_CREATION };
 
 class MenuStatus {
 private:
@@ -17,6 +17,7 @@ private:
 	std::vector<MapListItem> map_options;
 	Screen current_screen;
 	int selected_option;
+	void moveSelectedOption(int direction);
 public:
 	MenuStatus();
 	~MenuStatus();
@@ -26,8 +27,9 @@ public:
 	int getSelectedOption();
 	void updateGameOptions(std::vector<GameListItem>& new_options);
 	void updateMapOptions(std::vector<MapListItem>& new_options);
-	void updateSelectedOption(int new_selected_option);
 	void updateCurrentScreen(Screen new_screen);
+	void selectOptionUp();
+	void selectOptionDown();
 };
 
 #endif

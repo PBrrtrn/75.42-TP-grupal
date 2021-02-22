@@ -1,11 +1,15 @@
 #include "thread_client.h"
 
-ThreadClient::ThreadClient(int id, BlockingQueue<Message>& messages, 
-	BlockingQueue<Message>* messagesOut, Socket&& socket, ServerStatus& serverStatus, 
-	LobbyStatus& lobbyStatus) : 
-		id(id), messages(messages), messages_out(messagesOut), 
-		peer(std::move(socket)), keep_running(true), 
-		dead(false), serverStatus(serverStatus), lobbyStatus(lobbyStatus) {
+ThreadClient::ThreadClient(int id, BlockingQueue<Message>* messagesOut, 
+	Socket& socket, ServerStatus& serverStatus, LobbyStatus& lobbyStatus) : 
+		id(id),
+		messages_out(messagesOut), 
+		peer(socket), 
+		keep_running(true), 
+		dead(false), 
+		serverStatus(serverStatus), 
+		lobbyStatus(lobbyStatus) 
+		{
 			this->game_status = NULL;
 			this->game_started = false;
 }
@@ -18,49 +22,41 @@ void ThreadClient::run() {
 	this->choosing_game = true;
 
 	while(choosing_game){
-		ClientMessage cMessage;
-		size_t received = this->peer.socket_receive((char*)(&cMessage), sizeof(cMessage));
-		if (received < sizeof(cMessage)){
-			std::cout << "recv en threadclient fallo, no recibi nada! (cerro el socket?)" << std::endl;
-			this->shutdown();
-		} else {
-			Message m(cMessage.type, cMessage.entityId, this->id);
-			this->messages.push(m);
-			try{
-				Message answer = this->messages_out->pop();
-				switch (answer.getType())
-				{
-				case TYPE_SERVER_SEND_GAMES_LIST:
-					this->sendGamesList();
-					break;			
-				case TYPE_SERVER_JOIN_OK:
-					this->choosing_game = false;
-					this->sendJoinOk();
-					break;
-				case TYPE_SERVER_JOIN_REFUSED:
-					this->sendJoinRefused();
-					break;
-				case TYPE_SERVER_SEND_MAP_LIST:
-					this->sendMapsList();
-					break;
+		try{
+			Message answer = this->messages_out->pop();
+			this->informSomethingToReport(answer.getType());
+			switch (answer.getType())
+			{
+			case TYPE_SERVER_SEND_GAMES_LIST:
+				this->sendGamesList();
+				break;			
+			case TYPE_SERVER_JOIN_OK:
+				this->choosing_game = false;
+				//this->sendJoinOk();
+				break;
+			case TYPE_SERVER_JOIN_REFUSED:
+				this->sendJoinRefused();
+				break;
+			case TYPE_SERVER_SEND_MAP_LIST:
+				this->sendMapsList();
+				break;
 
-				case TYPE_SERVER_SHUTDOWN_CLIENT:
-					this->shutdown();
-					break;				
-				default:
-					break;
-				}			
-			} catch (...) {
+			case TYPE_SERVER_SHUTDOWN_CLIENT:
 				this->shutdown();
-			}
+				break;				
+			default:
+				break;
+			}			
+		} catch (...) {
+			this->shutdown();
 		}
-
 	} 
 
 	std::cout << "ThreadClient "<< this->id <<": voy a ingresar loop de juego" << std::endl;
 
     while (keep_running){
         try {
+			std::cout << "ThreadClient "<< this->id <<": poppeando evento" << std::endl;
 			Message m = this->messages_out->pop();
 			this->informSomethingToReport(m.getType());
 			switch (m.getType())
@@ -70,33 +66,22 @@ void ThreadClient::run() {
 				this->sendCurrentGameMap();
 				break;					
 			case TYPE_LOBBY_STATUS_UPDATE:
+				std::cout << "ThreadClient "<< this->id <<": voy a enviar lobby update" << std::endl;
 				this->sendLobbyStatus(m.getEntity());
 				break;
 			case TYPE_SERVER_SEND_GAME_UPDATE:
+				std::cout << "ThreadClient "<< this->id <<": voy a enviar game update" << std::endl;
 				this->sendGameUpdate();
 				break;
 			case TYPE_SERVER_SEND_GAME_STATISTICS:
 				std::cout << "ThreadClient "<< this->id <<": voy a mandar statistics" << std::endl;
+				this->sendGameStatistics();
 				break;
 			default:
 				std::cout << "ThreadClient "<< this->id <<": no se donde estoy! no procese este evento!" << std::endl;
 				break;
 			}
 			
-			size_t size;
-			int received = this->peer.socket_receive((char*)(&size), sizeof(size_t));
-			
-			ClientMessage cMessage;
-			for (int i = 0; i < size / sizeof(cMessage); i++ ){				
-				int received = this->peer.socket_receive((char*)(&cMessage), sizeof(cMessage));
-				if (received < sizeof(cMessage)){
-					std::cout << "recv en threadclient fallo, no recibi nada! (cerro el socket?)" << std::endl;
-					this->shutdown();
-				} else {
-					Message m(cMessage.type, cMessage.entityId, this->id);
-					this->messages.push(m);				
-				}
-			}
         } catch (...) {
             if (!keep_running) break;
         }
@@ -124,6 +109,8 @@ void ThreadClient::sendCurrentGameMap(){
    this->peer.socket_send(mapa.c_str(), size - 1);
    char endOfFile = 0;
    this->peer.socket_send((&endOfFile), sizeof(char));
+   
+   std::cout << "mapa enviado" << std::endl;
 }
 
 void ThreadClient::sendGameUpdate() {
@@ -170,11 +157,13 @@ void ThreadClient::informClientId() {
 }
 
 void ThreadClient::sendGamesList() {
+	std::cout << "Sending games list" << std::endl;
 	std::vector<GameListItem> list = this->serverStatus.getGamesList();
 	size_t size = list.size()*sizeof(GameListItem);
 	this->peer.socket_send((char*)(&size), sizeof(size_t));
 	for (auto& it: list) {
 		this->peer.socket_send((char*)(&it), sizeof(GameListItem));
+	std::cout << "Sent games list" << std::endl;
 	}
 }
 
@@ -184,12 +173,13 @@ void ThreadClient::sendLobbyStatus(int gameID) {
 	this->game_started = lobbyStatus.gameStarted;
 }
 
-void ThreadClient::sendGameStatistics(int gameID) {
+void ThreadClient::sendGameStatistics() {
 	GameStatistics gs = this->game_status->getStatistics();
 	this->peer.socket_send((char*)(&gs), sizeof(GameStatistics));
 }
 
 void ThreadClient::sendMapsList() {
+	std::cout << "Sending maps list" << std::endl;
 	const std::vector<MapListItem>& list = this->serverStatus.getMapsList();
 	size_t size = list.size()*sizeof(MapListItem);
 	this->peer.socket_send((char*)(&size), sizeof(size));
@@ -201,6 +191,7 @@ void ThreadClient::sendMapsList() {
 void ThreadClient::sendJoinOk() {
 	char result_join = 0;
 	this->peer.socket_send(&result_join, sizeof(result_join)); 
+	
 	
 	std::cout << "join OK enviado" << std::endl;
 }

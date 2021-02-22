@@ -1,6 +1,6 @@
 #include "thread_acceptor.h"
 
-ThreadAcceptor:: ThreadAcceptor() : message_processor(messages,gameManager){
+ThreadAcceptor:: ThreadAcceptor() : message_processor(gameManager) {
 	this->message_processor.start();
 }
 
@@ -17,16 +17,17 @@ void ThreadAcceptor:: run() {
 	
 	std::cout << "Acceptor socket opened:" << (resultado ? "OK" : "ERROR!") << std::endl;
 	
-    while (this->keep_running) {
-        this->acceptConnection();
-        this->gameManager.cleanUpDeadGames();
-    }
+  while (this->keep_running) {
+    this->acceptConnection();
+	//this->gameManager.receiveMessages();
+    this->gameManager.cleanUpDeadGames();
+  }
 }
 
 void ThreadAcceptor::acceptConnection(){
 	Socket peer;
 	if (peer.socket_accept(this->socket) > 0) {
-		this->gameManager.acceptClient(std::move(peer), this->messages);
+		this->gameManager.acceptClient(std::move(peer));
 	}
 }
 
@@ -35,7 +36,4 @@ void ThreadAcceptor::shutdown(){
 	this->socket.close_socket();
 }
 
-ThreadAcceptor:: ~ThreadAcceptor() {
-	this->message_processor.shutdown();
-	this->message_processor.join();
-}
+ThreadAcceptor:: ~ThreadAcceptor() {}

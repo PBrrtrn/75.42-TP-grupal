@@ -6,7 +6,6 @@ Animation::Animation(SDL_Renderer* renderer,
                      std::vector<std::string> frame_paths) : current_frame(0) {
   this->frames.reserve(frame_paths.size());
   for (std::string& frame_path : frame_paths) {
-    std::cout << frame_path << std::endl;
     this->frames.push_back(new Texture(renderer, frame_path.c_str()));
   }
 }
