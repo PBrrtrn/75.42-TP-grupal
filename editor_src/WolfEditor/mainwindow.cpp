@@ -8,7 +8,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::MainWindow),currentMap(MapServer(1,1))
 {
     ui->setupUi(this);
 
@@ -94,7 +94,7 @@ void MainWindow::openFile()
     QString fileName = QFileDialog::getOpenFileName(this);
     //std::string fileName = QFileDialog::getOpenFileName(this).toUtf8().constData();
     if (!fileName.isEmpty()){
-        this->currentMap = Map(fileName.toUtf8().constData());
+        this->currentMap = MapServer(fileName.toUtf8().constData());
         GameMapGrid* mapGrid = new GameMapGrid(this->currentMap,this->appStatus);
 
         QGraphicsScene* scene = new QGraphicsScene;

@@ -20,3 +20,7 @@ void ItemDraggable::mousePressEvent(QMouseEvent *event)
         Qt::DropAction dropAction = drag->exec();
     }
 }
+
+std::string ItemDraggable::getSerializedObject(int posX,int posY, bool respawns){
+    return "";
+}

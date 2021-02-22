@@ -22,15 +22,18 @@ private:
 	
 public:
 	Map();
+	Map(int width,int height);
 	Map(char* file_content);
 	Map(const char *file_location);
 	Map(const std::string& file_location);
 	~Map();
 	std::vector<int>& operator[](int x);
 	int getGridValue(int x, int y);
+	void setGridValue(int x, int y,int newValue);
 	int isWall(int x, int y);
 	int getWidth();
 	int getHeight();
+	std::string getSerializedMap();
 };
 
 #endif

@@ -5,7 +5,7 @@
 #include <QGraphicsGridLayout>
 #include <QMessageBox>
 
-GameMapGrid::GameMapGrid(Map& map,AppStatus& appStatus,QGraphicsWidget *parent) : QGraphicsWidget(parent, Qt::Widget),appStatus(appStatus),fullMap(map)
+GameMapGrid::GameMapGrid(MapServer& map,AppStatus& appStatus,QGraphicsWidget *parent) : QGraphicsWidget(parent, Qt::Widget),appStatus(appStatus),fullMap(map)
 {
 
     //this->fullMap = map;

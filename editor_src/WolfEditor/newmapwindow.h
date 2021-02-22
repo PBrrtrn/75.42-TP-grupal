@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QLabel>
-#include "Map.h"
+#include "../../server_src/games/MapServer.h"
 #include <QPushButton>
 #include <QLineEdit>
 
@@ -11,10 +11,10 @@ class NewMapWindow : public QWidget
 {
     Q_OBJECT
 public:
-    explicit NewMapWindow(Map& map,QWidget *parent = nullptr);
+    explicit NewMapWindow(MapServer& map,QWidget *parent = nullptr);
 
 private:
-    Map& map;
+    MapServer& map;
     QLineEdit* heightEdit;
     QLineEdit* widthEdit;
 

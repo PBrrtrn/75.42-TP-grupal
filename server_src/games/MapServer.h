@@ -40,6 +40,9 @@ private:
 
 public:
 	MapServer(const std::string& file_location);
+	MapServer(int width,int height);
+	std::string getSerializedMap();
+	void setGridValue(int x, int y,int newValue);
 	~MapServer();
 	std::vector<int>& operator[](int x);
 	int getGridValue(int x, int y);

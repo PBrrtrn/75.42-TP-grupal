@@ -56,7 +56,7 @@
 #include <QMessageBox>
 
 //! [0]
-LayoutItem::LayoutItem(Map& map,AppStatus& appStatus,int pos_x,int pos_y,std::string graphic,int scale,QGraphicsItem *parent)
+LayoutItem::LayoutItem(MapServer& map,AppStatus& appStatus,int pos_x,int pos_y,std::string graphic,int scale,QGraphicsItem *parent)
     : QGraphicsLayoutItem(), QGraphicsItem(parent),
       m_pix(QPixmap(QLatin1String(graphic.c_str())).scaled(QSize(scale,scale))),
       map(map),
@@ -67,6 +67,8 @@ LayoutItem::LayoutItem(Map& map,AppStatus& appStatus,int pos_x,int pos_y,std::st
     this->pos_y = pos_y;
     this->scale = scale;
     setGraphicsItem(this);
+    if (this->map.getGridValue(this->pos_x, this->pos_y) == 0)
+        setAcceptDrops(true);
 
 }
 //! [0]
@@ -123,8 +125,19 @@ void LayoutItem::mousePressEvent(QGraphicsSceneMouseEvent *event){
     std::string texture = TextureList::textures.at(this->map.getGridValue(this->pos_x, this->pos_y));
 
     m_pix = QPixmap(QLatin1String(texture.c_str())).scaled(QSize(this->scale,this->scale));
-
+    if (this->map.getGridValue(this->pos_x, this->pos_y) == 0){
+        setAcceptDrops(true);
+    }
+    else {
+        setAcceptDrops(false);
+    }
     this->update();
 }
 
+void LayoutItem::dragEnterEvent(QDragEnterEvent *event)
+{
+    //if (event->mimeData()->hasFormat("text/plain"))
+    if (false)
+        event->acceptProposedAction();
+}
 

@@ -1,6 +1,6 @@
 #include "newmapwindow.h"
 
-NewMapWindow::NewMapWindow(Map& map,QWidget *parent) : QWidget(parent),map(map)
+NewMapWindow::NewMapWindow(MapServer& map,QWidget *parent) : QWidget(parent),map(map)
 {
     //QWidget *centralwidget;
     //centralwidget = new QWidget(this);
@@ -55,7 +55,7 @@ void NewMapWindow::on_createNewMap_clicked(){
 
     int height = std::stoi(this->heightEdit->text().toUtf8().constData());
     int width = std::stoi(this->widthEdit->text().toUtf8().constData());
-    map = Map(height,width);
+    map = MapServer(height,width);
     emit this->newMapCreated();
     this->close();
 

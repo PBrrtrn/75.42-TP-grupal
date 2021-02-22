@@ -57,7 +57,7 @@
 #include <QObject>
 #include <vector>
 #include <unordered_map>
-#include "Map.h"
+#include "../../server_src/games/MapServer.h"
 #include "texture_list.h"
 #include "appstatus.h"
 
@@ -65,7 +65,7 @@
 class LayoutItem : public QGraphicsLayoutItem, public QGraphicsItem,public QObject
 {
 public:
-    LayoutItem(Map& map,AppStatus& appStatus,int pos_x = 0,int pos_y = 0,std::string graphic = ":/images/block.png",int scale = 1,QGraphicsItem *parent = nullptr);
+    LayoutItem(MapServer& map,AppStatus& appStatus,int pos_x = 0,int pos_y = 0,std::string graphic = ":/images/block.png",int scale = 1,QGraphicsItem *parent = nullptr);
 
     // Inherited from QGraphicsLayoutItem
     void setGeometry(const QRectF &geom) override;
@@ -84,11 +84,11 @@ public:
 
 private:
     QPixmap m_pix;
-    Map& map;
+    MapServer& map;
     AppStatus& appStatus;
 
 void mousePressEvent(QGraphicsSceneMouseEvent *event);
-
+void dragEnterEvent(QDragEnterEvent *event);
 
 };
 //! [0]

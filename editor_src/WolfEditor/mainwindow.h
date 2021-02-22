@@ -32,7 +32,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    Map currentMap;
+    MapServer currentMap;
     AppStatus appStatus;
     void openFile();
     void saveFile();

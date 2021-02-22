@@ -2,7 +2,7 @@
 #define GAMEMAPGRID_H
 
 #include <QGraphicsWidget>
-#include "Map.h"
+#include "../../server_src/games/MapServer.h"
 #include "texture_list.h"
 #include "appstatus.h"
 
@@ -10,13 +10,13 @@ class GameMapGrid : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    GameMapGrid(Map& map,AppStatus& appStatus,QGraphicsWidget *parent = nullptr);
+    GameMapGrid(MapServer& map,AppStatus& appStatus,QGraphicsWidget *parent = nullptr);
     std::vector<std::vector<int>> map;
     //void loadMap(Map& map);
 
 private:
     AppStatus& appStatus;
-    Map& fullMap;
+    MapServer& fullMap;
 
 
 };
