@@ -6,7 +6,13 @@ lanza_cohetes() {
 	}
 
 bool ArmaLanzaCohetes::pickUpAction(Player& p) {
-    return p.addWeapon(this->lanza_cohetes);
+	LanzaCohetes* lc = new LanzaCohetes();
+	this->lanza_cohetes.push_back(lc);
+    return p.addWeapon(lc);
 }
 
-ArmaLanzaCohetes::~ArmaLanzaCohetes(){}
+ArmaLanzaCohetes::~ArmaLanzaCohetes(){
+	for (auto x : this->lanza_cohetes) {
+		delete x;
+	}
+}

@@ -17,6 +17,7 @@ class Message
 class ReceiveClientMessages
 class ThreadAcceptor 
 class ThreadClient 
+class MessageProcesor
 
 class ClientGameStatus
 class Door 
@@ -113,6 +114,7 @@ ThreadAcceptor *-- Socket
 ThreadAcceptor *-- BlockingQueue
 ThreadAcceptor *-- GameManager
 ThreadAcceptor *-- Message
+ThreadAcceptor *-- MessageProcesor
 GameManager *-- ProtectedQueue
 GameManager *-- Message
 ReceiveClientMessages *-- ProtectedQueue

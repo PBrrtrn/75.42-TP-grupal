@@ -8,7 +8,7 @@ class ArmaLanzaCohetes : public Item {
 
 private:
 
-	LanzaCohetes lanza_cohetes;
+	std::vector<LanzaCohetes*> lanza_cohetes;
 
 public:
 

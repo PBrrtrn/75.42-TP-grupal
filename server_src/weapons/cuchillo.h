@@ -3,6 +3,7 @@
 
 #include "arma.h"
 #include <iostream>
+#include <string>
 
 class Cuchillo : public Arma {
     public:
