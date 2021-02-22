@@ -94,3 +94,15 @@ std::vector<SpawnPoint> MapServer::getRespawnPoints() {
 Map& MapServer::getMap() {
 	return this->map;
 }
+
+std::string MapServer::getSerializedMap() {
+	std::string serializedMapServer = this->map.getSerializedMap();
+	return serializedMapServer;
+}
+
+MapServer::MapServer(int width,int height) : map(width,height){
+}
+
+void MapServer::setGridValue(int x, int y,int newValue) {
+	this->map.setGridValue(x,y,newValue);
+}
