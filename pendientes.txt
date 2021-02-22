@@ -1,2 +1,8 @@
 diferentes valores de tesoro
 lanzacohetes
+botones editor
+close safe cliente
+ventana completa juego
+testear disparos
+musica fondo
+join message processor
