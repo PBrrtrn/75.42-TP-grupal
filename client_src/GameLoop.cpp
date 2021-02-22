@@ -56,19 +56,10 @@ void GameLoop::run() {
 
   SDL_Event user_input;
   while (true) {
-    auto start_t = std::chrono::steady_clock::now();
-
-    while (SDL_PollEvent(&user_input)) {
-      if (user_input.type == SDL_QUIT) {
-        // TODO: Salir de forma ordenada
-        throw 1;
-      }
-      input_handler.process(user_input);
+    SDL_PollEvent(&user_input);
+    if (user_input.type == SDL_QUIT) {
+      throw 1;
     }
-
-    auto t = std::chrono::steady_clock::now() - start_t;
-    auto sleep_t = std::chrono::duration_cast<std::chrono::microseconds>(t);
-
-    usleep((1000000/fps_cap) - sleep_t.count());
+    input_handler.process(user_input);
   }
 }

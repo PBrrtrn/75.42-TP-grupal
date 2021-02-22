@@ -55,21 +55,23 @@ void MapDrawer::draw(SDL_Renderer* renderer, Vector position, float view_angle,
   Vector plane(view_angle + M_PI/2);
   float view_y = sin(view_angle);
   float view_x = cos(view_angle);
-  float inv_det = 1 / (plane.x * view_y - plane.y * view_x);
   for (PlayerListItem& enemy : enemies) {
     Vector enemy_dir { enemy.position.x - position.x,
                              position.y - enemy.position.y };
-    float transf_x = inv_det * (view_y * enemy_dir.x - view_x * enemy_dir.y);
-    float transf_y = inv_det * (plane.x * enemy_dir.y - plane.y * enemy_dir.x);
+    float transf_x = view_x * enemy_dir.y - view_y * enemy_dir.x;
+    float transf_y = plane.y * enemy_dir.x - plane.x * enemy_dir.y;
 
-    int sprite_width = int(this->screen_width/transf_y);
-    int sprite_height = int(this->screen_height/transf_y);
+    if (transf_y > 0.1) {
+      int sprite_width = int(this->screen_width/transf_y);
+      int sprite_height = int(this->screen_height/transf_y);
 
-    int sprite_x = (this->screen_width/2) * (1 - transf_x/transf_y);
-    int sprite_y = (this->screen_height - sprite_height)/2;
+      int sprite_x = (this->screen_width/2) * (1 - transf_x/transf_y);
+      int sprite_y = (this->screen_height - sprite_height)/2;
 
-    Animation* animation = enemy_animations[0];
-    animation->renderTexel(renderer, z_buffer, transf_y, sprite_x, sprite_y,
-                           sprite_width, sprite_height);
+      Animation* animation = enemy_animations[0];
+      animation->renderTexel(renderer, z_buffer, transf_y, sprite_x, sprite_y,
+                             sprite_width, sprite_height);
+    }
+
   }
 }
