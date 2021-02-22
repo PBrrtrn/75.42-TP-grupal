@@ -50,18 +50,29 @@ void UpdateReceiver::fetchStatistics() {
 }
 
 void UpdateReceiver::receiveMenuUpdate(MessageType message_type) {
-	std::cout << "receive Menu Update" << std::endl;
+	std::cout << "receive Menu Update:"<< message_type << std::endl;
 	switch (message_type) {
 		case (TYPE_SERVER_SEND_MAP_LIST) :
+			std::cout << "receive map list" << std::endl;
 			this->fetchMapOptions();
 			break;
 		case (TYPE_SERVER_SEND_GAMES_LIST) :
+			std::cout << "receive games list" << std::endl;
 			this->fetchGameOptions();
 			break;
 		case (TYPE_SERVER_JOIN_OK) :
+			std::cout << "receive join ok" << std::endl;
 			this->menu_status.updateCurrentScreen(LOBBY);
+			break;
 		case (TYPE_LOBBY_STATUS_UPDATE) :
+			std::cout << "receive lobby status" << std::endl;
 			this->fetchLobbyStatus();
+			break;
+		case (TYPE_SERVER_SEND_GAME_UPDATE) :
+			std::cout << "receive game update (menu update)" << std::endl;
+			/*esto no deberia ser necesario, pero fetchLobbyStatus no esta leyendo el valor de gameStarted correctamente!*/
+			this->fetchGameUpdate();
+			this->in_game = true;
 			break;
 	}
 }
@@ -79,6 +90,9 @@ void UpdateReceiver::fetchGameOptions() {
 
 void UpdateReceiver::fetchLobbyStatus() {
 	LobbyStatusData lobby_status = this->connection.getLobbyStatus();
-	if (lobby_status.gameStarted) in_game = true;
+	if (lobby_status.gameStarted){
+		std::cout << "game started!" << std::endl;
+		in_game = true;
+	}
 	// this->menu_status.updateLobbyStatus(lobby_status);
 }

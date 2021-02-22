@@ -32,7 +32,7 @@ void ThreadClient::run() {
 				break;			
 			case TYPE_SERVER_JOIN_OK:
 				this->choosing_game = false;
-				this->sendJoinOk();
+				//this->sendJoinOk();
 				break;
 			case TYPE_SERVER_JOIN_REFUSED:
 				this->sendJoinRefused();
@@ -191,6 +191,7 @@ void ThreadClient::sendMapsList() {
 void ThreadClient::sendJoinOk() {
 	char result_join = 0;
 	this->peer.socket_send(&result_join, sizeof(result_join)); 
+	
 	
 	std::cout << "join OK enviado" << std::endl;
 }
