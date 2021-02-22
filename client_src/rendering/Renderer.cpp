@@ -8,25 +8,22 @@
 #include "MenuRenderer.h"
 
 Renderer::Renderer(YAML::Node& config, std::atomic<bool>& in_game, 
-	GameStatusMonitor& game_status_monitor, MenuStatus& menu_status): 
-	renderer(NULL), 
-	config(config), 
-	window(config["window"]),
-	in_game(in_game), 
-	game_status_monitor(game_status_monitor),
-	menu_status(menu_status), fps_cap(config["FPS_cap"].as<int>()) 
-	{
-	this->renderer = this->window.getRenderer();
-	if (this->renderer == NULL) throw RendererConstructorError(SDL_GetError());
+                   GameStatusMonitor& game_status_monitor, 
+                   MenuStatus& menu_status)
+: renderer(NULL), config(config), window(config["window"]),
+  in_game(in_game), game_status_monitor(game_status_monitor),
+  menu_status(menu_status), fps_cap(config["FPS_cap"].as<int>()) {
+  this->renderer = this->window.getRenderer();
+  if (this->renderer == NULL) throw RendererConstructorError(SDL_GetError());
 
-	if (TTF_Init() == -1) throw RendererConstructorError(TTF_GetError());
+  if (TTF_Init() == -1) throw RendererConstructorError(TTF_GetError());
 
-	SDL_SetRenderDrawColor(this->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+  SDL_SetRenderDrawColor(this->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
-	if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
-		std::cout << "Warning: Could not set SDL hints" << std::endl;
+  if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
+    std::cout << "Warning: Could not set SDL hints" << std::endl;
 
-	this->load();
+  this->load();
 }
 
 Renderer::~Renderer() {
@@ -135,6 +132,10 @@ void Renderer::renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer) {
                  status_update.lives, status_update.has_key);
 
   SDL_RenderPresent(this->renderer);
+}
+
+void Renderer::toggleFullscreen() {
+  this->window.toggleFullscreen();
 }
 
 RendererConstructorError::RendererConstructorError

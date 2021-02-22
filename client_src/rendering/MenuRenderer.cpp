@@ -140,8 +140,8 @@ void MenuRenderer::renderMapsBox(int selected_option) {
   }
 }
 
-void MenuRenderer::renderGameOption(GameListItem& option, int y, 
-																		bool highlight) {
+void MenuRenderer::renderGameOption(GameListItem& option, 
+																		int y, bool highlight) {
 	std::stringstream stream;
 	// Agregar al stream el nombre del mapa
 	stream << "(";
