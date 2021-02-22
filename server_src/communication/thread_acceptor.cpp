@@ -35,4 +35,6 @@ void ThreadAcceptor::shutdown(){
 	this->socket.close_socket();
 }
 
-ThreadAcceptor:: ~ThreadAcceptor() {}
+ThreadAcceptor:: ~ThreadAcceptor() {
+	this->message_processor.join();
+}
