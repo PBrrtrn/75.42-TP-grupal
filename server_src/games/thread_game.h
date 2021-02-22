@@ -39,8 +39,7 @@ class ThreadGame: public Thread {
         int id; /*numero de partida*/
         int map_id; /*id del mapa de la partida*/
         LobbyStatus& lobbyStatus;
-        //LobbyStatusData lobbyData; TODO
-        //BlockingQueue<Message>* messages; REMOVEME
+
         ProtectedQueue<Message>* messageReceiver;
         std::unordered_map<int, BlockingQueue<Message>*> out_queues;
 
