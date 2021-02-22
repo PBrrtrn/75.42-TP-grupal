@@ -68,5 +68,5 @@ RayHit RayCaster::castRay(Map& map, Vector position, float angle) {
 	else texel = position.x + distance * ray_x;
 	texel -= floor(texel);
 
-	return RayHit { distance, texture, texel, hit_side };
+	return RayHit { std::abs(distance), texture, texel, hit_side };
 }

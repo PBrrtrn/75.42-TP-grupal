@@ -42,10 +42,7 @@ void MapDrawer::draw(SDL_Renderer* renderer, Vector position, float view_angle,
     RayHit hit = this->ray_caster.castRay(this->map, position, a);
 
     float distance = cos(a - view_angle) * hit.distance;
-    int l = std::abs(this->wall_height * projection_distance / distance);
-    /* TODO: Ver cuales son los casos en los cuales esto da negativo 
-      así no hay que hacer std::abs a lo bruto.
-                                      - Pablo (14/01/2020)        */
+    int l = this->wall_height * projection_distance / distance;
 
     Texture* wall_texture = this->wall_textures[0];
     wall_texture->renderTexel(renderer, x, hit.texel, 
@@ -62,7 +59,6 @@ void MapDrawer::draw(SDL_Renderer* renderer, Vector position, float view_angle,
   for (PlayerListItem& enemy : enemies) {
     Vector enemy_dir { enemy.position.x - position.x,
                              position.y - enemy.position.y };
-    float enemy_distance = enemy_dir.norm();
     float transf_x = inv_det * (view_y * enemy_dir.x - view_x * enemy_dir.y);
     float transf_y = inv_det * (plane.x * enemy_dir.y - plane.y * enemy_dir.x);
 
