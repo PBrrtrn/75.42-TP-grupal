@@ -48,7 +48,7 @@ Moves:
   RotationRight: -0.1
 Game:
   GameTime: 30000
-  LobbyTime: 120
+  LobbyTime: 20
   FPS: 29
 Server:
   Hostname: localhost
