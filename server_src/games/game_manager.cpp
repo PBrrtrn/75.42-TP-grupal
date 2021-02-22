@@ -29,6 +29,7 @@ void GameManager::receiveMessages() {
             this->informAvailableGames(m.getClientId());
             break;
         case CLIENT_REQUEST_MAPS_LIST:
+			std::cout << "gamemanager - CLIENT_REQUEST_MAPS_LIST:" << std::to_string(m.getClientId()) << std::endl;
             this->sendMapsList(m.getClientId());
             break;
         case CLIENT_REQUEST_LEAVE_GAME:
@@ -99,7 +100,7 @@ void GameManager::acceptClient(Socket&& socket){
 	int clientId = this->clients_counter;
 	this->out_queues.insert({clientId, new BlockingQueue<Message>()} );
 
-    this->clientMessageReceiver.insert({clientId, new ReceiveClientMessages(std::move(socket), &this->lobby_messages)});
+    this->clientMessageReceiver.insert({clientId, new ReceiveClientMessages(clientId,std::move(socket), &this->lobby_messages)});
     this->clientMessageReceiver.at(clientId)->start();
 
     this->clientsThreads.insert({clientId, 
@@ -117,8 +118,9 @@ void GameManager::informAvailableGames(int clientId){
 }
 
 void GameManager::sendMapsList(int clientId) {
-    std::cout << "Sending maps list" << std::endl;
+    std::cout << "gamemanager - Sending maps list, size clients:" << std::to_string(this->out_queues.size()) << std::endl;
     this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_MAP_LIST, 0, clientId));
+    std::cout << "gamemanager - sent maps list message to threadclient" << std::endl;
 }
 
 void GameManager::cleanUpDeadGames(){

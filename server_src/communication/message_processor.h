@@ -14,12 +14,14 @@
 
 class MessageProcessor: public Thread {
 	private:
-        BlockingQueue<Message>& messages;
+        //BlockingQueue<Message>& messages;
         GameManager& gameManager;
         std::atomic<bool> keep_running;
+        
 
     public:
-        MessageProcessor(BlockingQueue<Message>& m, GameManager& gm);
+        //MessageProcessor(BlockingQueue<Message>& m, GameManager& gm);
+        MessageProcessor(GameManager& gm);
 
         virtual void run() override;
 

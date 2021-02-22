@@ -23,6 +23,7 @@ class ThreadAcceptor: public Thread {
         Socket socket;
         BlockingQueue<Message> messages;
         GameManager gameManager;
+        MessageProcessor message_processor;
 
         /** 
          * @brief Numero siempre creciente

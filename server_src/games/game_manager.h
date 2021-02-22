@@ -18,7 +18,8 @@ class GameManager{
 
 private:
 
-	ProtectedQueue<Message> lobby_messages;
+	//ProtectedQueue<Message> lobby_messages;
+	BlockingQueue<Message> lobby_messages;
 
 	/* clave: gameId value: GameListItem*/
 	std::unordered_map<int, GameListItem> games_list;

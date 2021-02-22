@@ -5,6 +5,7 @@
 #include "../../common_src/Thread.h"
 #include "../../common_src/Socket.h"
 #include "../../common_src/protected_queue.h"
+#include "../../common_src/blocking_queue.h"
 #include "../../common_src/ClientMessage.h"
 #include "message.h"
 
@@ -17,6 +18,7 @@ class ReceiveClientMessages : public Thread {
 private:
 	int id;
     ProtectedQueue<Message>* messages;
+    BlockingQueue<Message>* serverMessages;
     Socket peer;
     std::atomic<bool> keep_running{true};
     std::atomic<bool> dead{false};
@@ -28,7 +30,7 @@ public:
      * enviados por el cliente, para ser
      * procesados en el servidor
      */
-    ReceiveClientMessages(Socket&& socket, ProtectedQueue<Message>* messages);
+    ReceiveClientMessages(int clientId,Socket&& socket, BlockingQueue<Message>* messages);
     virtual void run() override;    
     void shutdown();
 

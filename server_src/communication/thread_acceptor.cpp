@@ -1,6 +1,8 @@
 #include "thread_acceptor.h"
 
-ThreadAcceptor:: ThreadAcceptor() {}
+ThreadAcceptor:: ThreadAcceptor() : message_processor(gameManager) {
+	this->message_processor.start();
+}
 
 void ThreadAcceptor:: run() {
 	
@@ -17,7 +19,7 @@ void ThreadAcceptor:: run() {
 	
   while (this->keep_running) {
     this->acceptConnection();
-		this->gameManager.receiveMessages();
+	//this->gameManager.receiveMessages();
     this->gameManager.cleanUpDeadGames();
   }
 }

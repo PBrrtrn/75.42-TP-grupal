@@ -1,9 +1,11 @@
 #include "ReceiveClientMessages.h"
 
-ReceiveClientMessages::ReceiveClientMessages(Socket&& socket, ProtectedQueue<Message>* messages) :
+ReceiveClientMessages::ReceiveClientMessages(int clientId,Socket&& socket, BlockingQueue<Message>* serverMessages) :
     peer(std::move(socket)), 
     keep_running(true), 
-    messages(messages) {}
+    serverMessages(serverMessages),id(clientId) {
+	this->messages = NULL;	
+	}
 
 void ReceiveClientMessages::assignToGameQueue(ProtectedQueue<Message>* messages) {
     this->messages = messages;
@@ -19,14 +21,19 @@ void ReceiveClientMessages::run() {
         std::cout << "Receiving client message" << std::endl;
         int received = this->peer.socket_receive((char*)&client_message, 
                                                  sizeof(ClientMessage));
-        std::cout << "Received client message" << std::endl;
+        std::cout << "Received client message:"<< std::to_string(this->id) << std::endl;
 
         if (received < sizeof(ClientMessage)) {
             std::cout << "recv en threadclient fallo, no recibi nada! (cerro el socket?)" << std::endl;
             this->shutdown();
         } else {
             Message m(client_message.type, client_message.entityId, this->id);
-            this->messages->push(m);
+            if (this->messages != NULL){
+				this->messages->push(m);
+			}
+			else {
+				this->serverMessages->push(m);
+			}
         }
         /*
         size_t size;
