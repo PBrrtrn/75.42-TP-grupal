@@ -14,18 +14,54 @@ Player::Player(int id){
 	this->bullets = c["StartingBullets"].as<int>();
 	this->armas[0] =  new Cuchillo();
 	this->armas[1] = new Pistola();
+	this->armas[2] = NULL;
+	this->armas[3] = NULL;
+	this->armas[4] = NULL;
 	this->selected_weapon_idx = 1;
 	this->previous_weapon_idx = 0;
 	this->movement_state = STATE_NOT_MOVING;
+	
+	std::cout << "fin constructor player" << std::endl;
+	
+}
+
+Player::Player(Player&& from){
+	this->id = from.id;
+	
+	this->vidas = from.vidas;
+	
+	this->health = from.health;
+	this->has_key = from.has_key;
+	this->puntaje = from.puntaje;
+	this->max_bullets = from.max_bullets;
+	this->bullets = from.bullets;
+	this->selected_weapon_idx = from.selected_weapon_idx;
+	this->previous_weapon_idx = from.previous_weapon_idx;
+	this->movement_state = from.movement_state;
+
+	this->armas[0] = from.armas[0];
+	this->armas[1] = from.armas[1];
+	this->armas[2] = from.armas[2];
+	this->armas[3] = from.armas[3];
+	this->armas[4] = from.armas[4];
+	
+	from.armas[0] = NULL;
+	from.armas[1] = NULL;
+	from.armas[2] = NULL;
+	from.armas[3] = NULL;
+	from.armas[4] = NULL;	
+	
 }
 
 float Player::getShootTimeout() {
-	if(this->armas[this->selected_weapon_idx] == NULL) return 0;
+	if(this->armas[this->selected_weapon_idx] == NULL) 
+		return 0;
 	return this->armas[this->selected_weapon_idx]->getCadencia();
 }
 
 int Player::getWeaponAttackRange() {
-	if(this->armas[this->selected_weapon_idx] == NULL) return 0;
+	if(this->armas[this->selected_weapon_idx] == NULL) 
+		return 0;
 	return this->armas[this->selected_weapon_idx]->getAttackRange();
 }
 
@@ -49,9 +85,12 @@ bool Player::loseHealth(int amount) {
 		this->bullets = 8;
 		this->puntaje = 0;
 		this->selected_weapon_idx = 1;
-		this->armas[2] = NULL;
-		this->armas[3] = NULL;
-		this->armas[4] = NULL;
+		for (int i = 2; i < this->armas.size(); i++){
+			if (this->armas[i] != NULL){
+				delete this->armas[i];
+				this->armas[i] = NULL;
+			}
+		}
 		this->movement_state = STATE_NOT_MOVING;
 		std::cout << "VIDAS: " << this->vidas << std::endl;
 		return true;
@@ -104,7 +143,7 @@ bool Player::addBullets(int amount) {
 }
 
 bool Player::addWeapon(Arma* arma) {
-	if (arma->getIndex() < this->armas.size() && this->armas[arma->getIndex()]->is_empty()){
+	if (arma->getIndex() < this->armas.size() && this->armas[arma->getIndex()] == NULL ){
 		return this->_addWeapon(arma->getIndex(),arma);
 	}
 	return false;
@@ -147,7 +186,8 @@ int Player::getCurrentBullets(){
 }
 
 bool Player::changeWeapon(int weapon_idx){
-	if(this->armas[this->selected_weapon_idx] == NULL) return 0;
+	if(this->armas[this->selected_weapon_idx] == NULL) 
+		return 0;
 	this->selected_weapon_idx = weapon_idx;
 	return true;
 }
@@ -192,6 +232,11 @@ MovementState Player::getCurrentRotationState(){
 }
 
 Player::~Player(){
-	delete this->armas[0];
-	delete this->armas[1];
+	std::cout << "entrando a destructor de player" << std::endl;
+	for (int i =0; i < AMOUNT_WEAPONS; i++){
+		if (this->armas[i] != NULL){
+			delete this->armas[i];
+			this->armas[i] = NULL;
+		}
+	}
 }

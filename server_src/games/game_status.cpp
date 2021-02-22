@@ -62,7 +62,7 @@ void GameStatus::addPlayer(int playerID, Vector &position, Vector &direction) {
     this->playersDirections[playerID] = direction;
 
     Player jugador(playerID);
-	this->players.insert({playerID, jugador});
+	this->players.insert({playerID, std::move(jugador)});
 }
 
 float GameStatus::getAngle(int playerID) {
@@ -80,7 +80,7 @@ void GameStatus::checkPlayerPickups(){
 
         for (auto& it: this->players){
 			int player_id = it.first;
-			Player player = it.second;
+			Player& player = it.second;
 
 			Vector distance = item_position - this->getPosition(player_id);
 			if (abs(distance.norm()) < 1 && item.canBePickedUp()) {

@@ -39,6 +39,10 @@ class Player {
 
 public:
 	
+	//Move constructor
+    Player(Player&& from);
+	Player(const Player&) = delete;	
+	
 	Player(int id);
     bool loseHealth(int amount);
     bool gainHealth(int amount);
