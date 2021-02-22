@@ -56,6 +56,7 @@ public:
     int getLives();
     bool changeWeapon(int weapon_idx);
     int getSelectedWeaponIndex();
+    //Item throwWeapon(Vector pos_inicial,bool respawns);
     bool changeMovementState(MovementState state);
     MovementState getCurrentMovementState();
     bool changeShootingState(ShootingState state);

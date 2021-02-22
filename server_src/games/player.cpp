@@ -71,6 +71,11 @@ bool Player::addScore(int amount) {
 	return true;
 }
 
+/*
+Item Player::throwWeapon(Vector pos_inicial,bool respawns) {
+	return this->armas[this->selected_weapon_idx].throwWeapon(pos_inicial, respawns);
+}*/
+
 bool Player::loseBullet() {
 	if(this->selected_weapon_idx == 0) return false;
 	if(this->bullets > 0) this->bullets--;

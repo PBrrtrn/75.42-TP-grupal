@@ -1,7 +1,8 @@
 #include "medkit.h"
 
 Medkit::Medkit(Vector pos_inicial,bool respawns) : Item(pos_inicial,respawns) {
-    this->amount = 20; //TODO pasar a config
+    const YAML::Node& c = ServerConfig::Config["Medkit"];
+    this->amount = c["Points"].as<int>();
     this->type = TYPE_MEDKIT;
 }
 

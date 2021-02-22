@@ -1,6 +1,6 @@
 #include "arma_ametralladora.h"
 
-ArmaAmetralladora::ArmaAmetralladora(Vector pos_inicial,bool respawns) : Item(pos_inicial,respawns), 
+ArmaAmetralladora::ArmaAmetralladora(Vector pos_inicial, bool respawns) : Item(pos_inicial,respawns), 
 ametralladora() {
 	this->type = TYPE_ARMA_AMETRALLADORA;
 	

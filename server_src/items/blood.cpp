@@ -1,7 +1,8 @@
 #include "blood.h"
 
 Blood::Blood(Vector pos_inicial,bool respawns) : Item(pos_inicial,respawns) {
-    this->amount = 1; //TODO pasar a config
+    const YAML::Node& c = ServerConfig::Config["Blood"];
+    this->amount = c["Points"].as<int>();
     this->type = TYPE_BLOOD;
 }
 

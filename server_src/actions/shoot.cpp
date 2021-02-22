@@ -34,9 +34,8 @@ void Shoot::tryAction(GameStatus& gs, int clientID){
                 std::cout << "DANIO: " << danio << std::endl;
 				if (target.loseHealth(danio) ) {
 					std::cout << "player "<< target_id <<" has been killed, danio: "<< danio << std::endl;
-					//TODO: El arma a dropear tiene que ser del tipo que llevaba el jugador muerto en ese momento.
 					//TODO: Dropear item falso "cadaver" que no va a ser utilizable pero si visible.
-					gs.items.push_back(ArmaAmetralladora(gs.getPosition(target_id),false));
+                    //gs.items.push_back(gs.players.at(target_id).throwWeapon(gs.getPosition(target_id),false));
 					gs.items.push_back(Bullets(gs.getPosition(target_id),false));
                     gs.addEnemyDead(clientID);
 				}

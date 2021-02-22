@@ -55,5 +55,6 @@ add_library(server-classes SHARED
   ./items/water.cpp
   ./items/barrel.cpp
   ./items/ItemSerializer.cpp
+  ./items/fake_item.cpp
   ./maps/mapRepository.cpp
 )
