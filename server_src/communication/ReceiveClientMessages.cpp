@@ -28,11 +28,16 @@ void ReceiveClientMessages::run() {
             this->shutdown();
         } else {
             Message m(client_message.type, client_message.entityId, this->id);
+            
             if (this->messages != NULL){
+				std::cout << "about to push to game queue, idclient:"<< std::to_string(this->id) << std::endl;
 				this->messages->push(m);
+				std::cout << "pushed to game queue, idclient:"<< std::to_string(this->id) << std::endl;
 			}
 			else {
+				std::cout << "about to push to server queue, idclient:"<< std::to_string(this->id) << std::endl;
 				this->serverMessages->push(m);
+				std::cout << "pushed to server queue, idclient:"<< std::to_string(this->id) << std::endl;
 			}
         }
         /*

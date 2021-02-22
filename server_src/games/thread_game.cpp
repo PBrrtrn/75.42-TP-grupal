@@ -109,6 +109,7 @@ void ThreadGame::sendGameStatistics(){
 }
 
 void ThreadGame::checkNews() {
+	std::cout << "popeando todos los eventos en threadgame" << std::endl;
 	std::vector<Message> messages = this->messageReceiver->popAll();
 
 	for (std::vector<Message>::iterator it = messages.begin() ; it != messages.end(); ++it) {

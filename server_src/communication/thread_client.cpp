@@ -56,6 +56,7 @@ void ThreadClient::run() {
 
     while (keep_running){
         try {
+			std::cout << "ThreadClient "<< this->id <<": poppeando evento" << std::endl;
 			Message m = this->messages_out->pop();
 			this->informSomethingToReport(m.getType());
 			switch (m.getType())
@@ -65,9 +66,11 @@ void ThreadClient::run() {
 				this->sendCurrentGameMap();
 				break;					
 			case TYPE_LOBBY_STATUS_UPDATE:
+				std::cout << "ThreadClient "<< this->id <<": voy a enviar lobby update" << std::endl;
 				this->sendLobbyStatus(m.getEntity());
 				break;
 			case TYPE_SERVER_SEND_GAME_UPDATE:
+				std::cout << "ThreadClient "<< this->id <<": voy a enviar game update" << std::endl;
 				this->sendGameUpdate();
 				break;
 			case TYPE_SERVER_SEND_GAME_STATISTICS:
@@ -106,6 +109,8 @@ void ThreadClient::sendCurrentGameMap(){
    this->peer.socket_send(mapa.c_str(), size - 1);
    char endOfFile = 0;
    this->peer.socket_send((&endOfFile), sizeof(char));
+   
+   std::cout << "mapa enviado" << std::endl;
 }
 
 void ThreadClient::sendGameUpdate() {

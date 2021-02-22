@@ -37,8 +37,10 @@ public:
     std::vector<T> popAll() {
         std::unique_lock<std::mutex> lock(m);
         std::vector<T> v;
-        v.push_back(queue.front());
-        queue.pop();
+        while (!queue.empty()){
+			v.push_back(queue.front());
+			queue.pop();
+		}
         return v;
     }
     
