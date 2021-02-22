@@ -19,7 +19,6 @@ void ThreadAcceptor:: run() {
 	
   while (this->keep_running) {
     this->acceptConnection();
-	//this->gameManager.receiveMessages();
     this->gameManager.cleanUpDeadGames();
   }
 }

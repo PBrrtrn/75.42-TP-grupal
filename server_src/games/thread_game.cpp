@@ -10,8 +10,10 @@ ThreadGame:: ThreadGame(int gameId, ProtectedQueue<Message>* messageReceiver,
 	lobbyStatus(lobbyStatus), 
 	messageReceiver(messageReceiver) 
 	{
-		this->remaining_time = 30 * 1000; // Fijar por config
-		this->waiting_time_to_start = 120; 
+		const YAML::Node& c = ServerConfig::Config["Game"];
+		this->remaining_time = c["GameTime"].as<int>();
+		this->waiting_time_to_start = c["LobbyTime"].as<int>(); 
+		this->fps = c["FPS"].as<int>();
 		this->start_running = true;
 		this->is_dead = false;
 }
@@ -65,7 +67,7 @@ void ThreadGame:: run() {
 		this->checkNews();
 		this->updatePlayerPositions();
 		this->updatePlayerRotations();
-		this->updateShootingTime(1000000/29);
+		this->updateShootingTime(1000000/this->fps);
         this->checkPlayerPickups();
         this->respawnItems();
         this->checkPlayerBullets();
@@ -73,8 +75,8 @@ void ThreadGame:: run() {
         
 		auto t = std::chrono::steady_clock::now() - start_t;
     	auto sleep_t = std::chrono::duration_cast<std::chrono::microseconds>(t);
-    	if ((1000000/29 - sleep_t.count()) > 0) {
-			usleep((1000000/29) - sleep_t.count());
+    	if ((1000000/this->fps - sleep_t.count()) > 0) {
+			usleep((1000000/this->fps) - sleep_t.count());
 		}
 
         this->remaining_time--;
