@@ -5,9 +5,10 @@
 #include <yaml-cpp/yaml.h>
 #include <SDL2/SDL.h>
 
-#include "../game_status/MenuStatus.h"
 #include "Font.h"
 #include "Texture.h"
+#include "../game_status/MenuStatus.h"
+#include "../../common_src/LobbyStatusData.h"
 
 class MenuRenderer {
 private:
@@ -19,7 +20,7 @@ private:
 	void load();
 	void renderGamesBox(int selected_option);
 	void renderMapsBox(int selected_option);
-	void renderBox();
+	void renderLobbyBox(LobbyStatusData lobby_status);
 	void renderGameOption(GameListItem& option, int y, bool highlight);
 	void renderMapOption(MapListItem& option, int y, bool highlight);
 public:

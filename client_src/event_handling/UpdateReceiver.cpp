@@ -80,6 +80,7 @@ void UpdateReceiver::fetchGameOptions() {
 
 void UpdateReceiver::fetchLobbyStatus() {
 	LobbyStatusData lobby_status = this->connection.getLobbyStatus();
+	this->menu_status.updateLobbyStatus(lobby_status);
 	if (lobby_status.gameStarted)	this->in_game = true;
 	// this->menu_status.updateLobbyStatus(lobby_status);
 }

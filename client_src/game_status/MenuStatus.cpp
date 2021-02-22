@@ -24,6 +24,11 @@ int MenuStatus::getSelectedOption() {
 	return this->selected_option;
 }
 
+LobbyStatusData MenuStatus::getLobbyStatus() {
+	std::unique_lock<std::mutex> lock(this->mutex);
+	return this->lobby_status;
+}
+
 void MenuStatus::updateGameOptions(std::vector<GameListItem>& new_options) {
 	std::unique_lock<std::mutex> lock(this->mutex);
 	this->game_options = new_options;
@@ -32,6 +37,11 @@ void MenuStatus::updateGameOptions(std::vector<GameListItem>& new_options) {
 void MenuStatus::updateMapOptions(std::vector<MapListItem>& new_options) {
 	std::unique_lock<std::mutex> lock(this->mutex);
 	this->map_options = new_options;
+}
+
+void MenuStatus::updateLobbyStatus(LobbyStatusData new_lobby_status) {
+	std::unique_lock<std::mutex> lock(this->mutex);
+	this->lobby_status = new_lobby_status;
 }
 
 void MenuStatus::updateCurrentScreen(Screen new_screen) {

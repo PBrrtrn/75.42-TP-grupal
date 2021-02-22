@@ -60,7 +60,7 @@ void MenuRenderer::render() {
 		this->font->render(this->renderer, "BACK", 300, 
 		                   420, 1, back_text_color);
 	} else {
-		// Render lobby
+		this->renderLobbyBox(this->menu_status.getLobbyStatus());
 	}
 
 	SDL_RenderPresent(this->renderer);
@@ -138,6 +138,75 @@ void MenuRenderer::renderMapsBox(int selected_option) {
     i++;
     text_y += 35;
   }
+}
+
+void MenuRenderer::renderLobbyBox(LobbyStatusData lobby_status) {
+	YAML::Node node = this->config["lobby_box"];
+	int box_x = node["x_pos"].as<int>();
+  int box_y = node["x_pos"].as<int>();
+  int box_w = node["width"].as<int>();
+  int box_h = node["height"].as<int>();
+
+  int gilding_w = node["gilding"].as<int>();
+
+  SDL_Rect lobby_box { box_x, box_y, box_w, box_h };
+
+  SDL_Rect outer_gilding { box_x - gilding_w * 2, box_y - gilding_w * 2, 
+                           box_w + gilding_w * 4, box_h + gilding_w * 4 };
+
+  SDL_SetRenderDrawColor(this->renderer, 255, 223, 0, 0);
+  SDL_RenderFillRect(this->renderer, &outer_gilding);
+
+  SDL_Rect inner_gilding { box_x - gilding_w, box_y - gilding_w, 
+                           box_w + gilding_w * 2, box_h + gilding_w * 2 };
+
+  SDL_SetRenderDrawColor(this->renderer, 200, 173, 0, 0);
+  SDL_RenderFillRect(this->renderer, &inner_gilding);
+
+  SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
+  SDL_RenderFillRect(this->renderer, &lobby_box);
+
+  int back_text_x = node["back_text"]["x_pos"].as<int>();
+  int back_text_y = node["back_text"]["y_pos"].as<int>();
+  std::string back_text = node["back_text"]["text"].as<std::string>();
+
+  SDL_Color back_text_color { 255, 69, 0 };
+
+  this->font->render(this->renderer, back_text.c_str(), 
+  									 back_text_x, back_text_y, 
+  									 1, back_text_color);
+
+  int header_text_x = node["header_text"]["x_pos"].as<int>();
+  int header_text_y = node["header_text"]["y_pos"].as<int>();
+  std::string header_text = node["header_text"]["text"].as<std::string>();
+
+  SDL_Color text_color { 255, 255, 255 };
+
+  this->font->render(this->renderer, header_text.c_str(), 
+  									 header_text_x, header_text_y, 1, text_color);
+
+  int time_text_x = node["time_text"]["x_pos"].as<int>();
+  int time_text_y = node["time_text"]["y_pos"].as<int>();
+  std::stringstream time_stream;
+  time_stream << node["time_text"]["text"].as<std::string>();
+  time_stream << lobby_status.remainingTime;
+  time_stream << " seconds";
+  std::string time_text = time_stream.str();
+
+  this->font->render(this->renderer, time_text.c_str(), 
+  									 time_text_x, time_text_y, 1, text_color);
+
+  int players_text_x = node["players_text"]["x_pos"].as<int>();
+  int players_text_y = node["players_text"]["y_pos"].as<int>();
+  std::stringstream players_stream;
+  players_stream << node["players_text"]["text"].as<std::string>();
+  players_stream << lobby_status.players;
+  players_stream << "/";
+  players_stream << lobby_status.maxPlayers;
+  std::string players_text = players_stream.str();
+
+  this->font->render(this->renderer, players_text.c_str(), 
+  									 players_text_x, players_text_y, 1, text_color);
 }
 
 void MenuRenderer::renderGameOption(GameListItem& option, 

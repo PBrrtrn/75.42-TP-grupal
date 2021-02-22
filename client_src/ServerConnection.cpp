@@ -60,11 +60,9 @@ std::vector<GameListItem> ServerConnection::getGameOptions() {
 }
 
 LobbyStatusData ServerConnection::getLobbyStatus() {
-	std::cout << "Getting lobby status" << std::endl;
 	LobbyStatusData lobby_status;
 	this->socket.socket_receive((char*)&lobby_status, sizeof(LobbyStatusData));
 
-	std::cout << "Got lobby status" << std::endl;
 	return lobby_status;
 }
 
