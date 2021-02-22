@@ -161,8 +161,7 @@ void MenuRenderer::renderGameOption(GameListItem& option, int y,
 	                   220, y, 1, match_text_color);
 }
 
-void MenuRenderer::renderMapOption(MapListItem& option, int y,
-																	 bool highlight) {
+void MenuRenderer::renderMapOption(MapListItem& option, int y, bool highlight) {
 	std::stringstream stream;
 	stream << option.name;
 	stream << " - Min: ";
