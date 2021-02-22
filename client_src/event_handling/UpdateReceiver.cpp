@@ -20,6 +20,7 @@ void UpdateReceiver::run() {
 }
 
 void UpdateReceiver::receiveGameUpdate(MessageType message_type) {
+	std::cout << "receive Game Update" << std::endl;
 	switch (message_type) {
 		case (TYPE_SERVER_SEND_MAP) :
 			this->fetchMap();
@@ -49,6 +50,7 @@ void UpdateReceiver::fetchStatistics() {
 }
 
 void UpdateReceiver::receiveMenuUpdate(MessageType message_type) {
+	std::cout << "receive Menu Update" << std::endl;
 	switch (message_type) {
 		case (TYPE_SERVER_SEND_MAP_LIST) :
 			this->fetchMapOptions();
@@ -65,6 +67,7 @@ void UpdateReceiver::receiveMenuUpdate(MessageType message_type) {
 }
 
 void UpdateReceiver::fetchMapOptions() {
+	std::cout << "Updating map options in menu status" << std::endl;
 	std::vector<MapListItem> maps = this->connection.getMapOptions();
 	this->menu_status.updateMapOptions(maps);
 }

@@ -2,9 +2,9 @@
 #include "InputHandler.h"
 
 InputHandler::InputHandler(std::atomic<bool>& in_game, MenuStatus& menu_status,
-							 						 BlockingQueue<Request>& request_queue)
-: in_game(in_game), menu_input_handler(request_queue, menu_status),
-	game_input_handler(request_queue) { }
+							 						 BlockingQueue<ClientMessage>& message_queue)
+: in_game(in_game), menu_input_handler(message_queue, menu_status),
+	game_input_handler(message_queue) { }
 
 InputHandler::~InputHandler() { }
 

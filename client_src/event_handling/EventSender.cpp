@@ -1,8 +1,8 @@
 #include "EventSender.h"
 
-EventSender::EventSender(BlockingQueue<Request>& request_queue,
+EventSender::EventSender(BlockingQueue<ClientMessage>& message_queue,
 												 ServerConnection& server_connection)
-: request_queue(request_queue),	server_connection(server_connection) { }
+: message_queue(message_queue),	server_connection(server_connection) { }
 
 EventSender::~EventSender() {
 	this->join();
@@ -10,7 +10,7 @@ EventSender::~EventSender() {
 
 void EventSender::run() {
 	while (true) {
-		Request request = request_queue.pop();
-		this->server_connection.sendRequest(request);
+		ClientMessage message = message_queue.pop();
+		this->server_connection.sendMessage(message);
 	}
 }

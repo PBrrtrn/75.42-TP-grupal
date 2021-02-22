@@ -1,11 +1,11 @@
 #include <iostream>
 #include "MenuInputHandler.h"
 
-MenuInputHandler::MenuInputHandler(BlockingQueue<Request>& request_queue,
+MenuInputHandler::MenuInputHandler(BlockingQueue<ClientMessage>& message_queue,
 																	 MenuStatus& menu_status)
-: request_queue(request_queue), menu_status(menu_status) {
-	Request request { CLIENT_REQUEST_MAPS_LIST };
-	this->request_queue.push(request);
+: message_queue(message_queue), menu_status(menu_status) {
+	ClientMessage message { CLIENT_REQUEST_MAPS_LIST };
+	this->message_queue.push(message);
 	this->refresh();
 }
 
@@ -40,8 +40,8 @@ void MenuInputHandler::handleGameSelection(SDL_Event input) {
 		} else {
 			std::vector<GameListItem> options = this->menu_status.getGameOptions();
 			char game_id = options[selected_option - 2].gameId; 
-			Request request { CLIENT_REQUEST_JOIN_GAME, game_id };
-			this->request_queue.push(request);
+			ClientMessage message { CLIENT_REQUEST_JOIN_GAME, game_id };
+			this->message_queue.push(message);
 		}
 	} else if (keycode == SDLK_w) {
 		this->menu_status.selectOptionUp();
@@ -53,8 +53,8 @@ void MenuInputHandler::handleGameSelection(SDL_Event input) {
 
 void MenuInputHandler::handleLobby(SDL_Event input) {
 	if (input.key.keysym.sym == SDLK_SPACE) {
-		Request request { CLIENT_REQUEST_LEAVE_GAME };
-		this->request_queue.push(request);
+		ClientMessage message { CLIENT_REQUEST_LEAVE_GAME };
+		this->message_queue.push(message);
 	}
 }
 
@@ -68,8 +68,8 @@ void MenuInputHandler::handleGameCreation(SDL_Event input) {
 		} else {
 			std::vector<MapListItem> options = this->menu_status.getMapOptions();
 			char map_id = options[selected_option - 1].mapId; 
-			Request request { CLIENT_REQUEST_CREATE_GAME, map_id };
-			this->request_queue.push(request);
+			ClientMessage message { CLIENT_REQUEST_CREATE_GAME, map_id };
+			this->message_queue.push(message);
 		}
 	} else if (keycode == SDLK_w) {
 		this->menu_status.selectOptionUp();
@@ -79,6 +79,6 @@ void MenuInputHandler::handleGameCreation(SDL_Event input) {
 }
 
 void MenuInputHandler::refresh() {
-	Request request { CLIENT_REQUEST_GAMES_LIST };
-	this->request_queue.push(request);
+	ClientMessage message { CLIENT_REQUEST_GAMES_LIST };
+	this->message_queue.push(message);
 }

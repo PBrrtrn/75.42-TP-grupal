@@ -27,7 +27,7 @@ void ThreadClient::run() {
 			this->informSomethingToReport(answer.getType());
 			switch (answer.getType())
 			{
-			case CLIENT_REQUEST_GAMES_LIST:
+			case TYPE_SERVER_SEND_GAME_LIST:
 				this->sendGamesList();
 				break;			
 			case TYPE_SERVER_JOIN_OK:
@@ -152,11 +152,13 @@ void ThreadClient::informClientId() {
 }
 
 void ThreadClient::sendGamesList() {
+	std::cout << "Sending games list" << std::endl;
 	std::vector<GameListItem> list = this->serverStatus.getGamesList();
 	size_t size = list.size()*sizeof(GameListItem);
 	this->peer.socket_send((char*)(&size), sizeof(size_t));
 	for (auto& it: list) {
 		this->peer.socket_send((char*)(&it), sizeof(GameListItem));
+	std::cout << "Sent games list" << std::endl;
 	}
 }
 
@@ -172,6 +174,7 @@ void ThreadClient::sendGameStatistics() {
 }
 
 void ThreadClient::sendMapsList() {
+	std::cout << "Sending maps list" << std::endl;
 	const std::vector<MapListItem>& list = this->serverStatus.getMapsList();
 	size_t size = list.size()*sizeof(MapListItem);
 	this->peer.socket_send((char*)(&size), sizeof(size));

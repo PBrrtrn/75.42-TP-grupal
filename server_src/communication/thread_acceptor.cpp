@@ -15,11 +15,11 @@ void ThreadAcceptor:: run() {
 	
 	std::cout << "Acceptor socket opened:" << (resultado ? "OK" : "ERROR!") << std::endl;
 	
-    while (this->keep_running) {
-        this->acceptConnection();
+  while (this->keep_running) {
+    this->acceptConnection();
 		this->gameManager.receiveMessages();
-        this->gameManager.cleanUpDeadGames();
-    }
+    this->gameManager.cleanUpDeadGames();
+  }
 }
 
 void ThreadAcceptor::acceptConnection(){

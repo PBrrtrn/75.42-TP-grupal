@@ -15,6 +15,20 @@ Socket& ReceiveClientMessages::getPeerReference() {
 
 void ReceiveClientMessages::run() {
     while (this->keep_running) {
+        ClientMessage client_message;
+        std::cout << "Receiving client message" << std::endl;
+        int received = this->peer.socket_receive((char*)&client_message, 
+                                                 sizeof(ClientMessage));
+        std::cout << "Received client message" << std::endl;
+
+        if (received < sizeof(ClientMessage)) {
+            std::cout << "recv en threadclient fallo, no recibi nada! (cerro el socket?)" << std::endl;
+            this->shutdown();
+        } else {
+            Message m(client_message.type, client_message.entityId, this->id);
+            this->messages->push(m);
+        }
+        /*
         size_t size;
         int received = this->peer.socket_receive((char*)(&size), sizeof(size_t));
         
@@ -29,6 +43,7 @@ void ReceiveClientMessages::run() {
                 this->messages->push(m);				
             }
         }
+        */
     }
 }
 

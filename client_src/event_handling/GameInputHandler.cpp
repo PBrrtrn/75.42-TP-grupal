@@ -23,8 +23,8 @@ static std::unordered_map<SDL_Keycode, MessageType> keyup_map = {
 	{ SDLK_SPACE, TYPE_SHOOT_STOP }
 };
 
-GameInputHandler::GameInputHandler(BlockingQueue<Request>& request_queue)
-: request_queue(request_queue) { }
+GameInputHandler::GameInputHandler(BlockingQueue<ClientMessage>& message_queue)
+: message_queue(message_queue) { }
 
 GameInputHandler::~GameInputHandler() { }
 
@@ -33,12 +33,12 @@ void GameInputHandler::handle(SDL_Event input) {
 		SDL_Keycode keycode = input.key.keysym.sym;
 		bool keydown = this->keyboard_state.isDown(keycode);
 		if ((input.type == SDL_KEYDOWN) && (!keydown)) {
-			Request request { keydown_map[keycode] };
-			this->request_queue.push(request);
+			ClientMessage message { keydown_map[keycode] };
+			this->message_queue.push(message);
 			this->keyboard_state.toggleKeyDown(keycode);
 		} else if ((input.type == SDL_KEYUP) && (keydown)) {
-			Request request { keydown_map[keycode] };
-			this->request_queue.push(request);
+			ClientMessage message { keydown_map[keycode] };
+			this->message_queue.push(message);
 			this->keyboard_state.toggleKeyUp(keycode);
 		}
 	}

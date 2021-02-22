@@ -7,9 +7,8 @@
 #include "../common_src/Socket.h"
 #include "../common_src/MapListItem.h"
 #include "../common_src/GameListItem.h"
-#include "../common_src/MessageType.h"
+#include "../common_src/ClientMessage.h"
 #include "../common_src/LobbyStatusData.h"
-#include "event_handling/Request.h"
 #include "game_status/GameStatus.h"
 
 class ServerConnection {
@@ -26,7 +25,7 @@ public:
 	Map getMap();
 	GameStatusUpdate getGameStatusUpdate();
 	GameStatistics getGameStatistics();
-	void sendRequest(Request request);
+	void sendMessage(ClientMessage message);
 	/*
 	bool joinGame(char game_id);
 	void exitLobby();

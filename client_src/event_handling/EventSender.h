@@ -5,16 +5,16 @@
 
 #include "../../common_src/Thread.h"
 
-#include "Request.h"
 #include "../ServerConnection.h"
 #include "../../common_src/blocking_queue.h"
+#include "../../common_src/ClientMessage.h"
 
 class EventSender : public Thread {
 private:
-	BlockingQueue<Request>& request_queue;
+	BlockingQueue<ClientMessage>& message_queue;
 	ServerConnection& server_connection;
 public:
-	EventSender(BlockingQueue<Request>& request_queue,
+	EventSender(BlockingQueue<ClientMessage>& message_queue,
 							ServerConnection& server_connection);
 	~EventSender();
 	void run();

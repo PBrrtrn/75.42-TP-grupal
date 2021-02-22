@@ -22,11 +22,9 @@ void GameManager::receiveMessages() {
         case CLIENT_REQUEST_CREATE_GAME:
             this->startGame(m.getClientId(), m.getEntity());
             break;
-        
         case CLIENT_REQUEST_JOIN_GAME:
             this->joinGame(m.getClientId(), m.getEntity());
             break;
-
         case CLIENT_REQUEST_GAMES_LIST:
             this->informAvailableGames(m.getClientId());
             break;
@@ -119,6 +117,7 @@ void GameManager::informAvailableGames(int clientId){
 }
 
 void GameManager::sendMapsList(int clientId) {
+    std::cout << "Sending maps list" << std::endl;
     this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_MAP_LIST, 0, clientId));
 }
 

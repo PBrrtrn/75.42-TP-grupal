@@ -94,6 +94,8 @@ Map ServerConnection::getMap() {
 }
 
 GameStatusUpdate ServerConnection::getGameStatusUpdate() {
+	std::cout << "Getting game status update" << std::endl;
+
 	PlayerStatus player_status;
 	this->socket.socket_receive((char*)&player_status, sizeof(PlayerStatus));
 
@@ -138,6 +140,7 @@ GameStatusUpdate ServerConnection::getGameStatusUpdate() {
 	update.direction = player_status.direction;
 	update.enemies = players_list;
 
+	std::cout << "Got game status update" << std::endl;
 	return update;
 }
 
@@ -148,61 +151,11 @@ GameStatistics ServerConnection::getGameStatistics() {
 	return statistics;
 }
 
-void ServerConnection::sendRequest(Request request) {
-	std::cout << "Sending request" << std::endl;
-	switch (request.type) {
-
-	}
-	std::cout << "Sent request" << std::endl;
-}
-
-/*
-
-bool ServerConnection::joinGame(char game_id) {
-	std::cout << "Joining game" << std::endl;
-	ClientMessage message { TYPE_JOIN_GAME, game_id };
+void ServerConnection::sendMessage(ClientMessage message) {
+	std::cout << "Sending message of type: " << message.type << std::endl;
 	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
-
-	char buffer;
-	this->socket.socket_receive(&buffer, 1);
-
-	std::cout << "Joined game" << std::endl;
-	return bool(buffer);
+	std::cout << "Sent message of type: " << message.type << std::endl;
 }
-
-
-void ServerConnection::exitLobby() {
-	ClientMessage message { TYPE_EXIT_GAME, 0 };
-	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
-}
-
-
-void ServerConnection::sendEvents(std::vector<MessageType> events) {
-	if (events.size() == 0) {
-		events.push_back(TYPE_CLIENT_PING);
-	}
-
-	size_t message_size = events.size()*sizeof(ClientMessage);
-	this->socket.socket_send((char*)&message_size, sizeof(size_t));
-	
-	for (MessageType event : events) {
-		ClientMessage message { event, 0 };
-		this->socket.socket_send((char*)&message, sizeof(ClientMessage));
-	}
-}
-
-void ServerConnection::sendPing() {
-	ClientMessage message { TYPE_CLIENT_PING, 0 };
-
-	size_t message_size = sizeof(ClientMessage);
-	this->socket.socket_send((char*)&message_size, sizeof(message_size));
-
-	
-	this->socket.socket_send((char*)&message, sizeof(message));
-	
-}
-
-*/
 
 ServerConnectionError::ServerConnectionError(const char *error) noexcept {
 	snprintf(this->error_msg, ERROR_BUF_LEN, "Connection error: %s", error);
