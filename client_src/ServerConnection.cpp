@@ -149,7 +149,11 @@ GameStatistics ServerConnection::getGameStatistics() {
 }
 
 void ServerConnection::sendRequest(Request request) {
+	std::cout << "Sending request" << std::endl;
+	switch (request.type) {
 
+	}
+	std::cout << "Sent request" << std::endl;
 }
 
 /*

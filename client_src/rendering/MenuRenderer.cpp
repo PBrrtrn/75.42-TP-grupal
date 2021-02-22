@@ -1,3 +1,4 @@
+#include <iostream>
 #include "MenuRenderer.h"
 
 MenuRenderer::MenuRenderer(YAML::Node config,
@@ -30,7 +31,7 @@ void MenuRenderer::render() {
 	this->background->render(this->renderer, NULL, NULL);
 
 	int selected_option = this->menu_status.getSelectedOption();
-	if (this->menu_status.getCurrentScreen() == LOBBY) {
+	if (this->menu_status.getCurrentScreen() == GAME_SELECTION) {
 		this->renderGamesBox(selected_option);
 
 		SDL_Color new_game_text_color { 255, 255, 255 };
@@ -48,7 +49,7 @@ void MenuRenderer::render() {
 		}
 		this->font->render(this->renderer, "REFRESH", 400, 
 		                   420, 1, refresh_text_color);
-	} else {
+	} else if (this->menu_status.getCurrentScreen() == GAME_CREATION) {
 		this->renderMapsBox(selected_option);
 
 		SDL_Color back_text_color { 255, 255, 255 };
@@ -58,6 +59,8 @@ void MenuRenderer::render() {
 		}
 		this->font->render(this->renderer, "BACK", 300, 
 		                   420, 1, back_text_color);
+	} else {
+		// Render lobby
 	}
 
 	SDL_RenderPresent(this->renderer);

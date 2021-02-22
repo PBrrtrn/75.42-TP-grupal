@@ -1,3 +1,4 @@
+#include <iostream>
 #include "MenuInputHandler.h"
 
 MenuInputHandler::MenuInputHandler(BlockingQueue<Request>& request_queue,

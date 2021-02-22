@@ -9,6 +9,8 @@
 #include "game_status/MenuStatus.h"
 #include "game_status/GameStatusMonitor.h"
 #include "event_handling/InputHandler.h"
+#include "event_handling/EventSender.h"
+#include "event_handling/UpdateReceiver.h"
 #include "event_handling/Request.h"
 #include "rendering/Renderer.h"
 #include "../common_src/blocking_queue.h"
@@ -28,15 +30,14 @@ GameLoop::~GameLoop() {
 void GameLoop::run() {
   int fps_cap = this->config["FPS_cap"].as<int>();
 
-  MenuStatus menu_status;
-  GameStatusMonitor game_status_monitor;
-
-
   std::string host = this->config["server"]["host"].as<std::string>();
   std::string port = this->config["server"]["port"].as<std::string>();
   ServerConnection server_connection(host, port);
 
-  BlockingQueue<UserRequest> request_queue;
+  MenuStatus menu_status;
+  GameStatusMonitor game_status_monitor;
+
+  BlockingQueue<Request> request_queue;
 
   std::atomic<bool> in_game(false);
 
@@ -47,11 +48,12 @@ void GameLoop::run() {
 
   Renderer renderer(this->config, in_game, game_status_monitor, menu_status);
 
+  InputHandler input_handler(in_game, menu_status, request_queue);
+
   event_sender.start();
   update_receiver.start();
   renderer.start();
 
-  InputHandler input_handler(in_game, menu_status, request_queue);
 
   SDL_Event user_input;
   while (true) {
