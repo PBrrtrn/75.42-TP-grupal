@@ -1,18 +1,31 @@
 #include "Window.h"
 
-Window::Window(YAML::Node config) : window(NULL), 
-                                    width(config["width"].as<int>()), 
-                                    height(config["height"].as<int>()) {
-  this->window = SDL_CreateWindow(config["title"].as<std::string>().c_str(), 
+Window::Window(YAML::Node config) : 
+	window(NULL), 
+	width(config["width"].as<int>()), 
+	height(config["height"].as<int>()),
+	fullscreen(false) 
+	{
+  	this->window = SDL_CreateWindow(config["title"].as<std::string>().c_str(), 
                                   SDL_WINDOWPOS_UNDEFINED,
                                   SDL_WINDOWPOS_UNDEFINED, 
                                   this->width, this->height,
                                   SDL_WINDOW_SHOWN);
-  if (this->window == NULL) throw WindowConstructorError(SDL_GetError());
+  	if (this->window == NULL) throw WindowConstructorError(SDL_GetError());
 }
 
 Window::~Window() {
   SDL_DestroyWindow(this->window);
+}
+
+void Window::toggleFullScreen() {
+	if (this->fullscreen) {
+		SDL_RestoreWindow(this->window);
+		this->fullscreen = false;
+	} else {
+  		SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN);
+		this->fullscreen = true;
+	}
 }
 
 int Window::getWidth() {

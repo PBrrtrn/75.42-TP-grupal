@@ -10,6 +10,7 @@ private:
   SDL_Window* window;
   int width;
   int height;
+  bool fullscreen;
 public:
   Window(YAML::Node config);
   ~Window();
@@ -17,6 +18,7 @@ public:
   Window& operator=(const Window&) = delete; // Saco la asignacion por copia
   int getWidth();
   int getHeight();
+  void toggleFullScreen();
   SDL_Renderer* getRenderer();
 };
 

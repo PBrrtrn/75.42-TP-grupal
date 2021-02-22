@@ -56,29 +56,29 @@ void ThreadClient::run() {
 
     while (keep_running){
         try {
-			std::cout << "ThreadClient "<< this->id <<": poppeando evento" << std::endl;
+			//std::cout << "ThreadClient "<< this->id <<": poppeando evento" << std::endl;
 			Message m = this->messages_out->pop();
 			this->informSomethingToReport(m.getType());
 			switch (m.getType())
 			{
 			case TYPE_SERVER_SEND_MAP:
-				std::cout << "ThreadClient "<< this->id <<": voy a enviar mapa" << std::endl;
+				//std::cout << "ThreadClient "<< this->id <<": voy a enviar mapa" << std::endl;
 				this->sendCurrentGameMap();
 				break;					
 			case TYPE_LOBBY_STATUS_UPDATE:
-				std::cout << "ThreadClient "<< this->id <<": voy a enviar lobby update" << std::endl;
+				//std::cout << "ThreadClient "<< this->id <<": voy a enviar lobby update" << std::endl;
 				this->sendLobbyStatus(m.getEntity());
 				break;
 			case TYPE_SERVER_SEND_GAME_UPDATE:
-				std::cout << "ThreadClient "<< this->id <<": voy a enviar game update" << std::endl;
+				//std::cout << "ThreadClient "<< this->id <<": voy a enviar game update" << std::endl;
 				this->sendGameUpdate();
 				break;
 			case TYPE_SERVER_SEND_GAME_STATISTICS:
-				std::cout << "ThreadClient "<< this->id <<": voy a mandar statistics" << std::endl;
+				//std::cout << "ThreadClient "<< this->id <<": voy a mandar statistics" << std::endl;
 				this->sendGameStatistics();
 				break;
 			default:
-				std::cout << "ThreadClient "<< this->id <<": no se donde estoy! no procese este evento!" << std::endl;
+				//std::cout << "ThreadClient "<< this->id <<": no se donde estoy! no procese este evento!" << std::endl;
 				break;
 			}
 			

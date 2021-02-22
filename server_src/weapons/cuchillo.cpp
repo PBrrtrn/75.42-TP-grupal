@@ -11,6 +11,7 @@ Cuchillo::Cuchillo() : Arma() {
 }
 
 bool Cuchillo::aimWeapon(float target_angle, float shooter_angle, float target_distance) {
+    std::cout << "aim weapon chucillo -- target distance: " << target_distance << "attack r: " << this->attack_range << std::endl;
     if (target_distance <= this->attack_range) { return true; }
     return false;
 }

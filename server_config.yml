@@ -46,6 +46,10 @@ Moves:
   Step: 0.1
   RotationLeft: 0.1
   RotationRight: -0.1
+Game:
+  GameTime: 30000
+  LobbyTime: 120
+  FPS: 29
 Server:
   Hostname: localhost
   Port: 9006

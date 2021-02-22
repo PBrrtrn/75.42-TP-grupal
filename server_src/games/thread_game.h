@@ -75,6 +75,7 @@ class ThreadGame: public Thread {
         std::atomic<bool>is_dead;
         int remaining_time;
         int waiting_time_to_start;
+        int fps;
         
 
         /**

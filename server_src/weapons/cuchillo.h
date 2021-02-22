@@ -2,6 +2,7 @@
 #define CUCHILLO_H
 
 #include "arma.h"
+#include <iostream>
 
 class Cuchillo : public Arma {
     public:

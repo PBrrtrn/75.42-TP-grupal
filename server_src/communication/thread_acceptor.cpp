@@ -19,7 +19,6 @@ void ThreadAcceptor:: run() {
 	
   while (this->keep_running) {
     this->acceptConnection();
-	//this->gameManager.receiveMessages();
     this->gameManager.cleanUpDeadGames();
   }
 }
@@ -36,4 +35,6 @@ void ThreadAcceptor::shutdown(){
 	this->socket.close_socket();
 }
 
-ThreadAcceptor:: ~ThreadAcceptor() {}
+ThreadAcceptor:: ~ThreadAcceptor() {
+	this->message_processor.join();
+}
