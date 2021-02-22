@@ -8,10 +8,8 @@ ServerConnection::ServerConnection(std::string host, std::string service) {
 	if (!this->socket.socket_connect(host.c_str(), service.c_str()))
 		throw ServerConnectionError("Failed to connect");
 
-	std::cout << "Getting client id" << std::endl;
 	char buffer;
 	socket.socket_receive(&buffer, sizeof(char));
-	std::cout << "Got client id" << std::endl;
 
 	this->client_id = buffer;
 }
@@ -19,17 +17,13 @@ ServerConnection::ServerConnection(std::string host, std::string service) {
 ServerConnection::~ServerConnection() { }
 
 MessageType ServerConnection::receiveMessageType() {
-	std::cout << "Getting incoming event" << std::endl;
 	MessageType message_type;
 	this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
-	std::cout << "Got incoming event" << std::endl;
 	
 	return message_type;
 }
 
 std::vector<MapListItem> ServerConnection::getMapOptions() {
-	std::cout << "Getting available maps" << std::endl;
-
 	char buffer[sizeof(size_t)];
 	socket.socket_receive(buffer, sizeof(size_t));
 	size_t response_size = *((size_t*)buffer);
@@ -44,14 +38,11 @@ std::vector<MapListItem> ServerConnection::getMapOptions() {
 		maps.push_back(item);
 	}
 
-	std::cout << "Got available maps" << std::endl;
 
 	return maps;
 }
 
 std::vector<GameListItem> ServerConnection::getGameOptions() {
-	std::cout << "Getting game options" << std::endl;
-
 	char buffer[sizeof(size_t)];
 	this->socket.socket_receive(buffer, sizeof(size_t));
 	size_t response_size = *((size_t*)buffer);
@@ -65,7 +56,6 @@ std::vector<GameListItem> ServerConnection::getGameOptions() {
 
 		options.push_back(item);
 	}
-	std::cout << "Got game options" << std::endl;
 	return options;
 }
 
@@ -79,23 +69,18 @@ LobbyStatusData ServerConnection::getLobbyStatus() {
 }
 
 Map ServerConnection::getMap() {
-	std::cout << "Getting map" << std::endl;
-
 	size_t map_data_size;
 	this->socket.socket_receive((char*)&map_data_size, sizeof(size_t));
 
 	char map_data[map_data_size];
 	this->socket.socket_receive(map_data, map_data_size);
 
-	std::cout << "Got map" << std::endl;
 	// TODO: Construir el mapa con la data y devolverlo
 	Map map("../maps/map1.yml");
 	return map;
 }
 
 GameStatusUpdate ServerConnection::getGameStatusUpdate() {
-	std::cout << "Getting game status update" << std::endl;
-
 	PlayerStatus player_status;
 	this->socket.socket_receive((char*)&player_status, sizeof(PlayerStatus));
 
@@ -140,7 +125,6 @@ GameStatusUpdate ServerConnection::getGameStatusUpdate() {
 	update.direction = player_status.direction;
 	update.enemies = players_list;
 
-	std::cout << "Got game status update" << std::endl;
 	return update;
 }
 
@@ -152,9 +136,7 @@ GameStatistics ServerConnection::getGameStatistics() {
 }
 
 void ServerConnection::sendMessage(ClientMessage message) {
-	std::cout << "Sending message of type: " << message.type << std::endl;
 	this->socket.socket_send((char*)&message, sizeof(ClientMessage));
-	std::cout << "Sent message of type: " << message.type << std::endl;
 }
 
 ServerConnectionError::ServerConnectionError(const char *error) noexcept {

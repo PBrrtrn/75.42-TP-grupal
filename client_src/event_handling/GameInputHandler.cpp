@@ -37,7 +37,7 @@ void GameInputHandler::handle(SDL_Event input) {
 			this->message_queue.push(message);
 			this->keyboard_state.toggleKeyDown(keycode);
 		} else if ((input.type == SDL_KEYUP) && (keydown)) {
-			ClientMessage message { keydown_map[keycode] };
+			ClientMessage message { keyup_map[keycode] };
 			this->message_queue.push(message);
 			this->keyboard_state.toggleKeyUp(keycode);
 		}
