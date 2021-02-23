@@ -82,7 +82,7 @@ void ThreadGame:: run() {
         this->remaining_time--;
 		this->keep_running = this->gameStatus.getAlivePlayers() > 1 && this->remaining_time != 0 && !this->is_dead;
     }
-    
+    std::cout << "HAY UN SOBREVIVIENTE GANADOR -- FIN JUEGO" << std::endl;
     this->sendGameStatistics();
 	this->is_dead = true;
 }
@@ -104,9 +104,13 @@ void ThreadGame::checkPlayerPickups(){
 }
 
 void ThreadGame::sendGameStatistics(){
+	std::cout << "HAY UN GANADOR -- MANDANDO ESTADISTICAS PARTIDA" << std::endl;
 	for (auto& it: this->out_queues) {
         int clientId = it.first;
-        this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAME_STATISTICS, this->id, clientId));
+    	std::cout << "MANDO A " << clientId << std::endl;
+		if (out_queues.find(clientId) != out_queues.end()) {
+        	this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAME_STATISTICS, this->id, clientId));
+		}
     }
 }
 
@@ -379,7 +383,7 @@ void ThreadGame::shutdown(){
 }
 
 ThreadGame:: ~ThreadGame(){
-	for (auto x: this->out_queues) {
+	/*for (auto x: this->out_queues) {
         delete x.second;
-    }
+    }*/
 }

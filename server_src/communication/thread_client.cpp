@@ -208,4 +208,6 @@ void ThreadClient::shutdown(){
 	this->messages_out->close();
 }
 
-ThreadClient:: ~ThreadClient(){	}
+ThreadClient:: ~ThreadClient(){	
+	delete this->messages_out;
+}

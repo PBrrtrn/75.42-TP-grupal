@@ -146,6 +146,7 @@ GameManager::~GameManager(){
         delete x.second;
     }
     for (auto x: this->clientMessageReceiver) {
+        x.second->shutdown();
         x.second->join();
     }
     /*
