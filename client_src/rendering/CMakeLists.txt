@@ -2,12 +2,14 @@ project(TPGrupal)
 
 add_library(rendering SHARED
 	Animation.cpp
+	TimedAnimation.cpp
 	Font.cpp
 	MapDrawer.cpp
-	UIDrawer.cpp
 	Renderer.cpp
-	MenuRenderer.cpp
 	GameRenderer.cpp
+	MenuRenderer.cpp
+	UIDrawer.cpp
+	PlayerWeapon.cpp
 	Texture.cpp
 	Window.cpp
 )
