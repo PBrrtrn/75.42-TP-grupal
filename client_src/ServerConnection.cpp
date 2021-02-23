@@ -119,8 +119,14 @@ GameStatusUpdate ServerConnection::getGameStatusUpdate() {
 	}
 
 	GameStatusUpdate update;
+
 	update.position = player_status.position;
 	update.direction = player_status.direction;
+	update.health = player_status.health;
+	update.selected_weapon = player_status.selectedWeapon;
+	update.bullets = player_status.bullets;
+	update.lives = player_status.lives;
+	update.has_key = player_status.hasKey;
 	update.enemies = players_list;
 
 	return update;
