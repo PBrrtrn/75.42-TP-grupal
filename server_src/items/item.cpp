@@ -14,8 +14,6 @@ bool Item::pickUpAction(Player& p) {
 }
 
 bool Item::pickUp(Player& p){
-	std::cout << "pick up" << std::endl;
-
 	if(this->pickUpAction(p)) {
 		this->canBePicked = false;
 		return true;

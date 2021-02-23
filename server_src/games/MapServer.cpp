@@ -27,13 +27,7 @@ void MapServer::loadItems(){
 	for (std::vector<std::string>::iterator it = this->items_yml.begin() ; it != this->items_yml.end(); ++it) {
 		this->items.push_back(this->item_serializer.deserialize(*it));
 		
-	}
-	
-	for (auto& x: this->items) {
-        std::cout << "item type in mapserver:" << std::to_string(x->getType()) << std::endl;
-    }
-	
-	
+	}	
 }
 
 void MapServer::loadDoors(){

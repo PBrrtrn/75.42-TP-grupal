@@ -7,7 +7,7 @@ Food::Food(Vector pos_inicial,bool respawns) : Item(pos_inicial,respawns) {
 }
 
 bool Food::pickUpAction(Player& p) {
-    std::cout << "pickupeando FOOD" << std::endl;
+    std::cout << "Player pickup FOOD" << std::endl;
     return p.gainHealth(this->amount);
 }
 

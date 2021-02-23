@@ -22,8 +22,6 @@ Player::Player(int id){
 	this->movement_state = STATE_NOT_MOVING;
 	this->firing_state = STATE_NOT_FIRING;
 	
-	std::cout << "fin constructor player" << std::endl;
-	
 }
 
 Player::Player(Player&& from){
@@ -69,19 +67,16 @@ int Player::getWeaponAttackRange() {
 
 bool Player::aimWeapon(float target_angle, float shooter_angle, float target_distance) {
 	if(this->armas[this->selected_weapon_idx] == NULL) {
-		std::cout << "en aim weapon de player ARMA NULL" << std::endl;
 		return false;
 	}
-	std::cout << "en aim weapon de player, weapon: "<< this->selected_weapon_idx << std::endl;
 	this->armas[this->selected_weapon_idx]->printNombre();
 	return this->armas[this->selected_weapon_idx]->aimWeapon(target_angle, shooter_angle, target_distance);
 }
 
 //si el jugador es muerto como resultado de perder vida, devuelvo true.
 bool Player::loseHealth(int amount) {
-	std::cout << "health: " << this->health << std::endl;
 	this->health = this->health - amount;
-	std::cout << "player was attacked health: " << this->health << std::endl;
+	std::cout << "Player was attacked --> health: " << this->health << std::endl;
 	if (this->health <= 0 && this->vidas > 0) {
 		this->health = 20;
 		this->vidas--;
@@ -96,7 +91,7 @@ bool Player::loseHealth(int amount) {
 			}
 		}
 		this->movement_state = STATE_NOT_MOVING;
-		std::cout << "VIDAS: " << this->vidas << std::endl;
+		std::cout << "LIVES: " << this->vidas << std::endl;
 		return true;
 	} else {
 		return false;
@@ -244,7 +239,6 @@ MovementState Player::getCurrentRotationState(){
 }
 
 Player::~Player(){
-	std::cout << "entrando a destructor de player" << std::endl;
 	for (int i =0; i < AMOUNT_WEAPONS; i++){
 		if (this->armas[i] != NULL){
 			delete this->armas[i];

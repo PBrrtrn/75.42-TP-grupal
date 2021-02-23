@@ -11,7 +11,7 @@ GameStatus::GameStatus(std::string mapLocation) : map(mapLocation) {
 	
 	this->loadDoors();
 	
-	std::cout << "mapa completo:" << this->entireMap << std::endl;
+	std::cout << "Entire map:" << this->entireMap << std::endl;
 	
 }
 
