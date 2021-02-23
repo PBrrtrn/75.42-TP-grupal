@@ -387,4 +387,10 @@ ThreadGame:: ~ThreadGame(){
 	/*for (auto x: this->out_queues) {
         delete x.second;
     }*/
+	for (auto x : this->clientGameStatuses) {
+		delete x.second;
+	}
+	for (auto x : this->shooting_events) {
+		delete x.second;
+	}
 }

@@ -41,8 +41,8 @@ void Shoot::tryAction(GameStatus& gs, int clientID){
 					gs.items.push_back(Bullets(gs.getPosition(target_id),false));
                     gs.addEnemyDead(clientID);
 				}
-                if (gs.players.at(clientID).loseBullet()) gs.addBulletShooted(clientID);
             }
+            if (gs.players.at(clientID).loseBullet()) gs.addBulletShooted(clientID);
         }
     }
     std::cout << "---------End tryAction de shoot----------" << std::endl;

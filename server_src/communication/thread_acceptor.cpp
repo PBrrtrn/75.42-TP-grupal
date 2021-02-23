@@ -36,5 +36,6 @@ void ThreadAcceptor::shutdown(){
 }
 
 ThreadAcceptor:: ~ThreadAcceptor() {
+	this->message_processor.shutdown();
 	this->message_processor.join();
 }
