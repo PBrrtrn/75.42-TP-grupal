@@ -25,7 +25,7 @@ private:
 	int maxPlayers;
 	
 	std::vector<std::string> items_yml;
-	std::vector<Item> items;
+	std::vector<Item*> items;
 	std::vector<std::string> doors_yml;
 	std::vector<Door> doors;
 	std::vector<SpawnPoint> respawnPoints;
@@ -54,7 +54,7 @@ public:
 	int getMinPlayers();
 	Map& getMap();
 	
-	std::vector<Item> getItems();
+	std::vector<Item*> getItems();
 	std::vector<Door> getDoors();
 	std::vector<SpawnPoint> getRespawnPoints();
 	

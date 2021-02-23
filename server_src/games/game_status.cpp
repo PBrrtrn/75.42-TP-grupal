@@ -10,7 +10,6 @@ GameStatus::GameStatus(std::string mapLocation) : map(mapLocation) {
 	}
 	
 	this->loadDoors();
-	this->loadItems();
 	
 	std::cout << "mapa completo:" << this->entireMap << std::endl;
 	
@@ -18,10 +17,6 @@ GameStatus::GameStatus(std::string mapLocation) : map(mapLocation) {
 
 std::vector<SpawnPoint> GameStatus::getSpawnPoints() {
 	return this->map.getRespawnPoints();
-}
-
-void GameStatus::loadItems(){
-	this->items = this->map.getItems();
 }
 
 void GameStatus::loadDoors() {
@@ -75,16 +70,30 @@ Vector GameStatus::getDirection(int playerID) {
 }
 
 void GameStatus::checkPlayerPickups(){
-	for (auto& item: this->items) {
-		Vector item_position = item.getPosition();
+	for (auto item: this->map.getItems()) {
+		Vector item_position = item->getPosition();
 
         for (auto& it: this->players){
 			int player_id = it.first;
 			Player& player = it.second;
 
 			Vector distance = item_position - this->getPosition(player_id);
-			if (abs(distance.norm()) < 1 && item.canBePickedUp()) {
-				item.pickUp(player);
+			if (abs(distance.norm()) < 6 && item->canBePickedUp()) {
+				item->pickUp(player);
+			}			
+		}
+        
+    }
+	for (auto item: this->items) {
+		Vector item_position = item->getPosition();
+
+        for (auto& it: this->players){
+			int player_id = it.first;
+			Player& player = it.second;
+
+			Vector distance = item_position - this->getPosition(player_id);
+			if (abs(distance.norm()) < 1 && item->canBePickedUp()) {
+				item->pickUp(player);
 			}			
 		}
         
@@ -131,9 +140,13 @@ void GameStatus::addBulletShooted(int playerID) {
 }
 
 void GameStatus::respawnItems(){
-	for (auto& it: this->items){
-		Item& item = it;
-		item.tick();
+	for (auto it: this->map.getItems()){
+		//Item* item = it;
+		it->tick();
+	}
+	for (auto it: this->items){
+		//Item* item = it;
+		it->tick();
 	}
 }
 
@@ -190,4 +203,8 @@ Map& GameStatus::getMap() {
 	return this->map.getMap();
 }
 
-GameStatus::~GameStatus() {}
+GameStatus::~GameStatus() {
+	for (auto x : this->items) {
+		delete x;
+	}
+}
