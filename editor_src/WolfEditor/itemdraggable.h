@@ -16,9 +16,11 @@ protected:
     std::string icon;
 private:
     void mousePressEvent(QMouseEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
 public:
     ItemDraggable(QWidget* widget);
-    virtual std::string getSerializedObject(int posX,int posY, bool respawns);
+
 };
 
 #endif // ITEMDRAGGABLE_H

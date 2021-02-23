@@ -80,7 +80,7 @@
      <string>Objetos</string>
     </property>
    </widget>
-   <widget class="QGraphicsView" name="gameMapView">
+   <widget class="MapView" name="gameMapView">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -95,8 +95,8 @@
      <rect>
       <x>560</x>
       <y>110</y>
-      <width>30</width>
-      <height>31</height>
+      <width>40</width>
+      <height>40</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -112,13 +112,13 @@
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="itemBullets">
+   <widget class="ItemTreasure" name="itemTreasure">
     <property name="geometry">
      <rect>
       <x>610</x>
       <y>110</y>
-      <width>30</width>
-      <height>31</height>
+      <width>40</width>
+      <height>40</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -128,46 +128,54 @@
      </size>
     </property>
     <property name="styleSheet">
-     <string notr="true">image: url(:/images/itemfood.png);</string>
+     <string notr="true">image: url(:/images/itemtreasure.png);</string>
     </property>
     <property name="text">
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="createNewMap">
+   <widget class="ItemBullets" name="itemBullets">
     <property name="geometry">
      <rect>
       <x>560</x>
-      <y>170</y>
-      <width>89</width>
-      <height>25</height>
+      <y>150</y>
+      <width>40</width>
+      <height>40</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>30</width>
+      <height>30</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">image: url(:/images/itembullets.png);</string>
     </property>
     <property name="text">
-     <string>Create</string>
+     <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="cancelNewMap">
+   <widget class="ItemAmetralladora" name="itemAmetralladora">
     <property name="geometry">
      <rect>
-      <x>560</x>
-      <y>200</y>
-      <width>89</width>
-      <height>25</height>
+      <x>610</x>
+      <y>150</y>
+      <width>40</width>
+      <height>40</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>30</width>
+      <height>30</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">image: url(:/images/itemametralladora.png);</string>
     </property>
     <property name="text">
-     <string>Cancel</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>290</y>
-      <width>113</width>
-      <height>25</height>
-     </rect>
+     <string/>
     </property>
    </widget>
    <zorder>wallListLabel</zorder>
@@ -175,10 +183,9 @@
    <zorder>objectListLabel</zorder>
    <zorder>gameMapView</zorder>
    <zorder>itemFood</zorder>
+   <zorder>itemTreasure</zorder>
    <zorder>itemBullets</zorder>
-   <zorder>createNewMap</zorder>
-   <zorder>cancelNewMap</zorder>
-   <zorder>lineEdit</zorder>
+   <zorder>itemAmetralladora</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -234,6 +241,26 @@
    <class>ItemFood</class>
    <extends>QLabel</extends>
    <header>itemfood.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MapView</class>
+   <extends>QGraphicsView</extends>
+   <header>mapview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ItemTreasure</class>
+   <extends>QLabel</extends>
+   <header>itemtreasure.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ItemBullets</class>
+   <extends>QLabel</extends>
+   <header>itembullets.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ItemAmetralladora</class>
+   <extends>QLabel</extends>
+   <header>itemametralladora.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

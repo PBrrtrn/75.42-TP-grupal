@@ -106,3 +106,11 @@ MapServer::MapServer(int width,int height) : map(width,height){
 void MapServer::setGridValue(int x, int y,int newValue) {
 	this->map.setGridValue(x,y,newValue);
 }
+
+void MapServer::insertItem(Item item){
+	this->items.push_back(item);
+}
+
+void MapServer::insertSpawnPoint(SpawnPoint s){
+	this->respawnPoints.push_back(s);
+}

@@ -53,6 +53,8 @@ public:
 	int getMaxPlayers();
 	int getMinPlayers();
 	Map& getMap();
+	void insertItem(Item item);
+	void insertSpawnPoint(SpawnPoint s);
 	
 	std::vector<Item> getItems();
 	std::vector<Door> getDoors();

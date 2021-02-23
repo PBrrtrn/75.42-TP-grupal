@@ -60,9 +60,34 @@ else()
     itemdraggable.h
     itemfood.cpp
     itemfood.h
+    itemametralladora.cpp
+    itemametralladora.h
+    itembarrel.cpp
+    itembarrel.h
+    itemblood.cpp
+    itemblood.h
+    itembullets.cpp
+    itembullets.h
+    itemcanion.cpp
+    itemcanion.h
+    object_list.h
+    itemkey.cpp
+    itemkey.h
+    itemmedkit.cpp
+    itemmedkit.h
+    itemtable.cpp
+    itemtable.h
+    itemtreasure.cpp
+    itemtreasure.h
+    itemwater.cpp
+    itemwater.h
     newmapwindow.cpp
     newmapwindow.h
     mainwindow.ui
+    mapview.cpp
+    mapview.h
+    editoritemserializer.cpp
+    editoritemserializer.h
     ../../common_src/Vector.cpp
     ../../common_src/Vector.h
     ../../server_src/games/SpawnPoint.h

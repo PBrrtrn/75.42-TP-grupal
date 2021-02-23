@@ -30,18 +30,23 @@ GameMapGrid::GameMapGrid(MapServer& map,AppStatus& appStatus,QGraphicsWidget *pa
 
     windowLayout->addItem(grid);
 
+
     setLayout(windowLayout);
+    //this->setAcceptDrops(true);
     //setWindowTitle(tr("MapGrid"));
 
 }
 
-//void GameMapGrid::loadMap(Map& map){
-//    this->fullMap = map;
+//void GameMapGrid::dragEnterEvent(QDragEnterEvent *event)
+//{
+//    if (true){
 //
-//}
-
-//std::string getSerializedMapGrid(){
-
-
+//        QMessageBox msgBox;
+//
+//        msgBox.setText("hola, drop");
+//        msgBox.exec();
+//        event->setAccepted(true);
+//        event->acceptProposedAction();
+//    }
 //}
 

@@ -79,6 +79,7 @@ void MainWindow::on_newMapCreated(){
 
     ui->gameMapView->setScene(scene);
     ui->gameMapView->setBackgroundBrush(QBrush(Qt::lightGray,Qt::SolidPattern));
+    //ui->gameMapView->setAcceptDrops(true);
     ui->gameMapView->show();
     this->repaint();
 
