@@ -7,7 +7,6 @@ void TimedEvent::activate(float timeout) {
     this->timeout = timeout;
     this->active = true;
     (shoot->*function)(this->gs, this->param);
-    std::cout << "shoot en te activate" <<std::endl;
 }
 
 void TimedEvent::deactivate() {
@@ -19,7 +18,6 @@ bool TimedEvent::update(float delta) {
     if (!this->active || this->timeout < 0) return false;
     elapsed += delta;
     if (elapsed >= timeout) {
-        std::cout << "shoot en te update" <<std::endl;
         (shoot->*function)(this->gs, this->param);
         this->elapsed = 0;
         return true;

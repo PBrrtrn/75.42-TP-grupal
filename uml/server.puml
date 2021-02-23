@@ -58,6 +58,8 @@ class Pistola
 
 class Server
 
+MessageProcesor : run()
+
 Server : ThreadAcceptor acceptor
 Server : start()
 
@@ -115,6 +117,7 @@ ThreadAcceptor *-- BlockingQueue
 ThreadAcceptor *-- GameManager
 ThreadAcceptor *-- Message
 ThreadAcceptor *-- MessageProcesor
+MessageProcesor *-- GameManager
 GameManager *-- ProtectedQueue
 GameManager *-- Message
 ReceiveClientMessages *-- ProtectedQueue

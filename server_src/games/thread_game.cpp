@@ -82,10 +82,8 @@ void ThreadGame:: run() {
         this->remaining_time--;
 		this->keep_running = this->gameStatus.getAlivePlayers() > 1 && this->remaining_time != 0 && !this->is_dead;
     }
-    std::cout << "HAY UN SOBREVIVIENTE GANADOR -- FIN JUEGO" << std::endl;
     this->sendGameStatistics();
 	this->is_dead = true;
-	//if (this->is_dead) usleep(1569325056);
 }
 
 void ThreadGame::sendMapToClient(int clientId){
@@ -105,10 +103,9 @@ void ThreadGame::checkPlayerPickups(){
 }
 
 void ThreadGame::sendGameStatistics(){
-	std::cout << "HAY UN GANADOR -- MANDANDO ESTADISTICAS PARTIDA" << std::endl;
+	std::cout << "Sending game statistics! GAME OVER" << std::endl;
 	for (auto& it: this->out_queues) {
         int clientId = it.first;
-    	std::cout << "MANDO A " << clientId << std::endl;
 		if (out_queues.find(clientId) != out_queues.end()) {
         	this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAME_STATISTICS, this->id, clientId));
 		}
@@ -116,7 +113,6 @@ void ThreadGame::sendGameStatistics(){
 }
 
 void ThreadGame::checkNews() {
-	//std::cout << "popeando todos los eventos en threadgame" << std::endl;
 	std::vector<Message> messages = this->messageReceiver->popAll();
 
 	for (std::vector<Message>::iterator it = messages.begin() ; it != messages.end(); ++it) {
@@ -153,13 +149,10 @@ void ThreadGame::checkNews() {
 			break;
 		
 		case TYPE_SHOOT_STOP:
-			std::cout << "en type shoot stop th game " << std::endl;
 			this->changeShootingState(it->getClientId(), STATE_NOT_SHOOTING);
 			break;
 
 		case TYPE_SHOOT_START:
-			//this->tryShoot(it->getClientId());
-			std::cout << "en type shoot start th game " << std::endl;
 			this->changeShootingState(it->getClientId(), STATE_SHOOTING);
 			break;
 		
@@ -249,18 +242,14 @@ void ThreadGame::changeRotationState(int playerId,MovementState state) {
 }
 
 void ThreadGame::changeShootingState(int playerId, ShootingState state) {
-	std::cout << "en change shooting state" <<std::endl;
 	this->gameStatus.changeShootingState(playerId, state);
 	switch (state)
 	{
 	case STATE_NOT_SHOOTING:
-		std::cout << "shoot deactivate en th game" <<std::endl;
 		this->shooting_events.at(playerId)->deactivate();
 		break;
 
 	case STATE_SHOOTING:
-		std::cout << "shoot activate en th game" <<std::endl;
-		std::cout << "shoot activate a player id: " << playerId << std::endl;
 		this->shooting_events.at(playerId)->activate(this->gameStatus.getShootTimeout(playerId));
 		break;
 	
@@ -359,15 +348,9 @@ void ThreadGame::fillTimedEvents() {
 			new TimedEvent(&shoot, &Shoot::tryAction, c.first, this->gameStatus)
 		));
 	}
-	std::cout << "---------TIMED EVENTS-----" << std::endl;
-	for (auto c: this->shooting_events) {
-		std::cout << "client id: " << c.first << "te: " << c.second << std::endl;
-	}
-	std::cout << "--------------------------" << std::endl;
 }
 
 void ThreadGame::updateShootingTime(float delta){
-	//std::cout << "en update shooting time" << std::endl;
 	for (auto te: this->shooting_events) {
 		te.second->update(delta);
 	}	

@@ -56,25 +56,20 @@ void ThreadClient::run() {
 
     while (keep_running){
         try {
-			//std::cout << "ThreadClient "<< this->id <<": poppeando evento" << std::endl;
 			Message m = this->messages_out->pop();
 			this->informSomethingToReport(m.getType());
 			switch (m.getType())
 			{
 			case TYPE_SERVER_SEND_MAP:
-				//std::cout << "ThreadClient "<< this->id <<": voy a enviar mapa" << std::endl;
 				this->sendCurrentGameMap();
 				break;					
 			case TYPE_LOBBY_STATUS_UPDATE:
-				//std::cout << "ThreadClient "<< this->id <<": voy a enviar lobby update" << std::endl;
 				this->sendLobbyStatus(m.getEntity());
 				break;
 			case TYPE_SERVER_SEND_GAME_UPDATE:
-				//std::cout << "ThreadClient "<< this->id <<": voy a enviar game update" << std::endl;
 				this->sendGameUpdate();
 				break;
 			case TYPE_SERVER_SEND_GAME_STATISTICS:
-				//std::cout << "ThreadClient "<< this->id <<": voy a mandar statistics" << std::endl;
 				this->sendGameStatistics();
 				break;
 			default:
@@ -103,14 +98,14 @@ void ThreadClient::sendCurrentGameMap(){
    std::string mapa = this->game_status->getEntireMap();
    size_t size = mapa.length() + 1;
    
-   std::cout << "tamanio del mapa:" << std::to_string(size) << std::endl;
+   std::cout << "Map size:" << std::to_string(size) << std::endl;
    
    this->peer.socket_send((char*)(&size), sizeof(size));
    this->peer.socket_send(mapa.c_str(), size - 1);
    char endOfFile = 0;
    this->peer.socket_send((&endOfFile), sizeof(char));
    
-   std::cout << "mapa enviado" << std::endl;
+   std::cout << "Map sent" << std::endl;
 }
 
 void ThreadClient::sendGameUpdate() {
@@ -152,18 +147,16 @@ void ThreadClient::informClientId() {
 	char client_id = (char)this->id;
     this->peer.socket_send(&client_id, sizeof(client_id));
     
-    std::cout << "client id enviado" << std::endl;
+    std::cout << "Client ID sent" << std::endl;
     
 }
 
 void ThreadClient::sendGamesList() {
-	std::cout << "Sending games list" << std::endl;
 	std::vector<GameListItem> list = this->serverStatus.getGamesList();
 	size_t size = list.size()*sizeof(GameListItem);
 	this->peer.socket_send((char*)(&size), sizeof(size_t));
 	for (auto& it: list) {
 		this->peer.socket_send((char*)(&it), sizeof(GameListItem));
-	std::cout << "Sent games list" << std::endl;
 	}
 }
 
@@ -192,9 +185,8 @@ void ThreadClient::sendMapsList() {
 void ThreadClient::sendJoinOk() {
 	char result_join = 0;
 	this->peer.socket_send(&result_join, sizeof(result_join)); 
-	
-	
-	std::cout << "join OK enviado" << std::endl;
+
+	std::cout << "Join OK sent" << std::endl;
 }
 
 void ThreadClient::sendJoinRefused() {

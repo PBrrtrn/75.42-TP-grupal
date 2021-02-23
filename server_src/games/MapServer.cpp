@@ -27,13 +27,7 @@ void MapServer::loadItems(){
 	for (std::vector<std::string>::iterator it = this->items_yml.begin() ; it != this->items_yml.end(); ++it) {
 		this->items.push_back(this->item_serializer.deserialize(*it));
 		
-	}
-	
-	for (auto& x: this->items) {
-        std::cout << "item type in mapserver:" << std::to_string(x.getType()) << std::endl;
-    }
-	
-	
+	}	
 }
 
 void MapServer::loadDoors(){
@@ -69,8 +63,8 @@ int MapServer::isWall(int x, int y) {
 }
 
 bool MapServer::isObstacle(Vector position) {
-	for (std::vector<Item>::iterator it = this->items.begin() ; it != this->items.end(); ++it) {
-		if ((*it).getPosition() == position) return true;
+	for (std::vector<Item*>::iterator it = this->items.begin() ; it != this->items.end(); ++it) {
+		if ((*it)->getPosition() == position) return true;
 	}
 	for (std::vector<Door>::iterator it = this->doors.begin() ; it != this->doors.end(); ++it) {
 		if ((*it).getLocation() == position && (*it).isLocked()) return true;
@@ -86,9 +80,7 @@ int MapServer::getHeight() {
 	return this->map.getHeight();
 }
 
-MapServer::~MapServer() { }
-
-std::vector<Item> MapServer::getItems() { 
+std::vector<Item*> MapServer::getItems() { 
 	return this->items;
 }
 std::vector<Door> MapServer::getDoors() { 
@@ -147,8 +139,14 @@ void MapServer::setGridValue(int x, int y,int newValue) {
 	this->map.setGridValue(x,y,newValue);
 }
 
+MapServer::~MapServer() { 
+	for (auto x : this->items) {
+		delete x;
+	}
+}
+
 void MapServer::insertItem(Item item){
-	this->items.push_back(item);
+	//this->items.push_back(item);
 }
 
 void MapServer::insertSpawnPoint(SpawnPoint s){
