@@ -88,15 +88,15 @@ class ThreadGame: public Thread {
          * @brief Metodos que llaman a los metodos 
          * correspondientes del game status
          */
-		void checkPlayerPickups();
+        void checkPlayerPickups();
         void respawnItems();
-		void checkPlayerBullets();   
+        void checkPlayerBullets();   
 
         /**
          * @brief Envia las estadisticas
          * de la partida, una vez finalizada
          */
-		void sendGameStatistics();
+        void sendGameStatistics();
 
         /**
          * @brief Envia los datos actualizados
@@ -158,18 +158,19 @@ class ThreadGame: public Thread {
 
         void changeShootingState(int playerId, ShootingState state);
         void updateShootingTime(float delta);
-		
-		void changeWeaponAmetralladora(int id);
-		void changeWeaponCanion(int id);
-		void changeWeaponCuchillo(int id);
-		void changeWeaponLanzacohetes(int id);
-		void changeWeaponPistola(int id);
-		
-		void useDoor(int id);
-		
-		char getCurrentPlayers();
+        void resetFiringState();
+        
+        void changeWeaponAmetralladora(int id);
+        void changeWeaponCanion(int id);
+        void changeWeaponCuchillo(int id);
+        void changeWeaponLanzacohetes(int id);
+        void changeWeaponPistola(int id);
+        
+        void useDoor(int id);
+        
+        char getCurrentPlayers();
         char getMaxPlayers();
-		void sendMapToClient(int clientId);
+        void sendMapToClient(int clientId);
 
         bool isDead();
         void shutdown();

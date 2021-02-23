@@ -6,6 +6,7 @@
 
 #include "Renderer.h"
 #include "MenuRenderer.h"
+#include "../../common_src/FiringState.h"
 
 Renderer::Renderer(YAML::Node& config, std::atomic<bool>& in_game, 
                    GameStatusMonitor& game_status_monitor, 
@@ -88,7 +89,10 @@ void Renderer::renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer) {
                   status_update.direction.getAngle(),
                   status_update.enemies);
 
-  this->player_weapons[0]->renderIdle(this->renderer);
+  if (status_update.player_firing == STATE_NOT_FIRING)
+    this->player_weapons[0]->renderIdle(this->renderer);
+  else if (status_update.player_firing == STATE_FIRING)
+    this->player_weapons[0]->renderShooting(this->renderer);
 
   ui_drawer.draw(this->renderer, status_update.health, 
                  status_update.enemies.size(), status_update.bullets,

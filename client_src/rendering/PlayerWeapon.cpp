@@ -25,7 +25,7 @@ PlayerWeapon::PlayerWeapon(YAML::Node spec, SDL_Renderer* renderer) {
     std::string path = dir + spec["shooting"][i].as<std::string>();
     shooting_paths.push_back(path);
   }
-  this->shooting_animation = new TimedAnimation(renderer, shooting_paths, 12);
+  this->shooting_animation = new TimedAnimation(renderer, shooting_paths, 1);
 }
 
 PlayerWeapon::~PlayerWeapon() {

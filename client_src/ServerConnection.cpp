@@ -2,6 +2,7 @@
 
 #include "ServerConnection.h"
 #include "../common_src/ClientMessage.h"
+#include "../common_src/FiringState.h"
 #include "../common_src/ClientGameStatusElements.h"
 
 ServerConnection::ServerConnection(std::string host, std::string service) {
@@ -126,6 +127,7 @@ GameStatusUpdate ServerConnection::getGameStatusUpdate() {
   update.bullets = player_status.bullets;
   update.lives = player_status.lives;
   update.has_key = player_status.hasKey;
+  update.player_firing = player_status.firing_state;
   update.enemies = players_list;
 
   return update;
