@@ -8,7 +8,7 @@
 #define TOP_STATISTICS 10
 
 //estatus del player asociado a este GameStatus
-struct PlayerStatus{
+struct PlayerStatus {
 	Vector position;
 	Vector direction;
 	char selectedWeapon;
@@ -20,7 +20,7 @@ struct PlayerStatus{
 };
 
 //listado de puertas
-struct DoorListItem{
+struct DoorListItem {
 	int doorId;
 	Vector gridPosition;
 	bool isOpen;

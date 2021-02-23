@@ -9,18 +9,18 @@
 
 class GameStatusMonitor {
 private:
-	GameStatus game_status;
-	std::mutex mutex;
-	std::condition_variable cv;
-	bool synchronized;
-	bool map_initialized;
+  GameStatus game_status;
+  std::mutex mutex;
+  std::condition_variable cv;
+  bool synchronized;
+  bool map_initialized;
 public:
-	GameStatusMonitor();
-	~GameStatusMonitor();
-	void initializeMap(Map& map);
-	Map& getMap();
-	void updateGameStatus(GameStatusUpdate& update);
-	GameStatusUpdate getUpdate();
+  GameStatusMonitor();
+  ~GameStatusMonitor();
+  void initializeMap(Map& map);
+  Map& getMap();
+  void updateGameStatus(GameStatusUpdate& update);
+  GameStatusUpdate getUpdate();
 };
 
 #endif
