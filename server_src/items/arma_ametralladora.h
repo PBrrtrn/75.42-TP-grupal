@@ -6,8 +6,7 @@
 
 class ArmaAmetralladora : public Item {
 	private:
-		Ametralladora ametralladora;
-
+		std::vector<Ametralladora*> ametralladoras;
 	public:
 		ArmaAmetralladora(Vector pos_inicial,bool respawns);
 		bool pickUpAction(Player& p) override;

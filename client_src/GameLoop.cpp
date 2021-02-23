@@ -8,10 +8,12 @@
 #include "ServerConnection.h"
 #include "game_status/MenuStatus.h"
 #include "game_status/GameStatusMonitor.h"
-#include "event_handling/UpdateQueue.h"
 #include "event_handling/InputHandler.h"
-#include "event_handling/StatusUpdater.h"
+#include "event_handling/EventSender.h"
+#include "event_handling/UpdateReceiver.h"
 #include "rendering/Renderer.h"
+#include "../common_src/blocking_queue.h"
+#include "../common_src/MessageType.h"
 
 GameLoop::GameLoop(YAML::Node& config) : config(config) {
   if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -28,45 +30,41 @@ GameLoop::~GameLoop() {
 void GameLoop::run() {
   int fps_cap = this->config["FPS_cap"].as<int>();
 
-  MenuStatus menu_status;
-  GameStatusMonitor game_status_monitor;
-
-  std::atomic<bool> in_game(false);
-  UpdateQueue update_queue;
-
   std::string host = this->config["server"]["host"].as<std::string>();
   std::string port = this->config["server"]["port"].as<std::string>();
   ServerConnection server_connection(host, port);
 
-  BlockingQueue<MessageType> blockingQueue;
+  MenuStatus menu_status;
+  GameStatusMonitor game_status_monitor;
 
-  InputHandler input_handler(in_game, update_queue, server_connection, blockingQueue);
+  BlockingQueue<ClientMessage> message_queue;
 
-  StatusUpdater status_updater(in_game, update_queue, server_connection,
-                               menu_status, game_status_monitor,blockingQueue);
+  std::atomic<bool> in_game(false);
 
-  Renderer renderer(this->config, in_game, 
-                    game_status_monitor, 
-                    menu_status);
+  EventSender event_sender(message_queue, server_connection);
+  UpdateReceiver update_receiver(in_game, server_connection,
+                                 game_status_monitor,
+                                 menu_status);
 
-  status_updater.start();
+  Renderer renderer(this->config, in_game, game_status_monitor, menu_status);
+
+  InputHandler input_handler(in_game, menu_status, message_queue);
+
+  event_sender.start();
+  update_receiver.start();
   renderer.start();
 
-  SDL_Event user_event;
+  SDL_Event input;
   while (true) {
-    auto start_t = std::chrono::steady_clock::now();
+    SDL_PollEvent(&input);
+    SDL_Keycode code = input.key.keysym.sym;
 
-    while (SDL_PollEvent(&user_event)) {
-      if (user_event.type == SDL_QUIT) {
-        // TODO: Salir de forma ordenada
-        throw 1;
-      }
-      input_handler.process(user_event);
+    if (input.type == SDL_QUIT) {
+      throw 1;
+    } else if ((input.type == SDL_KEYDOWN) && (code == SDLK_f)) {
+      renderer.toggleFullscreen();
+    } else {
+      input_handler.process(input);
     }
-
-    auto t = std::chrono::steady_clock::now() - start_t;
-    auto sleep_t = std::chrono::duration_cast<std::chrono::microseconds>(t);
-
-    usleep((1000000/fps_cap) - sleep_t.count());
   }
 }

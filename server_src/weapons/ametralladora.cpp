@@ -11,6 +11,8 @@ Ametralladora::Ametralladora() : Arma() {
 }
 
 bool Ametralladora::aimWeapon(float target_angle, float shooter_angle, float target_distance) {
+    target_angle = target_angle * 180 / PI;
+    shooter_angle = shooter_angle * 180 / PI;
     if (target_angle < shooter_angle + this->precision/target_distance && 
         target_angle > shooter_angle - this->precision/target_distance && 
         target_distance <= this->attack_range) { return true; }

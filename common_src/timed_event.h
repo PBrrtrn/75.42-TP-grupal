@@ -2,6 +2,7 @@
 #define __TIMED_EVENT_H__
 
 #include "../server_src/actions/shoot.h"
+#include "FiringState.h"
 //#include "../server_src/games/thread_game.h"
 
 //class ThreadGame;

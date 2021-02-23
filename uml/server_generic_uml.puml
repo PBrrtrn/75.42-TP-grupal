@@ -1,0 +1,72 @@
+@startuml uml
+
+class ReceiveClientMessages
+class ThreadAcceptor 
+class ThreadClient 
+class ThreadGame
+class Thread
+class GameManager
+class ProtectedQueue
+class BlockingQueue
+class Server
+class Socket
+
+Server : ThreadAcceptor acceptor
+Server : start()
+
+ReceiveClientMessages : ProtectedQueue<Message>* messages
+ReceiveClientMessages : Socket peer
+ReceiveClientMessages : assignToGameQueue(ProtectedQueue<Message>* messages)
+ReceiveClientMessages : Socket& getPeerReference()
+
+ThreadAcceptor : Socket socket
+ThreadAcceptor : BlockingQueue<Message> messages
+ThreadAcceptor : GameManager gameManager
+ThreadAcceptor : void acceptConnection()
+ThreadAcceptor : virtual void run() override
+ThreadAcceptor : void shutdown()
+
+ThreadClient : BlockingQueue<Message>* messages_out
+ThreadClient : Socket& peer
+ThreadClient : ServerStatus serverStatus
+ThreadClient : LobbyStatus& lobbyStatus
+ThreadClient : ClientGameStatus* game_status
+ThreadClient : virtual void run() override
+ThreadClient : void shutdown()
+ThreadClient : void assignToOutQueue(BlockingQueue<Message>* messages_out)
+ThreadClient : void assignToGameStatus(ClientGameStatus* gs)
+ThreadClient : void sendGamesList()
+ThreadClient : void sendMapsList()
+ThreadClient : void sendLobbyStatus(int gameID)
+ThreadClient : void sendGameStatistics()
+ThreadClient : void informClientId()
+ThreadClient : void sendCurrentGameMap()
+ThreadClient : void informNothingToReport()
+ThreadClient : void informSomethingToReport(MessageType type)
+
+Server *-- ThreadAcceptor
+ThreadAcceptor *-- Socket
+ThreadAcceptor *-- BlockingQueue
+ThreadAcceptor *-- GameManager
+
+GameManager *-- ProtectedQueue
+GameManager *-- ThreadGame
+GameManager *-- ReceiveClientMessages
+GameManager *-- ThreadClient
+
+ReceiveClientMessages *-- ProtectedQueue
+ReceiveClientMessages *-- Socket
+
+ThreadGame *-- ProtectedQueue
+ThreadGame *-- BlockingQueue
+ThreadGame *-- GameStatus
+
+ThreadClient *-- BlockingQueue
+ThreadClient *-- Socket
+
+Thread <|-- ThreadClient
+Thread <|-- ThreadGame
+Thread <|-- ThreadAcceptor
+Thread <|-- ReceiveClientMessages
+
+@enduml

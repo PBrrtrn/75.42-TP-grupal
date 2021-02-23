@@ -3,6 +3,7 @@
 
 #include "Vector.h"
 #include "ItemType.h"
+#include "FiringState.h"
 
 #define TOP_STATISTICS 10
 
@@ -15,6 +16,7 @@ struct PlayerStatus{
 	uint8_t bullets;
 	uint8_t lives;
 	bool hasKey;
+	FiringState firing_state;
 };
 
 //listado de puertas

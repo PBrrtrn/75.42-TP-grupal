@@ -4,12 +4,14 @@
 #include <yaml-cpp/yaml.h>
 #include <SDL2/SDL.h>
 #include <exception>
+#include <atomic>
 
 class Window {
 private:
   SDL_Window* window;
   int width;
   int height;
+  std::atomic<bool> fullscreen;
 public:
   Window(YAML::Node config);
   ~Window();
@@ -17,6 +19,7 @@ public:
   Window& operator=(const Window&) = delete; // Saco la asignacion por copia
   int getWidth();
   int getHeight();
+  void toggleFullscreen();
   SDL_Renderer* getRenderer();
 };
 

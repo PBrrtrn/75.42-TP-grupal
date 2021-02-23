@@ -36,6 +36,7 @@ public:
            MenuStatus& menu_status);
   ~Renderer();
   void run();
+  void toggleFullscreen();
 };
 
 #define ERROR_BUF_LEN 256

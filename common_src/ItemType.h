@@ -14,7 +14,8 @@ enum ItemType {
 	TYPE_MEDKIT = 10,
 	TYPE_TABLE = 11,
 	TYPE_TREASURE = 12,
-	TYPE_WATER = 13
+	TYPE_WATER = 13,
+	TYPE_FAKE_ITEM = 14
 };
 
 #endif

@@ -1,12 +1,19 @@
 #include "thread_game.h"
 
-ThreadGame:: ThreadGame(int gameId,BlockingQueue<Message>* m, 
-	std::unordered_map<int,GameListItem>& list, std::string map_location, int mapId, 
-	LobbyStatus& lobbyStatus) : 
-	id(gameId), messages(m), gameStatus(map_location), gameList(list),
-	map_id(mapId), lobbyStatus(lobbyStatus) {
-		this->remaining_time = 30 * 1000; // Fijar por config
-		this->waiting_time_to_start = 120; 
+ThreadGame:: ThreadGame(int gameId, ProtectedQueue<Message>* messageReceiver, 
+	std::unordered_map<int,GameListItem>& list, std::string map_location, 
+	int mapId, LobbyStatus& lobbyStatus) : 
+	id(gameId), 
+	gameStatus(map_location), 
+	gameList(list),
+	map_id(mapId), 
+	lobbyStatus(lobbyStatus), 
+	messageReceiver(messageReceiver) 
+	{
+		const YAML::Node& c = ServerConfig::Config["Game"];
+		this->remaining_time = c["GameTime"].as<int>();
+		this->waiting_time_to_start = c["LobbyTime"].as<int>(); 
+		this->fps = c["FPS"].as<int>();
 		this->start_running = true;
 		this->is_dead = false;
 }
@@ -60,7 +67,7 @@ void ThreadGame:: run() {
 		this->checkNews();
 		this->updatePlayerPositions();
 		this->updatePlayerRotations();
-		this->updateShootingTime(1000000/29);
+		this->updateShootingTime(1000000/this->fps);
         this->checkPlayerPickups();
         this->respawnItems();
         this->checkPlayerBullets();
@@ -68,14 +75,17 @@ void ThreadGame:: run() {
         
 		auto t = std::chrono::steady_clock::now() - start_t;
     	auto sleep_t = std::chrono::duration_cast<std::chrono::microseconds>(t);
-    	usleep((1000000/29) - sleep_t.count());
+    	if ((1000000/this->fps - sleep_t.count()) > 0) {
+			usleep((1000000/this->fps) - sleep_t.count());
+		}
 
         this->remaining_time--;
 		this->keep_running = this->gameStatus.getAlivePlayers() > 1 && this->remaining_time != 0 && !this->is_dead;
     }
-    
+    std::cout << "HAY UN SOBREVIVIENTE GANADOR -- FIN JUEGO" << std::endl;
     this->sendGameStatistics();
 	this->is_dead = true;
+	//if (this->is_dead) usleep(1569325056);
 }
 
 void ThreadGame::sendMapToClient(int clientId){
@@ -95,88 +105,92 @@ void ThreadGame::checkPlayerPickups(){
 }
 
 void ThreadGame::sendGameStatistics(){
+	std::cout << "HAY UN GANADOR -- MANDANDO ESTADISTICAS PARTIDA" << std::endl;
 	for (auto& it: this->out_queues) {
         int clientId = it.first;
-        this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAME_STATISTICS, this->id, clientId));
+    	std::cout << "MANDO A " << clientId << std::endl;
+		if (out_queues.find(clientId) != out_queues.end()) {
+        	this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAME_STATISTICS, this->id, clientId));
+		}
     }
 }
 
 void ThreadGame::checkNews() {
-	this->messages->lock();
-	while (!this->messages->isEmptySync()) {
-		Message m = this->messages->popSync();
+	//std::cout << "popeando todos los eventos en threadgame" << std::endl;
+	std::vector<Message> messages = this->messageReceiver->popAll();
+
+	for (std::vector<Message>::iterator it = messages.begin() ; it != messages.end(); ++it) {
 		
-		switch (m.getType())
+		switch (it->getType())
 		{
 		case TYPE_MOVE_FORWARD_START:
-			this->changeMovementState(m.getClientId(), STATE_MOVING_FORWARD);
+			this->changeMovementState(it->getClientId(), STATE_MOVING_FORWARD);
 			break;
 
 		case TYPE_MOVE_BACKWARD_START:
-			this->changeMovementState(m.getClientId(), STATE_MOVING_BACKWARDS);
+			this->changeMovementState(it->getClientId(), STATE_MOVING_BACKWARDS);
 			break;
 		
 		case TYPE_MOVE_LEFT_START:
-			this->changeRotationState(m.getClientId(),STATE_MOVING_LEFT);
+			this->changeRotationState(it->getClientId(),STATE_MOVING_LEFT);
 			break;
 
 		case TYPE_MOVE_RIGHT_START:
-			this->changeRotationState(m.getClientId(),STATE_MOVING_RIGHT);
+			this->changeRotationState(it->getClientId(),STATE_MOVING_RIGHT);
 			break;
 
 		case TYPE_MOVE_FORWARD_STOP:
 		case TYPE_MOVE_BACKWARD_STOP:
-			this->changeMovementState(m.getClientId(), STATE_NOT_MOVING);
+			this->changeMovementState(it->getClientId(), STATE_NOT_MOVING);
 			break;
 		case TYPE_MOVE_LEFT_STOP:
 		case TYPE_MOVE_RIGHT_STOP:
-			this->changeRotationState(m.getClientId(),STATE_NOT_MOVING);
+			this->changeRotationState(it->getClientId(),STATE_NOT_MOVING);
 			break;
 
-		case TYPE_EXIT_GAME:
-			this->expelClient(m.getClientId());
+		case CLIENT_REQUEST_LEAVE_GAME:
+			this->expelClient(it->getClientId());
 			break;
 		
 		case TYPE_SHOOT_STOP:
 			std::cout << "en type shoot stop th game " << std::endl;
-			this->changeShootingState(m.getClientId(), STATE_NOT_SHOOTING);
+			this->changeShootingState(it->getClientId(), STATE_NOT_SHOOTING);
 			break;
 
 		case TYPE_SHOOT_START:
-			//this->tryShoot(m.getClientId());
+			//this->tryShoot(it->getClientId());
 			std::cout << "en type shoot start th game " << std::endl;
-			this->changeShootingState(m.getClientId(), STATE_SHOOTING);
+			this->changeShootingState(it->getClientId(), STATE_SHOOTING);
 			break;
 		
 		case TYPE_CHANGE_AMETRALLADORA:
-			this->changeWeaponAmetralladora(m.getClientId());
+			this->changeWeaponAmetralladora(it->getClientId());
 			break;
 		
 		case TYPE_CHANGE_CANION:
-			this->changeWeaponCanion(m.getClientId());
+			this->changeWeaponCanion(it->getClientId());
 			break;
 
 		case TYPE_CHANGE_CUCHILLO:
-			this->changeWeaponCuchillo(m.getClientId());
+			this->changeWeaponCuchillo(it->getClientId());
 			break;
 
 		case TYPE_CHANGE_LANZA_COHETES:
-			this->changeWeaponLanzacohetes(m.getClientId());
+			this->changeWeaponLanzacohetes(it->getClientId());
 			break;
 
 		case TYPE_CHANGE_PISTOLA:
-			this->changeWeaponPistola(m.getClientId());
+			this->changeWeaponPistola(it->getClientId());
 			break;
 			
 		case TYPE_USE_DOOR:
-			this->useDoor(m.getClientId());
+			this->useDoor(it->getClientId());
 			break;		
 
 		default:
 			break;
 		}
 	}
-	this->messages->unlock();
 }
 
 void ThreadGame::sendLobbyStatus() {
@@ -370,7 +384,13 @@ void ThreadGame::shutdown(){
 }
 
 ThreadGame:: ~ThreadGame(){
-	for (auto x: this->out_queues) {
+	/*for (auto x: this->out_queues) {
         delete x.second;
-    }
+    }*/
+	for (auto x : this->clientGameStatuses) {
+		delete x.second;
+	}
+	for (auto x : this->shooting_events) {
+		delete x.second;
+	}
 }

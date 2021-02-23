@@ -8,7 +8,7 @@
 #include "MenuRenderer.h"
 
 Renderer::Renderer(YAML::Node& config, std::atomic<bool>& in_game, 
-                   GameStatusMonitor& game_status_monitor,
+                   GameStatusMonitor& game_status_monitor, 
                    MenuStatus& menu_status)
 : renderer(NULL), config(config), window(config["window"]),
   in_game(in_game), game_status_monitor(game_status_monitor),
@@ -132,6 +132,10 @@ void Renderer::renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer) {
                  status_update.lives, status_update.has_key);
 
   SDL_RenderPresent(this->renderer);
+}
+
+void Renderer::toggleFullscreen() {
+  this->window.toggleFullscreen();
 }
 
 RendererConstructorError::RendererConstructorError

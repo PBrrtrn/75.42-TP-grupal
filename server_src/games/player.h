@@ -14,6 +14,7 @@
 #include "../server_config.h"
 #include "../actions/MovementState.h"
 #include "../actions/ShootingState.h"
+#include "../../common_src/FiringState.h"
 
 class Player {
 	int id;
@@ -28,13 +29,21 @@ class Player {
     int selected_weapon_idx;
     int previous_weapon_idx;
     
-    std::array<Arma,AMOUNT_WEAPONS> armas;
+    std::array<Arma*,AMOUNT_WEAPONS> armas;
+    //    Arma armas[AMOUNT_WEAPONS];
+    Cuchillo cuchillo;
+    Pistola pistola;
     MovementState movement_state;
     ShootingState shooting_state;
+    FiringState firing_state;
     MovementState rotation_state;
-    bool _addWeapon(int idx, Arma& arma);
+    bool _addWeapon(int idx, Arma* arma);
 
 public:
+	
+	//Move constructor
+    Player(Player&& from);
+	Player(const Player&) = delete;	
 	
 	Player(int id);
     bool loseHealth(int amount);
@@ -46,7 +55,7 @@ public:
     bool loseBullet();
     bool gainKey();
     bool useKey();
-    bool addWeapon(Arma& arma);
+    bool addWeapon(Arma* arma);
     bool aimWeapon(float target_angle, float shooter_angle, float target_distance);
     int getWeaponAttackRange();
     float getShootTimeout();
@@ -56,12 +65,15 @@ public:
     int getLives();
     bool changeWeapon(int weapon_idx);
     int getSelectedWeaponIndex();
+    //Item throwWeapon(Vector pos_inicial,bool respawns);
     bool changeMovementState(MovementState state);
     MovementState getCurrentMovementState();
     bool changeShootingState(ShootingState state);
     ShootingState getCurrentShootingState();
     bool changeRotationState(MovementState state);
 	MovementState getCurrentRotationState();
+    bool changeFiringState(FiringState state);
+    FiringState getCurrentFiringState();
 	~Player();
 };
 

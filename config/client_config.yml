@@ -22,6 +22,28 @@ menu_ui:
     width: 440
     height: 300
     gilding: 3
+  lobby_box:
+    x_pos: 100
+    y_pos: 100
+    width: 440
+    height: 200
+    gilding: 3
+    header_text:
+      x_pos: 320
+      y_pos: 130
+      text: Waiting for players...
+    time_text:
+      x_pos: 250
+      y_pos: 170
+      text: 'Time remaining: '
+    players_text:
+      x_pos: 170
+      y_pos: 210
+      text: 'Players: '
+    back_text:
+      x_pos: 320
+      y_pos: 330
+      text: CANCEL
   directory: ../assets/menu_ui/
   font: wolfenstein.ttf
   background: background.png

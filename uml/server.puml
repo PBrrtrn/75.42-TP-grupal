@@ -1,0 +1,178 @@
+@startuml uml
+
+class Action
+class ChangeWeaponAmetralladora
+class ChangeWeaponPistola
+class ChangeWeaponCuchillo
+class ChangeWeaponCanion
+class ChangeWeaponLanzaCohetes
+class MoveBackward
+class MoveForward
+class MoveLeft
+class MoveRight
+class Shoot 
+class UseDoor 
+
+class Message 
+class ReceiveClientMessages
+class ThreadAcceptor 
+class ThreadClient 
+class MessageProcesor
+
+class ClientGameStatus
+class Door 
+class DoorSerializer
+class SpawnPointSerializer
+class GameManager
+class GameStatus
+class LobbyStatus
+class MapServer
+class Player
+class ServerStatus
+class SpawnPoints
+class Statistics
+class ThreadGame
+
+class Item 
+class ArmaAmetralladora
+class ArmaCanion
+class ArmaLanzaCohetes
+class Barrel
+class Blood
+class Bullets
+class Corpse 
+class Food 
+class Key 
+class Medkit
+class Table 
+class Treasure
+class Water
+class ItemSerializer
+
+class Arma 
+class Ametralladora 
+class CanionDeCadena
+class Cuchillo 
+class LanzaCohetes 
+class Pistola 
+
+class Server
+
+Server : ThreadAcceptor acceptor
+Server : start()
+
+Item : 	bool pickUp(Player& p)
+Item : 	bool canBePickedUp()
+Item : 	int getTimeToRespawn()
+Item : 	virtual bool pickUpAction(Player& p)
+Item : 	Vector getPosition()
+Item : 	bool isVisible()
+Item : 	bool hasVolume()
+Item : 	ItemType getType()
+
+Arma : 	virtual bool aimWeapon(float target_angle, float shooter_angle, float target_distance);
+
+Action : tryAction(GameStatus& gs, int clientID)
+Action : is_colision(int clientID, Vector& next_position, GameStatus& gs)
+
+Message : MessageType type
+Message : int entity
+Message : int clientId
+
+ReceiveClientMessages : ProtectedQueue<Message>* messages
+ReceiveClientMessages : Socket peer
+ReceiveClientMessages : assignToGameQueue(ProtectedQueue<Message>* messages)
+ReceiveClientMessages : Socket& getPeerReference()
+
+ThreadAcceptor : Socket socket
+ThreadAcceptor : BlockingQueue<Message> messages
+ThreadAcceptor : GameManager gameManager
+ThreadAcceptor : void acceptConnection()
+ThreadAcceptor : virtual void run() override
+ThreadAcceptor : void shutdown()
+
+ThreadClient : BlockingQueue<Message>* messages_out
+ThreadClient : Socket& peer
+ThreadClient : ServerStatus serverStatus
+ThreadClient : LobbyStatus& lobbyStatus
+ThreadClient : ClientGameStatus* game_status
+ThreadClient : virtual void run() override
+ThreadClient : void shutdown()
+ThreadClient : void assignToOutQueue(BlockingQueue<Message>* messages_out)
+ThreadClient : void assignToGameStatus(ClientGameStatus* gs)
+ThreadClient : void sendGamesList()
+ThreadClient : void sendMapsList()
+ThreadClient : void sendLobbyStatus(int gameID)
+ThreadClient : void sendGameStatistics()
+ThreadClient : void informClientId()
+ThreadClient : void sendCurrentGameMap()
+ThreadClient : void informNothingToReport()
+ThreadClient : void informSomethingToReport(MessageType type)
+
+Server *-- ThreadAcceptor
+ThreadAcceptor *-- Socket
+ThreadAcceptor *-- BlockingQueue
+ThreadAcceptor *-- GameManager
+ThreadAcceptor *-- Message
+ThreadAcceptor *-- MessageProcesor
+GameManager *-- ProtectedQueue
+GameManager *-- Message
+ReceiveClientMessages *-- ProtectedQueue
+ReceiveClientMessages *-- Socket
+ReceiveClientMessages *-- Message
+ThreadGame *-- ProtectedQueue
+ThreadGame *-- BlockingQueue
+ThreadGame *-- Action
+ThreadGame *-- lobbyStatus
+ThreadGame *-- GameStatus
+ThreadGame *-- Message
+GameStatus *-- Player
+GameStatus *-- MapServer
+GameStatus *-- Statistics
+GameStatus *-- Item
+GameStatus *-- SpawnPoints
+GameStatus *-- Door
+Player *-- Arma
+ThreadClient *-- BlockingQueue
+ThreadClient *-- Socket
+ThreadClient *-- ServerStatus
+ThreadClient *-- LobbyStatus
+ThreadClient *-- ClientGameStatus
+ThreadClient *-- Message
+MapServer *-- ItemSerializer
+MapServer *-- DoorSerializer
+MapServer *-- SpawnPointSerializer
+
+Arma <|-- Ametralladora 
+Arma <|-- CanionDeCadena
+Arma <|-- Cuchillo 
+Arma <|-- LanzaCohetes 
+Arma <|-- Pistola 
+
+Item <|-- ArmaAmetralladora
+Item <|-- ArmaCanion
+Item <|-- ArmaLanzaCohetes
+Item <|-- Barrel
+Item <|-- Blood
+Item <|-- Bullets
+Item <|-- Corpse 
+Item <|-- Food 
+Item <|-- Key 
+Item <|-- Medkit
+Item <|-- Table 
+Item <|-- Treasure
+Item <|-- Water
+Item <|-- ItemSerializer
+
+Action <|-- ChangeWeaponAmetralladora
+Action <|-- ChangeWeaponPistola
+Action <|-- ChangeWeaponCuchillo
+Action <|-- ChangeWeaponCanion
+Action <|-- ChangeWeaponLanzaCohetes
+Action <|-- MoveBackward
+Action <|-- MoveForward
+Action <|-- MoveLeft
+Action <|-- MoveRight
+Action <|-- Shoot 
+Action <|-- UseDoor 
+@enduml
