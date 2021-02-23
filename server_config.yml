@@ -34,10 +34,22 @@ Pistola:
   Idx: 1
   Cadencia: -1
   Precision: 0.2
+Blood:
+  Points: 1
+Food:
+  Points: 10
+Medkit:
+  Points: 20
+Treasure:
+  Points: 50
 Moves:
   Step: 0.1
   RotationLeft: 0.1
   RotationRight: -0.1
+Game:
+  GameTime: 30000
+  LobbyTime: 20
+  FPS: 29
 Server:
   Hostname: localhost
   Port: 9006

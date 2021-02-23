@@ -4,10 +4,11 @@
 #include <atomic>
 #include <SDL2/SDL.h>
 
-#include "UpdateQueue.h"
 #include "MenuInputHandler.h"
 #include "GameInputHandler.h"
-#include "../ServerConnection.h"
+#include "../game_status/MenuStatus.h"
+#include "../../common_src/blocking_queue.h"
+#include "../../common_src/ClientMessage.h"
 
 class InputHandler {
 private:
@@ -15,12 +16,10 @@ private:
 	MenuInputHandler menu_input_handler;
 	GameInputHandler game_input_handler;
 public:
-	InputHandler(std::atomic<bool>& in_game, 
-							 UpdateQueue& update_queue,
-							 ServerConnection& server_connection,
-							 BlockingQueue<MessageType>& blockingQueue);
+	InputHandler(std::atomic<bool>& in_game, MenuStatus& menu_status,
+							 BlockingQueue<ClientMessage>& message_queue);
 	~InputHandler();
-	void process(SDL_Event user_event);
+	void process(SDL_Event user_input);
 };
 
 #endif

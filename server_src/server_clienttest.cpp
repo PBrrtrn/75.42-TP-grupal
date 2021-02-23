@@ -72,7 +72,7 @@ void getAndPrintMapList(Socket& socket){
 void askForGameList(Socket& socket){	
 	ClientMessage m;
 	
-	m.type = TYPE_REFRESH_GAMES_LIST;
+	m.type = CLIENT_REQUEST_GAMES_LIST;
 	m.entityId = 0;
 	
 	socket.socket_send((char*)(&m),sizeof(m));
@@ -81,7 +81,7 @@ void askForGameList(Socket& socket){
 void askForMapList(Socket& socket){	
 	ClientMessage m;
 	
-	m.type = TYPE_SEND_MAPS_LIST;
+	m.type = CLIENT_REQUEST_MAPS_LIST;
 	m.entityId = 0;
 	
 	socket.socket_send((char*)(&m),sizeof(m));	
@@ -101,9 +101,9 @@ m.type = caracter;
 m.entityId = mapOrGameId;
 
 //envio el evento join game, ej: j 3
-if (caracter == TYPE_JOIN_GAME)
+if (caracter == CLIENT_REQUEST_JOIN_GAME)
 	std::cout << "send join game" << std::endl;	
-if (caracter == TYPE_START_GAME)
+if (caracter == CLIENT_REQUEST_CREATE_GAME)
 	std::cout << "send start game" << std::endl;	
 //socket.socket_send(buffer,length);
 socket.socket_send((char*)(&m),sizeof(m));	
@@ -205,18 +205,18 @@ int main(const int argc, const char* argv[]) {
 		
 		if (line[0] == 'j' ) {
 			char mapOrGameId = std::stoi(line.substr(2,1));
-			joinOrStartGame(socket,TYPE_JOIN_GAME,mapOrGameId);
+			joinOrStartGame(socket,CLIENT_REQUEST_JOIN_GAME,mapOrGameId);
 			
 		}	
 
 		if (line[0] == 'n') {
 			char mapOrGameId = std::stoi(line.substr(2,1));
-			joinOrStartGame(socket,TYPE_START_GAME,mapOrGameId);
+			joinOrStartGame(socket,CLIENT_REQUEST_CREATE_GAME,mapOrGameId);
 			
 		}
 		
 		//se escribio "e"
-		if (line[0] == TYPE_EXIT_GAME) {
+		if (line[0] == 'e') {
 			//size_t length;
 			//buffer[0] = TYPE_EXIT_GAME;
 			//buffer[1] = 0;
@@ -224,7 +224,7 @@ int main(const int argc, const char* argv[]) {
 			
 			ClientMessage m;
 
-			m.type = TYPE_EXIT_GAME;
+			m.type = CLIENT_REQUEST_LEAVE_GAME;
 			m.entityId = 0;			
 			
 			//envio el evento new game, ej: n 10
@@ -238,14 +238,14 @@ int main(const int argc, const char* argv[]) {
 			break;
 		}			
 		
-		if (line[0] == TYPE_REFRESH_GAMES_LIST) {
+		if (line[0] == CLIENT_REQUEST_GAMES_LIST) {
 			std::cout << "send request game list" << std::endl;	
 			askForGameList(socket);
 			getAndPrintGameList(socket);
 			
 		}	
 				
-		if (line[0] == TYPE_SEND_MAPS_LIST) {
+		if (line[0] == CLIENT_REQUEST_MAPS_LIST) {
 			std::cout << "send request maps list" << std::endl;	
 			askForMapList(socket);
 			getAndPrintMapList(socket);
