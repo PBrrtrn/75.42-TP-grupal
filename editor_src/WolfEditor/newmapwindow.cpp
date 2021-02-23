@@ -2,9 +2,6 @@
 
 NewMapWindow::NewMapWindow(int& height,int& width,int& minPlayers,int& maxPlayers,QWidget *parent) : QWidget(parent),map(map),mapHeight(height),mapWidth(width),mapMinPlayers(minPlayers),mapMaxPlayers(maxPlayers)
 {
-    //QWidget *centralwidget;
-    //centralwidget = new QWidget(this);
-    //centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
 
     QLabel *heightLabel;
     heightLabel = new QLabel(this);
@@ -57,7 +54,6 @@ void NewMapWindow::on_createNewMap_clicked(){
     this->mapWidth = std::stoi(this->widthEdit->text().toUtf8().constData());
     this->mapMinPlayers = 2;
     this->mapMaxPlayers = 16;
-    //map = MapServer(height,width,minPlayers,maxPlayers);
     emit this->newMapCreated();
     this->close();
 
@@ -67,7 +63,3 @@ void NewMapWindow::on_cancelNewMap_clicked(){
 
 }
 
-//void NewMapWindow::newMapCreated(){
-
-
-//}

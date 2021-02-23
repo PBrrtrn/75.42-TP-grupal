@@ -38,9 +38,7 @@ MapServer::MapServer(MapServer&& from){
 
 void MapServer::loadItems(){
 	for (std::vector<std::string>::iterator it = this->items_yml.begin() ; it != this->items_yml.end(); ++it) {
-		//this->items.push_back(this->item_serializer.deserialize(*it));
 		Item* item = this->item_serializer.deserialize(*it);
-		std::cout << "type in mapserver: " << std::to_string(item->getType()) << std::endl;
 		this->items.push_back(item);
 		
 	}	
@@ -156,7 +154,6 @@ void MapServer::setGridValue(int x, int y,int newValue) {
 }
 
 MapServer::~MapServer() { 
-	std::cout << "mapserver destructor"<< std::endl;
 	for (auto x : this->items) {
 		delete x;
 	}

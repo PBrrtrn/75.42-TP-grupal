@@ -100,7 +100,6 @@ void LayoutItem::mousePressEvent(QGraphicsSceneMouseEvent *event){
 
 void LayoutItem::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
-    qDebug("Item dragEnterEvent");
 
     if (!this->hasItem){
         event->acceptProposedAction();
@@ -109,12 +108,6 @@ void LayoutItem::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 
 void LayoutItem::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
-
-    qDebug("Item dropEvent");
-
-    //qDebug(std::to_string(this->pos_x).c_str());
-    //qDebug(std::to_string(this->pos_y).c_str());
-
     if (!this->hasItem){
 
         EditorItemSerializer factory;
@@ -122,11 +115,9 @@ void LayoutItem::dropEvent(QGraphicsSceneDragDropEvent *event)
 
         if (event->mimeData()->text() == "SPAWNPOINT")
         {
-            qDebug("Spawn dropEvent");
             SpawnPoint sp(Vector(this->pos_x,this->pos_y),Vector(1,0));
             this->map->insertSpawnPoint(sp);
         } else  {
-            qDebug("InsertItem dropEvent");
             this->map->insertItem(factory.getItem(this->pos_x,this->pos_y,event->mimeData()->text().toUtf8().constData()));
         }
         this->hasItem = true;
@@ -146,10 +137,6 @@ void LayoutItem::dropEvent(QGraphicsSceneDragDropEvent *event)
         }
 
         this->update();
-
-        //qDebug(serializer.serialize(i).c_str());
-
-        //msgBox.exec();
         event->acceptProposedAction();
     }
 }

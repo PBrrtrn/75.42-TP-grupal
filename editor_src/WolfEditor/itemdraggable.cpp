@@ -1,19 +1,13 @@
 #include "itemdraggable.h"
 
-#include <QMessageBox>
-
 ItemDraggable::ItemDraggable(QWidget* widget): QLabel(widget)
 {
-    //this->itemData = "a";
     this->setAcceptDrops(true);
 }
 
 void ItemDraggable::mousePressEvent(QMouseEvent *event)
 {
-    qDebug("drag and drop start");
-
-    if (event->button() == Qt::LeftButton
-        /*&& iconLabel->geometry().contains(event->pos()) */ ) {
+    if (event->button() == Qt::LeftButton ) {
 
         QDrag *drag = new QDrag(this);
         QMimeData *mimeData = new QMimeData;
@@ -24,30 +18,4 @@ void ItemDraggable::mousePressEvent(QMouseEvent *event)
 
         Qt::DropAction dropAction = drag->exec();
     }
-}
-
-void ItemDraggable::dragEnterEvent(QDragEnterEvent *event)
-{
-    if (true){
-
-
-        //QMessageBox msgBox;
-
-        //msgBox.setText("hola, drop");
-        //msgBox.exec();
-        //event->setAccepted(true);
-        event->acceptProposedAction();
-    }
-}
-
-void ItemDraggable::dropEvent(QDropEvent *event)
-{
-
-    QMessageBox msgBox;
-    msgBox.setText(event->mimeData()->text());
-    //msgBox.setText("hola, drop");
-
-
-    msgBox.exec();
-    event->acceptProposedAction();
 }
