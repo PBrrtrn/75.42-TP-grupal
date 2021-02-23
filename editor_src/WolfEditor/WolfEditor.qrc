@@ -16,5 +16,6 @@
         <file>images/itemkey.png</file>
         <file>images/itemmedkit.png</file>
         <file>images/itemtreasure.png</file>
+        <file>images/itemspawn.png</file>
     </qresource>
 </RCC>

@@ -11,7 +11,8 @@ static std::unordered_map<int,std::string> textures({{1,":/images/itembullets.pn
                                                      {4,":/images/itemametralladora.png"},
                                                      {9,":/images/itemkey.png"},
                                                      {10,":/images/itemmedkit.png"},
-                                                     {12,":/images/itemtreasure.png"}
+                                                     {12,":/images/itemtreasure.png"},
+                                                     {999,":/images/itemspawn.png"}
                                                });
 }
 

@@ -113,9 +113,15 @@ void LayoutItem::dropEvent(QGraphicsSceneDragDropEvent *event)
         EditorItemSerializer factory;
         ItemSerializer serializer;
 
-        //QMessageBox msgBox;
-        //Item i =
-        this->map.insertItem(factory.getItem(this->pos_x,this->pos_y,event->mimeData()->text().toUtf8().constData()));
+        if (event->mimeData()->text() == "SPAWNPOINT")
+        {
+            qDebug("Spawn dropEvent");
+            SpawnPoint sp(Vector(this->pos_x,this->pos_y),Vector(1,0));
+            this->map.insertSpawnPoint(sp);
+        } else  {
+            qDebug("InsertItem dropEvent");
+            this->map.insertItem(factory.getItem(this->pos_x,this->pos_y,event->mimeData()->text().toUtf8().constData()));
+        }
         this->hasItem = true;
         //msgBox.setText(serializer.serialize(i).c_str());
         //msgBox.setText(this->pos_x);
@@ -126,6 +132,14 @@ void LayoutItem::dropEvent(QGraphicsSceneDragDropEvent *event)
                 m_pix = QPixmap(QLatin1String(texture.c_str())).scaled(QSize(this->scale,this->scale));
             }
         }
+
+        for (auto& it: this->map.getRespawnPoints()) {
+            if (it.getPosition().getXCoordinate() == this->pos_x && it.getPosition().getYCoordinate() == this->pos_y){
+                std::string texture = ObjectList::textures.at(999);
+                m_pix = QPixmap(QLatin1String(texture.c_str())).scaled(QSize(this->scale,this->scale));
+            }
+        }
+
         this->update();
 
         //qDebug(serializer.serialize(i).c_str());

@@ -178,6 +178,28 @@
      <string/>
     </property>
    </widget>
+   <widget class="ItemSpawnPoint" name="spawnPoint">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>200</y>
+      <width>40</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>30</width>
+      <height>30</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">image: url(:/images/itemspawn.png);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
    <zorder>wallListLabel</zorder>
    <zorder>wallList</zorder>
    <zorder>objectListLabel</zorder>
@@ -186,6 +208,7 @@
    <zorder>itemTreasure</zorder>
    <zorder>itemBullets</zorder>
    <zorder>itemAmetralladora</zorder>
+   <zorder>spawnPoint</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -261,6 +284,11 @@
    <class>ItemAmetralladora</class>
    <extends>QLabel</extends>
    <header>itemametralladora.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ItemSpawnPoint</class>
+   <extends>QLabel</extends>
+   <header>itemspawnpoint.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
