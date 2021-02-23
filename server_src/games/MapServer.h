@@ -40,7 +40,7 @@ private:
 
 public:
 	MapServer(const std::string& file_location);
-	MapServer(int width,int height);
+	MapServer(int width,int height,int minPlayers,int maxPlayers);
 	std::string getSerializedMap();
 	void setGridValue(int x, int y,int newValue);
 	~MapServer();

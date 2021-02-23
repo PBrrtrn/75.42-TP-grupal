@@ -8,7 +8,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow),currentMap(MapServer(1,1))
+    , ui(new Ui::MainWindow),currentMap(MapServer(1,1,1,1))
 {
     ui->setupUi(this);
 

@@ -103,11 +103,44 @@ Map& MapServer::getMap() {
 }
 
 std::string MapServer::getSerializedMap() {
-	std::string serializedMapServer = this->map.getSerializedMap();
-	return serializedMapServer;
+	std::string serializedMap = this->map.getSerializedMap();
+	std::vector<std::string> serializedItems;
+	std::vector<std::string> serializedRespawns;
+	
+	ItemSerializer itemSerializer;
+	SpawnPointSerializer respawnSerializer;
+	
+	for (auto& it: this->items) {
+		std::string itemSerialized = itemSerializer.serialize(it);
+		serializedItems.push_back(itemSerialized);
+    }
+	for (auto& it: this->respawnPoints) {
+		std::string respawn = respawnSerializer.serialize(it);
+		serializedRespawns.push_back(respawn);
+    }	
+    YAML::Emitter outMap;
+    
+    outMap << YAML::BeginMap;
+		outMap << YAML::Key << "minPlayers";
+		outMap << YAML::Value << this->minPlayers ;	
+		outMap << YAML::Key << "maxPlayers";
+		outMap << YAML::Value << this->maxPlayers ;	
+		
+		outMap << YAML::Key << "items";
+		outMap << YAML::Value << YAML::Flow << serializedItems;		
+		
+		outMap << YAML::Key << "spawnpoints";
+		outMap << YAML::Value << YAML::Flow << serializedRespawns;	
+
+	outMap << YAML::EndMap;
+	
+	
+	return std::string(outMap.c_str()) + '\n' + serializedMap;
 }
 
-MapServer::MapServer(int width,int height) : map(width,height){
+MapServer::MapServer(int width,int height,int minPlayers,int maxPlayers) : map(width,height){
+	this->minPlayers = minPlayers;
+	this->maxPlayers = maxPlayers;
 }
 
 void MapServer::setGridValue(int x, int y,int newValue) {
