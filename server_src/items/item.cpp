@@ -14,7 +14,6 @@ bool Item::pickUpAction(Player& p) {
 }
 
 bool Item::pickUp(Player& p){
-
 	if(this->pickUpAction(p)) {
 		this->canBePicked = false;
 		return true;

@@ -18,10 +18,8 @@ Socket& ReceiveClientMessages::getPeerReference() {
 void ReceiveClientMessages::run() {
     while (this->keep_running) {
         ClientMessage client_message;
-        std::cout << "Receiving client message" << std::endl;
         int received = this->peer.socket_receive((char*)&client_message, 
                                                  sizeof(ClientMessage));
-        std::cout << "Received client message:"<< std::to_string(this->id) << std::endl;
 
         if (received < sizeof(ClientMessage)) {
             std::cout << "recv en threadclient fallo, no recibi nada! (cerro el socket?)" << std::endl;
@@ -30,14 +28,10 @@ void ReceiveClientMessages::run() {
             Message m(client_message.type, client_message.entityId, this->id);
             
             if (this->messages != NULL){
-				std::cout << "about to push to game queue, idclient:"<< std::to_string(this->id) << std::endl;
 				this->messages->push(m);
-				std::cout << "pushed to game queue, idclient:"<< std::to_string(this->id) << std::endl;
 			}
 			else {
-				std::cout << "about to push to server queue, idclient:"<< std::to_string(this->id) << std::endl;
 				this->serverMessages->push(m);
-				std::cout << "pushed to server queue, idclient:"<< std::to_string(this->id) << std::endl;
 			}
         }
         /*

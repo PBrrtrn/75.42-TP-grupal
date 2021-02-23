@@ -55,7 +55,9 @@ void NewMapWindow::on_createNewMap_clicked(){
 
     int height = std::stoi(this->heightEdit->text().toUtf8().constData());
     int width = std::stoi(this->widthEdit->text().toUtf8().constData());
-    map = MapServer(height,width);
+    int minPlayers = 2;
+    int maxPlayers = 16;
+    map = MapServer(height,width,minPlayers,maxPlayers);
     emit this->newMapCreated();
     this->close();
 

@@ -21,8 +21,8 @@
 class ItemSerializer {
     public:
         ItemSerializer();
-        Item deserialize(const std::string& serializedItem);
-        std::string serialize(Item& item);
+        Item* deserialize(const std::string& serializedItem);
+        std::string serialize(Item* item);
         ~ItemSerializer();
 };
 

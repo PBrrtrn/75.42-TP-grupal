@@ -25,7 +25,7 @@ private:
 	int maxPlayers;
 	
 	std::vector<std::string> items_yml;
-	std::vector<Item> items;
+	std::vector<Item*> items;
 	std::vector<std::string> doors_yml;
 	std::vector<Door> doors;
 	std::vector<SpawnPoint> respawnPoints;
@@ -40,7 +40,7 @@ private:
 
 public:
 	MapServer(const std::string& file_location);
-	MapServer(int width,int height);
+	MapServer(int width,int height,int minPlayers,int maxPlayers);
 	std::string getSerializedMap();
 	void setGridValue(int x, int y,int newValue);
 	~MapServer();
@@ -56,7 +56,7 @@ public:
 	void insertItem(Item item);
 	void insertSpawnPoint(SpawnPoint s);
 	
-	std::vector<Item> getItems();
+	std::vector<Item*> getItems();
 	std::vector<Door> getDoors();
 	std::vector<SpawnPoint> getRespawnPoints();
 	

@@ -5,6 +5,7 @@ class ThreadAcceptor
 class ThreadClient 
 class ThreadGame
 class Thread
+class MessageProcessor
 class GameManager
 class ProtectedQueue
 class BlockingQueue
@@ -54,6 +55,8 @@ GameManager *-- ThreadGame
 GameManager *-- ReceiveClientMessages
 GameManager *-- ThreadClient
 
+MessageProcessor *-- GameManager
+
 ReceiveClientMessages *-- ProtectedQueue
 ReceiveClientMessages *-- Socket
 
@@ -68,5 +71,6 @@ Thread <|-- ThreadClient
 Thread <|-- ThreadGame
 Thread <|-- ThreadAcceptor
 Thread <|-- ReceiveClientMessages
+Thread <|-- MessageProcessor
 
 @enduml
