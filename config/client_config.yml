@@ -81,6 +81,10 @@ consumables:
 animations:
   weapons:
     - directory: ../assets/sprites/player_weapons/pistol/
+      x_pos: 120
+      y_pos: 310
+      width: 420
+      height: 120
       idle:
         - pistol_idle.png
       shooting:

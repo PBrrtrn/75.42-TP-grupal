@@ -9,6 +9,10 @@
 
 class PlayerWeapon {
 private:
+	int sprite_x_pos;
+	int sprite_y_pos;
+	int sprite_width;
+	int sprite_height;
   Animation* idle_animation;
   TimedAnimation* shooting_animation;
 public:
