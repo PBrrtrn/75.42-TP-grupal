@@ -1,8 +1,6 @@
 diferentes valores de tesoro
 lanzacohetes
-botones editor
 close safe cliente
 musica fondo
-join message processor
 cadencia armas
 export path en instalador para que queden los ejecutables disponibles

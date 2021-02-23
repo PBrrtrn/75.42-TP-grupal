@@ -9,6 +9,7 @@
 #include "../game_status/GameStatusMonitor.h"
 #include "../game_status/MenuStatus.h"
 #include "Window.h"
+#include "PlayerWeapon.h"
 #include "Font.h"
 #include "Animation.h"
 #include "Texture.h"
@@ -28,6 +29,7 @@ private:
   int fps_cap;
   std::vector<Animation*> enemy_animations;
   std::vector<Texture*> wall_textures;
+  std::vector<PlayerWeapon*> player_weapons;
   void load();
   void renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer);
 public:

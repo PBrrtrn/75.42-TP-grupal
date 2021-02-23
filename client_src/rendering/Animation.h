@@ -14,6 +14,9 @@ private:
 public:
   Animation(SDL_Renderer* renderer, std::vector<std::string> frame_paths);
   ~Animation();
+  void renderNextFrame(SDL_Renderer* renderer, 
+  										 int x_pos, int y_pos,
+  										 int width, int height);
   void render(SDL_Renderer* renderer, 
               int x_pos, int y_pos, 
               int width, int height);
