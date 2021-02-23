@@ -159,6 +159,10 @@ bool GameStatus::changeRotationState(int clientId,MovementState state){
 	return this->players.at(clientId).changeRotationState(state);
 }
 
+bool GameStatus::changeFiringState(int clientId, FiringState state) {
+	return this->players.at(clientId).changeFiringState(state);
+}
+
 std::unordered_map<int,MovementState> GameStatus::getPlayerMovementStates(){
 	std::unordered_map<int,MovementState> states;
 	for (auto& p: this->players){

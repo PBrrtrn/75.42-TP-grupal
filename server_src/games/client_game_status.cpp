@@ -19,6 +19,7 @@ void ClientGameStatus::updateThisGameStatus(){
 		this->thisPlayerStatus.bullets = this->gameStatus.players.at(assignedClientId).getCurrentBullets();
 		this->thisPlayerStatus.lives = this->gameStatus.players.at(assignedClientId).getLives();
 		this->thisPlayerStatus.hasKey = this->gameStatus.players.at(assignedClientId).hasKey();
+		this->thisPlayerStatus.firing_state = this->gameStatus.players.at(assignedClientId).getCurrentFiringState();
 		for (auto& it: this->gameStatus.players) {
 			if (this->players.find(it.first) == this->players.end()) {
 				PlayerListItem p;

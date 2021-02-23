@@ -14,6 +14,7 @@
 #include "../server_config.h"
 #include "../actions/MovementState.h"
 #include "../actions/ShootingState.h"
+#include "../../common_src/FiringState.h"
 
 class Player {
 	int id;
@@ -34,6 +35,7 @@ class Player {
     Pistola pistola;
     MovementState movement_state;
     ShootingState shooting_state;
+    FiringState firing_state;
     MovementState rotation_state;
     bool _addWeapon(int idx, Arma* arma);
 
@@ -70,6 +72,8 @@ public:
     ShootingState getCurrentShootingState();
     bool changeRotationState(MovementState state);
 	MovementState getCurrentRotationState();
+    bool changeFiringState(FiringState state);
+    FiringState getCurrentFiringState();
 	~Player();
 };
 

@@ -8,6 +8,7 @@ Shoot::Shoot(){}
 
 void Shoot::tryAction(GameStatus& gs, int clientID){
     std::cout << "---------En tryAction de shoot----------" << std::endl;
+    gs.changeFiringState(clientID, STATE_FIRING);
     for (auto& it: gs.players) {
         int target_id = it.first;
         Player& target = it.second;
