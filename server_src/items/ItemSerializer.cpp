@@ -1,5 +1,9 @@
 #include "ItemSerializer.h"
 
+#include <algorithm>
+
+#include <iostream>
+
 ItemSerializer::ItemSerializer(){}
 
 Item* ItemSerializer::deserialize(const std::string& serializedItem){
@@ -13,6 +17,10 @@ Item* ItemSerializer::deserialize(const std::string& serializedItem){
 	type = (ItemType)std::stoi(word);
 	ss >> positionX;
 	ss >> positionY;
+	
+	std::cout << "type: " << std::to_string(type) << std::endl;
+	std::cout << "positionX: " << positionX << std::endl;
+	std::cout << "positionY: " << positionY << std::endl;
 	
 	switch (type) {
 		case TYPE_FOOD:
@@ -69,6 +77,9 @@ std::string ItemSerializer::serialize(Item* item){
 
 	std::string x = std::to_string(item->getPosition().getXCoordinate());
 	std::string y = std::to_string(item->getPosition().getYCoordinate());
+	
+	std::replace(x.begin(),x.end(),',','.');
+	std::replace(y.begin(),y.end(),',','.');
 	
 	return type + " " + x + " " + y;
 }

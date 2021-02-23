@@ -1,6 +1,6 @@
 #include "newmapwindow.h"
 
-NewMapWindow::NewMapWindow(MapServer& map,QWidget *parent) : QWidget(parent),map(map)
+NewMapWindow::NewMapWindow(int& height,int& width,int& minPlayers,int& maxPlayers,QWidget *parent) : QWidget(parent),map(map),mapHeight(height),mapWidth(width),mapMinPlayers(minPlayers),mapMaxPlayers(maxPlayers)
 {
     //QWidget *centralwidget;
     //centralwidget = new QWidget(this);
@@ -53,11 +53,11 @@ NewMapWindow::NewMapWindow(MapServer& map,QWidget *parent) : QWidget(parent),map
 void NewMapWindow::on_createNewMap_clicked(){
 
 
-    int height = std::stoi(this->heightEdit->text().toUtf8().constData());
-    int width = std::stoi(this->widthEdit->text().toUtf8().constData());
-    int minPlayers = 2;
-    int maxPlayers = 16;
-    map = MapServer(height,width,minPlayers,maxPlayers);
+    this->mapHeight = std::stoi(this->heightEdit->text().toUtf8().constData());
+    this->mapWidth = std::stoi(this->widthEdit->text().toUtf8().constData());
+    this->mapMinPlayers = 2;
+    this->mapMaxPlayers = 16;
+    //map = MapServer(height,width,minPlayers,maxPlayers);
     emit this->newMapCreated();
     this->close();
 

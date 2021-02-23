@@ -8,7 +8,7 @@ class EditorItemSerializer
 {    
 public:
     EditorItemSerializer();
-    Item getItem(float x,float y,std::string type);
+    Item* getItem(float x,float y,std::string type);
 };
 
 #endif // EDITORITEMSERIALIZER_H

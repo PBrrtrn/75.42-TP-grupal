@@ -8,7 +8,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow),currentMap(MapServer(1,1,1,1))
+    , ui(new Ui::MainWindow) /*,currentMap(MapServer(1,1,1,1))*/
 {
     ui->setupUi(this);
 
@@ -18,16 +18,6 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-//void MainWindow::on_botonArriba_clicked(){
-//    this->setWindowTitle("hola");
-
-//}
-
-//void MainWindow::on_botonAbajo_clicked(){
-//    this->setWindowTitle("chau");
-
-//}
 
 void MainWindow::on_actionNew_triggered(){
     this->newFile();
@@ -53,14 +43,15 @@ void MainWindow::saveFile()
     QString fileName = QFileDialog::getSaveFileName(this);
     if (!fileName.isEmpty()){
         std::ofstream foutMap(fileName.toUtf8().constData());
-        foutMap << this->currentMap.getSerializedMap().c_str();
+        //foutMap << this->currentMapGrid->getSerializedMap().c_str();
+        foutMap << this->currentMap->getSerializedMap().c_str();
         foutMap.close();
     }
 }
 
 void MainWindow::newFile()
 {
-    NewMapWindow *nw = new NewMapWindow(this->currentMap,this);
+    NewMapWindow *nw = new NewMapWindow(this->currentMapWidth,this->currentMapHeight,this->currentMapMinPlayers,this->currentMapMaxPlayers,this);
 
     QObject::connect(nw, SIGNAL(newMapCreated()), this, SLOT(on_newMapCreated()));
 
@@ -72,16 +63,32 @@ void MainWindow::newFile()
 }
 
 void MainWindow::on_newMapCreated(){
+
+    qDebug(std::to_string(this->currentMapHeight).c_str());
+
+    //MapServer newMap(this->currentMapWidth,this->currentMapHeight,this->currentMapMinPlayers,this->currentMapMaxPlayers);
+
+    this->currentMap = new MapServer(this->currentMapWidth,this->currentMapHeight,this->currentMapMinPlayers,this->currentMapMaxPlayers);
+
+    //GameMapGrid* mapGrid = new GameMapGrid(std::move(newMap),this->appStatus);
     GameMapGrid* mapGrid = new GameMapGrid(this->currentMap,this->appStatus);
+
+    //this->currentMapGrid = mapGrid;
+
+    qDebug("after current map grid");
 
     QGraphicsScene* scene = new QGraphicsScene;
     scene->addItem(mapGrid);
+
+    qDebug("after add item map grid");
 
     ui->gameMapView->setScene(scene);
     ui->gameMapView->setBackgroundBrush(QBrush(Qt::lightGray,Qt::SolidPattern));
     //ui->gameMapView->setAcceptDrops(true);
     ui->gameMapView->show();
     this->repaint();
+
+    qDebug("fin new map created");
 
 }
 
@@ -95,8 +102,19 @@ void MainWindow::openFile()
     QString fileName = QFileDialog::getOpenFileName(this);
     //std::string fileName = QFileDialog::getOpenFileName(this).toUtf8().constData();
     if (!fileName.isEmpty()){
-        this->currentMap = MapServer(fileName.toUtf8().constData());
+        qDebug("before openfile assign map");
+        //this->currentMap = MapServer(std::move(MapServer(fileName.toUtf8().constData())));
+        qDebug("after openfile assign map");
+        //GameMapGrid* mapGrid = new GameMapGrid(this->currentMap,this->appStatus);
+        //MapServer newMap(MapServer(fileName.toUtf8().constData()));
+
+        this->currentMap = new MapServer(fileName.toUtf8().constData());
+
+        //GameMapGrid* mapGrid = new GameMapGrid(std::move(newMap),this->appStatus);
+
         GameMapGrid* mapGrid = new GameMapGrid(this->currentMap,this->appStatus);
+
+        //this->currentMapGrid = mapGrid;
 
         QGraphicsScene* scene = new QGraphicsScene;
         scene->addItem(mapGrid);

@@ -23,9 +23,25 @@ MapServer::MapServer(const std::string& file_location): map(file_location.c_str(
 	
 }
 
+MapServer::MapServer(MapServer&& from){
+	
+	this->map = from.map;
+	this->minPlayers = from.minPlayers;
+	this->maxPlayers = from.maxPlayers;
+	
+	this->items = from.items;
+	this->respawnPoints = from.respawnPoints;
+	this->doors = from.doors;
+	from.items = std::vector<Item*>();
+	
+}
+
 void MapServer::loadItems(){
 	for (std::vector<std::string>::iterator it = this->items_yml.begin() ; it != this->items_yml.end(); ++it) {
-		this->items.push_back(this->item_serializer.deserialize(*it));
+		//this->items.push_back(this->item_serializer.deserialize(*it));
+		Item* item = this->item_serializer.deserialize(*it);
+		std::cout << "type in mapserver: " << std::to_string(item->getType()) << std::endl;
+		this->items.push_back(item);
 		
 	}	
 }
@@ -102,7 +118,7 @@ std::string MapServer::getSerializedMap() {
 	ItemSerializer itemSerializer;
 	SpawnPointSerializer respawnSerializer;
 	
-	for (auto& it: this->items) {
+	for (auto it: this->items) {
 		std::string itemSerialized = itemSerializer.serialize(it);
 		serializedItems.push_back(itemSerialized);
     }
@@ -140,13 +156,14 @@ void MapServer::setGridValue(int x, int y,int newValue) {
 }
 
 MapServer::~MapServer() { 
+	std::cout << "mapserver destructor"<< std::endl;
 	for (auto x : this->items) {
 		delete x;
 	}
 }
 
-void MapServer::insertItem(Item item){
-	//this->items.push_back(item);
+void MapServer::insertItem(Item* item){
+	this->items.push_back(item);
 }
 
 void MapServer::insertSpawnPoint(SpawnPoint s){

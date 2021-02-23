@@ -31,8 +31,14 @@ private slots:
 
 
 private:
+    int currentMapWidth;
+    int currentMapHeight;
+    int currentMapMinPlayers;
+    int currentMapMaxPlayers;
+    //GameMapGrid* currentMapGrid;
+    MapServer* currentMap;
     Ui::MainWindow *ui;
-    MapServer currentMap;
+    //MapServer currentMap;
     AppStatus appStatus;
     void openFile();
     void saveFile();

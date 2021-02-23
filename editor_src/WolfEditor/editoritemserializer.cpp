@@ -8,52 +8,41 @@ EditorItemSerializer::EditorItemSerializer()
 }
 
 
-Item EditorItemSerializer::getItem(float x,float y,std::string type){
+Item* EditorItemSerializer::getItem(float x,float y,std::string type){
 
     ItemSerializer serializer;
     if (type == "FOOD") {
-        Food item(Vector(x,y),true);
-        return std::move(item);
+        return new Food(Vector(x,y),true);
     }
     if (type == "BULLETS") {
-        Bullets item(Vector(x,y),true);
-        return std::move(item);
+        return new Bullets(Vector(x,y),true);
     }
     if (type == "WATER") {
-        Water item(Vector(x,y),true);
-        return std::move(item);
+        return new Water(Vector(x,y),true);
     }
     if (type == "TREASURE") {
-        Treasure item(Vector(x,y),true);
-        return std::move(item);
+        return new Treasure(Vector(x,y),true);
     }
     if (type == "TABLE") {
-        Table item(Vector(x,y),true);
-        return std::move(item);
+        return new Table(Vector(x,y),true);
     }
     if (type == "MEDKIT") {
-        Medkit item(Vector(x,y),true);
-        return std::move(item);
+        return new Medkit(Vector(x,y),true);
     }
     if (type == "KEY") {
-        Key item(Vector(x,y),true);
-        return std::move(item);
+        return new Key(Vector(x,y),true);
     }
     if (type == "BLOOD") {
-        Blood item(Vector(x,y),true);
-        return std::move(item);
+        return new Blood(Vector(x,y),true);
     }
     if (type == "BARREL") {
-        Barrel item(Vector(x,y),true);
-        return std::move(item);
+        return new Barrel(Vector(x,y),true);
     }
     if (type == "AMETRALLADORA") {
-        ArmaAmetralladora item(Vector(x,y),true);
-        return std::move(item);
+        return new ArmaAmetralladora(Vector(x,y),true);
     }
     if (type == "CANION") {
-        ArmaCanion item(Vector(x,y),true);
-        return std::move(item);
+        return new ArmaCanion(Vector(x,y),true);
     }
 
 
