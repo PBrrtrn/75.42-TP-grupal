@@ -1,0 +1,8 @@
+Package: wolfenstein-server-1.0
+Version: 1.0
+Section: base
+Priority: optional
+Architecture: amd64
+Depends: libyaml-cpp-dev, libsdl2-ttf-dev
+Maintainer: Grupo 13 <azaietz@fi.uba.ar>
+Description: Game Server!
