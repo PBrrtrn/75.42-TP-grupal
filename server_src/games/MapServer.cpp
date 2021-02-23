@@ -149,9 +149,10 @@ MapServer::~MapServer() {
 	for (auto x : this->items) {
 		delete x;
 	}
+}
 
 void MapServer::insertItem(Item item){
-	this->items.push_back(item);
+	//this->items.push_back(item);
 }
 
 void MapServer::insertSpawnPoint(SpawnPoint s){

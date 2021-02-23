@@ -190,8 +190,7 @@ int Player::getCurrentBullets(){
 }
 
 bool Player::changeWeapon(int weapon_idx){
-	if(this->armas[this->selected_weapon_idx] == NULL) 
-		return 0;
+	if(this->armas[weapon_idx] == NULL) return false;
 	this->selected_weapon_idx = weapon_idx;
 	return true;
 }
