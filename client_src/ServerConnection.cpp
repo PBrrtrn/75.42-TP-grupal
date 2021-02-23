@@ -129,7 +129,7 @@ GameStatusUpdate ServerConnection::getGameStatusUpdate() {
 GameStatistics ServerConnection::getGameStatistics() {
 	GameStatistics statistics;
 	this->socket.socket_receive((char*)&statistics, sizeof(GameStatistics));
-
+	std::cout << "SOY CLIENTE RECIBI STATISTICS" << std::endl;
 	return statistics;
 }
 

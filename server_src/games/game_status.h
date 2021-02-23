@@ -9,9 +9,9 @@
 #include "player.h"
 #include "../items/item.h"
 #include "../items/arma_ametralladora.h"
-#include <vector>
 #include "door.h"
 #include "statistics.h"
+#include "../../common_src/FiringState.h"
 
 class GameStatus {
 	
@@ -66,8 +66,9 @@ public:
 	bool changeMovementState(int clientId,MovementState state);
 	bool changeShootingState(int playerId, ShootingState state);
 	bool changeRotationState(int clientId,MovementState state);
+	bool changeFiringState(int clientId, FiringState state);
     
-	Statistics showStatistics();
+	Statistics& showStatistics();
     
     friend class Action;
 	friend class Shoot;

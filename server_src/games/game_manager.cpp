@@ -127,6 +127,14 @@ void GameManager::sendMapsList(int clientId) {
 void GameManager::cleanUpDeadGames(){
 	for (auto x: this->games) {
         if (x.second->isDead()) {
+            for (auto y: this->clientsInGames) {
+                if (y.second == x.first) {
+                    this->clientMessageReceiver.at(y.first)->shutdown();
+                    this->clientMessageReceiver.at(y.first)->join();
+                    delete x.second;
+                    this->clientMessageReceiver.erase(y.first);
+                }
+            }
             x.second->join();
             delete x.second;
             this->games.erase(x.first);
@@ -146,7 +154,9 @@ GameManager::~GameManager(){
         delete x.second;
     }
     for (auto x: this->clientMessageReceiver) {
+        x.second->shutdown();
         x.second->join();
+        delete x.second;
     }
     /*
     for (auto x: this->queues) {

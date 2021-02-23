@@ -176,6 +176,7 @@ void ThreadClient::sendLobbyStatus(int gameID) {
 void ThreadClient::sendGameStatistics() {
 	GameStatistics gs = this->game_status->getStatistics();
 	this->peer.socket_send((char*)(&gs), sizeof(GameStatistics));
+	//this->keep_running = false;
 }
 
 void ThreadClient::sendMapsList() {
@@ -208,4 +209,6 @@ void ThreadClient::shutdown(){
 	this->messages_out->close();
 }
 
-ThreadClient:: ~ThreadClient(){	}
+ThreadClient:: ~ThreadClient(){	
+	delete this->messages_out;
+}

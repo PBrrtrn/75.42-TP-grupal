@@ -14,12 +14,13 @@ Player::Player(int id){
 	this->bullets = c["StartingBullets"].as<int>();
 	this->armas[0] =  new Cuchillo();
 	this->armas[1] = new Pistola();
-	this->armas[2] = NULL;
-	this->armas[3] = NULL;
+	this->armas[2] = NULL; //new Ametralladora();//
+	this->armas[3] = NULL; //new CanionDeCadena();//
 	this->armas[4] = NULL;
 	this->selected_weapon_idx = 1;
 	this->previous_weapon_idx = 0;
 	this->movement_state = STATE_NOT_MOVING;
+	this->firing_state = STATE_NOT_FIRING;
 	
 	std::cout << "fin constructor player" << std::endl;
 	
@@ -38,6 +39,7 @@ Player::Player(Player&& from){
 	this->selected_weapon_idx = from.selected_weapon_idx;
 	this->previous_weapon_idx = from.previous_weapon_idx;
 	this->movement_state = from.movement_state;
+	this->firing_state = from.firing_state;
 
 	this->armas[0] = from.armas[0];
 	this->armas[1] = from.armas[1];
@@ -222,6 +224,15 @@ bool Player::changeShootingState(ShootingState state) {
 
 ShootingState Player::getCurrentShootingState() {
 	return this->shooting_state;
+}
+
+bool Player::changeFiringState(FiringState state) {
+	this->firing_state = state;
+	return true;
+}
+    
+FiringState Player::getCurrentFiringState() {
+	return this->firing_state;
 }
 
 bool Player::changeRotationState(MovementState state){

@@ -113,7 +113,7 @@ int GameStatus::getAlivePlayers() {
 	return amount_alive;
 }
 
-Statistics GameStatus::showStatistics() {
+Statistics& GameStatus::showStatistics() {
 	for (auto& it: this->players){
 		int player_id = it.first;
 		Player& player = it.second;
@@ -157,6 +157,10 @@ bool GameStatus::changeShootingState(int clientId,ShootingState state){
 
 bool GameStatus::changeRotationState(int clientId,MovementState state){
 	return this->players.at(clientId).changeRotationState(state);
+}
+
+bool GameStatus::changeFiringState(int clientId, FiringState state) {
+	return this->players.at(clientId).changeFiringState(state);
 }
 
 std::unordered_map<int,MovementState> GameStatus::getPlayerMovementStates(){
