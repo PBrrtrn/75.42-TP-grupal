@@ -8,7 +8,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow),currentMap(MapServer(1,1))
+    , ui(new Ui::MainWindow),currentMap(MapServer(1,1,1,1))
 {
     ui->setupUi(this);
 
@@ -79,6 +79,7 @@ void MainWindow::on_newMapCreated(){
 
     ui->gameMapView->setScene(scene);
     ui->gameMapView->setBackgroundBrush(QBrush(Qt::lightGray,Qt::SolidPattern));
+    //ui->gameMapView->setAcceptDrops(true);
     ui->gameMapView->show();
     this->repaint();
 

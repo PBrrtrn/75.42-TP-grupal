@@ -14,6 +14,13 @@ Animation::~Animation() {
   for (Texture* frame : this->frames) delete frame;
 }
 
+void Animation::renderNextFrame(SDL_Renderer* renderer,
+                                int x_pos, int y_pos,
+                                int width, int height) {
+  this->current_frame = (this->current_frame + 1) % this->frames.size();
+  this->render(renderer, x_pos, y_pos, width, height);
+}
+
 void Animation::render(SDL_Renderer* renderer, 
                        int x_pos, int y_pos, 
                        int width, int height) {
@@ -35,4 +42,6 @@ void Animation::renderTexel(SDL_Renderer* renderer,
       frame->renderTexel(renderer, texel_x, texel, 480, height, 0);
     }
   }
+
+  this->current_frame = (this->current_frame + 1) % this->frames.size();
 }

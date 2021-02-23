@@ -1,6 +1,5 @@
 #include "ItemSerializer.h"
 
-
 ItemSerializer::ItemSerializer(){}
 
 Item* ItemSerializer::deserialize(const std::string& serializedItem){
@@ -67,7 +66,7 @@ std::string ItemSerializer::serialize(Item* item){
 	std::string serializedItem;
 	
 	std::string type = std::to_string(item->getType());
-	
+
 	std::string x = std::to_string(item->getPosition().getXCoordinate());
 	std::string y = std::to_string(item->getPosition().getYCoordinate());
 	

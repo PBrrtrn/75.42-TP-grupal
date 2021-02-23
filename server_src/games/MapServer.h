@@ -40,7 +40,7 @@ private:
 
 public:
 	MapServer(const std::string& file_location);
-	MapServer(int width,int height);
+	MapServer(int width,int height,int minPlayers,int maxPlayers);
 	std::string getSerializedMap();
 	void setGridValue(int x, int y,int newValue);
 	~MapServer();
@@ -53,6 +53,8 @@ public:
 	int getMaxPlayers();
 	int getMinPlayers();
 	Map& getMap();
+	void insertItem(Item item);
+	void insertSpawnPoint(SpawnPoint s);
 	
 	std::vector<Item*> getItems();
 	std::vector<Door> getDoors();

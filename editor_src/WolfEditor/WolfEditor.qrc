@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/block.png</file>
         <file>images/bluestone.png</file>
         <file>images/colorstone.png</file>
         <file>images/eagle.png</file>
@@ -11,5 +10,11 @@
         <file>images/wood.png</file>
         <file>images/empty.png</file>
         <file>images/itemfood.png</file>
+        <file>images/itemametralladora.png</file>
+        <file>images/itembullets.png</file>
+        <file>images/itemcanion.png</file>
+        <file>images/itemkey.png</file>
+        <file>images/itemmedkit.png</file>
+        <file>images/itemtreasure.png</file>
     </qresource>
 </RCC>

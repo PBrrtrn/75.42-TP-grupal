@@ -79,6 +79,13 @@ props:
 consumables:
   directory: ../assets/textures/consumables/
 animations:
+  weapons:
+    - directory: ../assets/sprites/player_weapons/pistol/
+      idle:
+        - pistol_idle.png
+      shooting:
+        - pistol_shooting_1.png
+        - pistol_shooting_2.png
   enemies:
     directory: ../assets/sprites/enemies/
     sprite_sets:

@@ -17,6 +17,7 @@ public:
 private:
     AppStatus& appStatus;
     MapServer& fullMap;
+//    void dragEnterEvent(QDragEnterEvent *event);
 
 
 };
