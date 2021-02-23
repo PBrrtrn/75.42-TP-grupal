@@ -6,6 +6,7 @@ Bullets::Bullets(Vector pos_inicial,bool respawns) : Item(pos_inicial,respawns) 
 }
 
 bool Bullets::pickUpAction(Player& p) {
+    std::cout << "pickupeando BULLETS" << std::endl;
     return p.addBullets(this->amount);
 }
 

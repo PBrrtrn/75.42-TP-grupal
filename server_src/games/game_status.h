@@ -22,13 +22,12 @@ private:
 	std::unordered_map<int, Vector> playersDirections;
 	std::unordered_map<int, Player> players;
 	std::unordered_map<int, Door> doors;
-	std::vector<Item> items;
+	std::vector<Item*> items;
 	Vector angle;
 	MapServer map;
 	std::string mapLocation;
 	std::string entireMap;
 
-	void loadItems();
 	void loadDoors();
 	
 public:

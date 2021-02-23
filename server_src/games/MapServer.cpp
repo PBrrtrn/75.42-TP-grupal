@@ -30,7 +30,7 @@ void MapServer::loadItems(){
 	}
 	
 	for (auto& x: this->items) {
-        std::cout << "item type in mapserver:" << std::to_string(x.getType()) << std::endl;
+        std::cout << "item type in mapserver:" << std::to_string(x->getType()) << std::endl;
     }
 	
 	
@@ -69,8 +69,8 @@ int MapServer::isWall(int x, int y) {
 }
 
 bool MapServer::isObstacle(Vector position) {
-	for (std::vector<Item>::iterator it = this->items.begin() ; it != this->items.end(); ++it) {
-		if ((*it).getPosition() == position) return true;
+	for (std::vector<Item*>::iterator it = this->items.begin() ; it != this->items.end(); ++it) {
+		if ((*it)->getPosition() == position) return true;
 	}
 	for (std::vector<Door>::iterator it = this->doors.begin() ; it != this->doors.end(); ++it) {
 		if ((*it).getLocation() == position && (*it).isLocked()) return true;
@@ -86,9 +86,7 @@ int MapServer::getHeight() {
 	return this->map.getHeight();
 }
 
-MapServer::~MapServer() { }
-
-std::vector<Item> MapServer::getItems() { 
+std::vector<Item*> MapServer::getItems() { 
 	return this->items;
 }
 std::vector<Door> MapServer::getDoors() { 
@@ -146,6 +144,11 @@ MapServer::MapServer(int width,int height,int minPlayers,int maxPlayers) : map(w
 void MapServer::setGridValue(int x, int y,int newValue) {
 	this->map.setGridValue(x,y,newValue);
 }
+
+MapServer::~MapServer() { 
+	for (auto x : this->items) {
+		delete x;
+	}
 
 void MapServer::insertItem(Item item){
 	this->items.push_back(item);

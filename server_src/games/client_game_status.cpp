@@ -53,8 +53,8 @@ void ClientGameStatus::updateThisGameStatus(){
 		
 		for (auto& it: this->gameStatus.items) {
 			ItemListElement i;
-			i.pos = it.getPosition();
-			i.isVisible = it.isVisible();
+			i.pos = it->getPosition();
+			i.isVisible = it->isVisible();
 			this->items.push_back(i);
 		}	
 }

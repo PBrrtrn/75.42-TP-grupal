@@ -1,7 +1,8 @@
 #include "ItemSerializer.h"
 
 ItemSerializer::ItemSerializer(){}
-Item ItemSerializer::deserialize(const std::string& serializedItem){
+
+Item* ItemSerializer::deserialize(const std::string& serializedItem){
 	std::stringstream ss(serializedItem);
 	std::string word;
 	ItemType type;
@@ -15,61 +16,59 @@ Item ItemSerializer::deserialize(const std::string& serializedItem){
 	
 	switch (type) {
 		case TYPE_FOOD:
-			return Food(Vector(positionX,positionY),true);
+			return new Food(Vector(positionX,positionY),true);
 			break;
 		case TYPE_BULLETS:
-			return Bullets(Vector(positionX,positionY),true);
+			return new Bullets(Vector(positionX,positionY),true);
 			break;	
 		case TYPE_WATER:
-			return Water(Vector(positionX,positionY),true);	
+			return new Water(Vector(positionX,positionY),true);	
 			break;
 		case TYPE_TREASURE:
-			return Treasure(Vector(positionX,positionY),true);	
+			return new Treasure(Vector(positionX,positionY),true);	
 			break;
 		case TYPE_TABLE:
-			return Table(Vector(positionX,positionY),false);	
+			return new Table(Vector(positionX,positionY),false);	
 			break;
 		case TYPE_MEDKIT:
-			return Medkit(Vector(positionX,positionY),true);	
+			return new Medkit(Vector(positionX,positionY),true);	
 			break;
 		case TYPE_KEY:
-			return Key(Vector(positionX,positionY),true);	
+			return new Key(Vector(positionX,positionY),true);	
 			break;
 		case TYPE_CORPSE:
-			return Corpse(Vector(positionX,positionY),false);	
+			return new Corpse(Vector(positionX,positionY),false);	
 			break;
 		case TYPE_BLOOD:
-			return Blood(Vector(positionX,positionY),true);	
+			return new Blood(Vector(positionX,positionY),true);	
 			break;
 		case TYPE_BARREL:
-			return Barrel(Vector(positionX,positionY),false);	
+			return new Barrel(Vector(positionX,positionY),false);	
 			break;
 		case TYPE_ARMA_AMETRALLADORA:
-			return ArmaAmetralladora(Vector(positionX,positionY),true);	
+			return new ArmaAmetralladora(Vector(positionX,positionY),true);	
 			break;
 		case TYPE_ARMA_CANION:
-			return ArmaCanion(Vector(positionX,positionY),true);	
+			return new ArmaCanion(Vector(positionX,positionY),true);	
 			break;
 		case TYPE_ARMA_LANZACOHETES:
-			return ArmaLanzaCohetes(Vector(positionX,positionY),true);	
+			return new ArmaLanzaCohetes(Vector(positionX,positionY),true);	
 			break;
 		default:
 			break;
 	
 	}
 	
-	return Item(Vector(0,0),false);
+	return new Item(Vector(0,0),false);
 	
 }
-std::string ItemSerializer::serialize(Item& item){
+std::string ItemSerializer::serialize(Item* item){
 	std::string serializedItem;
 	
-	std::string type = std::to_string(item.getType());
-	
-	
-	
-	std::string x = std::to_string(item.getPosition().getXCoordinate());
-	std::string y = std::to_string(item.getPosition().getYCoordinate());
+	std::string type = std::to_string(item->getType());
+
+	std::string x = std::to_string(item->getPosition().getXCoordinate());
+	std::string y = std::to_string(item->getPosition().getYCoordinate());
 	
 	return type + " " + x + " " + y;
 }
