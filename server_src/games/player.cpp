@@ -77,7 +77,9 @@ bool Player::aimWeapon(float target_angle, float shooter_angle, float target_dis
 
 //si el jugador es muerto como resultado de perder vida, devuelvo true.
 bool Player::loseHealth(int amount) {
+	std::cout << "health: " << this->health << std::endl;
 	this->health = this->health - amount;
+	std::cout << "player was attacked health: " << this->health << std::endl;
 	if (this->health <= 0 && this->vidas > 0) {
 		this->health = 20;
 		this->vidas--;
