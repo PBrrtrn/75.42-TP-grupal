@@ -65,7 +65,7 @@ std::string ClientGameStatus::getEntireMap(){
 GameStatistics ClientGameStatus::getStatistics() {
 	GameStatistics gs;
 
-	Statistics s = this->gameStatus.showStatistics();
+	Statistics& s = this->gameStatus.showStatistics();
 
 	std::vector<std::pair<int, int>> kills(s.enemigos_matados.begin(), s.enemigos_matados.end());
 	std::sort(kills.begin(), kills.end(), comp);
@@ -99,6 +99,7 @@ GameStatistics ClientGameStatus::getStatistics() {
 		}
 
 	}
+	
 	return gs;
 }
 

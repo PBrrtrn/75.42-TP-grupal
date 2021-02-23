@@ -113,7 +113,7 @@ int GameStatus::getAlivePlayers() {
 	return amount_alive;
 }
 
-Statistics GameStatus::showStatistics() {
+Statistics& GameStatus::showStatistics() {
 	for (auto& it: this->players){
 		int player_id = it.first;
 		Player& player = it.second;

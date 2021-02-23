@@ -67,7 +67,7 @@ public:
 	bool changeShootingState(int playerId, ShootingState state);
 	bool changeRotationState(int clientId,MovementState state);
     
-	Statistics showStatistics();
+	Statistics& showStatistics();
     
     friend class Action;
 	friend class Shoot;

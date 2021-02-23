@@ -85,6 +85,7 @@ void ThreadGame:: run() {
     std::cout << "HAY UN SOBREVIVIENTE GANADOR -- FIN JUEGO" << std::endl;
     this->sendGameStatistics();
 	this->is_dead = true;
+	//if (this->is_dead) usleep(1569325056);
 }
 
 void ThreadGame::sendMapToClient(int clientId){

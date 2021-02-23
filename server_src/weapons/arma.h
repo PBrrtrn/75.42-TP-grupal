@@ -6,6 +6,8 @@
 #include <yaml-cpp/yaml.h>
 #include "../server_config.h"
 
+#define PI 3.14159265
+
 class Arma {
 	protected:
 		float precision;

@@ -9,13 +9,13 @@ Ametralladora:
   AttackRange: 1000000
   Idx: 2
   Cadencia: 275856
-  Precision: 0.5
+  Precision: 35
 CanionDeCadena:
   Nombre: CANION_DE_CADENA
   AttackRange: 1000000
   Idx: 3
   Cadencia: 68964
-  Precision: 0.5
+  Precision: 45
 Cuchillo:
   Nombre: CUCHILLO
   AttackRange: 1
@@ -33,7 +33,7 @@ Pistola:
   AttackRange: 1000000
   Idx: 1
   Cadencia: -1
-  Precision: 0.2
+  Precision: 30
 Blood:
   Points: 1
 Food:

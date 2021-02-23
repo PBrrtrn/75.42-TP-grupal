@@ -14,8 +14,8 @@ Player::Player(int id){
 	this->bullets = c["StartingBullets"].as<int>();
 	this->armas[0] =  new Cuchillo();
 	this->armas[1] = new Pistola();
-	this->armas[2] = NULL;
-	this->armas[3] = NULL;
+	this->armas[2] = new Ametralladora();//NULL;
+	this->armas[3] = new CanionDeCadena();//NULL;
 	this->armas[4] = NULL;
 	this->selected_weapon_idx = 1;
 	this->previous_weapon_idx = 0;
