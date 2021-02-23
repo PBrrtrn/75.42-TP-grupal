@@ -30,7 +30,8 @@ void Shoot::tryAction(GameStatus& gs, int clientID){
 
             if (gs.players.at(clientID).aimWeapon(target_angle, shooter_angle, target_distance) && 
             target_distance < wall_distance) {
-				int danio = (int)(abs(rand()) / target_distance) % 10 + 1;
+				//int danio = (int)(abs(rand()) / target_distance) % 10 + 1;
+                int danio = 1+rand()%10;
                 std::cout << "DANIO: " << danio << std::endl;
 				if (target.loseHealth(danio) ) {
 					std::cout << "player "<< target_id <<" has been killed, danio: "<< danio << std::endl;

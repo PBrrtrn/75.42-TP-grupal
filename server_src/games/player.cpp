@@ -12,28 +12,74 @@ Player::Player(int id){
 	this->puntaje = 0;
 	this->max_bullets = c["MaxBullets"].as<int>();
 	this->bullets = c["StartingBullets"].as<int>();
-	this->armas[0] =  Cuchillo();
-	this->armas[1] = Pistola();
+	this->armas[0] =  new Cuchillo();
+	this->armas[1] = new Pistola();
+	this->armas[2] = NULL;
+	this->armas[3] = NULL;
+	this->armas[4] = NULL;
 	this->selected_weapon_idx = 1;
 	this->previous_weapon_idx = 0;
 	this->movement_state = STATE_NOT_MOVING;
+	
+	std::cout << "fin constructor player" << std::endl;
+	
+}
+
+Player::Player(Player&& from){
+	this->id = from.id;
+	
+	this->vidas = from.vidas;
+	
+	this->health = from.health;
+	this->has_key = from.has_key;
+	this->puntaje = from.puntaje;
+	this->max_bullets = from.max_bullets;
+	this->bullets = from.bullets;
+	this->selected_weapon_idx = from.selected_weapon_idx;
+	this->previous_weapon_idx = from.previous_weapon_idx;
+	this->movement_state = from.movement_state;
+
+	this->armas[0] = from.armas[0];
+	this->armas[1] = from.armas[1];
+	this->armas[2] = from.armas[2];
+	this->armas[3] = from.armas[3];
+	this->armas[4] = from.armas[4];
+	
+	from.armas[0] = NULL;
+	from.armas[1] = NULL;
+	from.armas[2] = NULL;
+	from.armas[3] = NULL;
+	from.armas[4] = NULL;	
+	
 }
 
 float Player::getShootTimeout() {
-	return this->armas[this->selected_weapon_idx].getCadencia();
+	if(this->armas[this->selected_weapon_idx] == NULL) 
+		return 0;
+	return this->armas[this->selected_weapon_idx]->getCadencia();
 }
 
 int Player::getWeaponAttackRange() {
-	return this->armas[this->selected_weapon_idx].getAttackRange();
+	if(this->armas[this->selected_weapon_idx] == NULL) 
+		return 0;
+	return this->armas[this->selected_weapon_idx]->getAttackRange();
 }
 
 bool Player::aimWeapon(float target_angle, float shooter_angle, float target_distance) {
-	return this->armas[this->selected_weapon_idx].aimWeapon(target_angle, shooter_angle, target_distance);
+	if(this->armas[this->selected_weapon_idx] == NULL) {
+		std::cout << "en aim weapon de player ARMA NULL" << std::endl;
+		return false;
+	}
+	std::cout << "en aim weapon de player, weapon: "<< this->selected_weapon_idx << std::endl;
+	this->armas[this->selected_weapon_idx]->printNombre();
+	return this->armas[this->selected_weapon_idx]->aimWeapon(target_angle, shooter_angle, target_distance);
 }
 
 //si el jugador es muerto como resultado de perder vida, devuelvo true.
 bool Player::loseHealth(int amount) {
+	std::cout << "health: " << this->health << std::endl;
 	this->health = this->health - amount;
+	std::cout << "player was attacked health: " << this->health << std::endl;
 	if (this->health <= 0 && this->vidas > 0) {
 		this->health = 20;
 		this->vidas--;
@@ -41,10 +87,12 @@ bool Player::loseHealth(int amount) {
 		this->bullets = 8;
 		this->puntaje = 0;
 		this->selected_weapon_idx = 1;
-		Arma a;
-		this->armas[2] = a;
-		this->armas[3] = a;
-		this->armas[4] = a;
+		for (int i = 2; i < this->armas.size(); i++){
+			if (this->armas[i] != NULL){
+				delete this->armas[i];
+				this->armas[i] = NULL;
+			}
+		}
 		this->movement_state = STATE_NOT_MOVING;
 		std::cout << "VIDAS: " << this->vidas << std::endl;
 		return true;
@@ -96,14 +144,14 @@ bool Player::addBullets(int amount) {
 	return false;
 }
 
-bool Player::addWeapon(Arma& arma) {
-	if (arma.getIndex() < this->armas.size() && this->armas[arma.getIndex()].is_empty()){
-		return this->_addWeapon(arma.getIndex(),arma);
+bool Player::addWeapon(Arma* arma) {
+	if (arma->getIndex() < this->armas.size() && this->armas[arma->getIndex()] == NULL ){
+		return this->_addWeapon(arma->getIndex(),arma);
 	}
 	return false;
 }
 
-bool Player::_addWeapon(int idx, Arma& arma) {
+bool Player::_addWeapon(int idx, Arma* arma) {
 	this->armas[idx] = arma;
 	this->selected_weapon_idx = idx;
 	return true;
@@ -140,7 +188,8 @@ int Player::getCurrentBullets(){
 }
 
 bool Player::changeWeapon(int weapon_idx){
-	if (this->armas[weapon_idx].is_empty()) return false;
+	if(this->armas[this->selected_weapon_idx] == NULL) 
+		return 0;
 	this->selected_weapon_idx = weapon_idx;
 	return true;
 }
@@ -184,4 +233,12 @@ MovementState Player::getCurrentRotationState(){
 	return this->rotation_state;
 }
 
-Player::~Player(){}
+Player::~Player(){
+	std::cout << "entrando a destructor de player" << std::endl;
+	for (int i =0; i < AMOUNT_WEAPONS; i++){
+		if (this->armas[i] != NULL){
+			delete this->armas[i];
+			this->armas[i] = NULL;
+		}
+	}
+}

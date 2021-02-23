@@ -8,7 +8,7 @@ class ArmaCanion : public Item {
 
 private:
 
-	CanionDeCadena canion;
+	std::vector<CanionDeCadena*> caniones;
 
 public:
 
