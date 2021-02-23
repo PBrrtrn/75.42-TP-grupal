@@ -7,6 +7,7 @@
 class Shoot : public Action {
     public:
         Shoot();
+        void throwWeapon(int weapon_idx, int target_id, GameStatus& gs);
         void tryAction(GameStatus& gs, int clientID) override;
         ~Shoot();
 };
