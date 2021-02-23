@@ -4,7 +4,7 @@
     ThreadAcceptor -> ThreadAcceptor : acceptConnection()
     ReceiveClientMessages -> Socket : socket_receive()
     ReceiveClientMessages -> ProtectedQueue : push()
-    ThreadAcceptor -> GameManager : receiveMessages()
+    MessageProcessor -> GameManager : receiveMessages()
     GameManager -> ProtectedQueue : pop()
     GameManager -> GameManager : startGame()
     GameManager --> ProtectedQueue : new
