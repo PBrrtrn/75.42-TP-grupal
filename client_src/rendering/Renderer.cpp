@@ -35,9 +35,12 @@ Renderer::~Renderer() {
   for (Animation* animation : this->enemy_animations) delete animation;
   for (Texture* texture : this->wall_textures) delete texture;
 
+  delete this->menu_music;
+
   SDL_DestroyRenderer(this->renderer);
   TTF_Quit();
   IMG_Quit();
+  Mix_Quit();
   this->join();
 }
 
@@ -60,7 +63,13 @@ void Renderer::load() {
   }
 
   YAML::Node music_node = this->config["music"];
+  std::string music_dir = music_node["directory"].as<std::string>();
+
+  std::string music_path = music_dir + music_node["menu"].as<std::string>();
+  this->menu_music = new MusicTrack(music_path.c_str());
   
+  music_path = music_dir + music_node["game"].as<std::string>();
+  this->game_music = new MusicTrack(music_path.c_str());
 
   //////////////////////////////////////////////////////////////
   std::vector<std::string> paths;
@@ -76,14 +85,17 @@ void Renderer::run() {
     MenuRenderer menu_renderer(this->config["menu_ui"],
                                this->menu_status,
                                this->renderer);
+    this->menu_music->play();
     while (!this->in_game) menu_renderer.render();
 
+    this->game_music->play();
     Map map = this->game_status_monitor.getMap();
     MapDrawer map_drawer(this->config, map, 
                          this->wall_textures, 
                          this->enemy_animations);
     UIDrawer ui_drawer(this->renderer, this->config["game_ui"]);
     while (this->in_game) renderMatch(map_drawer, ui_drawer);
+    this->game_music->pause();
   }
 }
 

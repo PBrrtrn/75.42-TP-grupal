@@ -7,7 +7,8 @@ graphics:
   wall_height: 1.5
 music:
   directory: ../assets/music/
-  menu: menu_music.wav
+  menu: searching_for_the_enemy.wav
+  game: funk_you.wav
 window:
   title: FIUBAstein 3D
   width: 640

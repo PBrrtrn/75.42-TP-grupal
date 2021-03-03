@@ -31,8 +31,8 @@ private:
   std::vector<Animation*> enemy_animations;
   std::vector<Texture*> wall_textures;
   std::vector<PlayerWeapon*> player_weapons;
-  MusicTrack menu_music;
-  MusicTrack game_music;
+  MusicTrack* menu_music;
+  MusicTrack* game_music;
   void load();
   void renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer);
 public:

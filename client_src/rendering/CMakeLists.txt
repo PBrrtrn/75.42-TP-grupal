@@ -5,6 +5,7 @@ add_library(rendering SHARED
 	TimedAnimation.cpp
 	Font.cpp
 	MapDrawer.cpp
+	MusicTrack.cpp
 	Renderer.cpp
 	MenuRenderer.cpp
 	UIDrawer.cpp
