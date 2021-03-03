@@ -20,6 +20,14 @@ void Shoot::tryAction(GameStatus& gs, int clientID){
             RayCaster ray_caster;
             float wall_distance = abs(ray_caster.castRay(gs.getMap(), gs.getPosition(target_id), target_angle).distance);
 
+            std::cout << "target direction: x:" << target_direction.x << "y: " << target_direction.y << std::endl;
+            std::cout << "target angle" << abs(target_angle * 180 / PI) << std::endl;
+            std::cout << "shooter angle" << shooter_angle * 180 / PI << std::endl;
+            std::cout << "shooter position: x:" << gs.getPosition(clientID).x << "y: " << gs.getPosition(clientID).y << std::endl;
+            std::cout << "target position: x:" << gs.getPosition(target_id).x << "y: " << gs.getPosition(target_id).y << std::endl;
+            std::cout << "wall distance: " << wall_distance << std::endl;
+            std::cout << "target distance: " << target_distance << std::endl;
+
             if (gs.players.at(clientID).aimWeapon(target_angle, shooter_angle, target_distance) && 
             target_distance < wall_distance) {
 				//int danio = (int)(abs(rand()) / target_distance) % 10 + 1;
