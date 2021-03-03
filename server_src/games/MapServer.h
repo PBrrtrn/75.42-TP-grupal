@@ -57,9 +57,9 @@ public:
 	void insertItem(Item* item);
 	void insertSpawnPoint(SpawnPoint s);
 	
-	std::vector<Item*> getItems();
-	std::vector<Door> getDoors();
-	std::vector<SpawnPoint> getRespawnPoints();
+	std::vector<Item*>& getItems();
+	std::vector<Door>& getDoors();
+	std::vector<SpawnPoint>& getRespawnPoints();
 	
 };
 

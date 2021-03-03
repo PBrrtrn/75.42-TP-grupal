@@ -51,6 +51,8 @@ public:
   int getAlivePlayers();
   int getMaxPlayers();
   int getMinPlayers();
+	std::vector<Item*>& getMapItems();
+  std::vector<Item*>& getGsItems();
   float getShootTimeout(int playerID);
   std::vector<SpawnPoint> getSpawnPoints();
   

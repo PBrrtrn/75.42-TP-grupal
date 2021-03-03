@@ -94,13 +94,13 @@ int MapServer::getHeight() {
 	return this->map.getHeight();
 }
 
-std::vector<Item*> MapServer::getItems() { 
+std::vector<Item*>& MapServer::getItems() { 
 	return this->items;
 }
-std::vector<Door> MapServer::getDoors() { 
+std::vector<Door>& MapServer::getDoors() { 
 	return this->doors;
 }
-std::vector<SpawnPoint> MapServer::getRespawnPoints() { 
+std::vector<SpawnPoint>& MapServer::getRespawnPoints() { 
 	return this->respawnPoints;
 }
 
