@@ -32,15 +32,20 @@ PlayerWeapon::PlayerWeapon(YAML::Node spec, SDL_Renderer* renderer)
   this->shooting_animation = new TimedAnimation(renderer, 
                                                 shooting_paths, 
                                                 steps_per_frame);
+
+  std::string sound_path = dir + spec["sfx"].as<std::string>();
+  this->shooting_sound = new SoundEffect(sound_path.c_str());
 }
 
 PlayerWeapon::~PlayerWeapon() {
   delete this->idle_animation;
   delete this->shooting_animation;
+  delete this->shooting_sound;
 }
 
 void PlayerWeapon::setShooting() {
   this->shooting = true;
+  this->shooting_sound->play();
 }
 
 void PlayerWeapon::render(SDL_Renderer* renderer) {

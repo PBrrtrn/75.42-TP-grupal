@@ -6,6 +6,7 @@
 
 #include "Animation.h"
 #include "TimedAnimation.h"
+#include "SoundEffect.h"
 
 class PlayerWeapon {
 private:
@@ -15,6 +16,7 @@ private:
 	int sprite_height;
   Animation* idle_animation;
   TimedAnimation* shooting_animation;
+  SoundEffect* shooting_sound;
   bool shooting;
   int total_shooting_steps;
   int elapsed_shooting_steps;

@@ -6,6 +6,7 @@ add_library(rendering SHARED
 	Font.cpp
 	MapDrawer.cpp
 	MusicTrack.cpp
+	SoundEffect.cpp
 	Renderer.cpp
 	MenuRenderer.cpp
 	UIDrawer.cpp

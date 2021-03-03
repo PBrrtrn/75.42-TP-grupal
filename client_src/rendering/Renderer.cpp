@@ -55,7 +55,7 @@ void Renderer::load() {
     this->wall_textures.push_back(texture);
   }
 
-  YAML::Node weapons_node = this->config["animations"]["weapons"];
+  YAML::Node weapons_node = this->config["weapons"];
   for (int i = 0; i < weapons_node.size(); i++) {
     PlayerWeapon* player_weapon = new PlayerWeapon(weapons_node[i], 
                                                    this->renderer);

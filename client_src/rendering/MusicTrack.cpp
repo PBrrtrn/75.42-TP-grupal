@@ -4,7 +4,6 @@
 
 MusicTrack::MusicTrack(const char* filepath) : music_track(NULL) {
 	this->music_track = Mix_LoadMUS(filepath);
-	std::cout << filepath << std::endl;
 	if (this->music_track == NULL)
 		throw "error loading music track";
 		// throw TrackConstructorError(Mix_GetError());
