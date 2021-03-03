@@ -67,7 +67,7 @@ void MapDrawer::drawEnemies(SDL_Renderer* renderer,
   float view_y = sin(view_angle);
   float view_x = cos(view_angle);
   Vector plane(view_angle + M_PI/2);
-  // Vector plane { 1, 0 }; // Hacer esto bien factoreando el valor de FOV
+  plane = plane * ((this->fov*180) / (100*M_PI));
   for (PlayerListItem& enemy : enemies) {
     Vector enemy_dir { enemy.position.x - position.x,
                        position.y - enemy.position.y };
