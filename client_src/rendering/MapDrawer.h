@@ -23,12 +23,22 @@ private:
 	std::vector<Animation*>& enemy_animations;
 	Map& map;
 	RayCaster ray_caster;
+	void drawFloors(SDL_Renderer* renderer);
+	void drawEnemies(SDL_Renderer* renderer, 
+                   Vector position, float view_angle,
+                   std::vector<PlayerListItem>& enemies,
+                   std::vector<float> z_buffer);
+	void drawItems(SDL_Renderer* renderer, 
+                 Vector position, float view_angle,
+                 std::vector<ItemListElement>& items,
+                 std::vector<float> z_buffer);
 public:
 	MapDrawer(YAML::Node& config, Map& map, std::vector<Texture*>& wall_textures,
 						std::vector<Animation*>& enemy_animations);
 	~MapDrawer();
 	void draw(SDL_Renderer* renderer, Vector position, float view_angle,
-						std::vector<PlayerListItem>& enemies);
+						std::vector<PlayerListItem>& enemies,
+						std::vector<ItemListElement>& items);
 };
 
 #endif

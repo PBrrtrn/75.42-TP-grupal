@@ -10,12 +10,14 @@ CanionDeCadena::CanionDeCadena() : Arma() {
     this->precision = c["Precision"].as<float>();
 }
 
-bool CanionDeCadena::aimWeapon(float target_angle, float shooter_angle, float target_distance) {
+bool CanionDeCadena::aimWeapon(float ort_dist, float target_dist) {
+    /*
     target_angle = target_angle * 180 / PI;
     shooter_angle = shooter_angle * 180 / PI;
     if (target_angle < shooter_angle + this->precision/target_distance && 
         target_angle > shooter_angle - this->precision/target_distance && 
         target_distance <= this->attack_range) { return true; }
+    */
     return false;
 }
 

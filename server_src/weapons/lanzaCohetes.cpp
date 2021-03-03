@@ -10,7 +10,7 @@ LanzaCohetes::LanzaCohetes() : Arma() {
     this->precision = c["Precision"].as<float>();
 }
 
-bool LanzaCohetes::aimWeapon(float target_angle, float shooter_angle, float target_distance) {
+bool LanzaCohetes::aimWeapon(float ort_dist, float target_dist) {
     //TODO implementar
     return false;
 }

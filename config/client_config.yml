@@ -76,8 +76,22 @@ props:
     - barrel.png
     - greenlight.png
     - pillar.png
-consumables:
-  directory: ../assets/textures/consumables/
+items:
+  directory: ../assets/textures/items/
+  files:
+    - bullets.png
+    - food.png
+    - cannon.png
+    - machine_gun.png
+    - rocket_launcher.png
+    - barrel.png
+    - blood.png
+    - corpse.png
+    - key.png
+    - medkit.png
+    - table.png
+    - treasure.png
+    - water.png
 animations:
   weapons:
     - directory: ../assets/sprites/player_weapons/knife/

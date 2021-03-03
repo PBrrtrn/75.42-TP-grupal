@@ -24,7 +24,7 @@ class Arma {
 		int getAttackRange();
 		int getIndex();
 		void printNombre();
-		virtual bool aimWeapon(float target_angle, float shooter_angle, float target_distance);
+		virtual bool aimWeapon(float ort_dist, float target_dist);
 		float getCadencia();
 		virtual ~Arma();
 };

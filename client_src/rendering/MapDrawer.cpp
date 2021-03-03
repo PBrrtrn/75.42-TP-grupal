@@ -18,16 +18,9 @@ MapDrawer::MapDrawer(YAML::Node& config, Map& map,
 MapDrawer::~MapDrawer() { }
 
 void MapDrawer::draw(SDL_Renderer* renderer, Vector position, float view_angle,
-                     std::vector<PlayerListItem>& enemies) {
-  SDL_Rect top_half { 0, 0, this->screen_width, (this->screen_height)/2 };
-  SDL_SetRenderDrawColor(renderer, 130, 130, 130, 255);
-  SDL_RenderFillRect(renderer, &top_half);
-
-  SDL_Rect bottom_half { 0, (this->screen_height)/2,
-                         this->screen_width, (this->screen_height)/2 };
-  SDL_SetRenderDrawColor(renderer, 90, 90, 90, 255);
-  SDL_RenderFillRect(renderer, &bottom_half);
-
+                     std::vector<PlayerListItem>& enemies,
+                     std::vector<ItemListElement>& items) {
+  this->drawFloors(renderer);
 
   float a_increment = (this->fov/this->screen_width);
   float initial_angle = view_angle + (this->fov/2);
@@ -45,19 +38,39 @@ void MapDrawer::draw(SDL_Renderer* renderer, Vector position, float view_angle,
     int l = this->wall_height * projection_distance / distance;
 
     Texture* wall_texture = this->wall_textures[0];
-    wall_texture->renderTexel(renderer, x, hit.texel, 
+    wall_texture->renderTexel(renderer, x, hit.texel,
                               this->screen_height, l, hit.side);
 
     z_buffer.push_back(hit.distance);
     x++;
   }
 
-  Vector plane(view_angle + M_PI/2);
+  this->drawEnemies(renderer, position, view_angle, enemies, z_buffer);
+  this->drawItems(renderer, position, view_angle, items, z_buffer);
+}
+
+void MapDrawer::drawFloors(SDL_Renderer* renderer) {
+  SDL_Rect top_half { 0, 0, this->screen_width, (this->screen_height)/2 };
+  SDL_SetRenderDrawColor(renderer, 130, 130, 130, 255);
+  SDL_RenderFillRect(renderer, &top_half);
+
+  SDL_Rect bottom_half { 0, (this->screen_height)/2,
+                         this->screen_width, (this->screen_height)/2 };
+  SDL_SetRenderDrawColor(renderer, 90, 90, 90, 255);
+  SDL_RenderFillRect(renderer, &bottom_half);
+}
+
+void MapDrawer::drawEnemies(SDL_Renderer* renderer,
+                            Vector position, float view_angle,
+                            std::vector<PlayerListItem>& enemies,
+                            std::vector<float> z_buffer) {
   float view_y = sin(view_angle);
   float view_x = cos(view_angle);
+  Vector plane(view_angle + M_PI/2);
+  // Vector plane { 1, 0 }; // Hacer esto bien factoreando el valor de FOV
   for (PlayerListItem& enemy : enemies) {
     Vector enemy_dir { enemy.position.x - position.x,
-                             position.y - enemy.position.y };
+                       position.y - enemy.position.y };
     float transf_x = view_x * enemy_dir.y - view_y * enemy_dir.x;
     float transf_y = plane.y * enemy_dir.x - plane.x * enemy_dir.y;
 
@@ -72,6 +85,12 @@ void MapDrawer::draw(SDL_Renderer* renderer, Vector position, float view_angle,
       animation->renderTexel(renderer, z_buffer, transf_y, sprite_x, sprite_y,
                              sprite_width, sprite_height);
     }
-
   }
+}
+
+void MapDrawer::drawItems(SDL_Renderer* renderer, 
+                          Vector position, float view_angle,
+                          std::vector<ItemListElement>& items,
+                          std::vector<float> z_buffer) {
+
 }

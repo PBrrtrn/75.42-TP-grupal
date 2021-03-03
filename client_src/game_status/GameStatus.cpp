@@ -21,6 +21,7 @@ void GameStatus::update(GameStatusUpdate& status_update) {
 
   this->player_status = new_player_status;
   this->enemies = status_update.enemies;
+  this->items = status_update.items;
 }
 
 Map& GameStatus::getMap() {
@@ -36,7 +37,8 @@ GameStatusUpdate GameStatus::getUpdate() {
                             this->player_status.lives,
                             this->player_status.hasKey,
                             this->player_status.firing_state,
-                            this->enemies };
+                            this->enemies,
+                            this->items };
 
   return update;
 }

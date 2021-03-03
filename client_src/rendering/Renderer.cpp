@@ -87,18 +87,12 @@ void Renderer::renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer) {
 
   map_drawer.draw(this->renderer, status_update.position, 
                   status_update.direction.getAngle(),
-                  status_update.enemies);
+                  status_update.enemies, status_update.items);
 
   int selected_weapon = int(status_update.selected_weapon);
   if (status_update.player_firing == STATE_FIRING)
     this->player_weapons[selected_weapon]->setShooting();
   this->player_weapons[selected_weapon]->render(this->renderer);
-  /*
-  if (status_update.player_firing == STATE_NOT_FIRING)
-    this->player_weapons[selected_weapon]->renderIdle(this->renderer);
-  else if (status_update.player_firing == STATE_FIRING)
-    this->player_weapons[selected_weapon]->renderShooting(this->renderer);
-  */
 
   ui_drawer.draw(this->renderer, status_update.health, 
                  status_update.enemies.size(), status_update.bullets,

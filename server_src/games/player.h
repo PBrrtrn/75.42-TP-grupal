@@ -56,7 +56,7 @@ public:
     bool gainKey();
     bool useKey();
     bool addWeapon(Arma* arma);
-    bool aimWeapon(float target_angle, float shooter_angle, float target_distance);
+    bool aimWeapon(float ort_dist, float target_dist);
     int getWeaponAttackRange();
     float getShootTimeout();
     int getCurrentBullets();

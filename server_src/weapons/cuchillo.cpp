@@ -10,8 +10,8 @@ Cuchillo::Cuchillo() : Arma() {
     this->precision = c["Precision"].as<float>();
 }
 
-bool Cuchillo::aimWeapon(float target_angle, float shooter_angle, float target_distance) {
-    if (target_distance <= this->attack_range) { return true; }
+bool Cuchillo::aimWeapon(float ort_dist, float target_dist) {
+    if (target_dist <= this->attack_range) { return true; }
     return false;
 }
 

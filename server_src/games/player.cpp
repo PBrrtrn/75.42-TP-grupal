@@ -65,12 +65,12 @@ int Player::getWeaponAttackRange() {
 	return this->armas[this->selected_weapon_idx]->getAttackRange();
 }
 
-bool Player::aimWeapon(float target_angle, float shooter_angle, float target_distance) {
+bool Player::aimWeapon(float ort_dist, float target_dist) {
 	if(this->armas[this->selected_weapon_idx] == NULL) {
 		return false;
 	}
 	this->armas[this->selected_weapon_idx]->printNombre();
-	return this->armas[this->selected_weapon_idx]->aimWeapon(target_angle, shooter_angle, target_distance);
+	return this->armas[this->selected_weapon_idx]->aimWeapon(ort_dist, target_dist);
 }
 
 //si el jugador es muerto como resultado de perder vida, devuelvo true.

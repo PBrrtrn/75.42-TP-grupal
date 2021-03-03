@@ -16,6 +16,7 @@ struct GameStatusUpdate {
   bool has_key;
   FiringState player_firing;
   std::vector<PlayerListItem> enemies;
+  std::vector<ItemListElement> items;
 };
 
 class GameStatus {
@@ -23,6 +24,7 @@ private:
   Map map;
   PlayerStatus player_status;
   std::vector<PlayerListItem> enemies;
+  std::vector<ItemListElement> items;
 public:
   GameStatus();
   ~GameStatus();
