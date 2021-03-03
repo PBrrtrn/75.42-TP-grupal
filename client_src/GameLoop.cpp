@@ -16,7 +16,7 @@
 #include "../common_src/MessageType.h"
 
 GameLoop::GameLoop(YAML::Node& config) : config(config) {
-  if (SDL_Init(SDL_INIT_VIDEO) < 0)
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
     throw std::runtime_error("Failed to initialize SDL");
     // throw SDLInitializationError(SDL_GetError());
   if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))

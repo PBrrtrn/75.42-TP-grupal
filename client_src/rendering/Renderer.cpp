@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <array>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "Renderer.h"
 #include "MenuRenderer.h"
@@ -23,6 +24,9 @@ Renderer::Renderer(YAML::Node& config, std::atomic<bool>& in_game,
 
   if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
     std::cout << "Warning: Could not set SDL hints" << std::endl;
+
+  if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+    throw RendererConstructorError(Mix_GetError());
 
   this->load();
 }
@@ -54,6 +58,9 @@ void Renderer::load() {
                                                    this->renderer);
     this->player_weapons.push_back(player_weapon);
   }
+
+  YAML::Node music_node = this->config["music"];
+  
 
   //////////////////////////////////////////////////////////////
   std::vector<std::string> paths;

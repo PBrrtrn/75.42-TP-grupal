@@ -5,6 +5,9 @@ FPS_cap: 60
 graphics:
   FOV: 1.0472
   wall_height: 1.5
+music:
+  directory: ../assets/music/
+  menu: menu_music.wav
 window:
   title: FIUBAstein 3D
   width: 640
