@@ -163,6 +163,14 @@ bool GameStatus::changeMovementState(int clientId,MovementState state){
 	
 }
 
+std::vector<Item*>& GameStatus::getMapItems() {
+	return this->map.getItems();
+}
+
+std::vector<Item*>& GameStatus::getGsItems() {
+	return this->items;
+}
+
 bool GameStatus::changeShootingState(int clientId,ShootingState state){
 	return this->players.at(clientId).changeShootingState(state);
 	

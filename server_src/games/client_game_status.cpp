@@ -51,12 +51,21 @@ void ClientGameStatus::updateThisGameStatus(){
 			}
 		}	
 		
-		for (auto& it: this->gameStatus.items) {
+		this->items.clear();
+
+		for (auto& it: this->gameStatus.getGsItems()) {
 			ItemListElement i;
 			i.pos = it->getPosition();
 			i.isVisible = it->isVisible();
 			this->items.push_back(i);
 		}	
+
+		for (auto& it: this->gameStatus.getMapItems()) {
+			ItemListElement i;
+			i.pos = it->getPosition();
+			i.isVisible = it->isVisible();
+			this->items.push_back(i);
+		}
 }
 
 std::string ClientGameStatus::getEntireMap(){
