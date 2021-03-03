@@ -56,7 +56,11 @@ void GameLoop::run() {
 
   SDL_Event input;
   while (true) {
-    SDL_PollEvent(&input);
+    try {
+      SDL_WaitEvent(&input);
+    } catch (...) {
+      // throw ...
+    }
     SDL_Keycode code = input.key.keysym.sym;
 
     if (input.type == SDL_QUIT) {
