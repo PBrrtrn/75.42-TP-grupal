@@ -16,8 +16,6 @@ protected:
     std::string icon;
 private:
     void mousePressEvent(QMouseEvent *event);
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dropEvent(QDropEvent *event);
 public:
     ItemDraggable(QWidget* widget);
 

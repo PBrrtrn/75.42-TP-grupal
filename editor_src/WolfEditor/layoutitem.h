@@ -22,7 +22,7 @@
 class LayoutItem : public QGraphicsLayoutItem, public QGraphicsItem,public QObject
 {
 public:
-    LayoutItem(MapServer& map,AppStatus& appStatus,float pos_x = 0,float pos_y = 0,std::string graphic = ":/images/block.png",int scale = 1,QGraphicsItem *parent = nullptr);
+    LayoutItem(MapServer* map,AppStatus& appStatus,float pos_x = 0,float pos_y = 0,std::string graphic = ":/images/block.png",int scale = 1,QGraphicsItem *parent = nullptr);
 
     // Inherited from QGraphicsLayoutItem
     void setGeometry(const QRectF &geom) override;
@@ -41,7 +41,7 @@ public:
 
 private:
     QPixmap m_pix;
-    MapServer& map;
+    MapServer* map;
     AppStatus& appStatus;
     bool hasItem;
 void mousePressEvent(QGraphicsSceneMouseEvent *event);

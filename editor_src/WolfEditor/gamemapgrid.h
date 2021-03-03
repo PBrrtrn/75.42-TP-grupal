@@ -10,13 +10,14 @@ class GameMapGrid : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    GameMapGrid(MapServer& map,AppStatus& appStatus,QGraphicsWidget *parent = nullptr);
+    GameMapGrid(MapServer* map,AppStatus& appStatus,QGraphicsWidget *parent = nullptr);
     std::vector<std::vector<int>> map;
-    //void loadMap(Map& map);
+    std::string getSerializedMap();
 
 private:
     AppStatus& appStatus;
-    MapServer& fullMap;
+    //MapServer& fullMap;
+    MapServer* fullMap;
 //    void dragEnterEvent(QDragEnterEvent *event);
 
 

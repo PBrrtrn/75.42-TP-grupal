@@ -70,6 +70,8 @@ else()
     itembullets.h
     itemcanion.cpp
     itemcanion.h
+    itemspawnpoint.cpp
+    itemspawnpoint.h
     object_list.h
     itemkey.cpp
     itemkey.h

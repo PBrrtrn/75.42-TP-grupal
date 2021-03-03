@@ -1,5 +1,9 @@
 #include "SpawnPointSerializer.h"
 
+#include <iostream>
+
+#include <algorithm>
+
 SpawnPointSerializer::SpawnPointSerializer(){}
 SpawnPoint SpawnPointSerializer::deserialize(const std::string& serializedSP){
 	std::stringstream ss(serializedSP);
@@ -22,6 +26,11 @@ std::string SpawnPointSerializer::serialize(SpawnPoint& sp){
 	std::string positionY = std::to_string(sp.getPosition().getYCoordinate());
 	std::string directionX = std::to_string(sp.getDirection().getXCoordinate());
 	std::string directionY = std::to_string(sp.getDirection().getYCoordinate());
+	
+	std::replace(positionX.begin(),positionX.end(),',','.');
+	std::replace(positionY.begin(),positionY.end(),',','.');
+	std::replace(directionX.begin(),directionX.end(),',','.');
+	std::replace(directionY.begin(),directionY.end(),',','.');
 	
 	return positionX + " " + positionY + " " + directionX + " " + directionY;
 }

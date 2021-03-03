@@ -5,25 +5,26 @@
 #include <QGraphicsGridLayout>
 #include <QMessageBox>
 
-GameMapGrid::GameMapGrid(MapServer& map,AppStatus& appStatus,QGraphicsWidget *parent) : QGraphicsWidget(parent, Qt::Widget),appStatus(appStatus),fullMap(map)
+GameMapGrid::GameMapGrid(MapServer* map,AppStatus& appStatus,QGraphicsWidget *parent) : QGraphicsWidget(parent, Qt::Widget),appStatus(appStatus),fullMap(map)
 {
-
-    //this->fullMap = map;
 
     QGraphicsLinearLayout *windowLayout = new QGraphicsLinearLayout(Qt::Vertical);
 
     QGraphicsGridLayout *grid = new QGraphicsGridLayout(windowLayout);
 
-    int width = this->fullMap.getWidth();
-    int height = this->fullMap.getHeight();
+    int width = this->fullMap->getWidth();
+    int height = this->fullMap->getHeight();
 
     std::unordered_map<int,std::string> texture_list;
+
+    qDebug(std::to_string(width).c_str());
 
     for (int row = 0; row < height; row++){
         for (int column = 0;column < width; column++){
 
-            std::string graphic = TextureList::textures.at(this->fullMap.getGridValue(column,row));
-            LayoutItem *item = new LayoutItem(this->fullMap,this->appStatus,column,row,graphic,20);
+            //std::string graphic = TextureList::textures.at(this->fullMap.getGridValue(column,row));
+            std::string graphic = TextureList::textures.at(this->fullMap->getGridValue(column,row));
+            LayoutItem *item = new LayoutItem(this->fullMap,this->appStatus,column,row,graphic,30);
             grid->addItem(item, row, column, 1, 1 );
         }
     }
@@ -37,16 +38,6 @@ GameMapGrid::GameMapGrid(MapServer& map,AppStatus& appStatus,QGraphicsWidget *pa
 
 }
 
-//void GameMapGrid::dragEnterEvent(QDragEnterEvent *event)
-//{
-//    if (true){
-//
-//        QMessageBox msgBox;
-//
-//        msgBox.setText("hola, drop");
-//        msgBox.exec();
-//        event->setAccepted(true);
-//        event->acceptProposedAction();
-//    }
-//}
-
+std::string GameMapGrid::getSerializedMap(){
+    return this->fullMap->getSerializedMap();
+}
