@@ -80,11 +80,23 @@ consumables:
   directory: ../assets/textures/consumables/
 animations:
   weapons:
+    - directory: ../assets/sprites/player_weapons/knife/
+      x_pos: 120
+      y_pos: 310
+      width: 420
+      height: 120
+      steps: 12
+      idle:
+        - knife_idle.png
+      shooting:
+        - knife_stabbing_1.png
+        - knife_stabbing_2.png
     - directory: ../assets/sprites/player_weapons/pistol/
       x_pos: 120
       y_pos: 310
       width: 420
       height: 120
+      steps: 12
       idle:
         - pistol_idle.png
       shooting:

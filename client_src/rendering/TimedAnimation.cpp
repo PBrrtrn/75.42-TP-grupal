@@ -11,9 +11,11 @@ TimedAnimation::~TimedAnimation() { }
 void TimedAnimation::render(SDL_Renderer* renderer, 
          										int x_pos, int y_pos, 
          										int width, int height) {
-	if (this->steps == 0) 
+	if (((this->steps + 1) % steps_per_frame) == 0)
 		this->animation.renderNextFrame(renderer, x_pos, y_pos, width, height);
-	else this->animation.render(renderer, x_pos, y_pos, width, height);
+	else
+		this->animation.render(renderer, x_pos, y_pos, width, height);
+
 	this->steps = (this->steps + 1) % steps_per_frame;
 }
 

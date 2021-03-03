@@ -5,7 +5,10 @@
 
 #include "PlayerWeapon.h"
 
-PlayerWeapon::PlayerWeapon(YAML::Node spec, SDL_Renderer* renderer) {
+PlayerWeapon::PlayerWeapon(YAML::Node spec, SDL_Renderer* renderer) 
+: shooting(false), elapsed_shooting_steps(0) {
+  this->total_shooting_steps = spec["steps"].as<int>();
+
   this->sprite_x_pos = spec["x_pos"].as<int>();
   this->sprite_y_pos = spec["y_pos"].as<int>();
   this->sprite_width = spec["width"].as<int>();
@@ -25,7 +28,10 @@ PlayerWeapon::PlayerWeapon(YAML::Node spec, SDL_Renderer* renderer) {
     std::string path = dir + spec["shooting"][i].as<std::string>();
     shooting_paths.push_back(path);
   }
-  this->shooting_animation = new TimedAnimation(renderer, shooting_paths, 1);
+  int steps_per_frame = this->total_shooting_steps/spec["shooting"].size();
+  this->shooting_animation = new TimedAnimation(renderer, 
+                                                shooting_paths, 
+                                                steps_per_frame);
 }
 
 PlayerWeapon::~PlayerWeapon() {
@@ -33,19 +39,28 @@ PlayerWeapon::~PlayerWeapon() {
   delete this->shooting_animation;
 }
 
-void PlayerWeapon::renderIdle(SDL_Renderer* renderer) {
-  this->shooting_animation->reset();
-  this->idle_animation->render(renderer,
-                               this->sprite_x_pos, 
-                               this->sprite_y_pos,
-                               this->sprite_width,
-                               this->sprite_height);
+void PlayerWeapon::setShooting() {
+  this->shooting = true;
 }
 
-void PlayerWeapon::renderShooting(SDL_Renderer* renderer) {
-  this->shooting_animation->render(renderer,
-                                   this->sprite_x_pos, 
-                                   this->sprite_y_pos,
-                                   this->sprite_width,
-                                   this->sprite_height);
+void PlayerWeapon::render(SDL_Renderer* renderer) {
+  if (this->shooting) {
+    this->shooting_animation->render(renderer,
+                                     this->sprite_x_pos, 
+                                     this->sprite_y_pos,
+                                     this->sprite_width,
+                                     this->sprite_height);
+    this->elapsed_shooting_steps++;
+    if (this->elapsed_shooting_steps == this->total_shooting_steps) {
+      this->shooting_animation->reset();
+      this->elapsed_shooting_steps = 0;
+      this->shooting = false;
+    }
+  } else {
+    this->idle_animation->render(renderer,
+                                 this->sprite_x_pos, 
+                                 this->sprite_y_pos,
+                                 this->sprite_width,
+                                 this->sprite_height);
+  }
 }

@@ -15,11 +15,14 @@ private:
 	int sprite_height;
   Animation* idle_animation;
   TimedAnimation* shooting_animation;
+  bool shooting;
+  int total_shooting_steps;
+  int elapsed_shooting_steps;
 public:
   PlayerWeapon(YAML::Node spec, SDL_Renderer* renderer);
   ~PlayerWeapon();
-  void renderIdle(SDL_Renderer* renderer);
-  void renderShooting(SDL_Renderer* renderer);
+  void setShooting();
+  void render(SDL_Renderer* renderer);
 };
 
 #endif
