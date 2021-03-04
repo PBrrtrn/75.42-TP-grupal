@@ -33,13 +33,19 @@ void ClientGameStatus::updateThisGameStatus(){
 				p.direction = this->gameStatus.playersDirections.at(p.clientId);
 				p.selectedWeapon = it.second.getSelectedWeaponIndex();
 				p.isAlive = it.second.getHealth();
+				p.receiveDamage = it.second.receivedDamageInStep();
+				p.firing_state = it.second.getCurrentFiringState();
+				p.movement_state = it.second.getCurrentMovementState();
 				this->players.insert({it.first,p});
 			} else {
 				this->players.at(it.first).clientId = it.first;
 				this->players.at(it.first).position = this->gameStatus.playersPositions.at(it.first);
 				this->players.at(it.first).direction = this->gameStatus.playersDirections.at(it.first);
 				this->players.at(it.first).selectedWeapon = it.second.getSelectedWeaponIndex();
-				this->players.at(it.first).isAlive = it.second.getHealth() ? true : false;				
+				this->players.at(it.first).isAlive = it.second.getHealth() ? true : false;
+				this->players.at(it.first).receiveDamage = it.second.receivedDamageInStep();
+				this->players.at(it.first).firing_state = it.second.getCurrentFiringState();
+				this->players.at(it.first).movement_state = it.second.getCurrentMovementState();				
 			}
 		}
 		for (auto& it: this->gameStatus.doors) {

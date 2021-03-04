@@ -38,6 +38,9 @@ struct PlayerListItem {
 	Vector direction;
 	uint8_t selectedWeapon;
 	bool isAlive;
+	bool receiveDamage;
+	FiringState firing_state;
+	MovementState movement_state;
 };
 
 //listado de items asociados a este 
