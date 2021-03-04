@@ -44,6 +44,10 @@ void Shoot::tryAction(GameStatus& gs, int clientID){
                         this->throwWeapon(gs.players.at(target_id).getSelectedWeaponIndex(), target_id, gs);
                         gs.items.push_back(new Bullets(gs.getPosition(target_id),false));
                         gs.addEnemyDead(clientID);
+                        std::vector<SpawnPoint> spawnpoints = gs.getSpawnPoints();
+                        int sp_idx = rand()% (spawnpoints.size());
+                        Vector position = spawnpoints[sp_idx].getPosition();
+                        gs.setPosition(clientID, position);
                     }
                 }
             }
