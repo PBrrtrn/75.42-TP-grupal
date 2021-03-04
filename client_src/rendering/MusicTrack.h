@@ -14,7 +14,6 @@ public:
 	void pause();
 };
 
-/*
 #define ERROR_BUF_LEN 256
 
 class TrackConstructorError : public std::exception {
@@ -26,5 +25,4 @@ public:
   virtual ~TrackConstructorError() noexcept;
 };
 
-*/
 #endif

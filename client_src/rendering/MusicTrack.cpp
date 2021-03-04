@@ -20,7 +20,7 @@ void MusicTrack::play() {
 void MusicTrack::pause() {
 	Mix_PauseMusic();
 }
-/*
+
 TrackConstructorError::TrackConstructorError
                 (const char *error) noexcept {
   snprintf(this->error_msg, ERROR_BUF_LEN, 
@@ -32,4 +32,3 @@ TrackConstructorError::~TrackConstructorError() noexcept { }
 const char* TrackConstructorError::what() const noexcept {
   return this->error_msg;
 }
-*/
