@@ -4,6 +4,7 @@
 #include "Vector.h"
 #include "ItemType.h"
 #include "FiringState.h"
+#include "../server_src/actions/MovementState.h"
 
 #define TOP_STATISTICS 10
 
