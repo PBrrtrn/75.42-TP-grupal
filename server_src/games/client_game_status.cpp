@@ -20,6 +20,11 @@ void ClientGameStatus::updateThisGameStatus(){
 		this->thisPlayerStatus.lives = this->gameStatus.players.at(assignedClientId).getLives();
 		this->thisPlayerStatus.hasKey = this->gameStatus.players.at(assignedClientId).hasKey();
 		this->thisPlayerStatus.firing_state = this->gameStatus.players.at(assignedClientId).getCurrentFiringState();
+		this->thisPlayerStatus.receivedDamage = this->gameStatus.players.at(assignedClientId).receivedDamageInStep();
+		this->thisPlayerStatus.died = this->gameStatus.players.at(assignedClientId).diedInStep();
+		this->thisPlayerStatus.pickedUpTreasure = this->gameStatus.players.at(assignedClientId).pickedUpTreasureInStep();
+		this->thisPlayerStatus.pickedUpBullets = this->gameStatus.players.at(assignedClientId).pickedUpBulletsInStep();
+		this->thisPlayerStatus.pickedUpLife = this->gameStatus.players.at(assignedClientId).pickedUpLifeInStep();
 		for (auto& it: this->gameStatus.players) {
 			if (this->players.find(it.first) == this->players.end()) {
 				PlayerListItem p;

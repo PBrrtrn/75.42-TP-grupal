@@ -211,6 +211,12 @@ Map& GameStatus::getMap() {
 	return this->map.getMap();
 }
 
+void GameStatus::resetPlayerStatusEvents() {
+	for (auto& p: this->players) {
+    	p.second.resetStepEvents();
+  	}
+}
+
 GameStatus::~GameStatus() {
 	for (auto x : this->items) {
 		delete x;

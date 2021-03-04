@@ -17,6 +17,11 @@ struct PlayerStatus {
 	uint8_t lives;
 	bool hasKey;
 	FiringState firing_state;
+	bool receivedDamage;
+	bool died;
+	bool pickedUpTreasure;
+	bool pickedUpBullets;
+	bool pickedUpLife;
 };
 
 //listado de puertas

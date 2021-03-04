@@ -39,6 +39,12 @@ class Player {
     MovementState rotation_state;
     bool _addWeapon(int idx, Arma* arma);
 
+    bool receivedDamage;
+	bool died;
+	bool pickedUpTreasure;
+	bool pickedUpBullets;
+	bool pickedUpLife;
+
 public:
 	
 	//Move constructor
@@ -62,6 +68,12 @@ public:
     int getCurrentBullets();
     int getPoints();
     bool hasKey();
+    bool receivedDamageInStep();
+	bool diedInStep();
+	bool pickedUpTreasureInStep();
+	bool pickedUpBulletsInStep();
+	bool pickedUpLifeInStep();
+    void resetStepEvents();
     int getLives();
     bool changeWeapon(int weapon_idx);
     int getSelectedWeaponIndex();

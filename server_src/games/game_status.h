@@ -70,6 +70,8 @@ public:
   bool changeFiringState(int clientId, FiringState state);
     
   Statistics& showStatistics();
+
+  void resetPlayerStatusEvents();
     
   friend class Action;
   friend class Shoot;
