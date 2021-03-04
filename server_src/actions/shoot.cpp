@@ -8,35 +8,65 @@
 Shoot::Shoot(){}
 
 void Shoot::tryAction(GameStatus& gs, int clientID){
+    if (gs.players.at(clientID).loseBullet()) gs.addBulletShooted(clientID);
     gs.changeFiringState(clientID, STATE_FIRING);
-    for (auto& it: gs.players) {
-        int target_id = it.first;
-        Player& target = it.second;
-        if (target_id != clientID && !target.is_dead()) {
-            Vector player_pos = gs.getPosition(clientID);
-            Vector target_pos = gs.getPosition(target_id);
 
-            Vector player_dir(gs.getAngle(clientID));
-            Vector target_dir = target_pos - player_pos;
+    Vector position = gs.getPosition(clientID);
+    float angle = gs.getAngle(clientID);
 
-            float angle = abs(player_dir.getAngle()) - abs(target_dir.getAngle());
-            if (abs(angle) < M_PI/2) {
-                float scalar = player_dir.x * target_dir.x;
-                scalar += player_dir.y * target_dir.y;
-                scalar = scalar / pow(player_dir.norm(), 2);
+    int map_column = int(position.x);
+    int map_row = int(position.y);
 
-                Vector projection { scalar * player_dir.x, 
-                                    - scalar * player_dir.y };
-                float ort_dist = (target_dir - projection).norm();
-                float target_dist = target_dir.norm();
+    float dir_x = cos(angle);
+    float dir_y = sin(angle);
 
-                RayCaster ray_caster;
-                RayHit hit = ray_caster.castRay(gs.getMap(), target_pos, target_dir.getAngle());
-                float wall_distance = hit.distance;
+    float columnwise_delta = std::abs(1/dir_x);
+    float rowwise_delta = std::abs(1/dir_y);
 
-                bool hit_wall = wall_distance < target_dist;
-                bool hit_enemy = gs.players.at(clientID).aimWeapon(ort_dist, target_dist);
-                if (hit_enemy && !hit_wall) {
+    float first_column_distance;
+    int columnwise_step;
+    if (dir_x > 0) {
+        columnwise_step = 1;
+        first_column_distance = 1 - (position.x - map_column);
+    } else {
+        columnwise_step = -1;
+        first_column_distance = (position.x - map_column);
+    }
+
+    float first_row_distance;
+    int rowwise_step;
+    if (dir_y > 0) {
+        rowwise_step = -1;
+        first_row_distance = (position.y - map_row);
+    } else {
+        rowwise_step = 1;
+        first_row_distance = 1 - (position.y - map_row);
+    }
+
+    float columnwise_distance = first_column_distance * columnwise_delta;
+    float rowwise_distance = first_row_distance * rowwise_delta;
+
+    int hit_side = 1;
+    while (gs.getMap()[map_row][map_column] < 1) {
+        for (auto& it: gs.players) {
+            int target_id = it.first;
+            Player& target = it.second;
+            if (target_id != clientID && !target.is_dead()) {
+                Vector tgt = gs.getPosition(target_id);
+                float x_distance = float(tgt.x - float(map_column));
+                float y_distance = float(tgt.y - float(map_row));
+                float ort_dist = fabs(x_distance) + fabs(y_distance);
+
+                float target_dist;
+                if (hit_side == 0) {
+                  target_dist = map_column - position.x + (1 - columnwise_step)/2;
+                  target_dist = target_dist * columnwise_delta;
+                }   else {
+                    target_dist = (position.y - (1 - rowwise_step)/2 - map_row) * rowwise_delta;
+                }
+                target_dist = fabs(target_dist);
+
+                if (gs.players.at(clientID).aimWeapon(ort_dist, target_dist)) {
                     int danio = 1+rand()%10;
                     if (target.loseHealth(danio) ) {
                         std::cout << "Player "<< target_id <<" has been killed" << std::endl;
@@ -49,10 +79,19 @@ void Shoot::tryAction(GameStatus& gs, int clientID){
                         Vector position = spawnpoints[sp_idx].getPosition();
                         gs.setPosition(clientID, position);
                     }
+                    return;
                 }
             }
+        }
 
-            if (gs.players.at(clientID).loseBullet()) gs.addBulletShooted(clientID);
+        if (columnwise_distance < rowwise_distance) {
+            map_column += columnwise_step;
+            columnwise_distance += columnwise_delta;
+            hit_side = 0;
+        } else {
+            map_row += rowwise_step;
+            rowwise_distance += rowwise_delta;
+            hit_side = 1;
         }
     }
 }

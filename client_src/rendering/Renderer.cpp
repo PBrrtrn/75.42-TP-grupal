@@ -106,6 +106,12 @@ void Renderer::run() {
                          this->item_textures,
                          this->enemy_animations);
     UIDrawer ui_drawer(this->renderer, this->config["game_ui"]);
+
+    GameStatusUpdate status_update = this->game_status_monitor.getUpdate();
+    for (PlayerListItem& enemy : status_update.enemies) {
+      std::cout << int(enemy.clientId) << std::endl;
+    }
+
     while (this->in_game) renderMatch(map_drawer, ui_drawer);
     this->game_music->pause();
   }
