@@ -10,19 +10,8 @@ void MessageProcessor::run(){
     }	
 }
 
-void MessageProcessor::checkNews() {
-	/*
-	this->messages.lock();
-	while (!this->messages.isEmptySync()) {
-		Message m = this->messages.popSync();
-		this->gameManager.newMessage(m);
-	}
-	this->messages.unlock();
-	*/
-	//REEMPLZAR POR PTRORECETD
-}
-
 void MessageProcessor::shutdown(){
+	this->gameManager.closeBlockingQueue();
 	this->keep_running = false;
 }
 
