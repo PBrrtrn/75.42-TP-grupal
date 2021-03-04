@@ -119,6 +119,8 @@ public:
 
 	void receiveMessages();
 
+	void closeBlockingQueue();
+
 	~GameManager();
 };
 
