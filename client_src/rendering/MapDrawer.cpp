@@ -100,8 +100,6 @@ void MapDrawer::drawItems(SDL_Renderer* renderer,
   plane = plane * ((this->fov*180) / (100*M_PI));
 
   for (ItemListElement& item : items) {
-    // std::cout << "current pos: (" << position.x << ", " << position.y << ")" << std::endl;
-    // std::cout << "item pos: (" << item.pos.x << ", " << item.pos.y << ")" << std::endl;
     Vector item_dir { item.pos.x - position.x,
                       position.y - item.pos.y };
     float transf_x = view_x * item_dir.y - view_y * item_dir.x;
