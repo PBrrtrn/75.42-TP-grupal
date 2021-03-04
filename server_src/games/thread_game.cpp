@@ -65,6 +65,7 @@ void ThreadGame:: run() {
     auto start_t = std::chrono::steady_clock::now();
 
     this->resetFiringState();
+    this->resetPlayerStatusEvents();
     this->checkNews();
     this->updatePlayerPositions();
     this->updatePlayerRotations();
@@ -361,6 +362,10 @@ void ThreadGame::resetFiringState() {
   for (auto c: this->clients) {
     this->gameStatus.changeFiringState(c.first, STATE_NOT_FIRING);
   }
+}
+
+void ThreadGame::resetPlayerStatusEvents() {
+  this->gameStatus.resetPlayerStatusEvents();
 }
 
 bool ThreadGame:: isDead() {
