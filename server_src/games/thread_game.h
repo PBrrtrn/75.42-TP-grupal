@@ -159,6 +159,8 @@ class ThreadGame: public Thread {
         void changeShootingState(int playerId, ShootingState state);
         void updateShootingTime(float delta);
         void resetFiringState();
+
+        void resetPlayerStatusEvents();
         
         void changeWeaponAmetralladora(int id);
         void changeWeaponCanion(int id);

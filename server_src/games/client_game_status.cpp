@@ -20,6 +20,11 @@ void ClientGameStatus::updateThisGameStatus(){
 		this->thisPlayerStatus.lives = this->gameStatus.players.at(assignedClientId).getLives();
 		this->thisPlayerStatus.hasKey = this->gameStatus.players.at(assignedClientId).hasKey();
 		this->thisPlayerStatus.firing_state = this->gameStatus.players.at(assignedClientId).getCurrentFiringState();
+		this->thisPlayerStatus.receivedDamage = this->gameStatus.players.at(assignedClientId).receivedDamageInStep();
+		this->thisPlayerStatus.died = this->gameStatus.players.at(assignedClientId).diedInStep();
+		this->thisPlayerStatus.pickedUpTreasure = this->gameStatus.players.at(assignedClientId).pickedUpTreasureInStep();
+		this->thisPlayerStatus.pickedUpBullets = this->gameStatus.players.at(assignedClientId).pickedUpBulletsInStep();
+		this->thisPlayerStatus.pickedUpLife = this->gameStatus.players.at(assignedClientId).pickedUpLifeInStep();
 		for (auto& it: this->gameStatus.players) {
 			if (this->players.find(it.first) == this->players.end()) {
 				PlayerListItem p;
@@ -28,13 +33,19 @@ void ClientGameStatus::updateThisGameStatus(){
 				p.direction = this->gameStatus.playersDirections.at(p.clientId);
 				p.selectedWeapon = it.second.getSelectedWeaponIndex();
 				p.isAlive = it.second.getHealth();
+				p.receiveDamage = it.second.receivedDamageInStep();
+				p.firing_state = it.second.getCurrentFiringState();
+				p.movement_state = it.second.getCurrentMovementState();
 				this->players.insert({it.first,p});
 			} else {
 				this->players.at(it.first).clientId = it.first;
 				this->players.at(it.first).position = this->gameStatus.playersPositions.at(it.first);
 				this->players.at(it.first).direction = this->gameStatus.playersDirections.at(it.first);
 				this->players.at(it.first).selectedWeapon = it.second.getSelectedWeaponIndex();
-				this->players.at(it.first).isAlive = it.second.getHealth() ? true : false;				
+				this->players.at(it.first).isAlive = it.second.getHealth() ? true : false;
+				this->players.at(it.first).receiveDamage = it.second.receivedDamageInStep();
+				this->players.at(it.first).firing_state = it.second.getCurrentFiringState();
+				this->players.at(it.first).movement_state = it.second.getCurrentMovementState();				
 			}
 		}
 		for (auto& it: this->gameStatus.doors) {
