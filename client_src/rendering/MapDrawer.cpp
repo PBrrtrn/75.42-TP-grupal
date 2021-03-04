@@ -100,8 +100,8 @@ void MapDrawer::drawItems(SDL_Renderer* renderer,
   plane = plane * ((this->fov*180) / (100*M_PI));
 
   for (ItemListElement& item : items) {
-    std::cout << "current pos: (" << position.x << ", " << position.y << ")" << std::endl;
-    std::cout << "item pos: (" << item.pos.x << ", " << item.pos.y << ")" << std::endl;
+    // std::cout << "current pos: (" << position.x << ", " << position.y << ")" << std::endl;
+    // std::cout << "item pos: (" << item.pos.x << ", " << item.pos.y << ")" << std::endl;
     Vector item_dir { item.pos.x - position.x,
                       position.y - item.pos.y };
     float transf_x = view_x * item_dir.y - view_y * item_dir.x;
@@ -114,11 +114,12 @@ void MapDrawer::drawItems(SDL_Renderer* renderer,
       int sprite_x = (this->screen_width/2) * (1 - transf_x/transf_y);
       int sprite_y = (this->screen_height - sprite_height)/2;
 
-      // Texture* sprite = this->item_sprites[item.type];
-      Texture* sprite = this->item_sprites[0];
-      sprite->renderTexels(renderer, z_buffer, transf_y,
-                              sprite_x, sprite_y,
-                              sprite_width, sprite_height);
+      Texture* sprite = this->item_sprites[item.type];
+      if (item.isVisible) {
+        sprite->renderTexels(renderer, z_buffer, transf_y,
+                                sprite_x, sprite_y,
+                                sprite_width, sprite_height);
+      }
     }
   }
 }
