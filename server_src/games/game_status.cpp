@@ -10,6 +10,10 @@ GameStatus::GameStatus(std::string mapLocation) : map(mapLocation) {
 	}
 	
 	this->loadDoors();
+
+	const YAML::Node& c = ServerConfig::Config["Item"];
+
+    this->itemPickUpRange = c["PickUpRange"].as<float>();
 	
 	std::cout << "Entire map:" << this->entireMap << std::endl;
 	
@@ -78,7 +82,7 @@ void GameStatus::checkPlayerPickups(){
 			Player& player = it.second;
 
 			Vector distance = item_position - this->getPosition(player_id);
-			if (abs(distance.norm()) < 6 && item->canBePickedUp()) {
+			if (abs(distance.norm()) < this->itemPickUpRange && item->canBePickedUp()) {
 				item->pickUp(player);
 			}			
 		}
@@ -92,7 +96,7 @@ void GameStatus::checkPlayerPickups(){
 			Player& player = it.second;
 
 			Vector distance = item_position - this->getPosition(player_id);
-			if (abs(distance.norm()) < 1 && item->canBePickedUp()) {
+			if (abs(distance.norm()) < this->itemPickUpRange && item->canBePickedUp()) {
 				item->pickUp(player);
 			}			
 		}

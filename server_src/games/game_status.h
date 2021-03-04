@@ -27,6 +27,7 @@ private:
   MapServer map;
   std::string mapLocation;
   std::string entireMap;
+  float itemPickUpRange;
 
   void loadDoors();
   
