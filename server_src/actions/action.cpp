@@ -23,6 +23,9 @@ bool Action:: is_colision(int clientID, Vector& next_position, GameStatus& gs) {
     } else if (map.isObstacle(next_position)) {
         std::cout << "Object detected - invalid move" << '\n';
         return true;
+    } else if (gs.isPlayer(next_position)) {
+        std::cout << "Player detected - invalid move" << '\n';
+        return true;
     } else {
         gs.setPosition(clientID, next_position);
         return false;

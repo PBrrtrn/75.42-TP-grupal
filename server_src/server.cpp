@@ -6,12 +6,15 @@ Server::Server() {}
 void Server::start() {
     std::cout << "SERVER STARTED." << std::endl;
     this->acceptor.start();
-    
+
     std::string line;
-    while (std::getline(std::cin, line)) {
-		if (line == "q" || line == "quit") break;
+    while (true) {
+        std::getline(std::cin, line);
+		if (line == "q" || line == "quit") {
+           	this->acceptor.shutdown(); 
+            return;
+        }
 	}
-	this->acceptor.shutdown();
 }
 
 

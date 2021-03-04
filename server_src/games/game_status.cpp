@@ -221,6 +221,13 @@ void GameStatus::resetPlayerStatusEvents() {
   	}
 }
 
+bool GameStatus::isPlayer(Vector& position) {
+	for (auto& p: this->playersPositions) {
+    	if (p.second == position) return true; 
+  	}
+	return false;
+}
+
 GameStatus::~GameStatus() {
 	for (auto x : this->items) {
 		delete x;

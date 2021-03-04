@@ -13,9 +13,7 @@ void GameManager:: newMessage(Message message) {
 void GameManager:: _parse_message(Message message){}
 
 void GameManager::receiveMessages() {
-    //std::vector<Message> messages = this->lobby_messages.popAll();
-
-	//for (std::vector<Message>::iterator it = messages.begin() ; it != messages.end(); ++it) {
+    try {
         Message m = this->lobby_messages.pop();
         switch (m.getType())
         {
@@ -29,7 +27,6 @@ void GameManager::receiveMessages() {
             this->informAvailableGames(m.getClientId());
             break;
         case CLIENT_REQUEST_MAPS_LIST:
-			//std::cout << "gamemanager - CLIENT_REQUEST_MAPS_LIST:" << std::to_string(m.getClientId()) << std::endl;
             this->sendMapsList(m.getClientId());
             break;
         case CLIENT_REQUEST_LEAVE_GAME:
@@ -38,15 +35,13 @@ void GameManager::receiveMessages() {
         case TYPE_CLIENT_PING:
             break;     
         
-        /*si el cliente mando un mensaje que esta asociado al juego donde 
-        * esta jugando*/
         default:
-            //int gameId = this->clientsInGames.at(m.getClientId());
-            //this->queues.at(gameId)->push(m.;
             break;
         }
+    } catch (...) {
+        return;
     }
-//}
+}
 
 void GameManager::expelClient(int expelledClientId){
 	if (this->clientsInGames.find(expelledClientId) != this->clientsInGames.end()) {
@@ -70,7 +65,6 @@ void GameManager::startGame(int clientIdStarter, int mapId) {
                                             this->mapsRepo.getMapLocation(mapId),
                                             mapId, this->lobbyStatus) 
                             });
-        //TODO check si sigue siendo necesario clientsInGames
         this->clientsInGames.insert({clientIdStarter,this->games_counter});
         this->messageReceiver.insert(std::make_pair(this->games_counter, receiver));
         this->joinGame(clientIdStarter, this->games_counter);
@@ -137,6 +131,10 @@ void GameManager::cleanUpDeadGames(){
             this->games.erase(x.first);
         }
     }
+}
+
+void GameManager::closeBlockingQueue() {
+    this->lobby_messages.close();
 }
 
 GameManager::~GameManager(){

@@ -77,7 +77,7 @@ void Shoot::tryAction(GameStatus& gs, int clientID){
                         std::vector<SpawnPoint> spawnpoints = gs.getSpawnPoints();
                         int sp_idx = rand()% (spawnpoints.size());
                         Vector position = spawnpoints[sp_idx].getPosition();
-                        gs.setPosition(clientID, position);
+                        gs.setPosition(target_id, position);
                     }
                     return;
                 }
