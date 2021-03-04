@@ -65,19 +65,21 @@ void ClientGameStatus::updateThisGameStatus(){
 		this->items.clear();
 
 		for (auto& it: this->gameStatus.getGsItems()) {
-			ItemListElement i;
-			i.type = it->getType();
-			i.pos = it->getPosition();
-			i.isVisible = it->isVisible();
-			this->items.push_back(i);
+			if (it->isVisible()) {
+				ItemListElement i;
+				i.type = it->getType();
+				i.pos = it->getPosition();
+				this->items.push_back(i);
+			}
 		}	
 
 		for (auto& it: this->gameStatus.getMapItems()) {
-			ItemListElement i;
-			i.type = it->getType();
-			i.pos = it->getPosition();
-			i.isVisible = it->isVisible();
-			this->items.push_back(i);
+			if (it->isVisible()) {
+				ItemListElement i;
+				i.type = it->getType();
+				i.pos = it->getPosition();
+				this->items.push_back(i);
+			}
 		}
 }
 
