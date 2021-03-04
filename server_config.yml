@@ -34,6 +34,8 @@ Pistola:
   Idx: 1
   Cadencia: -1
   Precision: 1.5
+Item:
+  PickUpRange: 0.5
 Blood:
   Points: 1
 Food:

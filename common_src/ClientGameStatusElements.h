@@ -48,7 +48,6 @@ struct PlayerListItem {
 struct ItemListElement {
 	ItemType type;
 	Vector pos;
-	bool isVisible;
 };
 
 struct ClientKills {
