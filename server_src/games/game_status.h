@@ -73,6 +73,8 @@ public:
   Statistics& showStatistics();
 
   void resetPlayerStatusEvents();
+
+  bool isPlayer(Vector& position);
     
   friend class Action;
   friend class Shoot;
