@@ -28,10 +28,10 @@ void Animation::render(SDL_Renderer* renderer,
   this->frames[this->current_frame]->render(renderer, NULL, &dest);
 }
 
-void Animation::renderTexel(SDL_Renderer* renderer, 
-                            std::vector<float>& z_buffer,
-                            float z_depth, int x_pos, int y_pos, 
-                            int width, int height) {
+void Animation::renderTexels(SDL_Renderer* renderer,
+                             std::vector<float>& z_buffer,
+                             float z_depth, int x_pos, int y_pos,
+                             int width, int height) {
   Texture* frame = this->frames[0];
 
   int start_x = x_pos - (width/2);

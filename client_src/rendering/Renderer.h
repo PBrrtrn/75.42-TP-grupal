@@ -30,6 +30,7 @@ private:
   int fps_cap;
   std::vector<Animation*> enemy_animations;
   std::vector<Texture*> wall_textures;
+  std::vector<Texture*> item_textures;
   std::vector<PlayerWeapon*> player_weapons;
   MusicTrack* menu_music;
   MusicTrack* game_music;

@@ -7,19 +7,20 @@
 
 MapDrawer::MapDrawer(YAML::Node& config, Map& map,
                      std::vector<Texture*>& wall_textures,
+                     std::vector<Texture*>& item_sprites,
                      std::vector<Animation*>& enemy_animations)
 : screen_width(config["window"]["width"].as<int>()), 
   screen_height(config["window"]["height"].as<int>()), 
   fov(config["graphics"]["FOV"].as<float>()),
   wall_height(config["graphics"]["wall_height"].as<float>()),
-  wall_textures(wall_textures), enemy_animations(enemy_animations), 
-  map(map) { }
+  wall_textures(wall_textures), item_sprites(item_sprites),
+  enemy_animations(enemy_animations), map(map) { }
 
 MapDrawer::~MapDrawer() { }
 
 void MapDrawer::draw(SDL_Renderer* renderer, Vector position, float view_angle,
-                     std::vector<PlayerListItem>& enemies,
-                     std::vector<ItemListElement>& items) {
+                     std::vector<ItemListElement>& items,
+                     std::vector<PlayerListItem>& enemies) {
   this->drawFloors(renderer);
 
   float a_increment = (this->fov/this->screen_width);
@@ -82,8 +83,9 @@ void MapDrawer::drawEnemies(SDL_Renderer* renderer,
       int sprite_y = (this->screen_height - sprite_height)/2;
 
       Animation* animation = enemy_animations[0];
-      animation->renderTexel(renderer, z_buffer, transf_y, sprite_x, sprite_y,
-                             sprite_width, sprite_height);
+      animation->renderTexels(renderer, z_buffer, transf_y, 
+                              sprite_x, sprite_y,
+                              sprite_width, sprite_height);
     }
   }
 }
@@ -92,5 +94,31 @@ void MapDrawer::drawItems(SDL_Renderer* renderer,
                           Vector position, float view_angle,
                           std::vector<ItemListElement>& items,
                           std::vector<float> z_buffer) {
+  float view_y = sin(view_angle);
+  float view_x = cos(view_angle);
+  Vector plane(view_angle + M_PI/2);
+  plane = plane * ((this->fov*180) / (100*M_PI));
 
+  for (ItemListElement& item : items) {
+    std::cout << "current pos: (" << position.x << ", " << position.y << ")" << std::endl;
+    std::cout << "item pos: (" << item.pos.x << ", " << item.pos.y << ")" << std::endl;
+    Vector item_dir { item.pos.x - position.x,
+                      position.y - item.pos.y };
+    float transf_x = view_x * item_dir.y - view_y * item_dir.x;
+    float transf_y = plane.y * item_dir.x - plane.x * item_dir.y;
+
+    if (transf_y > 0.1) {
+      int sprite_width = int(this->screen_width/transf_y);
+      int sprite_height = int(this->screen_height/transf_y);
+
+      int sprite_x = (this->screen_width/2) * (1 - transf_x/transf_y);
+      int sprite_y = (this->screen_height - sprite_height)/2;
+
+      // Texture* sprite = this->item_sprites[item.type];
+      Texture* sprite = this->item_sprites[0];
+      sprite->renderTexels(renderer, z_buffer, transf_y,
+                              sprite_x, sprite_y,
+                              sprite_width, sprite_height);
+    }
+  }
 }

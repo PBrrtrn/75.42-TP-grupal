@@ -34,6 +34,7 @@ Renderer::Renderer(YAML::Node& config, std::atomic<bool>& in_game,
 Renderer::~Renderer() {
   for (Animation* animation : this->enemy_animations) delete animation;
   for (Texture* texture : this->wall_textures) delete texture;
+  for (Texture* texture : this->item_textures) delete texture;
 
   delete this->menu_music;
 
@@ -53,6 +54,16 @@ void Renderer::load() {
 
     Texture* texture = new Texture(this->renderer, filepath.c_str());
     this->wall_textures.push_back(texture);
+  }
+
+  std::string items_dir = config["items"]["directory"].as<std::string>();
+
+  for (int i = 0; i < this->config["items"]["files"].size(); i++) {
+    std::string filename = this->config["items"]["files"][i].as<std::string>();
+    std::string filepath = items_dir + filename;
+
+    Texture* texture = new Texture(this->renderer, filepath.c_str());
+    this->item_textures.push_back(texture);
   }
 
   YAML::Node weapons_node = this->config["weapons"];
@@ -91,7 +102,8 @@ void Renderer::run() {
     this->game_music->play();
     Map map = this->game_status_monitor.getMap();
     MapDrawer map_drawer(this->config, map, 
-                         this->wall_textures, 
+                         this->wall_textures,
+                         this->item_textures,
                          this->enemy_animations);
     UIDrawer ui_drawer(this->renderer, this->config["game_ui"]);
     while (this->in_game) renderMatch(map_drawer, ui_drawer);
@@ -106,7 +118,7 @@ void Renderer::renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer) {
 
   map_drawer.draw(this->renderer, status_update.position, 
                   status_update.direction.getAngle(),
-                  status_update.enemies, status_update.items);
+                  status_update.items, status_update.enemies);
 
   int selected_weapon = int(status_update.selected_weapon);
   if (status_update.player_firing == STATE_FIRING)

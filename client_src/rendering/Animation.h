@@ -20,8 +20,8 @@ public:
   void render(SDL_Renderer* renderer, 
               int x_pos, int y_pos, 
               int width, int height);
-  void renderTexel(SDL_Renderer* renderer, std::vector<float>& z_buffer,
-                   float z_depth, int x_pos, int y_pos, int width, int height);
+  void renderTexels(SDL_Renderer* renderer, std::vector<float>& z_buffer,
+                    float z_depth, int x_pos, int y_pos, int width, int height);
 };
 
 #endif

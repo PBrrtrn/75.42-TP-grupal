@@ -121,30 +121,31 @@ weapons:
     shooting:
       - pistol_shooting_1.png
       - pistol_shooting_2.png
+  - directory: ../assets/player_weapons/pistol/ # Ametralladora
+    sfx: shooting.wav
+    x_pos: 120
+    y_pos: 310
+    width: 420
+    height: 120
+    steps: 12
+    idle:
+      - pistol_idle.png
+    shooting:
+      - pistol_shooting_1.png
+      - pistol_shooting_2.png
+  - directory: ../assets/player_weapons/pistol/ # Chaincannon
+    sfx: shooting.wav
+    x_pos: 120
+    y_pos: 310
+    width: 420
+    height: 120
+    steps: 12
+    idle:
+      - pistol_idle.png
+    shooting:
+      - pistol_shooting_1.png
+      - pistol_shooting_2.png
 animations:
-  # weapons:
-  #   - directory: ../assets/sprites/player_weapons/knife/
-  #     x_pos: 120
-  #     y_pos: 310
-  #     width: 420
-  #     height: 120
-  #     steps: 12
-  #     idle:
-  #       - knife_idle.png
-  #     shooting:
-  #       - knife_stabbing_1.png
-  #       - knife_stabbing_2.png
-  #   - directory: ../assets/sprites/player_weapons/pistol/
-  #     x_pos: 120
-  #     y_pos: 310
-  #     width: 420
-  #     height: 120
-  #     steps: 12
-  #     idle:
-  #       - pistol_idle.png
-  #     shooting:
-  #       - pistol_shooting_1.png
-  #       - pistol_shooting_2.png
   enemies:
     directory: ../assets/sprites/enemies/
     sprite_sets:

@@ -17,6 +17,10 @@ public:
   Texture(const Texture&) = delete;            // Saco el constructor por copia
   Texture& operator=(const Texture&) = delete; // Saco la asignacion por copia
   void render(SDL_Renderer* renderer, SDL_Rect *clip, SDL_Rect *dst);
+  void renderTexels(SDL_Renderer* renderer,
+                    std::vector<float>& z_buffer,
+                    float z_depth, int x_pos, int y_pos,
+                    int width, int height);
   void renderTexel(SDL_Renderer* renderer, int x, float texel, 
                    int screen_height, int length, int side);
   int getWidth();

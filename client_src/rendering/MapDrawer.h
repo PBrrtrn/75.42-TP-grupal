@@ -20,6 +20,7 @@ private:
 	float fov;
 	float wall_height;
 	std::vector<Texture*>& wall_textures;
+	std::vector<Texture*>& item_sprites;
 	std::vector<Animation*>& enemy_animations;
 	Map& map;
 	RayCaster ray_caster;
@@ -34,11 +35,12 @@ private:
                  std::vector<float> z_buffer);
 public:
 	MapDrawer(YAML::Node& config, Map& map, std::vector<Texture*>& wall_textures,
+						std::vector<Texture*>& item_sprites,
 						std::vector<Animation*>& enemy_animations);
 	~MapDrawer();
 	void draw(SDL_Renderer* renderer, Vector position, float view_angle,
-						std::vector<PlayerListItem>& enemies,
-						std::vector<ItemListElement>& items);
+						std::vector<ItemListElement>& items,
+						std::vector<PlayerListItem>& enemies);
 };
 
 #endif
