@@ -115,11 +115,9 @@ void MapDrawer::drawItems(SDL_Renderer* renderer,
       int sprite_y = (this->screen_height - sprite_height)/2;
 
       Texture* sprite = this->item_sprites[item.type];
-      if (item.isVisible) {
-        sprite->renderTexels(renderer, z_buffer, transf_y,
-                                sprite_x, sprite_y,
-                                sprite_width, sprite_height);
-      }
+      sprite->renderTexels(renderer, z_buffer, transf_y,
+                           sprite_x, sprite_y,
+                           sprite_width, sprite_height);
     }
   }
 }
