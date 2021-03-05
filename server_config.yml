@@ -4,35 +4,34 @@ Player:
   MaxBullets: 100
   StartingBullets: 8
 Ametralladora:
-  Cadencia: 0.1
   Nombre: AMETRALLADORA
   AttackRange: 1000000
   Idx: 2
-  Cadencia: 275856
+  Cadencia: 0.3
   Precision: 2
 CanionDeCadena:
   Nombre: CANION_DE_CADENA
   AttackRange: 1000000
   Idx: 3
-  Cadencia: 68964
+  Cadencia: 0.1
   Precision: 3
 Cuchillo:
   Nombre: CUCHILLO
   AttackRange: 1
   Idx: 0
-  Cadencia: -1
+  Cadencia: 0
   Precision: 0
 LanzaCohetes:
   Nombre: LANZA_COHETES
   AttackRange: 1000000
   Idx: 4
-  Cadencia: -1
+  Cadencia: 0
   Precision: 0
 Pistola:
   Nombre: PISTOLA
   AttackRange: 1000000
   Idx: 1
-  Cadencia: -1
+  Cadencia: 0
   Precision: 1.5
 Item:
   PickUpRange: 0.5
