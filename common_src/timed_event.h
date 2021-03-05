@@ -3,14 +3,16 @@
 
 #include "../server_src/actions/shoot.h"
 #include "FiringState.h"
+#include <time.h>
 //#include "../server_src/games/thread_game.h"
 
 //class ThreadGame;
 
 class TimedEvent {
     private:
-        float timeout;
-        float elapsed;
+        double timeout;
+        double elapsed;
+        double last_shoot_time;
         Shoot* shoot;
         void (Shoot::*function)(GameStatus& gs, int id);
         bool active;
@@ -18,9 +20,9 @@ class TimedEvent {
         GameStatus& gs;
     public:
         TimedEvent(Shoot* shoot, void (Shoot::*function)(GameStatus& gs, int id), const int id, GameStatus& gs);
-        void activate(float timeout);
+        void activate(double timeout);
         void deactivate();
-        bool update(float delta);
+        bool update(double delta);
         ~TimedEvent();
 };
 

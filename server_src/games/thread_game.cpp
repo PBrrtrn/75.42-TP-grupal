@@ -61,6 +61,7 @@ void ThreadGame:: run() {
 
   this->fillTimedEvents();  
   
+  auto start = std::chrono::steady_clock::now();
     while (keep_running) {
     auto start_t = std::chrono::steady_clock::now();
 
@@ -69,7 +70,12 @@ void ThreadGame:: run() {
     this->checkNews();
     this->updatePlayerPositions();
     this->updatePlayerRotations();
-    this->updateShootingTime(1000000/this->fps);
+
+    auto updating = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed = updating - start;
+    this->updateShootingTime(elapsed.count());
+
+
     this->checkPlayerPickups();
     this->respawnItems();
     this->checkPlayerBullets();
@@ -81,7 +87,7 @@ void ThreadGame:: run() {
       usleep((1000000/this->fps) - sleep_t.count());
     }
 
-        this->remaining_time--;
+    this->remaining_time--;
     this->keep_running = this->gameStatus.getAlivePlayers() > 1 && this->remaining_time != 0 && !this->is_dead;
     }
     this->sendGameStatistics();
@@ -352,7 +358,7 @@ void ThreadGame::fillTimedEvents() {
   }
 }
 
-void ThreadGame::updateShootingTime(float delta){
+void ThreadGame::updateShootingTime(double delta){
   for (auto te: this->shooting_events) {
     te.second->update(delta);
   } 

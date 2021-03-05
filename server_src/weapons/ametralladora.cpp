@@ -6,7 +6,7 @@ Ametralladora::Ametralladora() : Arma() {
     this->nombre = c["Nombre"].as<std::string>();
     this->attack_range = c["AttackRange"].as<int>();
     this->indice = c["Idx"].as<int>();
-    this->cadencia = c["Cadencia"].as<float>();
+    this->cadencia = c["Cadencia"].as<double>();
     this->precision = c["Precision"].as<float>();
 }
 
