@@ -4,7 +4,6 @@ MessageProcessor::MessageProcessor(GameManager& gm) :
 gameManager(gm), keep_running(true) {}
 	
 void MessageProcessor::run(){
-	std::cout << "Message Processor running." << std::endl;
     while (keep_running) {
         this->gameManager.receiveMessages();
     }	

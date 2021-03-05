@@ -75,7 +75,6 @@ bool Player::aimWeapon(float ort_dist, float target_dist) {
 	if(this->armas[this->selected_weapon_idx] == NULL) {
 		return false;
 	}
-	this->armas[this->selected_weapon_idx]->printNombre();
 	return this->armas[this->selected_weapon_idx]->aimWeapon(ort_dist, target_dist);
 }
 

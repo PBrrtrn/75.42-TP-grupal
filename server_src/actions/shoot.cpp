@@ -57,14 +57,7 @@ void Shoot::tryAction(GameStatus& gs, int clientID){
                 float y_distance = float(tgt.y - float(map_row));
                 float ort_dist = fabs(x_distance) + fabs(y_distance);
 
-                float target_dist;
-                if (hit_side == 0) {
-                  target_dist = map_column - position.x + (1 - columnwise_step)/2;
-                  target_dist = target_dist * columnwise_delta;
-                }   else {
-                    target_dist = (position.y - (1 - rowwise_step)/2 - map_row) * rowwise_delta;
-                }
-                target_dist = fabs(target_dist);
+                float target_dist = fabs((tgt - position).norm());
 
                 if (gs.players.at(clientID).aimWeapon(ort_dist, target_dist)) {
                     int danio = 1+rand()%10;
