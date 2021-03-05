@@ -7,7 +7,12 @@ ArmaCanion::ArmaCanion(Vector pos_inicial,bool respawns) : Item(pos_inicial,resp
 bool ArmaCanion::pickUpAction(Player& p) {
 	CanionDeCadena* c = new CanionDeCadena();
 	//this->caniones.push_back(c);
-    return p.addWeapon(c);
+   	if (p.addWeapon(c)) {
+		return true;
+	} else {
+		delete c;
+		return false;
+	}
 }
 
 ArmaCanion::~ArmaCanion(){
