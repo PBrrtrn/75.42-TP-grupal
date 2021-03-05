@@ -17,7 +17,7 @@ CanionDeCadena:
   Precision: 3
 Cuchillo:
   Nombre: CUCHILLO
-  AttackRange: 1
+  AttackRange: 2
   Idx: 0
   Cadencia: 0
   Precision: 0
@@ -31,7 +31,7 @@ Pistola:
   Nombre: PISTOLA
   AttackRange: 1000000
   Idx: 1
-  Cadencia: 0
+  Cadencia: 1
   Precision: 1.5
 Item:
   PickUpRange: 0.5
