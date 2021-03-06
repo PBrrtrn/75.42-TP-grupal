@@ -8,7 +8,6 @@ class RespawnEvent : public TimedEvent {
     private:
         double timeout;
         double elapsed;
-        double last_run_time;
         bool active;
 
         Player* player;

@@ -285,7 +285,6 @@ void Player::respawn() {
 }
 
 bool Player::outGame() {
-	std::cout << "out game" << this->before_respawn << std::endl;
 	return this->before_respawn;
 }
 

@@ -50,7 +50,7 @@ Moves:
 Game:
   GameTime: 30000
   LobbyTime: 20
-  RespawnTime: 10
+  RespawnTime: 1
   FPS: 29
 Server:
   Hostname: localhost

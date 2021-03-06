@@ -76,8 +76,8 @@ void ThreadGame:: run() {
     this->updateShootingTime(elapsed.count());
 
     auto died = std::chrono::steady_clock::now();
-    std::chrono::duration<double> respawning = died - start;
-    this->updateRespawnPlayers(respawning.count());
+    std::chrono::duration<double> respawning = died - start_t;
+    this->updateRespawnPlayers(respawning.count() * 100);
 
     this->checkPlayerPickups();
     this->respawnItems();

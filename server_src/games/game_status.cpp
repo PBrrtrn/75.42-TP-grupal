@@ -127,6 +127,7 @@ void GameStatus::updateRespawnEvents(double delta) {
 			int sp_idx = rand()% (spawnpoints.size());
 			Vector position = spawnpoints[sp_idx].getPosition();
 			this->setPosition(te.first, position);
+			te.second->deactivate();
 		}
   	} 
 }
