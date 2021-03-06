@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <array>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "Renderer.h"
 #include "MenuRenderer.h"
@@ -24,16 +25,23 @@ Renderer::Renderer(YAML::Node& config, std::atomic<bool>& in_game,
   if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
     std::cout << "Warning: Could not set SDL hints" << std::endl;
 
+  if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+    throw RendererConstructorError(Mix_GetError());
+
   this->load();
 }
 
 Renderer::~Renderer() {
   for (Animation* animation : this->enemy_animations) delete animation;
   for (Texture* texture : this->wall_textures) delete texture;
+  for (Texture* texture : this->item_textures) delete texture;
+
+  delete this->menu_music;
 
   SDL_DestroyRenderer(this->renderer);
   TTF_Quit();
   IMG_Quit();
+  Mix_Quit();
   this->join();
 }
 
@@ -48,12 +56,31 @@ void Renderer::load() {
     this->wall_textures.push_back(texture);
   }
 
-  YAML::Node weapons_node = this->config["animations"]["weapons"];
+  std::string items_dir = config["items"]["directory"].as<std::string>();
+
+  for (int i = 0; i < this->config["items"]["files"].size(); i++) {
+    std::string filename = this->config["items"]["files"][i].as<std::string>();
+    std::string filepath = items_dir + filename;
+
+    Texture* texture = new Texture(this->renderer, filepath.c_str());
+    this->item_textures.push_back(texture);
+  }
+
+  YAML::Node weapons_node = this->config["weapons"];
   for (int i = 0; i < weapons_node.size(); i++) {
     PlayerWeapon* player_weapon = new PlayerWeapon(weapons_node[i], 
                                                    this->renderer);
     this->player_weapons.push_back(player_weapon);
   }
+
+  YAML::Node music_node = this->config["music"];
+  std::string music_dir = music_node["directory"].as<std::string>();
+
+  std::string music_path = music_dir + music_node["menu"].as<std::string>();
+  this->menu_music = new MusicTrack(music_path.c_str());
+  
+  music_path = music_dir + music_node["game"].as<std::string>();
+  this->game_music = new MusicTrack(music_path.c_str());
 
   //////////////////////////////////////////////////////////////
   std::vector<std::string> paths;
@@ -69,14 +96,24 @@ void Renderer::run() {
     MenuRenderer menu_renderer(this->config["menu_ui"],
                                this->menu_status,
                                this->renderer);
+    this->menu_music->play();
     while (!this->in_game) menu_renderer.render();
 
+    this->game_music->play();
     Map map = this->game_status_monitor.getMap();
     MapDrawer map_drawer(this->config, map, 
-                         this->wall_textures, 
+                         this->wall_textures,
+                         this->item_textures,
                          this->enemy_animations);
     UIDrawer ui_drawer(this->renderer, this->config["game_ui"]);
+
+    GameStatusUpdate status_update = this->game_status_monitor.getUpdate();
+    for (PlayerListItem& enemy : status_update.enemies) {
+      std::cout << int(enemy.clientId) << std::endl;
+    }
+
     while (this->in_game) renderMatch(map_drawer, ui_drawer);
+    this->game_music->pause();
   }
 }
 
@@ -87,12 +124,12 @@ void Renderer::renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer) {
 
   map_drawer.draw(this->renderer, status_update.position, 
                   status_update.direction.getAngle(),
-                  status_update.enemies);
+                  status_update.items, status_update.enemies);
 
-  if (status_update.player_firing == STATE_NOT_FIRING)
-    this->player_weapons[0]->renderIdle(this->renderer);
-  else if (status_update.player_firing == STATE_FIRING)
-    this->player_weapons[0]->renderShooting(this->renderer);
+  int selected_weapon = int(status_update.selected_weapon);
+  if (status_update.player_firing == STATE_FIRING)
+    this->player_weapons[selected_weapon]->setShooting();
+  this->player_weapons[selected_weapon]->render(this->renderer);
 
   ui_drawer.draw(this->renderer, status_update.health, 
                  status_update.enemies.size(), status_update.bullets,

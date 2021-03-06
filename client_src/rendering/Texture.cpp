@@ -1,3 +1,5 @@
+#include <vector>
+
 #include <iostream>
 #include "Texture.h"
 
@@ -25,6 +27,20 @@ Texture::~Texture() {
 
 void Texture::render(SDL_Renderer* renderer, SDL_Rect *clip, SDL_Rect *dest) {
   SDL_RenderCopy(renderer, this->texture, clip, dest);
+}
+
+void Texture::renderTexels(SDL_Renderer* renderer,
+                           std::vector<float>& z_buffer,
+                           float z_depth, int x_pos, int y_pos,
+                           int width, int height) {
+  int start_x = x_pos - (width/2);
+  int end_x = x_pos + (width/2);
+  for (int texel_x = start_x; (texel_x < end_x) && (texel_x < 640); texel_x++) {
+    if (z_depth < z_buffer[texel_x]) {
+      float texel = ((float)(texel_x - start_x))/(float(this->getWidth()));
+      this->renderTexel(renderer, texel_x, texel, 480, height, 0);
+    }
+  }
 }
 
 void Texture::renderTexel(SDL_Renderer* renderer, int x, float texel, 

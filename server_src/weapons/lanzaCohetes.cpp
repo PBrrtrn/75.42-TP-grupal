@@ -6,11 +6,11 @@ LanzaCohetes::LanzaCohetes() : Arma() {
     this->nombre = c["Nombre"].as<std::string>();
     this->attack_range = c["AttackRange"].as<int>();
     this->indice = c["Idx"].as<int>();
-    this->cadencia = c["Cadencia"].as<float>();
+    this->cadencia = c["Cadencia"].as<double>();
     this->precision = c["Precision"].as<float>();
 }
 
-bool LanzaCohetes::aimWeapon(float target_angle, float shooter_angle, float target_distance) {
+bool LanzaCohetes::aimWeapon(float ort_dist, float target_dist) {
     //TODO implementar
     return false;
 }

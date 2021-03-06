@@ -2,7 +2,13 @@
 
 #include <iostream>
 
-Player::Player(int id){
+Player::Player(int id) : 
+	receivedDamage(false),
+	died(false),
+	pickedUpTreasure(false),
+	pickedUpBullets(false),
+	pickedUpLife(false)
+	{
 	const YAML::Node& c = ServerConfig::Config["Player"];
 	
 	this->id = id;	
@@ -65,19 +71,21 @@ int Player::getWeaponAttackRange() {
 	return this->armas[this->selected_weapon_idx]->getAttackRange();
 }
 
-bool Player::aimWeapon(float target_angle, float shooter_angle, float target_distance) {
+bool Player::aimWeapon(float ort_dist, float target_dist) {
 	if(this->armas[this->selected_weapon_idx] == NULL) {
 		return false;
 	}
-	this->armas[this->selected_weapon_idx]->printNombre();
-	return this->armas[this->selected_weapon_idx]->aimWeapon(target_angle, shooter_angle, target_distance);
+	//this->armas[this->selected_weapon_idx]->printNombre();
+	return this->armas[this->selected_weapon_idx]->aimWeapon(ort_dist, target_dist);
 }
 
 //si el jugador es muerto como resultado de perder vida, devuelvo true.
 bool Player::loseHealth(int amount) {
 	this->health = this->health - amount;
 	std::cout << "Player was attacked --> health: " << this->health << std::endl;
+	this->receivedDamage = true;
 	if (this->health <= 0 && this->vidas > 0) {
+		this->died = true;
 		this->health = 20;
 		this->vidas--;
 		this->has_key = false;
@@ -106,6 +114,7 @@ bool Player::gainHealth(int amount) {
 	if(this->health < 20) {
 		this->health += amount;
 		if(this->health > 20) this->health = 20;
+		this->pickedUpLife = true;
 		return true;
 	}
 	return false;
@@ -113,6 +122,7 @@ bool Player::gainHealth(int amount) {
 
 bool Player::addScore(int amount) {
 	this->puntaje += amount;
+	this->pickedUpTreasure = true;
 	return true;
 }
 
@@ -136,6 +146,7 @@ bool Player::addBullets(int amount) {
 	if( this->bullets < this->max_bullets) {
 		this->bullets += amount;
 		if(this->bullets > this->max_bullets) this->bullets = this->max_bullets;
+		this->pickedUpBullets = true;
 		return true;
 	}
 	return false;
@@ -236,6 +247,34 @@ bool Player::changeRotationState(MovementState state){
 
 MovementState Player::getCurrentRotationState(){
 	return this->rotation_state;
+}
+
+bool Player::receivedDamageInStep() {
+	return this->receivedDamage;
+}
+
+bool Player::diedInStep(){
+	return this->died;
+}
+
+bool Player::pickedUpTreasureInStep(){
+	return this->pickedUpTreasure;
+}
+
+bool Player::pickedUpBulletsInStep(){
+	return this->pickedUpBullets;
+}
+
+bool Player::pickedUpLifeInStep(){
+	return this->pickedUpLife;
+}
+
+void Player::resetStepEvents(){
+	this->receivedDamage = false;
+	this->died = false;
+	this->pickedUpTreasure = false;
+	this->pickedUpBullets = false;
+	this->pickedUpLife = false;
 }
 
 Player::~Player(){

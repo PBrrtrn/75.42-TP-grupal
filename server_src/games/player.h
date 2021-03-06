@@ -39,6 +39,12 @@ class Player {
     MovementState rotation_state;
     bool _addWeapon(int idx, Arma* arma);
 
+    bool receivedDamage;
+	bool died;
+	bool pickedUpTreasure;
+	bool pickedUpBullets;
+	bool pickedUpLife;
+
 public:
 	
 	//Move constructor
@@ -56,12 +62,18 @@ public:
     bool gainKey();
     bool useKey();
     bool addWeapon(Arma* arma);
-    bool aimWeapon(float target_angle, float shooter_angle, float target_distance);
+    bool aimWeapon(float ort_dist, float target_dist);
     int getWeaponAttackRange();
     float getShootTimeout();
     int getCurrentBullets();
     int getPoints();
     bool hasKey();
+    bool receivedDamageInStep();
+	bool diedInStep();
+	bool pickedUpTreasureInStep();
+	bool pickedUpBulletsInStep();
+	bool pickedUpLifeInStep();
+    void resetStepEvents();
     int getLives();
     bool changeWeapon(int weapon_idx);
     int getSelectedWeaponIndex();

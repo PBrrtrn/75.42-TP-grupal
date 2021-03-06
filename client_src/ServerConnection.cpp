@@ -129,6 +129,8 @@ GameStatusUpdate ServerConnection::getGameStatusUpdate() {
   update.has_key = player_status.hasKey;
   update.player_firing = player_status.firing_state;
   update.enemies = players_list;
+  update.items = items_list;
+  // TODO: Guardar directamente sobre update
 
   return update;
 }

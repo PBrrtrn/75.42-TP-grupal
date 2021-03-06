@@ -14,23 +14,13 @@
 
 class MessageProcessor: public Thread {
 	private:
-        //BlockingQueue<Message>& messages;
         GameManager& gameManager;
         std::atomic<bool> keep_running;
-        
 
     public:
-        //MessageProcessor(BlockingQueue<Message>& m, GameManager& gm);
         MessageProcessor(GameManager& gm);
 
         virtual void run() override;
-
-        /**
-         * @brief Agarra un nuevo mensaje de la cola
-         * y se lo pasa al game manager para que
-         * ejecute las acciones correspondientes
-         */
-        void checkNews();
 
         void shutdown();
         

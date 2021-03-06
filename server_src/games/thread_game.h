@@ -6,8 +6,8 @@
 #include <list>
 #include <atomic>
 #include <iostream>
-#include<stdlib.h>
-#include<time.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "../communication/thread_client.h"
 #include "../../common_src/Thread.h"
@@ -157,8 +157,10 @@ class ThreadGame: public Thread {
         void updatePlayerRotations();
 
         void changeShootingState(int playerId, ShootingState state);
-        void updateShootingTime(float delta);
+        void updateShootingTime(double delta);
         void resetFiringState();
+
+        void resetPlayerStatusEvents();
         
         void changeWeaponAmetralladora(int id);
         void changeWeaponCanion(int id);

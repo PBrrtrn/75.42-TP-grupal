@@ -5,6 +5,8 @@ add_library(rendering SHARED
 	TimedAnimation.cpp
 	Font.cpp
 	MapDrawer.cpp
+	MusicTrack.cpp
+	SoundEffect.cpp
 	Renderer.cpp
 	MenuRenderer.cpp
 	UIDrawer.cpp
@@ -13,4 +15,4 @@ add_library(rendering SHARED
 	Window.cpp
 )
 
-target_link_libraries(rendering SDL2 SDL2_image SDL2_ttf)
+target_link_libraries(rendering SDL2 SDL2_image SDL2_ttf SDL2_mixer)

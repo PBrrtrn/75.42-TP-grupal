@@ -27,6 +27,7 @@ private:
   MapServer map;
   std::string mapLocation;
   std::string entireMap;
+  float itemPickUpRange;
 
   void loadDoors();
   
@@ -51,6 +52,8 @@ public:
   int getAlivePlayers();
   int getMaxPlayers();
   int getMinPlayers();
+	std::vector<Item*>& getMapItems();
+  std::vector<Item*>& getGsItems();
   float getShootTimeout(int playerID);
   std::vector<SpawnPoint> getSpawnPoints();
   
@@ -68,6 +71,10 @@ public:
   bool changeFiringState(int clientId, FiringState state);
     
   Statistics& showStatistics();
+
+  void resetPlayerStatusEvents();
+
+  bool isPlayer(Vector& position);
     
   friend class Action;
   friend class Shoot;

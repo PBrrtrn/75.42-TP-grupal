@@ -18,10 +18,10 @@ bool Action:: is_colision(int clientID, Vector& next_position, GameStatus& gs) {
     int y_grid = (int)next_position.y;
 
     if (map.isWall(x_grid, y_grid)) {
-        std::cout << "Wall detected - invalid move" << '\n';
         return true;
     } else if (map.isObstacle(next_position)) {
-        std::cout << "Object detected - invalid move" << '\n';
+        return true;
+    } else if (gs.isPlayer(next_position)) {
         return true;
     } else {
         gs.setPosition(clientID, next_position);

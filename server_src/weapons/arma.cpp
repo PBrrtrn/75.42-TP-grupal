@@ -28,7 +28,7 @@ void Arma::printNombre() {
     std::cout << this->nombre << std::endl;
 }
 
-bool Arma::aimWeapon(float target_angle, float shooter_angle, float target_distance) {
+bool Arma::aimWeapon(float ort_dist, float target_dist) {
     return false;
 }
 

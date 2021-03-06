@@ -6,17 +6,12 @@ Pistola::Pistola() : Arma() {
     this->nombre = c["Nombre"].as<std::string>();
     this->attack_range = c["AttackRange"].as<int>();
     this->indice = c["Idx"].as<int>();
-    this->cadencia = c["Cadencia"].as<float>();
+    this->cadencia = c["Cadencia"].as<double>();
     this->precision = c["Precision"].as<float>();
 }
 
-bool Pistola::aimWeapon(float target_angle, float shooter_angle, float target_distance) {
-    target_angle = target_angle * 180 / PI;
-    shooter_angle = shooter_angle * 180 / PI;
-    if (target_angle < shooter_angle + this->precision/target_distance && 
-        target_angle > shooter_angle - this->precision/target_distance && 
-        target_distance <= this->attack_range) { return true; }
-    return false;
+bool Pistola::aimWeapon(float ort_dist, float target_dist) {
+    return (ort_dist < this->precision && target_dist < this->attack_range);
 }
 
 Pistola::~Pistola() {}

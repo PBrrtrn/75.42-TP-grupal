@@ -6,7 +6,7 @@
 class CanionDeCadena : public Arma {
     public:
         CanionDeCadena();
-        bool aimWeapon(float target_angle, float shooter_angle, float target_distance) override;
+        bool aimWeapon(float ort_dist, float target_dist) override;
         virtual ~CanionDeCadena() override;
 };
 

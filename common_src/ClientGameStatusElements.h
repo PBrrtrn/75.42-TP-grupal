@@ -4,6 +4,7 @@
 #include "Vector.h"
 #include "ItemType.h"
 #include "FiringState.h"
+#include "../server_src/actions/MovementState.h"
 
 #define TOP_STATISTICS 10
 
@@ -17,6 +18,11 @@ struct PlayerStatus {
 	uint8_t lives;
 	bool hasKey;
 	FiringState firing_state;
+	bool receivedDamage;
+	bool died;
+	bool pickedUpTreasure;
+	bool pickedUpBullets;
+	bool pickedUpLife;
 };
 
 //listado de puertas
@@ -33,13 +39,15 @@ struct PlayerListItem {
 	Vector direction;
 	uint8_t selectedWeapon;
 	bool isAlive;
+	bool receiveDamage;
+	FiringState firing_state;
+	MovementState movement_state;
 };
 
 //listado de items asociados a este 
 struct ItemListElement {
 	ItemType type;
 	Vector pos;
-	bool isVisible;
 };
 
 struct ClientKills {

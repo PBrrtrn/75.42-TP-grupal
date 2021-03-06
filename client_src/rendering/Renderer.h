@@ -15,6 +15,7 @@
 #include "Texture.h"
 #include "MapDrawer.h"
 #include "UIDrawer.h"
+#include "MusicTrack.h"
 #include "../../common_src/Map.h"
 #include "../../common_src/Thread.h"
 
@@ -29,7 +30,10 @@ private:
   int fps_cap;
   std::vector<Animation*> enemy_animations;
   std::vector<Texture*> wall_textures;
+  std::vector<Texture*> item_textures;
   std::vector<PlayerWeapon*> player_weapons;
+  MusicTrack* menu_music;
+  MusicTrack* game_music;
   void load();
   void renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer);
 public:

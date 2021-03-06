@@ -28,14 +28,14 @@ void Animation::render(SDL_Renderer* renderer,
   this->frames[this->current_frame]->render(renderer, NULL, &dest);
 }
 
-void Animation::renderTexel(SDL_Renderer* renderer, 
-                            std::vector<float>& z_buffer,
-                            float z_depth, int x_pos, int y_pos, 
-                            int width, int height) {
+void Animation::renderTexels(SDL_Renderer* renderer,
+                             std::vector<float>& z_buffer,
+                             float z_depth, int x_pos, int y_pos,
+                             int width, int height) {
   Texture* frame = this->frames[0];
 
-  int start_x = x_pos - (frame->getWidth()/2);
-  int end_x = x_pos + (frame->getWidth()/2);
+  int start_x = x_pos - (width/2);
+  int end_x = x_pos + (width/2);
   for (int texel_x = start_x; (texel_x < end_x) && (texel_x < 640); texel_x++) {
     if (z_depth < z_buffer[texel_x]) {
       float texel = ((float)(texel_x - start_x))/(float(frame->getWidth()));
