@@ -145,26 +145,102 @@ weapons:
     shooting:
       - pistol_shooting_1.png
       - pistol_shooting_2.png
-animations:
-  enemies:
-    directory: ../assets/sprites/enemies/
-    sprite_sets:
-      - directory: ss/
-        sprites:
-          idle:
-            - idle_front.png
-          move_forward:
-            - moving_front_1.png
-            - moving_front_2.png
-            - moving_front_3.png
-            - moving_front_4.png
-          shooting:
-            - shooting_1.png
-            - shooting_2.png
-            - shooting_3.png
-          dying:
-            - dying_1.png
-            - dying_2.png
-            - dying_3.png
-            - dying_4.png
-            - dying_5.png
+enemies:
+  - directory: ../assets/enemies/ss/
+    idle_animations:
+      front:
+        - idle_front.png
+      quarter_right:
+        - idle_front.png
+      profile_right:
+        - idle_front.png
+      three_quarters_right:
+        - idle_front.png
+      back:
+        - idle_front.png
+      three_quarters_left:
+        - idle_front.png
+      profile_left:
+        - idle_front.png
+      quarter_left:
+        - idle_front.png
+    moving_animations:
+      front:
+        - moving_front_1.png
+        - moving_front_2.png
+        - moving_front_3.png
+        - moving_front_4.png
+      quarter_right:
+        - moving_front_1.png
+        - moving_front_2.png
+        - moving_front_3.png
+        - moving_front_4.png
+      profile_right:
+        - moving_front_1.png
+        - moving_front_2.png
+        - moving_front_3.png
+        - moving_front_4.png
+      three_quarters_right:
+        - moving_front_1.png
+        - moving_front_2.png
+        - moving_front_3.png
+        - moving_front_4.png
+      back:
+        - moving_front_1.png
+        - moving_front_2.png
+        - moving_front_3.png
+        - moving_front_4.png
+      three_quarters_left:
+        - moving_front_1.png
+        - moving_front_2.png
+        - moving_front_3.png
+        - moving_front_4.png
+      profile_left:
+        - moving_front_1.png
+        - moving_front_2.png
+        - moving_front_3.png
+        - moving_front_4.png
+      quarter_left:
+        - moving_front_1.png
+        - moving_front_2.png
+        - moving_front_3.png
+        - moving_front_4.png
+    dying_animation:
+      - dying_1.png
+      - dying_2.png
+      - dying_3.png
+      - dying_4.png
+      - dying_5.png
+    shooting_animation:
+      - shooting_1.png
+      - shooting_2.png
+      - shooting_3.png
+    shot_animation:
+      - idle_front.png
+    dying_sound: mein_leiben.wav
+    shooting_sound: shooting.wav
+    shot_sound: enemy_shot.wav
+
+# animations:
+#   enemies:
+#     directory: ../assets/sprites/enemies/
+#     sprite_sets:
+#       - directory: ss/
+#         sprites:
+#           idle:
+#             - idle_front.png
+#           move_forward:
+#             - moving_front_1.png
+#             - moving_front_2.png
+#             - moving_front_3.png
+#             - moving_front_4.png
+#           shooting:
+#             - shooting_1.png
+#             - shooting_2.png
+#             - shooting_3.png
+#           dying:
+#             - dying_1.png
+#             - dying_2.png
+#             - dying_3.png
+#             - dying_4.png
+#             - dying_5.png
