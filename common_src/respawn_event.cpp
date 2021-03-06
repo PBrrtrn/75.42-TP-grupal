@@ -19,11 +19,7 @@ void RespawnEvent::deactivate() {
 bool RespawnEvent::update(double delta) {
     if (!this->active) return false;
     this->elapsed += delta;
-    std::cout << "elapsed" << this->elapsed << std::endl;
-    std::cout << "timeout" << this->timeout << std::endl;
     if (this->elapsed >= this->timeout) {
-        std::cout << "elapsed" << this->elapsed << std::endl;
-        std::cout << "timeout" << this->timeout << std::endl;
         (player->*player_func)();
         return true;
     } else {
