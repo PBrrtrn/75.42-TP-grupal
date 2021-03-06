@@ -2,6 +2,7 @@
 
 UseDoor::UseDoor(){}
 void UseDoor::tryAction(GameStatus& gs, int clientID){
+	if (gs.players.at(clientID).outGame()) return;
 	Vector player_position = gs.playersPositions.at(clientID);
 	for (auto& it: gs.doors) {
 		Door& door = it.second;

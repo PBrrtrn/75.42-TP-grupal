@@ -45,6 +45,8 @@ class Player {
 	bool pickedUpBullets;
 	bool pickedUpLife;
 
+    bool before_respawn;
+
 public:
 	
 	//Move constructor
@@ -86,6 +88,8 @@ public:
 	MovementState getCurrentRotationState();
     bool changeFiringState(FiringState state);
     FiringState getCurrentFiringState();
+    void respawn();
+    bool outGame();
 	~Player();
 };
 

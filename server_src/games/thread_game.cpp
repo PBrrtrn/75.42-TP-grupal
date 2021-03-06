@@ -59,7 +59,7 @@ void ThreadGame:: run() {
         this->sendMapToClient(clientId);
     }
 
-  this->fillTimedEvents();  
+  this->fillShootEvents();  
   
   auto start = std::chrono::steady_clock::now();
     while (keep_running) {
@@ -75,6 +75,9 @@ void ThreadGame:: run() {
     std::chrono::duration<double> elapsed = updating - start;
     this->updateShootingTime(elapsed.count());
 
+    auto died = std::chrono::steady_clock::now();
+    std::chrono::duration<double> respawning = died - start_t;
+    this->updateRespawnPlayers(respawning.count() * 100);
 
     this->checkPlayerPickups();
     this->respawnItems();
@@ -204,14 +207,14 @@ void ThreadGame::sendLobbyStatus() {
 }
 
 void ThreadGame::sendGameUpdates(){
-  for (auto& it: this->clientGameStatuses) {
-        int clientId = it.first;
-        this->clientGameStatuses.at(clientId)->updateThisGameStatus();
-    } 
-  for (auto& it: this->out_queues) {
-        int clientId = it.first;
-        this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAME_UPDATE, 0, clientId));
-    }
+	for (auto& it: this->clientGameStatuses) {
+		int clientId = it.first;
+		this->clientGameStatuses.at(clientId)->updateThisGameStatus();
+	} 
+	for (auto& it: this->out_queues) {
+		int clientId = it.first;
+		this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAME_UPDATE, 0, clientId));
+	}
 }
 
 void ThreadGame::expelClient(int id){
@@ -349,11 +352,11 @@ void ThreadGame::updatePlayerRotations(){
   } 
 }
 
-void ThreadGame::fillTimedEvents() {
+void ThreadGame::fillShootEvents() {
   for (auto c: this->clients) {
     this->shooting_events.insert(std::make_pair(
       c.first, 
-      new TimedEvent(&shoot, &Shoot::tryAction, c.first, this->gameStatus)
+      new ShootEvent(&shoot, &Shoot::tryAction, c.first, this->gameStatus)
     ));
   }
 }
@@ -362,6 +365,10 @@ void ThreadGame::updateShootingTime(double delta){
   for (auto te: this->shooting_events) {
     te.second->update(delta);
   } 
+}
+
+void ThreadGame::updateRespawnPlayers(double delta) {
+  this->gameStatus.updateRespawnEvents(delta);
 }
 
 void ThreadGame::resetFiringState() {

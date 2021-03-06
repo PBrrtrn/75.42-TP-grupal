@@ -12,6 +12,7 @@
 #include "door.h"
 #include "statistics.h"
 #include "../../common_src/FiringState.h"
+#include "../../common_src/respawn_event.h"
 
 class GameStatus {
   
@@ -28,6 +29,9 @@ private:
   std::string mapLocation;
   std::string entireMap;
   float itemPickUpRange;
+
+  /*clave: id del cliente, valor: timed event para disparar*/
+  std::unordered_map<int,RespawnEvent*> respawn_events;
 
   void loadDoors();
   
@@ -73,6 +77,9 @@ public:
   Statistics& showStatistics();
 
   void resetPlayerStatusEvents();
+  void fillRespawnEvents();
+  void respawnPlayer(int playerID);
+  void updateRespawnEvents(double delta);
 
   bool isPlayer(Vector& position);
     
@@ -84,6 +91,11 @@ public:
   friend class ChangeWeaponCanion;
   friend class ChangeWeaponLanzaCohetes;
   friend class UseDoor;
+  friend class MoveBackward;
+  friend class MoveForward;
+  friend class MoveLeft;
+  friend class MoveRight;
+  friend class Shoot;
     
   friend class ClientGameStatus;
     

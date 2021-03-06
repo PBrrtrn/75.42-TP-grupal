@@ -5,9 +5,13 @@
 #include <iostream>
 #include <cmath>
 
-Shoot::Shoot(){}
+Shoot::Shoot(){
+    const YAML::Node& c = ServerConfig::Config["Game"];
+    this->respawn_timeout = c["RespawnTime"].as<int>(); 
+}
 
 void Shoot::tryAction(GameStatus& gs, int clientID){
+    if (gs.players.at(clientID).outGame()) return;
     if (gs.players.at(clientID).loseBullet()) gs.addBulletShooted(clientID);
     gs.changeFiringState(clientID, STATE_FIRING);
 
@@ -63,14 +67,12 @@ void Shoot::tryAction(GameStatus& gs, int clientID){
                     int danio = 1+rand()%10;
                     if (target.loseHealth(danio) ) {
                         std::cout << "Player "<< target_id <<" has been killed" << std::endl;
-                        //TODO: Dropear item falso "cadaver" que no va a ser utilizable pero si visible.
+
                         this->throwWeapon(gs.players.at(target_id).getSelectedWeaponIndex(), target_id, gs);
                         gs.items.push_back(new Bullets(gs.getPosition(target_id),false));
+
                         gs.addEnemyDead(clientID);
-                        std::vector<SpawnPoint> spawnpoints = gs.getSpawnPoints();
-                        int sp_idx = rand()% (spawnpoints.size());
-                        Vector position = spawnpoints[sp_idx].getPosition();
-                        gs.setPosition(target_id, position);
+                        gs.respawn_events.at(target_id)->activate(this->respawn_timeout);
                     }
                     return;
                 }

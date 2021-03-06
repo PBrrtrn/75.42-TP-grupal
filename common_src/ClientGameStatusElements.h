@@ -23,6 +23,7 @@ struct PlayerStatus {
 	bool pickedUpTreasure;
 	bool pickedUpBullets;
 	bool pickedUpLife;
+	bool before_respawn;
 };
 
 //listado de puertas
@@ -42,6 +43,7 @@ struct PlayerListItem {
 	bool receiveDamage;
 	FiringState firing_state;
 	MovementState movement_state;
+	bool before_respawn;
 };
 
 //listado de items asociados a este 

@@ -5,6 +5,7 @@
 #include "../items/bullets.h"
 
 class Shoot : public Action {
+    int respawn_timeout;
     public:
         Shoot();
         void throwWeapon(int weapon_idx, int target_id, GameStatus& gs);

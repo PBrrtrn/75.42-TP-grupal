@@ -6,8 +6,9 @@ ChangeWeaponCanion::ChangeWeaponCanion(){
 }
 
 void ChangeWeaponCanion::tryAction(GameStatus& gs, int clientID) {
-	gs.players.at(clientID).changeWeapon(this->canion_idx);
-	
+	if (!gs.players.at(clientID).outGame()) {
+		gs.players.at(clientID).changeWeapon(this->canion_idx);
+	}
 }
 
 ChangeWeaponCanion::~ChangeWeaponCanion(){}

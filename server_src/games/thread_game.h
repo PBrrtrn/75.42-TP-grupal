@@ -33,7 +33,7 @@
 
 #include "client_game_status.h"
 
-#include "../../common_src/timed_event.h"
+#include "../../common_src/shoot_event.h"
 
 class ThreadGame: public Thread {
         int id; /*numero de partida*/
@@ -54,7 +54,7 @@ class ThreadGame: public Thread {
         std::unordered_map<int,ClientGameStatus*> clientGameStatuses;
 
         /*clave: id del cliente, valor: timed event para disparar*/
-        std::unordered_map<int,TimedEvent*> shooting_events;
+        std::unordered_map<int,ShootEvent*> shooting_events;
         
         GameStatus gameStatus;
 
@@ -117,7 +117,7 @@ class ThreadGame: public Thread {
          * disparar por cada uno de los 
          * jugadores en la partida
          */
-        void fillTimedEvents();
+        void fillShootEvents();
 
     public:
         ThreadGame(int gameId, ProtectedQueue<Message>* messageReceiver, 
@@ -176,6 +176,7 @@ class ThreadGame: public Thread {
 
         bool isDead();
         void shutdown();
+        void updateRespawnPlayers(double delta);
         
         virtual ~ThreadGame() override;
 };
