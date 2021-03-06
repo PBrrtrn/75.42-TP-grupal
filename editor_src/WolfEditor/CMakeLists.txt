@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(WolfEditor LANGUAGES CXX)
+project(editor-classes LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -26,20 +26,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-if(ANDROID)
-  add_library(WolfEditor SHARED
-    main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    layoutitem.h
-    layoutitem.cpp
-    gamemapgrid.cpp
-    gamemapgrid.h
-    mainwindow.ui
-    WolfEditor.qrc
-  )
-else()
-  add_executable(WolfEditor
+#if(ANDROID)
+#	add_library(editor-classes SHARED
+#    main.cpp
+#    mainwindow.cpp
+#    mainwindow.h
+#    layoutitem.h
+#    layoutitem.cpp
+#    gamemapgrid.cpp
+#    gamemapgrid.h
+#    mainwindow.ui
+#    WolfEditor.qrc
+#  )
+#else()
+  add_library(editor-classes
     main.cpp
     mainwindow.cpp
     mainwindow.h
@@ -146,6 +146,6 @@ else()
     ../../server_src/weapons/pistola.h
     WolfEditor.qrc
   )
-endif()
+#endif()
 
-target_link_libraries(WolfEditor PRIVATE Qt5::Widgets yaml-cpp)
+target_link_libraries(editor-classes PRIVATE Qt5::Widgets yaml-cpp)

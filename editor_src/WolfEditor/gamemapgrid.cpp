@@ -17,12 +17,9 @@ GameMapGrid::GameMapGrid(MapServer* map,AppStatus& appStatus,QGraphicsWidget *pa
 
     std::unordered_map<int,std::string> texture_list;
 
-    qDebug(std::to_string(width).c_str());
-
     for (int row = 0; row < height; row++){
         for (int column = 0;column < width; column++){
 
-            //std::string graphic = TextureList::textures.at(this->fullMap.getGridValue(column,row));
             std::string graphic = TextureList::textures.at(this->fullMap->getGridValue(column,row));
             LayoutItem *item = new LayoutItem(this->fullMap,this->appStatus,column,row,graphic,30);
             grid->addItem(item, row, column, 1, 1 );
@@ -33,8 +30,6 @@ GameMapGrid::GameMapGrid(MapServer* map,AppStatus& appStatus,QGraphicsWidget *pa
 
 
     setLayout(windowLayout);
-    //this->setAcceptDrops(true);
-    //setWindowTitle(tr("MapGrid"));
 
 }
 
