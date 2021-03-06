@@ -94,7 +94,7 @@ void ThreadGame:: run() {
     this->keep_running = this->gameStatus.getAlivePlayers() > 1 && this->remaining_time != 0 && !this->is_dead;
     }
     this->sendGameStatistics();
-  this->is_dead = true;
+    this->is_dead = true;
 }
 
 void ThreadGame::sendMapToClient(int clientId){
@@ -120,7 +120,7 @@ void ThreadGame::sendGameStatistics(){
     if (out_queues.find(clientId) != out_queues.end()) {
           this->out_queues.at(clientId)->push(Message(TYPE_SERVER_SEND_GAME_STATISTICS, this->id, clientId));
     }
-    }
+  }
 }
 
 void ThreadGame::checkNews() {
@@ -155,7 +155,7 @@ void ThreadGame::checkNews() {
       this->changeRotationState(it->getClientId(),STATE_NOT_MOVING);
       break;
 
-    case CLIENT_REQUEST_LEAVE_GAME:
+    case TYPE_EXIT_GAME:
       this->expelClient(it->getClientId());
       break;
     
@@ -218,7 +218,15 @@ void ThreadGame::sendGameUpdates(){
 }
 
 void ThreadGame::expelClient(int id){
-  this->clients.erase(id);  
+  if (this->clients.find(id) != this->clients.end()) {
+      this->clients.at(id)->shutdown();
+      this->clients.at(id)->join();
+      this->clients.erase(id); 
+  }
+  if (this->out_queues.find(id) != this->out_queues.end()) {
+    this->out_queues.at(id)->close();
+    this->out_queues.erase(id);
+  }
   if (this->clients.size() <= 1){
     this->shutdown();
   }
@@ -389,16 +397,19 @@ void ThreadGame::shutdown(){
   this->keep_running = false;
   this->start_running = false;
   this->is_dead = true;
+  this->messageReceiver->close();
 }
 
 ThreadGame:: ~ThreadGame(){
-  /*for (auto x: this->out_queues) {
-        delete x.second;
-    }*/
   for (auto x : this->clientGameStatuses) {
     delete x.second;
   }
   for (auto x : this->shooting_events) {
     delete x.second;
+  }
+  for (auto x : this->clients) {
+    x.second->shutdown();
+    x.second->join();
+    //delete x.second;
   }
 }
