@@ -6,8 +6,9 @@ ChangeWeaponCuchillo::ChangeWeaponCuchillo(){
 }
 
 void ChangeWeaponCuchillo::tryAction(GameStatus& gs, int clientID) {
-	gs.players.at(clientID).changeWeapon(this->cuchillo_idx);
-	
+	if (!gs.players.at(clientID).outGame()) {
+		gs.players.at(clientID).changeWeapon(this->cuchillo_idx);
+	}
 }
 
 ChangeWeaponCuchillo::~ChangeWeaponCuchillo(){}

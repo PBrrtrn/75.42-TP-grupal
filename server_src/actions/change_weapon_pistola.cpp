@@ -6,8 +6,9 @@ ChangeWeaponPistola::ChangeWeaponPistola(){
 }
 
 void ChangeWeaponPistola::tryAction(GameStatus& gs, int clientID) {
-	gs.players.at(clientID).changeWeapon(this->pistola_idx);
-	
+	if (!gs.players.at(clientID).outGame()) {
+		gs.players.at(clientID).changeWeapon(this->pistola_idx);
+	}
 }
 
 ChangeWeaponPistola::~ChangeWeaponPistola(){}

@@ -6,7 +6,9 @@ ChangeWeaponAmetralladora::ChangeWeaponAmetralladora(){
 }
 
 void ChangeWeaponAmetralladora::tryAction(GameStatus& gs, int clientID) {
-	gs.players.at(clientID).changeWeapon(this->ametralladora_idx);	
+	if (!gs.players.at(clientID).outGame()) {
+		gs.players.at(clientID).changeWeapon(this->ametralladora_idx);	
+	}
 }
 
 ChangeWeaponAmetralladora::~ChangeWeaponAmetralladora(){}

@@ -13,4 +13,8 @@ add_library(common-classes SHARED
 	LobbyStatusData.h
 	timed_event.h
 	timed_event.cpp
+	shoot_event.h
+	shoot_event.cpp
+	respawn_event.h
+	respawn_event.cpp
 )

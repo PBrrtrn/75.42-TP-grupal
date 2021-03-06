@@ -6,8 +6,9 @@ ChangeWeaponLanzaCohetes::ChangeWeaponLanzaCohetes(){
 }
 
 void ChangeWeaponLanzaCohetes::tryAction(GameStatus& gs, int clientID) {
-	gs.players.at(clientID).changeWeapon(this->lanzacohetes_idx);
-	
+	if (!gs.players.at(clientID).outGame()) {
+		gs.players.at(clientID).changeWeapon(this->lanzacohetes_idx);
+	}
 }
 
 ChangeWeaponLanzaCohetes::~ChangeWeaponLanzaCohetes(){}

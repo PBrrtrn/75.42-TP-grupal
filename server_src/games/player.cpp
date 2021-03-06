@@ -7,7 +7,8 @@ Player::Player(int id) :
 	died(false),
 	pickedUpTreasure(false),
 	pickedUpBullets(false),
-	pickedUpLife(false)
+	pickedUpLife(false),
+	before_respawn(false)
 	{
 	const YAML::Node& c = ServerConfig::Config["Player"];
 	
@@ -20,14 +21,13 @@ Player::Player(int id) :
 	this->bullets = c["StartingBullets"].as<int>();
 	this->armas[0] =  new Cuchillo();
 	this->armas[1] = new Pistola();
-	this->armas[2] = NULL; //new Ametralladora();//
+	this->armas[2] = new Ametralladora();//
 	this->armas[3] = NULL; //new CanionDeCadena();//
 	this->armas[4] = NULL;
 	this->selected_weapon_idx = 1;
 	this->previous_weapon_idx = 0;
 	this->movement_state = STATE_NOT_MOVING;
 	this->firing_state = STATE_NOT_FIRING;
-	
 }
 
 Player::Player(Player&& from){
@@ -44,6 +44,7 @@ Player::Player(Player&& from){
 	this->previous_weapon_idx = from.previous_weapon_idx;
 	this->movement_state = from.movement_state;
 	this->firing_state = from.firing_state;
+	this->before_respawn = from.before_respawn;
 
 	this->armas[0] = from.armas[0];
 	this->armas[1] = from.armas[1];
@@ -81,11 +82,13 @@ bool Player::aimWeapon(float ort_dist, float target_dist) {
 
 //si el jugador es muerto como resultado de perder vida, devuelvo true.
 bool Player::loseHealth(int amount) {
+	if (this->before_respawn) return false;
 	this->health = this->health - amount;
 	std::cout << "Player was attacked --> health: " << this->health << std::endl;
 	this->receivedDamage = true;
 	if (this->health <= 0 && this->vidas > 0) {
 		this->died = true;
+		this->before_respawn = true;
 		this->health = 20;
 		this->vidas--;
 		this->has_key = false;
@@ -275,6 +278,15 @@ void Player::resetStepEvents(){
 	this->pickedUpTreasure = false;
 	this->pickedUpBullets = false;
 	this->pickedUpLife = false;
+}
+
+void Player::respawn() {
+	this->before_respawn = false;
+}
+
+bool Player::outGame() {
+	std::cout << "out game" << this->before_respawn << std::endl;
+	return this->before_respawn;
 }
 
 Player::~Player(){

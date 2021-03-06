@@ -62,6 +62,10 @@ void GameStatus::addPlayer(int playerID, Vector &position, Vector &direction) {
 
     Player jugador(playerID);
 	this->players.insert({playerID, std::move(jugador)});
+	this->respawn_events.insert(std::make_pair(
+		playerID, 
+		new RespawnEvent(&this->players.at(playerID), &Player::respawn)
+	));
 }
 
 float GameStatus::getAngle(int playerID) {
@@ -114,6 +118,17 @@ void GameStatus::checkPlayerBullets(){
 		}		
 	}	
 	
+}
+
+void GameStatus::updateRespawnEvents(double delta) {
+	for (auto te: this->respawn_events) {
+    	if (te.second->update(delta)) {
+			std::vector<SpawnPoint> spawnpoints = this->getSpawnPoints();
+			int sp_idx = rand()% (spawnpoints.size());
+			Vector position = spawnpoints[sp_idx].getPosition();
+			this->setPosition(te.first, position);
+		}
+  	} 
 }
 
 int GameStatus::getAlivePlayers() {
@@ -208,9 +223,6 @@ std::unordered_map<int,MovementState> GameStatus::getPlayerRotationStates(){
 	return states;		
 }
 
-//void GameStatus::updatePlayerPositions(){
-//}
-
 Map& GameStatus::getMap() {
 	return this->map.getMap();
 }
@@ -232,4 +244,7 @@ GameStatus::~GameStatus() {
 	for (auto x : this->items) {
 		delete x;
 	}
+	for (auto x : this->respawn_events) {
+    	delete x.second;
+  	}
 }

@@ -25,6 +25,7 @@ void ClientGameStatus::updateThisGameStatus(){
 		this->thisPlayerStatus.pickedUpTreasure = this->gameStatus.players.at(assignedClientId).pickedUpTreasureInStep();
 		this->thisPlayerStatus.pickedUpBullets = this->gameStatus.players.at(assignedClientId).pickedUpBulletsInStep();
 		this->thisPlayerStatus.pickedUpLife = this->gameStatus.players.at(assignedClientId).pickedUpLifeInStep();
+		this->thisPlayerStatus.before_respawn = this->gameStatus.players.at(assignedClientId).outGame();
 		for (auto& it: this->gameStatus.players) {
 			if (this->players.find(it.first) == this->players.end()) {
 				PlayerListItem p;
@@ -36,6 +37,7 @@ void ClientGameStatus::updateThisGameStatus(){
 				p.receiveDamage = it.second.receivedDamageInStep();
 				p.firing_state = it.second.getCurrentFiringState();
 				p.movement_state = it.second.getCurrentMovementState();
+				p.before_respawn = it.second.outGame();
 				this->players.insert({it.first,p});
 			} else {
 				this->players.at(it.first).clientId = it.first;
@@ -45,7 +47,8 @@ void ClientGameStatus::updateThisGameStatus(){
 				this->players.at(it.first).isAlive = it.second.getHealth() ? true : false;
 				this->players.at(it.first).receiveDamage = it.second.receivedDamageInStep();
 				this->players.at(it.first).firing_state = it.second.getCurrentFiringState();
-				this->players.at(it.first).movement_state = it.second.getCurrentMovementState();				
+				this->players.at(it.first).movement_state = it.second.getCurrentMovementState();
+				this->players.at(it.first).before_respawn = it.second.outGame();				
 			}
 		}
 		for (auto& it: this->gameStatus.doors) {
