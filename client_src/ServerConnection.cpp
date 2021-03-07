@@ -10,7 +10,8 @@ ServerConnection::ServerConnection(std::string host, std::string service) {
     throw ServerConnectionError("Failed to connect");
 
   char buffer;
-  socket.socket_receive(&buffer, sizeof(char));
+  ssize_t receive = socket.socket_receive(&buffer, sizeof(char));
+  if (receive < 0) throw ServerConnectionError("Failed to connect");
 
   this->client_id = buffer;
 }
@@ -19,14 +20,17 @@ ServerConnection::~ServerConnection() { }
 
 MessageType ServerConnection::receiveMessageType() {
   MessageType message_type;
-  this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
+  ssize_t receive = this->socket.socket_receive((char*)&message_type, sizeof(MessageType));
+  if (receive < 0) throw ServerConnectionError("Failed to connect");
   
   return message_type;
 }
 
 std::vector<MapListItem> ServerConnection::getMapOptions() {
   char buffer[sizeof(size_t)];
-  socket.socket_receive(buffer, sizeof(size_t));
+  ssize_t receive = socket.socket_receive(buffer, sizeof(size_t));
+  if (receive < 0) throw ServerConnectionError("Failed to connect");
+
   size_t response_size = *((size_t*)buffer);
   size_t n_maps = response_size/sizeof(MapListItem);
 
@@ -34,7 +38,8 @@ std::vector<MapListItem> ServerConnection::getMapOptions() {
   maps.reserve(n_maps);
   for (int i = 0; i < n_maps; i++) {
     MapListItem item;
-    socket.socket_receive((char*)&item, sizeof(MapListItem));
+    ssize_t receive = socket.socket_receive((char*)&item, sizeof(MapListItem));
+    if (receive < 0) throw ServerConnectionError("Failed to connect");
 
     maps.push_back(item);
   }
@@ -44,7 +49,9 @@ std::vector<MapListItem> ServerConnection::getMapOptions() {
 
 std::vector<GameListItem> ServerConnection::getGameOptions() {
   char buffer[sizeof(size_t)];
-  this->socket.socket_receive(buffer, sizeof(size_t));
+  ssize_t receive = this->socket.socket_receive(buffer, sizeof(size_t));
+  if (receive < 0) throw ServerConnectionError("Failed to connect");
+
   size_t response_size = *((size_t*)buffer);
   size_t n_games = response_size/sizeof(GameListItem);
 
@@ -52,7 +59,8 @@ std::vector<GameListItem> ServerConnection::getGameOptions() {
   options.reserve(n_games);
   for (int i = 0; i < n_games; i++) {
     GameListItem item;
-    socket.socket_receive((char*)&item, sizeof(GameListItem));
+    ssize_t receive = socket.socket_receive((char*)&item, sizeof(GameListItem));
+    if (receive < 0) throw ServerConnectionError("Failed to connect");
 
     options.push_back(item);
   }
@@ -61,17 +69,21 @@ std::vector<GameListItem> ServerConnection::getGameOptions() {
 
 LobbyStatusData ServerConnection::getLobbyStatus() {
   LobbyStatusData lobby_status;
-  this->socket.socket_receive((char*)&lobby_status, sizeof(LobbyStatusData));
+  ssize_t receive = this->socket.socket_receive((char*)&lobby_status, sizeof(LobbyStatusData));
+  if (receive < 0) throw ServerConnectionError("Failed to connect");
 
   return lobby_status;
 }
 
 Map ServerConnection::getMap() {
   size_t map_data_size;
-  this->socket.socket_receive((char*)&map_data_size, sizeof(size_t));
+  int receive;
+  receive = this->socket.socket_receive((char*)&map_data_size, sizeof(size_t));
+  if (receive < 0) throw ServerConnectionError("Failed to connect");
 
   char map_data[map_data_size];
-  this->socket.socket_receive(map_data, map_data_size);
+  receive = this->socket.socket_receive(map_data, map_data_size);
+  if (receive < 0) throw ServerConnectionError("Failed to connect");
 
   // TODO: Construir el mapa con la data y devolverlo
   Map map("../maps/map1.yml");
@@ -79,41 +91,50 @@ Map ServerConnection::getMap() {
 }
 
 GameStatusUpdate ServerConnection::getGameStatusUpdate() {
+  int receive; 
+
   PlayerStatus player_status;
-  this->socket.socket_receive((char*)&player_status, sizeof(PlayerStatus));
+  receive = this->socket.socket_receive((char*)&player_status, sizeof(PlayerStatus));
+  if (receive < 0) throw ServerConnectionError("Failed to connect");
 
   std::vector<PlayerListItem> players_list;
   size_t player_list_size;
-  this->socket.socket_receive((char*)&player_list_size, sizeof(size_t));
+  receive = this->socket.socket_receive((char*)&player_list_size, sizeof(size_t));
+  if (receive < 0) throw ServerConnectionError("Failed to connect");
   size_t n_players = player_list_size/sizeof(PlayerListItem);
   players_list.reserve(n_players);
   for (int i = 0; i < n_players; i++) {
     PlayerListItem player;
-    this->socket.socket_receive((char*)&player, sizeof(PlayerListItem));
+    receive = this->socket.socket_receive((char*)&player, sizeof(PlayerListItem));
+    if (receive < 0) throw ServerConnectionError("Failed to connect");
 
     if (player.clientId != this->client_id) players_list.push_back(player);
   }
 
   std::vector<DoorListItem> doors_list;
   size_t door_list_size;
-  this->socket.socket_receive((char*)&door_list_size, sizeof(size_t));
+  receive = this->socket.socket_receive((char*)&door_list_size, sizeof(size_t));
+  if (receive < 0) throw ServerConnectionError("Failed to connect");
   size_t n_doors = door_list_size/sizeof(DoorListItem);
   doors_list.reserve(n_doors);
   for (int i = 0; i < n_doors; i++) {
     DoorListItem door;
-    this->socket.socket_receive((char*)&door, sizeof(DoorListItem));
+    receive = this->socket.socket_receive((char*)&door, sizeof(DoorListItem));
+    if (receive < 0) throw ServerConnectionError("Failed to connect");
 
     doors_list.push_back(door);
   }
 
   std::vector<ItemListElement> items_list;
   size_t item_list_size;
-  this->socket.socket_receive((char*)&item_list_size, sizeof(size_t));
+  receive = this->socket.socket_receive((char*)&item_list_size, sizeof(size_t));
+  if (receive < 0) throw ServerConnectionError("Failed to connect");
   size_t n_items = item_list_size/sizeof(ItemListElement);
   items_list.reserve(n_items);
   for (int i = 0; i < n_items; i++) {
     ItemListElement item;
-    this->socket.socket_receive((char*)&item, sizeof(ItemListElement));
+    receive = this->socket.socket_receive((char*)&item, sizeof(ItemListElement));
+    if (receive < 0) throw ServerConnectionError("Failed to connect");
 
     items_list.push_back(item);
   }
@@ -137,7 +158,8 @@ GameStatusUpdate ServerConnection::getGameStatusUpdate() {
 
 GameStatistics ServerConnection::getGameStatistics() {
   GameStatistics statistics;
-  this->socket.socket_receive((char*)&statistics, sizeof(GameStatistics));
+  ssize_t receive = this->socket.socket_receive((char*)&statistics, sizeof(GameStatistics));
+  if (receive < 0) throw ServerConnectionError("Failed to connect");
   std::cout << "SOY CLIENTE RECIBI STATISTICS" << std::endl;
   return statistics;
 }

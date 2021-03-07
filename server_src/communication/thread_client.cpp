@@ -78,7 +78,7 @@ void ThreadClient::run() {
 			}
 			
         } catch (...) {
-            if (!keep_running) break;
+            //if (!keep_running) break;
         }
     }
 }
@@ -169,7 +169,6 @@ void ThreadClient::sendLobbyStatus(int gameID) {
 void ThreadClient::sendGameStatistics() {
 	GameStatistics gs = this->game_status->getStatistics();
 	this->peer.socket_send((char*)(&gs), sizeof(GameStatistics));
-	//this->keep_running = false;
 }
 
 void ThreadClient::sendMapsList() {

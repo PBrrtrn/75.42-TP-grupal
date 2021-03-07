@@ -32,6 +32,7 @@ void ThreadAcceptor::acceptConnection(){
 
 void ThreadAcceptor::shutdown(){
 	this->keep_running = false;
+	this->gameManager.cleanUpDeadGames();
 	this->socket.close_socket();
 }
 

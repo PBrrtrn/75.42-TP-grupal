@@ -1,12 +1,5 @@
 #include "arma.h"
 
-/*Arma::Arma() {
-    this->precision = precision;
-    this->cadencia = cadencia;
-    this->balas = 100;
-    this->indice = -1;
-}*/
-
 Arma::Arma(){
 	this->nombre = "VACIA";
     this->cadencia = 0;	
