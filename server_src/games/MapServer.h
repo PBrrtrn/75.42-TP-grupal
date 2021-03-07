@@ -61,6 +61,8 @@ public:
 	std::vector<Door>& getDoors();
 	std::vector<SpawnPoint>& getRespawnPoints();
 	
+	int* getMapGridCopy();
+	
 };
 
 #endif

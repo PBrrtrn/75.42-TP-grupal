@@ -241,6 +241,18 @@ bool GameStatus::isPlayer(Vector& position) {
 	return false;
 }
 
+int* GameStatus::getMapGrid(){
+	return this->map.getMapGridCopy();
+}
+int GameStatus::getMapWidth(){
+	return this->map.getWidth();
+	
+}
+int GameStatus::getMapHeight(){
+	return this->map.getHeight();
+	
+}
+
 GameStatus::~GameStatus() {
 	for (auto x : this->items) {
 		delete x;

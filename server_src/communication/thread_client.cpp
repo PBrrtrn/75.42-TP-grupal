@@ -95,17 +95,31 @@ void ThreadClient::informSomethingToReport(MessageType type){
 
 
 void ThreadClient::sendCurrentGameMap(){
-   std::string mapa = this->game_status->getEntireMap();
-   size_t size = mapa.length() + 1;
+   //std::string mapa = this->game_status->getEntireMap();
+   int* mapGrid = this->game_status->getMapGrid();
+   size_t size = this->game_status->getMapWidth() * this->game_status->getMapHeight() * sizeof(int);
+   //size_t size = mapa.length() + 1;
    
+   int width = this->game_status->getMapWidth();
+   int height = this->game_status->getMapHeight();
+   
+   std::cout << "Map width:" << std::to_string(size) << std::endl;
+   std::cout << "Map height:" << std::to_string(size) << std::endl;
    std::cout << "Map size:" << std::to_string(size) << std::endl;
-   
+   this->peer.socket_send((char*)(&width), sizeof(width));
+   this->peer.socket_send((char*)(&height), sizeof(height));
    this->peer.socket_send((char*)(&size), sizeof(size));
-   this->peer.socket_send(mapa.c_str(), size - 1);
-   char endOfFile = 0;
-   this->peer.socket_send((&endOfFile), sizeof(char));
+   this->peer.socket_send((char*)mapGrid,size);
+   //this->peer.socket_send(mapa.c_str(), size - 1);
+   //char endOfFile = 0;
+   //this->peer.socket_send((&endOfFile), sizeof(char));
    
    std::cout << "Map sent" << std::endl;
+   
+   delete mapGrid;
+   
+   std::cout << "Map grid data released - pointer deleted" << std::endl;
+   
 }
 
 void ThreadClient::sendGameUpdate() {

@@ -68,13 +68,18 @@ LobbyStatusData ServerConnection::getLobbyStatus() {
 
 Map ServerConnection::getMap() {
   size_t map_data_size;
+  int width;
+  int height;
+  this->socket.socket_receive((char*)&width, sizeof(int));
+  this->socket.socket_receive((char*)&height, sizeof(int));
   this->socket.socket_receive((char*)&map_data_size, sizeof(size_t));
 
-  char map_data[map_data_size];
-  this->socket.socket_receive(map_data, map_data_size);
 
-  // TODO: Construir el mapa con la data y devolverlo
-  Map map("../maps/map1.yml");
+  int* mapGrid = new int[width*height];
+  this->socket.socket_receive((char*)mapGrid, map_data_size);
+  Map map(width,height,mapGrid);
+  delete mapGrid;
+  
   return map;
 }
 

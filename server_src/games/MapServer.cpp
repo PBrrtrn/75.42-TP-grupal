@@ -166,3 +166,8 @@ void MapServer::insertItem(Item* item){
 void MapServer::insertSpawnPoint(SpawnPoint s){
 	this->respawnPoints.push_back(s);
 }
+
+int* MapServer::getMapGridCopy(){
+	return this->map.getMapGridCopy();
+	
+}

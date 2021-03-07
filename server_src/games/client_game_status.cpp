@@ -131,4 +131,17 @@ GameStatistics ClientGameStatus::getStatistics() {
 	return gs;
 }
 
+int* ClientGameStatus::getMapGrid(){
+	return this->gameStatus.getMapGrid();
+}
+
+int ClientGameStatus::getMapWidth(){
+	return this->gameStatus.getMapWidth();
+}
+
+int ClientGameStatus::getMapHeight(){
+	return this->gameStatus.getMapHeight();
+}
+
+
 ClientGameStatus::~ClientGameStatus() {}

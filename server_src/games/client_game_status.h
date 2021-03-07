@@ -16,6 +16,9 @@ class ClientGameStatus {
 		ClientGameStatus(GameStatus& gameStatus,int assignedClientId);
 		void updateThisGameStatus();
 		std::string getEntireMap();
+		int* getMapGrid();
+		int getMapWidth();
+		int getMapHeight();
 		GameStatistics getStatistics();
 		~ClientGameStatus();
 
