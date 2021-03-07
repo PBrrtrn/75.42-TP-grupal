@@ -79,6 +79,7 @@ void ThreadClient::run() {
 			
         } catch (...) {
             //if (!keep_running) break;
+			this->shutdown();
         }
     }
 }

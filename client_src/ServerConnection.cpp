@@ -165,7 +165,8 @@ GameStatistics ServerConnection::getGameStatistics() {
 }
 
 void ServerConnection::sendMessage(ClientMessage message) {
-  this->socket.socket_send((char*)&message, sizeof(ClientMessage));
+  int send = this->socket.socket_send((char*)&message, sizeof(ClientMessage));
+  if (send < 0) throw ServerConnectionError("Failed to connect");
 }
 
 ServerConnectionError::ServerConnectionError(const char *error) noexcept {
