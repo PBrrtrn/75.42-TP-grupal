@@ -161,11 +161,9 @@ void GameStatus::addBulletShooted(int playerID) {
 
 void GameStatus::respawnItems(){
 	for (auto it: this->map.getItems()){
-		//Item* item = it;
 		it->tick();
 	}
 	for (auto it: this->items){
-		//Item* item = it;
 		it->tick();
 	}
 }

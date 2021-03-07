@@ -37,6 +37,7 @@ enum MessageType {
 	TYPE_USE_DOOR,
 
 	TYPE_CLIENT_PING,
+	TYPE_EXIT_GAME,
 	// tipos de mensaje de respuesta del servidor a cliente
 	TYPE_SERVER_SEND_GAME_UPDATE,
 	TYPE_SERVER_SEND_GAMES_LIST,

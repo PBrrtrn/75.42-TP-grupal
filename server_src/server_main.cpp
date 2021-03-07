@@ -7,5 +7,6 @@
 int main(const int argc, const char* argv[]) {
     Server s;
     s.start();
+    std::cout << "SERVER CERRADO" << std::endl;
     return 0;
 }

@@ -4,6 +4,7 @@
 #include "../../common_src/ClientGameStatusElements.h"
 #include <vector>
 #include <algorithm>
+#include <cstring>
 
 class ClientGameStatus {
 

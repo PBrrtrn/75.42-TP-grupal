@@ -46,8 +46,11 @@ void GameManager::receiveMessages() {
 void GameManager::expelClient(int expelledClientId){
 	if (this->clientsInGames.find(expelledClientId) != this->clientsInGames.end()) {
 		this->games.at(this->clientsInGames.at(expelledClientId))->expelClient(expelledClientId);
+        delete this->clientsThreads.at(expelledClientId);
 	} else {
 		this->clientsThreads.at(expelledClientId)->shutdown();
+        this->clientsThreads.at(expelledClientId)->join();
+        delete this->clientsThreads.at(expelledClientId);
 		this->clientsThreads.erase(expelledClientId);
 	}
 	
@@ -118,11 +121,12 @@ void GameManager::sendMapsList(int clientId) {
 void GameManager::cleanUpDeadGames(){
 	for (auto x: this->games) {
         if (x.second->isDead()) {
+            std::cout << "Game id: " << x.first << " - END" << std::endl;
             for (auto y: this->clientsInGames) {
                 if (y.second == x.first) {
                     this->clientMessageReceiver.at(y.first)->shutdown();
                     this->clientMessageReceiver.at(y.first)->join();
-                    delete x.second;
+                    delete this->clientMessageReceiver.at(y.first);
                     this->clientMessageReceiver.erase(y.first);
                 }
             }
@@ -153,14 +157,12 @@ GameManager::~GameManager(){
         x.second->join();
         delete x.second;
     }
-    /*
-    for (auto x: this->queues) {
-        delete x.second;
-    }*/
     for (auto x: this->out_queues) {
+        x.second->close();
         delete x.second;
     }
     for (auto x: this->messageReceiver) {
         delete x.second;
     }
+    this->lobby_messages.close();
 }

@@ -78,7 +78,8 @@ void ThreadClient::run() {
 			}
 			
         } catch (...) {
-            if (!keep_running) break;
+            //if (!keep_running) break;
+			this->shutdown();
         }
     }
 }
@@ -183,7 +184,6 @@ void ThreadClient::sendLobbyStatus(int gameID) {
 void ThreadClient::sendGameStatistics() {
 	GameStatistics gs = this->game_status->getStatistics();
 	this->peer.socket_send((char*)(&gs), sizeof(GameStatistics));
-	//this->keep_running = false;
 }
 
 void ThreadClient::sendMapsList() {
@@ -211,7 +211,6 @@ void ThreadClient::sendJoinRefused() {
 void ThreadClient::shutdown(){
 	this->keep_running = false;
 	this->choosing_game = false;
-	this->peer.close_socket();
 	this->messages_out->close();
 }
 

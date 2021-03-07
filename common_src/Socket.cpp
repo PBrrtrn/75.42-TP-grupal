@@ -130,7 +130,7 @@ ssize_t Socket:: socket_receive(char* buffer, size_t length){
                         remaining_bytes, 0);
 
         if (bytes == -1) {
-            fprintf(stderr, "socket_receive-->recv: %s\n", strerror(errno));
+            //fprintf(stderr, "socket_receive-->recv: %s\n", strerror(errno));
             return bytes;
         }
         if (bytes == 0) break;

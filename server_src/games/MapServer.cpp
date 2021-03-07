@@ -1,7 +1,6 @@
 #include "MapServer.h"
 
 MapServer::MapServer(const std::string& file_location): map(file_location.c_str()){
-	
 	YAML::Node mapa = YAML::LoadFile(file_location);
 	
 	this->minPlayers = mapa["minPlayers"].as<int>();
@@ -24,7 +23,6 @@ MapServer::MapServer(const std::string& file_location): map(file_location.c_str(
 }
 
 MapServer::MapServer(MapServer&& from){
-	
 	this->map = from.map;
 	this->minPlayers = from.minPlayers;
 	this->maxPlayers = from.maxPlayers;
@@ -33,7 +31,6 @@ MapServer::MapServer(MapServer&& from){
 	this->respawnPoints = from.respawnPoints;
 	this->doors = from.doors;
 	from.items = std::vector<Item*>();
-	
 }
 
 void MapServer::loadItems(){

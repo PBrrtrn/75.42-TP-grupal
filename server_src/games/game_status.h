@@ -39,7 +39,6 @@ public:
   
   GameStatus(std::string mapLocation);
   Vector getPosition();
-  //float getAngle();
   void addPlayer(int playerID, Vector &position, Vector &direction);
   Vector getPosition(int playerID);
   Vector getDirection(int playerID);
@@ -63,8 +62,6 @@ public:
   
   std::string getEntireMap();
   Map& getMap();
-  
-  //void updatePlayerPositions();
   
   std::unordered_map<int,MovementState> getPlayerMovementStates();
   std::unordered_map<int,MovementState> getPlayerRotationStates();
