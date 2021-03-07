@@ -59,4 +59,4 @@ Maps:
   Location: ../maps/
 MapsSequence:
   - 'map1.yml'
-  - 'map2.yml'
+  - 'map-large.yml'
