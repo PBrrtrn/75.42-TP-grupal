@@ -96,6 +96,7 @@ std::string ClientGameStatus::getEntireMap(){
 
 GameStatistics ClientGameStatus::getStatistics() {
 	GameStatistics gs;
+	memset(&gs, 0, sizeof(GameStatistics));
 
 	Statistics& s = this->gameStatus.showStatistics();
 
@@ -111,6 +112,7 @@ GameStatistics ClientGameStatus::getStatistics() {
 	for (int i = 0; i < TOP_STATISTICS; i++) {
 		if (i < kills.size()) {
 			ClientKills gs_kills;
+			memset(&gs_kills, 0, sizeof(ClientKills));
 			gs_kills.clientId = kills[i].first;
 			gs_kills.kills = kills[i].second;
 			gs.kills[i] = gs_kills;
@@ -118,6 +120,7 @@ GameStatistics ClientGameStatus::getStatistics() {
 		
 		if (i < points.size()) {
 			ClientPoints gs_points;
+			memset(&gs_points, 0, sizeof(ClientPoints));
 			gs_points.clientId = points[i].first;
 			gs_points.puntaje = points[i].second;
 			gs.points[i] = gs_points;
@@ -125,6 +128,7 @@ GameStatistics ClientGameStatus::getStatistics() {
 
 		if (i < kills.size()) {
 			ClientShootedBullets gs_bullets;
+			memset(&gs_bullets, 0, sizeof(ClientShootedBullets));
 			gs_bullets.clientId = bullets[i].first;
 			gs_bullets.bullets_shooted = bullets[i].second;
 			gs.bullets[i] = gs_bullets;
