@@ -11,7 +11,7 @@
 #include "Window.h"
 #include "PlayerWeapon.h"
 #include "Font.h"
-#include "Animation.h"
+#include "EnemyComponent.h"
 #include "Texture.h"
 #include "MapDrawer.h"
 #include "UIDrawer.h"
@@ -28,9 +28,9 @@ private:
   GameStatusMonitor& game_status_monitor;
   MenuStatus& menu_status;
   int fps_cap;
-  std::vector<Animation*> enemy_animations;
   std::vector<Texture*> wall_textures;
   std::vector<Texture*> item_textures;
+  std::vector<EnemyComponent*> enemy_components;
   std::vector<PlayerWeapon*> player_weapons;
   MusicTrack* menu_music;
   MusicTrack* game_music;

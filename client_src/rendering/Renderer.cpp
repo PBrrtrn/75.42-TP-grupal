@@ -32,11 +32,13 @@ Renderer::Renderer(YAML::Node& config, std::atomic<bool>& in_game,
 }
 
 Renderer::~Renderer() {
-  for (Animation* animation : this->enemy_animations) delete animation;
   for (Texture* texture : this->wall_textures) delete texture;
   for (Texture* texture : this->item_textures) delete texture;
+  for (EnemyComponent* component : this->enemy_components) delete component;
+  for (PlayerWeapon* weapon : this->player_weapon) delete weapon;
 
   delete this->menu_music;
+  delete this->game_music;
 
   SDL_DestroyRenderer(this->renderer);
   TTF_Quit();
@@ -66,6 +68,13 @@ void Renderer::load() {
     this->item_textures.push_back(texture);
   }
 
+  Yaml::Node enemies_node = this->config["enemies"];
+  for (int i = 0; i < enemies_node.size(); i++) {
+    EnemyComponent* enemy_component = new EnemyComponent(renderer, 
+                                                         enemies_node[i]);
+    this->enemy_components.push_back(enemy_component);
+  }
+
   YAML::Node weapons_node = this->config["weapons"];
   for (int i = 0; i < weapons_node.size(); i++) {
     PlayerWeapon* player_weapon = new PlayerWeapon(weapons_node[i], 
@@ -81,14 +90,6 @@ void Renderer::load() {
   
   music_path = music_dir + music_node["game"].as<std::string>();
   this->game_music = new MusicTrack(music_path.c_str());
-
-  //////////////////////////////////////////////////////////////
-  std::vector<std::string> paths;
-  paths.push_back(std::string("../assets/sprites/enemies/ss/idle_front.png"));
-
-  Animation* animation = new Animation(this->renderer, paths);
-  this->enemy_animations.push_back(animation);
-  //////////////////////////////////////////////////////////////
 }
 
 void Renderer::run() {
@@ -103,8 +104,7 @@ void Renderer::run() {
     Map map = this->game_status_monitor.getMap();
     MapDrawer map_drawer(this->config, map, 
                          this->wall_textures,
-                         this->item_textures,
-                         this->enemy_animations);
+                         this->item_textures);
     UIDrawer ui_drawer(this->renderer, this->config["game_ui"]);
 
     GameStatusUpdate status_update = this->game_status_monitor.getUpdate();

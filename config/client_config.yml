@@ -215,11 +215,11 @@ enemies:
       - shooting_1.png
       - shooting_2.png
       - shooting_3.png
-    shot_animation:
+    damage_animation:
       - idle_front.png
     dying_sound: mein_leiben.wav
     shooting_sound: shooting.wav
-    shot_sound: enemy_shot.wav
+    damage_sound: enemy_shot.wav
 
 # animations:
 #   enemies:

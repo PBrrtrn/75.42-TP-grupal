@@ -3,6 +3,7 @@ project(TPGrupal)
 add_library(rendering SHARED
 	Animation.cpp
 	TimedAnimation.cpp
+	EnemyComponent.cpp
 	Font.cpp
 	MapDrawer.cpp
 	MusicTrack.cpp

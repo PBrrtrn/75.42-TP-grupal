@@ -20,6 +20,8 @@ enum SpriteAngle {
 	QUARTER_LEFT
 };
 
+enum State { IDLE, MOVING, DYING, SHOOTING, DAMAGE };
+
 class EnemyComponent {
 private:
 	std::vector<Animation*> idle_animations;
@@ -33,32 +35,37 @@ private:
 	SoundEffect* shooting_sound;
 	SoundEffect* damage_sound;
 
-	void loadIdleAnimations(SDL_Renderer* renderer, 
-													std::string directory, 
-													YAML::Node spec);
-	void loadMovingAnimations();
-	Animation* buildAnimation(YAML::Node spec,
+	std::vector<Animation*> buildAnimations(SDL_Renderer* renderer, 
+											    								std::string directory, 
+											    								YAML::Node spec);
+	Animation* buildAnimation(SDL_Renderer* renderer,
 													  std::string directory,
-													  SDL_Renderer* renderer);
+													  YAML::Node spec);
 	SoundEffect* buildSoundEffect(std::string path);
 public:
 	EnemyComponent(SDL_Renderer* renderer, YAML::Node spec);
 	~EnemyComponent();
-	void renderIdle(SDL_Renderer* renderer, std::vector<float>& z_buffer,
-									float z_depth, int x_pos, int y_pos, int width, int height,
-									int frame, SpriteAngle view_angle);
-	void renderMoving(SDL_Renderer* renderer, std::vector<float>& z_buffer,
-										float z_depth, int x_pos, int y_pos, int width, int height,
-										int frame, SpriteAngle view_angle);
-	void renderDying(SDL_Renderer* renderer, std::vector<float>& z_buffer,
-									 float z_depth, int x_pos, int y_pos, 
-									 int width, int height, int frame);
-	void renderShooting(SDL_Renderer* renderer, std::vector<float>& z_buffer,
-										  float z_depth, int x_pos, int y_pos, 
-										  int width, int height, int frame);
-	void renderGettingShot(SDL_Renderer* renderer, std::vector<float>& z_buffer,
-												 float z_depth, int x_pos, int y_pos, 
-												 int width, int height, int frame);
+	void renderDying(SDL_Renderer* renderer, std::vector<float> z_buffer,
+									 float z_depth, int x_pos, int y_pos,
+									 int width, int height, int elapsed_steps);
+	void renderDamage(SDL_Renderer* renderer, std::vector<float> z_buffer,
+									  float z_depth, int x_pos, int y_pos,
+									  int width, int height, int elapsed_steps);
+	void renderShooting(SDL_Renderer* renderer, std::vector<float> z_buffer,
+									    float z_depth, int x_pos, int y_pos,
+									    int width, int height, int elapsed_steps);
+	void renderIdle(SDL_Renderer* renderer, std::vector<float> z_buffer,
+									float z_depth, int x_pos, int y_pos, SpriteAngle angle,
+									int width, int height, int elapsed_steps);
+	void renderMoving(SDL_Renderer* renderer, std::vector<float> z_buffer,
+									  float z_depth, int x_pos, int y_pos, SpriteAngle angle,
+									  int width, int height, int elapsed_steps);
+	int dyingSteps();
+	int shootingSteps();
+	int damageSteps();
+	/* Si es necesario repetir frames de la animación en varios steps,
+	el parámetro steps_per_frame debería existir en EnemyComponent y
+	cargarse del nodo de configuracion														  */
 };
 
 #endif

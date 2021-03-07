@@ -7,14 +7,13 @@
 
 MapDrawer::MapDrawer(YAML::Node& config, Map& map,
                      std::vector<Texture*>& wall_textures,
-                     std::vector<Texture*>& item_sprites,
-                     std::vector<Animation*>& enemy_animations)
+                     std::vector<Texture*>& item_sprites)
 : screen_width(config["window"]["width"].as<int>()), 
   screen_height(config["window"]["height"].as<int>()), 
   fov(config["graphics"]["FOV"].as<float>()),
   wall_height(config["graphics"]["wall_height"].as<float>()),
   wall_textures(wall_textures), item_sprites(item_sprites),
-  enemy_animations(enemy_animations), map(map) { }
+  map(map) { }
 
 MapDrawer::~MapDrawer() { }
 
@@ -82,10 +81,12 @@ void MapDrawer::drawEnemies(SDL_Renderer* renderer,
       int sprite_x = (this->screen_width/2) * (1 - transf_x/transf_y);
       int sprite_y = (this->screen_height - sprite_height)/2;
 
+      /*
       Animation* animation = enemy_animations[0];
       animation->renderTexels(renderer, z_buffer, transf_y, 
                               sprite_x, sprite_y,
                               sprite_width, sprite_height);
+      */
     }
   }
 }
