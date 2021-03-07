@@ -35,7 +35,7 @@ Renderer::~Renderer() {
   for (Texture* texture : this->wall_textures) delete texture;
   for (Texture* texture : this->item_textures) delete texture;
   for (EnemyComponent* component : this->enemy_components) delete component;
-  for (PlayerWeapon* weapon : this->player_weapon) delete weapon;
+  for (PlayerWeapon* weapon : this->player_weapons) delete weapon;
 
   delete this->menu_music;
   delete this->game_music;
@@ -68,7 +68,7 @@ void Renderer::load() {
     this->item_textures.push_back(texture);
   }
 
-  Yaml::Node enemies_node = this->config["enemies"];
+  YAML::Node enemies_node = this->config["enemies"];
   for (int i = 0; i < enemies_node.size(); i++) {
     EnemyComponent* enemy_component = new EnemyComponent(renderer, 
                                                          enemies_node[i]);

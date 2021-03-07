@@ -2,6 +2,7 @@
 #define __RENDERER_H__
 
 #include <vector>
+#include <unordered_map>
 #include <atomic>
 #include <yaml-cpp/yaml.h>
 #include <SDL2/SDL.h>
@@ -12,6 +13,7 @@
 #include "PlayerWeapon.h"
 #include "Font.h"
 #include "EnemyComponent.h"
+#include "EnemyEntity.h"
 #include "Texture.h"
 #include "MapDrawer.h"
 #include "UIDrawer.h"
@@ -34,6 +36,7 @@ private:
   std::vector<PlayerWeapon*> player_weapons;
   MusicTrack* menu_music;
   MusicTrack* game_music;
+  std::unordered_map<char, EnemyEntity> enemies;
   void load();
   void renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer);
 public:

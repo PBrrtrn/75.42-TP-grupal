@@ -60,12 +60,12 @@ public:
 	void renderMoving(SDL_Renderer* renderer, std::vector<float> z_buffer,
 									  float z_depth, int x_pos, int y_pos, SpriteAngle angle,
 									  int width, int height, int elapsed_steps);
+	void playDyingSound();
+	void playDamageSound();
+	void playShootingSound();
 	int dyingSteps();
 	int shootingSteps();
 	int damageSteps();
-	/* Si es necesario repetir frames de la animación en varios steps,
-	el parámetro steps_per_frame debería existir en EnemyComponent y
-	cargarse del nodo de configuracion														  */
 };
 
 #endif

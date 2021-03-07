@@ -9,15 +9,12 @@ EnemyComponent::EnemyComponent(SDL_Renderer* renderer, YAML::Node spec) {
 	this->moving_animations = this->buildAnimations(renderer, directory,
 																									spec["moving_animations"]);
 
-	this->dying_steps = spec["dying_animation"].size();
 	this->dying_animation = this->buildAnimation(renderer, directory,
 																      				 spec["dying_animation"]);
 
-	this->shooting_steps = spec["shooting_animation"].size();
 	this->shooting_animation = this->buildAnimation(renderer, directory,
 																	      				  spec["shooting_animation"]);
 
-	this->damage_steps = spec["damage_animation"].size();
 	this->damage_animation = this->buildAnimation(renderer, directory,
 																      				  spec["damage_animation"]);
 
@@ -95,46 +92,70 @@ SoundEffect* EnemyComponent::buildSoundEffect(std::string path) {
 	return new SoundEffect(path.c_str());
 }
 
-void renderDying(SDL_Renderer* renderer, std::vector<float> z_buffer,
-								 float z_depth, int x_pos, int y_pos,
-								 int width, int height, int elapsed_steps) {
-
+void EnemyComponent::renderDying(SDL_Renderer* renderer, 
+																 std::vector<float> z_buffer,
+								 								 float z_depth, int x_pos, int y_pos,
+								 								 int width, int height, int elapsed_steps) {
+	this->dying_animation->renderTexels(renderer, elapsed_steps, z_buffer, 
+																		  z_depth, x_pos, y_pos, width, height);
 }
 
-void renderDamage(SDL_Renderer* renderer, std::vector<float> z_buffer,
-								  float z_depth, int x_pos, int y_pos,
-								  int width, int height, int elapsed_steps) {
-
+void EnemyComponent::renderDamage(SDL_Renderer* renderer, 
+																	std::vector<float> z_buffer,
+								  								float z_depth, int x_pos, int y_pos,
+								  								int width, int height, int elapsed_steps) {
+	this->damage_animation->renderTexels(renderer, elapsed_steps, z_buffer, 
+																		   z_depth, x_pos, y_pos, width, height);
 }
 
-void renderShooting(SDL_Renderer* renderer, std::vector<float> z_buffer,
-								    float z_depth, int x_pos, int y_pos,
-								    int width, int height, int elapsed_steps) {
-
+void EnemyComponent::renderShooting(SDL_Renderer* renderer, 
+																	  std::vector<float> z_buffer,
+								    								float z_depth, int x_pos, int y_pos,
+								    								int width, int height, int elapsed_steps) {
+	this->shooting_animation->renderTexels(renderer, elapsed_steps, z_buffer, 
+																		     z_depth, x_pos, y_pos, width, height);
 }
 
-void renderIdle(SDL_Renderer* renderer, std::vector<float> z_buffer,
-								float z_depth, int x_pos, int y_pos, SpriteAngle angle,
-								int width, int height, int elapsed_steps) {
-	this->idle_animations[angle]->render(renderer, z_buffer, z_depth, 
-																			 x_pos, y_pos, width, height, 
-																			 elapsed_steps);
+void EnemyComponent::renderIdle(SDL_Renderer* renderer, 
+																std::vector<float> z_buffer,
+																float z_depth, int x_pos, int y_pos, 
+																SpriteAngle angle, int width, int height, 
+																int elapsed_steps) {
+	this->idle_animations[angle]->renderTexels(renderer, elapsed_steps, 
+																						 z_buffer, z_depth, 
+																						 x_pos, y_pos, width, height);
 }
 
-void renderMoving(SDL_Renderer* renderer, std::vector<float> z_buffer,
-								  float z_depth, int x_pos, int y_pos, SpriteAngle angle,
-								  int width, int height, int elapsed_steps) {
-
+void EnemyComponent::renderMoving(SDL_Renderer* renderer, 
+																	std::vector<float> z_buffer,
+								  								float z_depth, int x_pos, int y_pos, 
+								  								SpriteAngle angle, int width, int height, 
+								  								int elapsed_steps) {
+	this->moving_animations[angle]->renderTexels(renderer, elapsed_steps, 
+																						   z_buffer, z_depth, 
+																						   x_pos, y_pos, width, height);
 }
 
-int dyingSteps() {
-	return this->dying_steps;
+void EnemyComponent::playDyingSound() {
+	this->dying_sound->play();
 }
 
-int shootingSteps() {
-	return this->shooting_steps;
+void EnemyComponent::playDamageSound() {
+	this->damage_sound->play();
 }
 
-int damageSteps() {
-	return this->damage_steps;
+void EnemyComponent::playShootingSound() {
+	this->shooting_sound->play();
+}
+
+int EnemyComponent::dyingSteps() {
+	return this->dying_animation->framesCount();
+}
+
+int EnemyComponent::shootingSteps() {
+	return this->shooting_animation->framesCount();
+}
+
+int EnemyComponent::damageSteps() {
+	return this->damage_animation->framesCount();
 }

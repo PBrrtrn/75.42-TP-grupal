@@ -7,7 +7,7 @@
 #include "EnemyComponent.h"
 #include "../../common_src/Vector.h"
 
-enum EnemyType { DOG, GUARD, SS, OFFICIAL }:
+enum EnemyType { DOG, GUARD, SS, OFFICIAL };
 
 class EnemyEntity {
 private:
@@ -26,9 +26,10 @@ public:
 	void render(SDL_Renderer* renderer, std::vector<float>& z_buffer,
 							float z_depth, int x_pos, int y_pos, 
 							int width, int height, SpriteAngle angle);
+	void setMoving();
 	void setDying();
 	void setReceivingDamage();
-	void setFiring();
+	void setShooting();
 };
 
 #endif
