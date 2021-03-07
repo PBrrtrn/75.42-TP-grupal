@@ -21,7 +21,7 @@ Player::Player(int id) :
 	this->bullets = c["StartingBullets"].as<int>();
 	this->armas[0] =  new Cuchillo();
 	this->armas[1] = new Pistola();
-	this->armas[2] = new Ametralladora();//
+	this->armas[2] = NULL; //new Ametralladora();//
 	this->armas[3] = NULL; //new CanionDeCadena();//
 	this->armas[4] = NULL;
 	this->selected_weapon_idx = 1;
@@ -76,7 +76,6 @@ bool Player::aimWeapon(float ort_dist, float target_dist) {
 	if(this->armas[this->selected_weapon_idx] == NULL) {
 		return false;
 	}
-	//this->armas[this->selected_weapon_idx]->printNombre();
 	return this->armas[this->selected_weapon_idx]->aimWeapon(ort_dist, target_dist);
 }
 
@@ -128,11 +127,6 @@ bool Player::addScore(int amount) {
 	this->pickedUpTreasure = true;
 	return true;
 }
-
-/*
-Item Player::throwWeapon(Vector pos_inicial,bool respawns) {
-	return this->armas[this->selected_weapon_idx].throwWeapon(pos_inicial, respawns);
-}*/
 
 bool Player::loseBullet() {
 	if(this->selected_weapon_idx == 0) return false;

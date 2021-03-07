@@ -11,7 +11,6 @@
 
 #include "../communication/thread_client.h"
 #include "../../common_src/Thread.h"
-/////#include "../../common_src/socket.h"
 #include "game_status.h"
 #include "../../common_src/protected_queue.h"
 

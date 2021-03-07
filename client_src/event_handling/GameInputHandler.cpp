@@ -12,7 +12,8 @@ static std::unordered_map<SDL_Keycode, MessageType> keydown_map = {
   { SDLK_2, TYPE_CHANGE_PISTOLA },
   { SDLK_3, TYPE_CHANGE_AMETRALLADORA },
   { SDLK_4, TYPE_CHANGE_CANION },
-  { SDLK_SPACE, TYPE_SHOOT_START }
+  { SDLK_SPACE, TYPE_SHOOT_START },
+  { SDLK_e, TYPE_EXIT_GAME}
 };
 
 static std::unordered_map<SDL_Keycode, MessageType> keyup_map = {

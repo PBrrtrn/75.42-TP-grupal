@@ -30,7 +30,6 @@ class Player {
     int previous_weapon_idx;
     
     std::array<Arma*,AMOUNT_WEAPONS> armas;
-    //    Arma armas[AMOUNT_WEAPONS];
     Cuchillo cuchillo;
     Pistola pistola;
     MovementState movement_state;
@@ -79,7 +78,6 @@ public:
     int getLives();
     bool changeWeapon(int weapon_idx);
     int getSelectedWeaponIndex();
-    //Item throwWeapon(Vector pos_inicial,bool respawns);
     bool changeMovementState(MovementState state);
     MovementState getCurrentMovementState();
     bool changeShootingState(ShootingState state);
