@@ -220,7 +220,6 @@ void ThreadGame::sendGameUpdates(){
 void ThreadGame::expelClient(int id){
   if (this->clients.find(id) != this->clients.end()) {
       this->clients.at(id)->shutdown();
-      this->clients.at(id)->join();
       this->clients.erase(id); 
   }
   if (this->out_queues.find(id) != this->out_queues.end()) {
@@ -409,7 +408,5 @@ ThreadGame:: ~ThreadGame(){
   }
   for (auto x : this->clients) {
     x.second->shutdown();
-    x.second->join();
-    //delete x.second;
   }
 }
