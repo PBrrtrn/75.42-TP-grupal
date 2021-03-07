@@ -35,7 +35,7 @@ GameStatusUpdate GameStatus::getUpdate() {
                             this->player_status.health,
                             this->player_status.bullets,
                             this->player_status.lives,
-                            this->player_status.hasKey,
+                            (this->player_status.hasKey == 1),
                             this->player_status.firing_state,
                             this->enemies,
                             this->items };

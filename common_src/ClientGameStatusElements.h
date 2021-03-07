@@ -16,21 +16,21 @@ struct PlayerStatus {
 	uint8_t health;
 	uint8_t bullets;
 	uint8_t lives;
-	bool hasKey;
+	int hasKey;
 	FiringState firing_state;
-	bool receivedDamage;
-	bool died;
-	bool pickedUpTreasure;
-	bool pickedUpBullets;
-	bool pickedUpLife;
-	bool before_respawn;
+	int receivedDamage;
+	int died;
+	int pickedUpTreasure;
+	int pickedUpBullets;
+	int pickedUpLife;
+	int before_respawn;
 };
 
 //listado de puertas
 struct DoorListItem {
 	int doorId;
 	Vector gridPosition;
-	bool isOpen;
+	int isOpen;
 };
 
 //listado de Jugadores que no son el player asociado a este GameStatus
@@ -39,11 +39,11 @@ struct PlayerListItem {
 	Vector position;
 	Vector direction;
 	uint8_t selectedWeapon;
-	bool isAlive;
-	bool receiveDamage;
+	int isAlive;
+	int receiveDamage;
 	FiringState firing_state;
 	MovementState movement_state;
-	bool before_respawn;
+	int before_respawn;
 };
 
 //listado de items asociados a este 

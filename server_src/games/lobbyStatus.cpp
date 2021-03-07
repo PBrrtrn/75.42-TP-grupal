@@ -8,7 +8,8 @@ void LobbyStatus::updateLobbyData(int gameID, int remainingTime, int players,
     lobbyStatus.remainingTime = remainingTime;
     lobbyStatus.players = players;
     lobbyStatus.maxPlayers = maxPlayers;
-    lobbyStatus.gameStarted = gameStarted;
+    //lobbyStatus.gameStarted = gameStarted;
+    lobbyStatus.gameStarted = gameStarted?1:0;
     
     if (this->lobbysData.find(gameID) == this->lobbysData.end()) {
         this->lobbysData.insert({gameID, lobbyStatus});

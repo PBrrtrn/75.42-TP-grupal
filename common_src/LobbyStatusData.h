@@ -5,7 +5,7 @@ struct LobbyStatusData {
 	int remainingTime;
 	int players;
 	int maxPlayers;
-	bool gameStarted;
+	int gameStarted;
 };
 
 #endif
