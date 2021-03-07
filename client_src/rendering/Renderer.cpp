@@ -114,6 +114,12 @@ void Renderer::run() {
 
     while (this->in_game) renderMatch(map_drawer, ui_drawer);
     this->game_music->pause();
+
+    GameStatistics& statistics = this->game_status_monitor.getStatistics();
+    StatisticsRenderer statistics_renderer(this->config["game_end_ui"], 
+                                  this->renderer, 
+                                  statistics);
+    statistics_renderer.render();
   }
 }
 

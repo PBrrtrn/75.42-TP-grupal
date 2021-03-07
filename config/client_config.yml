@@ -168,3 +168,25 @@ animations:
             - dying_3.png
             - dying_4.png
             - dying_5.png
+game_end_ui:
+  statistics_box:
+    x_pos: 100
+    y_pos: 100
+    width: 440
+    height: 300
+    gilding: 3
+    kills:
+      x_pos: 320
+      y_pos: 130
+      text: Game kills
+    points:
+      x_pos: 250
+      y_pos: 170
+      text: Game points
+    shot_bullets:
+      x_pos: 170
+      y_pos: 210
+      text: Game shoots
+      directory: ../assets/menu_ui/
+    font: wolfenstein.ttf
+    background: background.png
