@@ -6,7 +6,8 @@ ShootEvent::ShootEvent(Shoot* shoot, void (Shoot::*shoot_func)(GameStatus& gs, i
     param(id), gs(gs), 
     shoot(shoot), 
     elapsed(0),
-    last_run_time(0)
+    last_run_time(0), 
+    timeout(0)
     {}
 
 void ShootEvent::activate(double timeout) {

@@ -29,6 +29,7 @@ void ClientGameStatus::updateThisGameStatus(){
 		for (auto& it: this->gameStatus.players) {
 			if (this->players.find(it.first) == this->players.end()) {
 				PlayerListItem p;
+				memset(&p, 0, sizeof(PlayerListItem));
 				p.clientId = it.first;
 				p.position = this->gameStatus.playersPositions.at(p.clientId);
 				p.direction = this->gameStatus.playersDirections.at(p.clientId);
@@ -54,6 +55,7 @@ void ClientGameStatus::updateThisGameStatus(){
 		for (auto& it: this->gameStatus.doors) {
 			if (this->doors.find(it.first) == this->doors.end()) {
 				DoorListItem d;
+				memset(&d, 0, sizeof(DoorListItem));
 				d.doorId = it.first;
 				d.gridPosition = it.second.getLocation();
 				d.isOpen = it.second.isOpen();
@@ -70,6 +72,7 @@ void ClientGameStatus::updateThisGameStatus(){
 		for (auto& it: this->gameStatus.getGsItems()) {
 			if (it->isVisible()) {
 				ItemListElement i;
+				memset(&i, 0, sizeof(ItemListElement));
 				i.type = it->getType();
 				i.pos = it->getPosition();
 				this->items.push_back(i);
@@ -79,6 +82,7 @@ void ClientGameStatus::updateThisGameStatus(){
 		for (auto& it: this->gameStatus.getMapItems()) {
 			if (it->isVisible()) {
 				ItemListElement i;
+				memset(&i, 0, sizeof(ItemListElement));
 				i.type = it->getType();
 				i.pos = it->getPosition();
 				this->items.push_back(i);
