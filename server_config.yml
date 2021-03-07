@@ -58,5 +58,5 @@ Server:
 Maps:
   Location: ../maps/
 MapsSequence:
-  - map1.yml
-  - map2.yml
+  - 'map1.yml'
+  - 'map2.yml'

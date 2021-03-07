@@ -28,6 +28,8 @@ Player::Player(int id) :
 	this->previous_weapon_idx = 0;
 	this->movement_state = STATE_NOT_MOVING;
 	this->firing_state = STATE_NOT_FIRING;
+	this->shooting_state = STATE_NOT_SHOOTING;
+	this->rotation_state = STATE_NOT_MOVING;
 }
 
 Player::Player(Player&& from){
@@ -45,6 +47,8 @@ Player::Player(Player&& from){
 	this->movement_state = from.movement_state;
 	this->firing_state = from.firing_state;
 	this->before_respawn = from.before_respawn;
+	this->shooting_state = from.shooting_state;
+	this->rotation_state = from.rotation_state;
 
 	this->armas[0] = from.armas[0];
 	this->armas[1] = from.armas[1];

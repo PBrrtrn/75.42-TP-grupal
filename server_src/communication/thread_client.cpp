@@ -197,7 +197,6 @@ void ThreadClient::sendJoinRefused() {
 void ThreadClient::shutdown(){
 	this->keep_running = false;
 	this->choosing_game = false;
-	this->peer.close_socket();
 	this->messages_out->close();
 }
 
