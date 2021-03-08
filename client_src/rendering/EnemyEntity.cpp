@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "EnemyEntity.h"
 
 EnemyEntity::EnemyEntity(std::vector<EnemyComponent*>& components)
@@ -8,7 +10,7 @@ EnemyEntity::~EnemyEntity() { }
 
 void EnemyEntity::render(SDL_Renderer* renderer, std::vector<float>& z_buffer,
 												 float z_depth, int x_pos, int y_pos, 
-												 int width, int height, SpriteAngle view_angle) {
+												 int width, int height, int view_angle) {
 	EnemyComponent* component = this->components[this->type];
 	if (this->dying) {
 		component->renderDying(renderer, z_buffer, z_depth, x_pos, y_pos,
@@ -41,6 +43,14 @@ void EnemyEntity::render(SDL_Renderer* renderer, std::vector<float>& z_buffer,
 	this->elapsed_steps++;
 }
 
+void EnemyEntity::setIdle() {
+	this->elapsed_steps = 0;
+	this->moving = false;
+	this->dying = false;
+	this->receiving_damage = false;
+	this->shooting = false;
+}
+
 void EnemyEntity::setMoving() {
 	this->elapsed_steps = 0;
 	this->moving = true;
@@ -55,7 +65,7 @@ void EnemyEntity::setDying() {
 void EnemyEntity::setReceivingDamage() {
 	this->elapsed_steps = 0;
 	this->receiving_damage = true;
-	this->components[this->type]->playDyingSound();
+	this->components[this->type]->playDamageSound();
 }
 
 void EnemyEntity::setShooting() {

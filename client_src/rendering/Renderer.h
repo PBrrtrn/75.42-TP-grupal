@@ -36,7 +36,7 @@ private:
   std::vector<PlayerWeapon*> player_weapons;
   MusicTrack* menu_music;
   MusicTrack* game_music;
-  std::unordered_map<char, EnemyEntity> enemies;
+  std::unordered_map<char, EnemyEntity*> enemies;
   void load();
   void renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer);
 public:

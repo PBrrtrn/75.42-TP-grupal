@@ -7,7 +7,7 @@
 #include "EnemyComponent.h"
 #include "../../common_src/Vector.h"
 
-enum EnemyType { DOG, GUARD, SS, OFFICIAL };
+enum EnemyType { DOG = 0, GUARD = 1, SS = 2, OFFICIAL = 3 };
 
 class EnemyEntity {
 private:
@@ -18,15 +18,16 @@ private:
 	bool receiving_damage;
 	int elapsed_steps;
 public:
-	EnemyType type;
+	uint8_t type;
 	Vector position;
 	Vector direction; // Ver si no conviene usar un float...
 	EnemyEntity(std::vector<EnemyComponent*>& components);
 	~EnemyEntity();
 	void render(SDL_Renderer* renderer, std::vector<float>& z_buffer,
 							float z_depth, int x_pos, int y_pos, 
-							int width, int height, SpriteAngle angle);
+							int width, int height, int angle);
 	void setMoving();
+	void setIdle();
 	void setDying();
 	void setReceivingDamage();
 	void setShooting();

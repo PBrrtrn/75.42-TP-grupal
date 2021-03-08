@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "EnemyComponent.h"
 
 EnemyComponent::EnemyComponent(SDL_Renderer* renderer, YAML::Node spec) {
@@ -23,10 +25,10 @@ EnemyComponent::EnemyComponent(SDL_Renderer* renderer, YAML::Node spec) {
 	this->dying_sound = new SoundEffect((directory + sound_path).c_str());
       
 	sound_path = spec["shooting_sound"].as<std::string>();
-	this->dying_sound = new SoundEffect((directory + sound_path).c_str());
+	this->shooting_sound = new SoundEffect((directory + sound_path).c_str());
       
 	sound_path = spec["damage_sound"].as<std::string>();
-	this->dying_sound = new SoundEffect((directory + sound_path).c_str());
+	this->damage_sound = new SoundEffect((directory + sound_path).c_str());
 }
 
 EnemyComponent::~EnemyComponent() {
@@ -119,7 +121,7 @@ void EnemyComponent::renderShooting(SDL_Renderer* renderer,
 void EnemyComponent::renderIdle(SDL_Renderer* renderer, 
 																std::vector<float> z_buffer,
 																float z_depth, int x_pos, int y_pos, 
-																SpriteAngle angle, int width, int height, 
+																int angle, int width, int height, 
 																int elapsed_steps) {
 	this->idle_animations[angle]->renderTexels(renderer, elapsed_steps, 
 																						 z_buffer, z_depth, 
@@ -129,7 +131,7 @@ void EnemyComponent::renderIdle(SDL_Renderer* renderer,
 void EnemyComponent::renderMoving(SDL_Renderer* renderer, 
 																	std::vector<float> z_buffer,
 								  								float z_depth, int x_pos, int y_pos, 
-								  								SpriteAngle angle, int width, int height, 
+								  								int angle, int width, int height, 
 								  								int elapsed_steps) {
 	this->moving_animations[angle]->renderTexels(renderer, elapsed_steps, 
 																						   z_buffer, z_depth, 
@@ -137,14 +139,17 @@ void EnemyComponent::renderMoving(SDL_Renderer* renderer,
 }
 
 void EnemyComponent::playDyingSound() {
+	//std::cout << "Dying sound!" << std::endl;
 	this->dying_sound->play();
 }
 
 void EnemyComponent::playDamageSound() {
+	//std::cout << "Damage sound!" << std::endl;
 	this->damage_sound->play();
 }
 
 void EnemyComponent::playShootingSound() {
+	//std::cout << "Shooting sound!" << std::endl;
 	this->shooting_sound->play();
 }
 

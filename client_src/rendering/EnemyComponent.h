@@ -55,10 +55,10 @@ public:
 									    float z_depth, int x_pos, int y_pos,
 									    int width, int height, int elapsed_steps);
 	void renderIdle(SDL_Renderer* renderer, std::vector<float> z_buffer,
-									float z_depth, int x_pos, int y_pos, SpriteAngle angle,
+									float z_depth, int x_pos, int y_pos, int angle,
 									int width, int height, int elapsed_steps);
 	void renderMoving(SDL_Renderer* renderer, std::vector<float> z_buffer,
-									  float z_depth, int x_pos, int y_pos, SpriteAngle angle,
+									  float z_depth, int x_pos, int y_pos, int angle,
 									  int width, int height, int elapsed_steps);
 	void playDyingSound();
 	void playDamageSound();

@@ -109,11 +109,13 @@ void Renderer::run() {
 
     GameStatusUpdate status_update = this->game_status_monitor.getUpdate();
     for (PlayerListItem& enemy : status_update.enemies) {
-      std::cout << int(enemy.clientId) << std::endl;
+      this->enemies[enemy.clientId] = new EnemyEntity(this->enemy_components);
     }
 
     while (this->in_game) renderMatch(map_drawer, ui_drawer);
     this->game_music->pause();
+
+    for (auto it : this->enemies) delete it.second;
   }
 }
 
@@ -122,9 +124,21 @@ void Renderer::renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer) {
 
   GameStatusUpdate status_update = this->game_status_monitor.getUpdate();
 
+  for (PlayerListItem& enemy : status_update.enemies) {
+    EnemyEntity* entity = this->enemies[enemy.clientId];
+    entity->type = enemy.selectedWeapon;
+    entity->position = enemy.position;
+    entity->direction = enemy.direction;
+    if (!enemy.isAlive) entity->setDying();
+    else if (enemy.receiveDamage) entity->setReceivingDamage();
+    else if (enemy.firing_state == STATE_FIRING) entity->setShooting();
+    else if (enemy.movement_state != 5) entity->setMoving();
+    else entity->setIdle();
+  }
+
   map_drawer.draw(this->renderer, status_update.position, 
                   status_update.direction.getAngle(),
-                  status_update.items, status_update.enemies);
+                  status_update.items, this->enemies);
 
   int selected_weapon = int(status_update.selected_weapon);
   if (status_update.player_firing == STATE_FIRING)
