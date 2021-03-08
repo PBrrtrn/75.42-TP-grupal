@@ -117,7 +117,7 @@ void ThreadClient::sendCurrentGameMap(){
    
    std::cout << "Map sent" << std::endl;
    
-   delete mapGrid;
+   delete[] mapGrid;
    
    std::cout << "Map grid data released - pointer deleted" << std::endl;
    
