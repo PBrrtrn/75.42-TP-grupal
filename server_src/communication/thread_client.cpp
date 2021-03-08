@@ -214,10 +214,6 @@ void ThreadClient::shutdown(){
 	this->messages_out->close();
 }
 
-void ThreadClient::sleepAndRespawn() {
-	usleep(1000000);
-}
-
 ThreadClient:: ~ThreadClient(){	
 	delete this->messages_out;
 }
