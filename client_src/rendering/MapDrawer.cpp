@@ -106,8 +106,8 @@ void MapDrawer::drawEnemies(SDL_Renderer* renderer,
       else if ((2*M_PI/3 < p_angle) && (p_angle < 5*M_PI/6))
         perspective = 7; // 1/4 left
 
-      int sprite_width = int(this->screen_width/transf_y);
-      int sprite_height = int(this->screen_height/transf_y);
+      int sprite_width = abs(int(this->screen_width/transf_y));
+      int sprite_height = 2 * abs(int(this->screen_height/transf_y));
 
       int sprite_x = (this->screen_width/2) * (1 - transf_x/transf_y);
       int sprite_y = (this->screen_height - sprite_height)/2;
@@ -127,15 +127,17 @@ void MapDrawer::drawItems(SDL_Renderer* renderer,
   Vector plane(view_angle + M_PI/2);
   plane = plane * ((this->fov*180) / (100*M_PI));
 
+  float inv_det = 1.0 / fabs((plane.x * view_y) - (plane.y * view_x));
+
   for (ItemListElement& item : items) {
     Vector item_dir { item.pos.x - position.x,
                       position.y - item.pos.y };
-    float transf_x = view_x * item_dir.y - view_y * item_dir.x;
-    float transf_y = plane.y * item_dir.x - plane.x * item_dir.y;
+    float transf_x = inv_det * (view_x * item_dir.y - view_y * item_dir.x);
+    float transf_y = inv_det * (plane.y * item_dir.x - plane.x * item_dir.y);
 
     if (transf_y > 0.1) {
       int sprite_width = int(this->screen_width/transf_y);
-      int sprite_height = int(this->screen_height/transf_y);
+      int sprite_height = 2*int(this->screen_height/transf_y);
 
       int sprite_x = (this->screen_width/2) * (1 - transf_x/transf_y);
       int sprite_y = (this->screen_height - sprite_height)/2;

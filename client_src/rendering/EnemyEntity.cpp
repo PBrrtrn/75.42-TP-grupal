@@ -52,7 +52,6 @@ void EnemyEntity::setIdle() {
 }
 
 void EnemyEntity::setMoving() {
-	this->elapsed_steps = 0;
 	this->moving = true;
 }
 
