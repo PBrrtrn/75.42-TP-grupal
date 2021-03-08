@@ -2,7 +2,7 @@
 
 ItemWater::ItemWater(QWidget* widget) : ItemDraggable(widget)
 {
-    this->icon = ":/images/itemwater.png";
+    this->icon = ObjectList::textures.at(TYPE_WATER);
     this->itemData = "WATER";
 }
 

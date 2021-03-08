@@ -8,6 +8,7 @@
 #include <QMouseEvent>
 #include "../../server_src/items/ItemSerializer.h"
 #include "../../server_src/games/SpawnPointSerializer.h"
+#include "object_list.h"
 
 class ItemDraggable : public QLabel
 {
