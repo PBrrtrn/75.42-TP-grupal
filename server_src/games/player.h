@@ -84,8 +84,10 @@ public:
     ShootingState getCurrentShootingState();
     bool changeRotationState(MovementState state);
 	MovementState getCurrentRotationState();
+    bool isMoving();
     bool changeFiringState(FiringState state);
     FiringState getCurrentFiringState();
+    bool isShooting();
     void respawn();
     bool outGame();
 	~Player();

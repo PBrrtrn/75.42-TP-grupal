@@ -12,9 +12,9 @@ MapRepository:: MapRepository(): config(ServerConfig::Config) {
         struct_map.mapId = this->map_id_counter;
         memset(struct_map.name, '\0', sizeof(struct_map.name));
         strncpy(struct_map.name, map.as<std::string>().c_str(), sizeof(char) * strlen(map.as<std::string>().c_str()));
-        //TODO leer maxPlayers y minPlayers
-        struct_map.maxPlayers = 16;
-        struct_map.minPlayers = 8;
+        YAML::Node mapa = YAML::LoadFile(maps_location + map.as<std::string>());
+        struct_map.maxPlayers = mapa["maxPlayers"].as<int>();;
+        struct_map.minPlayers = mapa["minPlayers"].as<int>();;
         this->maps.push_back(struct_map);
         this->map_id_counter++;
     }
