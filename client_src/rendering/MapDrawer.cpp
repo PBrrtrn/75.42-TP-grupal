@@ -67,17 +67,45 @@ void MapDrawer::drawEnemies(SDL_Renderer* renderer,
   float view_y = sin(view_angle);
   float view_x = cos(view_angle);
   Vector plane(view_angle + M_PI/2);
-  plane = plane * ((this->fov*180) / (100*M_PI));
+  plane = plane * ((this->fov*180.0) / (100.0*M_PI));
+
+  float inv_det = 1.0 / fabs((plane.x * view_y) - (plane.y * view_x));
 
   for (auto& it : enemies) {
     EnemyEntity* enemy = it.second;
 
     Vector enemy_dir { enemy->position.x - position.x,
                        position.y - enemy->position.y };
-    float transf_x = view_x * enemy_dir.y - view_y * enemy_dir.x;
-    float transf_y = plane.y * enemy_dir.x - plane.x * enemy_dir.y;
+    float transf_x = inv_det * (view_x * enemy_dir.y - view_y * enemy_dir.x);
+    float transf_y = inv_det * (plane.y * enemy_dir.x - plane.x * enemy_dir.y);
 
     if (transf_y > 0.1) {
+      float angle_to_enemy = enemy_dir.getAngle();
+      float enemy_view_angle = enemy->direction.getAngle();
+
+      float p_angle = enemy_view_angle - angle_to_enemy;
+      /* No funciona este cálculo para todos los vectores posibles
+         por ejemplo, cuando los dos tienen direccion (-1,0) el ángulo
+         se vuelve cerca de -6.28 - habría que analizar los casos posibles */
+
+      int perspective = 0;
+      if ((5*M_PI/6 < p_angle) || (p_angle < -5*M_PI/6))
+        perspective = 0; // front
+      else if ((-5*M_PI/6 < p_angle) && (p_angle < -2*M_PI/3))
+        perspective = 1; // 1/4 right
+      else if ((-2*M_PI/3 < p_angle) && (p_angle < -M_PI/2))
+        perspective = 2; // profile right
+      else if ((-M_PI/3 < p_angle) && (p_angle < -M_PI/6))
+        perspective = 3; // 3/4 right
+      else if ((-M_PI/6 < p_angle) && (p_angle < M_PI/6))
+        perspective = 4; // back
+      else if ((M_PI/6 < p_angle) && (p_angle < M_PI/3))
+        perspective =  5; // 3/4 left
+      else if ((M_PI/3 < p_angle) && (p_angle < 2*M_PI/3))
+        perspective = 6; // profile left
+      else if ((2*M_PI/3 < p_angle) && (p_angle < 5*M_PI/6))
+        perspective = 7; // 1/4 left
+
       int sprite_width = int(this->screen_width/transf_y);
       int sprite_height = int(this->screen_height/transf_y);
 
@@ -85,30 +113,9 @@ void MapDrawer::drawEnemies(SDL_Renderer* renderer,
       int sprite_y = (this->screen_height - sprite_height)/2;
 
       enemy->render(renderer, z_buffer, transf_y, sprite_x, sprite_y,
-                    sprite_width, sprite_height, 0);
+                    sprite_width, sprite_height, perspective);
     }
   }
-  /*
-  for (PlayerListItem& enemy : enemies) {
-    Vector enemy_dir { enemy.position.x - position.x,
-                       position.y - enemy.position.y };
-    float transf_x = view_x * enemy_dir.y - view_y * enemy_dir.x;
-    float transf_y = plane.y * enemy_dir.x - plane.x * enemy_dir.y;
-
-    if (transf_y > 0.1) {
-      int sprite_width = int(this->screen_width/transf_y);
-      int sprite_height = int(this->screen_height/transf_y);
-
-      int sprite_x = (this->screen_width/2) * (1 - transf_x/transf_y);
-      int sprite_y = (this->screen_height - sprite_height)/2;
-
-      Animation* animation = enemy_animations[0];
-      animation->renderTexels(renderer, z_buffer, transf_y, 
-                              sprite_x, sprite_y,
-                              sprite_width, sprite_height);
-    }
-  }
-  */
 }
 
 void MapDrawer::drawItems(SDL_Renderer* renderer, 

@@ -98,6 +98,7 @@ void EnemyComponent::renderDying(SDL_Renderer* renderer,
 																 std::vector<float> z_buffer,
 								 								 float z_depth, int x_pos, int y_pos,
 								 								 int width, int height, int elapsed_steps) {
+	// int frame = elapsed_steps/this->dying_steps_per_frame;
 	this->dying_animation->renderTexels(renderer, elapsed_steps, z_buffer, 
 																		  z_depth, x_pos, y_pos, width, height);
 }
@@ -106,6 +107,7 @@ void EnemyComponent::renderDamage(SDL_Renderer* renderer,
 																	std::vector<float> z_buffer,
 								  								float z_depth, int x_pos, int y_pos,
 								  								int width, int height, int elapsed_steps) {
+	// int frame = elapsed_steps/this->damage_steps_per_frame;
 	this->damage_animation->renderTexels(renderer, elapsed_steps, z_buffer, 
 																		   z_depth, x_pos, y_pos, width, height);
 }
@@ -114,6 +116,7 @@ void EnemyComponent::renderShooting(SDL_Renderer* renderer,
 																	  std::vector<float> z_buffer,
 								    								float z_depth, int x_pos, int y_pos,
 								    								int width, int height, int elapsed_steps) {
+	// int frame = elapsed_steps/this->shooting_steps_per_frame;
 	this->shooting_animation->renderTexels(renderer, elapsed_steps, z_buffer, 
 																		     z_depth, x_pos, y_pos, width, height);
 }
@@ -123,6 +126,7 @@ void EnemyComponent::renderIdle(SDL_Renderer* renderer,
 																float z_depth, int x_pos, int y_pos, 
 																int angle, int width, int height, 
 																int elapsed_steps) {
+	// int frame = elapsed_steps/this->idle_steps_per_frame;
 	this->idle_animations[angle]->renderTexels(renderer, elapsed_steps, 
 																						 z_buffer, z_depth, 
 																						 x_pos, y_pos, width, height);
@@ -133,23 +137,21 @@ void EnemyComponent::renderMoving(SDL_Renderer* renderer,
 								  								float z_depth, int x_pos, int y_pos, 
 								  								int angle, int width, int height, 
 								  								int elapsed_steps) {
+	// int frame = elapsed_steps/this->moving_steps_per_frame;
 	this->moving_animations[angle]->renderTexels(renderer, elapsed_steps, 
 																						   z_buffer, z_depth, 
 																						   x_pos, y_pos, width, height);
 }
 
 void EnemyComponent::playDyingSound() {
-	//std::cout << "Dying sound!" << std::endl;
 	this->dying_sound->play();
 }
 
 void EnemyComponent::playDamageSound() {
-	//std::cout << "Damage sound!" << std::endl;
 	this->damage_sound->play();
 }
 
 void EnemyComponent::playShootingSound() {
-	//std::cout << "Shooting sound!" << std::endl;
 	this->shooting_sound->play();
 }
 
