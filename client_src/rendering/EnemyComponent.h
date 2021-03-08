@@ -31,6 +31,12 @@ private:
 	Animation* shooting_animation;
 	Animation* damage_animation;
 
+	int idle_steps_per_frame;
+	int moving_steps_per_frame;
+	int dying_steps_per_frame;
+	int shooting_steps_per_frame;
+	int damage_steps_per_frame;
+
 	SoundEffect* dying_sound;
 	SoundEffect* shooting_sound;
 	SoundEffect* damage_sound;

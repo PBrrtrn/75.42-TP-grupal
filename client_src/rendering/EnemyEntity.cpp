@@ -44,11 +44,7 @@ void EnemyEntity::render(SDL_Renderer* renderer, std::vector<float>& z_buffer,
 }
 
 void EnemyEntity::setIdle() {
-	this->elapsed_steps = 0;
 	this->moving = false;
-	this->dying = false;
-	this->receiving_damage = false;
-	this->shooting = false;
 }
 
 void EnemyEntity::setMoving() {
@@ -57,18 +53,21 @@ void EnemyEntity::setMoving() {
 
 void EnemyEntity::setDying() {
 	this->elapsed_steps = 0;
+	this->moving = false;
 	this->dying = true;
 	this->components[this->type]->playDyingSound();
 }
 
 void EnemyEntity::setReceivingDamage() {
 	this->elapsed_steps = 0;
+	this->moving = false;
 	this->receiving_damage = true;
 	this->components[this->type]->playDamageSound();
 }
 
 void EnemyEntity::setShooting() {
 	this->elapsed_steps = 0;
+	this->moving = false;
 	this->shooting = true;
 	this->components[this->type]->playShootingSound();
 }
