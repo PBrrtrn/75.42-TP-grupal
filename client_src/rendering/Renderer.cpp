@@ -32,11 +32,13 @@ Renderer::Renderer(YAML::Node& config, std::atomic<bool>& in_game,
 }
 
 Renderer::~Renderer() {
-  for (Animation* animation : this->enemy_animations) delete animation;
   for (Texture* texture : this->wall_textures) delete texture;
   for (Texture* texture : this->item_textures) delete texture;
+  for (EnemyComponent* component : this->enemy_components) delete component;
+  for (PlayerWeapon* weapon : this->player_weapons) delete weapon;
 
   delete this->menu_music;
+  delete this->game_music;
 
   SDL_DestroyRenderer(this->renderer);
   TTF_Quit();
@@ -66,6 +68,13 @@ void Renderer::load() {
     this->item_textures.push_back(texture);
   }
 
+  YAML::Node enemies_node = this->config["enemies"];
+  for (int i = 0; i < enemies_node.size(); i++) {
+    EnemyComponent* enemy_component = new EnemyComponent(renderer, 
+                                                         enemies_node[i]);
+    this->enemy_components.push_back(enemy_component);
+  }
+
   YAML::Node weapons_node = this->config["weapons"];
   for (int i = 0; i < weapons_node.size(); i++) {
     PlayerWeapon* player_weapon = new PlayerWeapon(weapons_node[i], 
@@ -81,14 +90,6 @@ void Renderer::load() {
   
   music_path = music_dir + music_node["game"].as<std::string>();
   this->game_music = new MusicTrack(music_path.c_str());
-
-  //////////////////////////////////////////////////////////////
-  std::vector<std::string> paths;
-  paths.push_back(std::string("../assets/sprites/enemies/ss/idle_front.png"));
-
-  Animation* animation = new Animation(this->renderer, paths);
-  this->enemy_animations.push_back(animation);
-  //////////////////////////////////////////////////////////////
 }
 
 void Renderer::run() {
@@ -103,17 +104,18 @@ void Renderer::run() {
     Map map = this->game_status_monitor.getMap();
     MapDrawer map_drawer(this->config, map, 
                          this->wall_textures,
-                         this->item_textures,
-                         this->enemy_animations);
+                         this->item_textures);
     UIDrawer ui_drawer(this->renderer, this->config["game_ui"]);
 
     GameStatusUpdate status_update = this->game_status_monitor.getUpdate();
     for (PlayerListItem& enemy : status_update.enemies) {
-      std::cout << int(enemy.clientId) << std::endl;
+      this->enemies[enemy.clientId] = new EnemyEntity(this->enemy_components);
     }
 
     while (this->in_game) renderMatch(map_drawer, ui_drawer);
     this->game_music->pause();
+
+    for (auto it : this->enemies) delete it.second;
   }
 }
 
@@ -122,9 +124,21 @@ void Renderer::renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer) {
 
   GameStatusUpdate status_update = this->game_status_monitor.getUpdate();
 
+  for (PlayerListItem& enemy : status_update.enemies) {
+    EnemyEntity* entity = this->enemies[enemy.clientId];
+    entity->type = enemy.selectedWeapon;
+    entity->position = enemy.position;
+    entity->direction = enemy.direction;
+    if (!enemy.isAlive) entity->setDying();
+    else if (enemy.receiveDamage) entity->setReceivingDamage();
+    else if (enemy.firing_state == STATE_FIRING) entity->setShooting();
+    else if (enemy.movement_state != 5) entity->setMoving();
+    else entity->setIdle();
+  }
+
   map_drawer.draw(this->renderer, status_update.position, 
                   status_update.direction.getAngle(),
-                  status_update.items, status_update.enemies);
+                  status_update.items, this->enemies);
 
   int selected_weapon = int(status_update.selected_weapon);
   if (status_update.player_firing == STATE_FIRING)
