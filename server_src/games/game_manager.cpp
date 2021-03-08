@@ -142,12 +142,12 @@ void GameManager::closeBlockingQueue() {
 }
 
 GameManager::~GameManager(){
-    for (auto x: this->clientsThreads) {
+    for (auto x: this->games) {
         x.second->shutdown();
         x.second->join();
         delete x.second;
-    }
-    for (auto x: this->games) {
+    }  
+    for (auto x: this->clientsThreads) {
         x.second->shutdown();
         x.second->join();
         delete x.second;
