@@ -15,7 +15,7 @@ void EnemyEntity::render(SDL_Renderer* renderer, std::vector<float>& z_buffer,
 	if (this->dying) {
 		component->renderDying(renderer, z_buffer, z_depth, x_pos, y_pos,
 													 width, height, elapsed_steps);
-		if (this->elapsed_steps == component->dyingSteps()) {
+		if (this->elapsed_steps == component->dyingSteps()-1) {
 			this->dying = false;
 			this->elapsed_steps = 0;
 		}
