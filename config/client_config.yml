@@ -208,9 +208,9 @@ enemies:
     shooting_steps_per_frame: 4
     shooting_animation:
       [shooting_1.png, shooting_2.png, shooting_3.png]
-    damage_steps_per_frame: 4
+    damage_steps_per_frame: 6
     damage_animation:
-      [idle_front.png]
+      [damaged_1.png]
     dying_sound: mein_leiben.wav
     shooting_sound: shooting.wav
     damage_sound: enemy_shot.wav
@@ -257,9 +257,9 @@ enemies:
     shooting_steps_per_frame: 4
     shooting_animation:
       [shooting_1.png, shooting_2.png, shooting_3.png]
-    damage_steps_per_frame: 4
+    damage_steps_per_frame: 6
     damage_animation:
-      [idle_front.png]
+      [damaged_1.png]
     dying_sound: mein_leiben.wav
     shooting_sound: shooting.wav
     damage_sound: enemy_shot.wav
@@ -306,9 +306,9 @@ enemies:
     shooting_steps_per_frame: 4
     shooting_animation:
       [shooting_1.png, shooting_2.png, shooting_3.png]
-    damage_steps_per_frame: 4
+    damage_steps_per_frame: 6
     damage_animation:
-      [idle_front.png]
+      [damaged_1.png]
     dying_sound: mein_leiben.wav
     shooting_sound: shooting.wav
     damage_sound: enemy_shot.wav
@@ -355,9 +355,9 @@ enemies:
     shooting_steps_per_frame: 4
     shooting_animation:
       [shooting_1.png, shooting_2.png, shooting_3.png]
-    damage_steps_per_frame: 4
+    damage_steps_per_frame: 6
     damage_animation:
-      [idle_front.png]
+      [damaged_1.png]
     dying_sound: mein_leiben.wav
     shooting_sound: shooting.wav
     damage_sound: enemy_shot.wav
