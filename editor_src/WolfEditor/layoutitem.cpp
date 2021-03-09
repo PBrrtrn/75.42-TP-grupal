@@ -85,6 +85,29 @@ void LayoutItem::mousePressEvent(QGraphicsSceneMouseEvent *event){
 
     std::string texture = TextureList::textures.at(this->map->getGridValue(this->pos_x, this->pos_y));
 
+	if (this->appStatus.getCurrentWallIndex() == 0){
+		int i = 0;
+        for (auto& it: this->map->getItems()) {
+			//Vector pos(it->getPosition().getXCoordinate(),it->getPosition().getYCoordinate());
+            if (it->getPosition().getXCoordinate() == this->pos_x && it->getPosition().getYCoordinate() == this->pos_y){
+				this->map->eraseItemAt(i);
+				break;
+            }
+			i++;
+        }	
+        
+		i = 0;
+        for (auto& it: this->map->getRespawnPoints()) {
+			//Vector pos(it->getPosition().getXCoordinate(),it->getPosition().getYCoordinate());
+            if (it.getPosition().getXCoordinate() == this->pos_x && it.getPosition().getYCoordinate() == this->pos_y){
+				this->map->eraseSpawnPointAt(i);
+				break;
+            }
+			i++;
+        }	        
+        	
+	}
+
     m_pix = QPixmap(QLatin1String(texture.c_str())).scaled(QSize(this->scale,this->scale));
     if (this->map->getGridValue(this->pos_x, this->pos_y) == 0){
         setAcceptDrops(true);
