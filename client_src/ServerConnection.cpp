@@ -164,7 +164,6 @@ GameStatistics ServerConnection::getGameStatistics() {
   GameStatistics statistics;
   ssize_t receive = this->socket.socket_receive((char*)&statistics, sizeof(GameStatistics));
   if (receive < 0) throw ServerConnectionError("Failed to connect");
-  std::cout << "SOY CLIENTE RECIBI STATISTICS" << std::endl;
   return statistics;
 }
 

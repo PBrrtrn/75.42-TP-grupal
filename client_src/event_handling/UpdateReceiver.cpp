@@ -89,5 +89,4 @@ void UpdateReceiver::fetchLobbyStatus() {
 		this->in_game = true;
 	if (lobby_status.remainingTime == 0)
 		this->menu_status.updateCurrentScreen(GAME_CREATION);
-	// this->menu_status.updateLobbyStatus(lobby_status);
 }
