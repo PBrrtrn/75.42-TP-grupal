@@ -79,28 +79,29 @@ void MapDrawer::drawEnemies(SDL_Renderer* renderer,
     float transf_x = inv_det * (view_x * enemy_dir.y - view_y * enemy_dir.x);
     float transf_y = inv_det * (plane.y * enemy_dir.x - plane.x * enemy_dir.y);
 
-    Vector view_dir(view_angle);
+    Vector view_dir = enemy->direction;
     float dot = enemy_dir.x*view_dir.x + enemy_dir.y*view_dir.y;
     float det = enemy_dir.x*view_dir.y - enemy_dir.y*view_dir.x;
     float p_angle = atan2(det, dot);
 
     if (transf_y > 0.1) {
+
       int perspective = 0;
-      if ((5*M_PI/6 < p_angle) || (p_angle < -5*M_PI/6))
-        perspective = 0; // front
-      else if ((-5*M_PI/6 < p_angle) && (p_angle < -2*M_PI/3))
+      if ((5*M_PI/6 < p_angle) || (p_angle <= -5*M_PI/6))
+        perspective = 0; //front
+      else if ((-5*M_PI/6 < p_angle) && (p_angle <= -2*M_PI/3))
         perspective = 1; // 1/4 right
       else if ((-2*M_PI/3 < p_angle) && (p_angle < -M_PI/2))
         perspective = 2; // profile right
-      else if ((-M_PI/3 < p_angle) && (p_angle < -M_PI/6))
+      else if ((-M_PI/2 < p_angle) && (p_angle < -M_PI/3))
         perspective = 3; // 3/4 right
-      else if ((-M_PI/6 < p_angle) && (p_angle < M_PI/6))
+      else if ((-M_PI/3 < p_angle) && (p_angle <= M_PI/6))
         perspective = 4; // back
-      else if ((M_PI/6 < p_angle) && (p_angle < M_PI/3))
-        perspective =  5; // 3/4 left
-      else if ((M_PI/3 < p_angle) && (p_angle < 2*M_PI/3))
+      else if ((M_PI/6 < p_angle) && (p_angle <= M_PI/3))
+        perspective = 5; // 3/4 left
+      else if ((M_PI/3 < p_angle) && (p_angle <= M_PI/2))
         perspective = 6; // profile left
-      else if ((2*M_PI/3 < p_angle) && (p_angle < 5*M_PI/6))
+      else if ((M_PI/2 < p_angle) && (p_angle <= 2*M_PI/3))
         perspective = 7; // 1/4 left
 
       int sprite_width = abs(int(this->screen_width/transf_y));

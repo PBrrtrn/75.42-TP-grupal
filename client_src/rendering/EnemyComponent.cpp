@@ -77,7 +77,7 @@ std::vector<Animation*> EnemyComponent::buildAnimations(SDL_Renderer* renderer,
 	ptr = buildAnimation(renderer, directory, spec["profile_left"]);
 	animations.push_back(ptr);
 
-	ptr = buildAnimation(renderer, directory, spec["three_quarters_right"]);
+	ptr = buildAnimation(renderer, directory, spec["quarter_left"]);
 	animations.push_back(ptr);
 
 	return animations;
