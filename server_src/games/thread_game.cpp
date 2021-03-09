@@ -94,6 +94,9 @@ void ThreadGame:: run() {
     this->keep_running = this->gameStatus.getAlivePlayers() > 1 && this->remaining_time != 0 && !this->is_dead;
     }
     this->sendGameStatistics();
+    
+    usleep(2000000);
+    
     this->is_dead = true;
 }
 
