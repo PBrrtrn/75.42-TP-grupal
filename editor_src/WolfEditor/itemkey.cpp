@@ -2,7 +2,7 @@
 
 ItemKey::ItemKey(QWidget* widget) : ItemDraggable(widget)
 {
-    this->icon = ":/images/itemkey.png";
+    this->icon = ObjectList::textures.at(TYPE_KEY);
     this->itemData = "KEY";
 }
 

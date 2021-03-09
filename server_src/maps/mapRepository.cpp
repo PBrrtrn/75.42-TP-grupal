@@ -8,11 +8,13 @@ MapRepository:: MapRepository(): config(ServerConfig::Config) {
     for (YAML::const_iterator it = maps_sequence.begin(); it != maps_sequence.end(); ++it) {
         const YAML::Node& map = *it;
         MapListItem struct_map;
+        memset(&struct_map, 0, sizeof(MapListItem));
         struct_map.mapId = this->map_id_counter;
-        strncpy(struct_map.name, map.as<std::string>().c_str(), sizeof(struct_map.name));
-        //TODO leer maxPlayers y minPlayers
-        struct_map.maxPlayers = 16;
-        struct_map.minPlayers = 8;
+        memset(struct_map.name, '\0', sizeof(struct_map.name));
+        strncpy(struct_map.name, map.as<std::string>().c_str(), sizeof(char) * strlen(map.as<std::string>().c_str()));
+        YAML::Node mapa = YAML::LoadFile(maps_location + map.as<std::string>());
+        struct_map.maxPlayers = mapa["maxPlayers"].as<int>();;
+        struct_map.minPlayers = mapa["minPlayers"].as<int>();;
         this->maps.push_back(struct_map);
         this->map_id_counter++;
     }

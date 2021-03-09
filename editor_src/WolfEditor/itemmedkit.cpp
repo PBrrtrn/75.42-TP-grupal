@@ -2,7 +2,7 @@
 
 ItemMedkit::ItemMedkit(QWidget* widget) : ItemDraggable(widget)
 {
-    this->icon = ":/images/itemmedkit.png";
+    this->icon = ObjectList::textures.at(TYPE_MEDKIT);
     this->itemData = "MEDKIT";
 }
 

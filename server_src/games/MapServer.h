@@ -61,6 +61,11 @@ public:
 	std::vector<Door>& getDoors();
 	std::vector<SpawnPoint>& getRespawnPoints();
 	
+	bool eraseItemAt(unsigned int position);
+	bool eraseSpawnPointAt(unsigned int pos);
+	
+	int* getMapGridCopy();
+	
 };
 
 #endif

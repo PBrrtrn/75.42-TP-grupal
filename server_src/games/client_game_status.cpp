@@ -29,15 +29,17 @@ void ClientGameStatus::updateThisGameStatus(){
 		for (auto& it: this->gameStatus.players) {
 			if (this->players.find(it.first) == this->players.end()) {
 				PlayerListItem p;
+				memset(&p, 0, sizeof(PlayerListItem));
 				p.clientId = it.first;
 				p.position = this->gameStatus.playersPositions.at(p.clientId);
 				p.direction = this->gameStatus.playersDirections.at(p.clientId);
 				p.selectedWeapon = it.second.getSelectedWeaponIndex();
 				p.isAlive = it.second.getHealth();
 				p.receiveDamage = it.second.receivedDamageInStep();
-				p.firing_state = it.second.getCurrentFiringState();
-				p.movement_state = it.second.getCurrentMovementState();
+				p.firing_state = it.second.isShooting();
+				p.movement_state = it.second.isMoving();
 				p.before_respawn = it.second.outGame();
+				p.died = it.second.diedInStep();
 				this->players.insert({it.first,p});
 			} else {
 				this->players.at(it.first).clientId = it.first;
@@ -46,14 +48,16 @@ void ClientGameStatus::updateThisGameStatus(){
 				this->players.at(it.first).selectedWeapon = it.second.getSelectedWeaponIndex();
 				this->players.at(it.first).isAlive = it.second.getHealth() ? true : false;
 				this->players.at(it.first).receiveDamage = it.second.receivedDamageInStep();
-				this->players.at(it.first).firing_state = it.second.getCurrentFiringState();
-				this->players.at(it.first).movement_state = it.second.getCurrentMovementState();
-				this->players.at(it.first).before_respawn = it.second.outGame();				
+				this->players.at(it.first).firing_state = it.second.isShooting();
+				this->players.at(it.first).movement_state = it.second.isMoving();
+				this->players.at(it.first).before_respawn = it.second.outGame();	
+				this->players.at(it.first).died = it.second.diedInStep();			
 			}
 		}
 		for (auto& it: this->gameStatus.doors) {
 			if (this->doors.find(it.first) == this->doors.end()) {
 				DoorListItem d;
+				memset(&d, 0, sizeof(DoorListItem));
 				d.doorId = it.first;
 				d.gridPosition = it.second.getLocation();
 				d.isOpen = it.second.isOpen();
@@ -70,6 +74,7 @@ void ClientGameStatus::updateThisGameStatus(){
 		for (auto& it: this->gameStatus.getGsItems()) {
 			if (it->isVisible()) {
 				ItemListElement i;
+				memset(&i, 0, sizeof(ItemListElement));
 				i.type = it->getType();
 				i.pos = it->getPosition();
 				this->items.push_back(i);
@@ -79,6 +84,7 @@ void ClientGameStatus::updateThisGameStatus(){
 		for (auto& it: this->gameStatus.getMapItems()) {
 			if (it->isVisible()) {
 				ItemListElement i;
+				memset(&i, 0, sizeof(ItemListElement));
 				i.type = it->getType();
 				i.pos = it->getPosition();
 				this->items.push_back(i);
@@ -92,6 +98,7 @@ std::string ClientGameStatus::getEntireMap(){
 
 GameStatistics ClientGameStatus::getStatistics() {
 	GameStatistics gs;
+	memset(&gs, 0, sizeof(GameStatistics));
 
 	Statistics& s = this->gameStatus.showStatistics();
 
@@ -107,6 +114,7 @@ GameStatistics ClientGameStatus::getStatistics() {
 	for (int i = 0; i < TOP_STATISTICS; i++) {
 		if (i < kills.size()) {
 			ClientKills gs_kills;
+			memset(&gs_kills, 0, sizeof(ClientKills));
 			gs_kills.clientId = kills[i].first;
 			gs_kills.kills = kills[i].second;
 			gs.kills[i] = gs_kills;
@@ -114,6 +122,7 @@ GameStatistics ClientGameStatus::getStatistics() {
 		
 		if (i < points.size()) {
 			ClientPoints gs_points;
+			memset(&gs_points, 0, sizeof(ClientPoints));
 			gs_points.clientId = points[i].first;
 			gs_points.puntaje = points[i].second;
 			gs.points[i] = gs_points;
@@ -121,6 +130,7 @@ GameStatistics ClientGameStatus::getStatistics() {
 
 		if (i < kills.size()) {
 			ClientShootedBullets gs_bullets;
+			memset(&gs_bullets, 0, sizeof(ClientShootedBullets));
 			gs_bullets.clientId = bullets[i].first;
 			gs_bullets.bullets_shooted = bullets[i].second;
 			gs.bullets[i] = gs_bullets;
@@ -130,5 +140,18 @@ GameStatistics ClientGameStatus::getStatistics() {
 	
 	return gs;
 }
+
+int* ClientGameStatus::getMapGrid(){
+	return this->gameStatus.getMapGrid();
+}
+
+int ClientGameStatus::getMapWidth(){
+	return this->gameStatus.getMapWidth();
+}
+
+int ClientGameStatus::getMapHeight(){
+	return this->gameStatus.getMapHeight();
+}
+
 
 ClientGameStatus::~ClientGameStatus() {}

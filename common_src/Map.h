@@ -23,6 +23,8 @@ private:
 public:
 	Map();
 	Map(int width,int height);
+	Map(int width,int height,int* mapData);
+	int* getMapGridCopy();
 	Map(char* file_content);
 	Map(const char *file_location);
 	Map(const std::string& file_location);

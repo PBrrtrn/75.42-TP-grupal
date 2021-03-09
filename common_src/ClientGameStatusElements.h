@@ -41,9 +41,10 @@ struct PlayerListItem {
 	uint8_t selectedWeapon;
 	int isAlive;
 	int receiveDamage;
-	FiringState firing_state;
-	MovementState movement_state;
+	int firing_state;
+	int movement_state;
 	int before_respawn;
+	int died;
 };
 
 //listado de items asociados a este 

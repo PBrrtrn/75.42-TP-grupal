@@ -106,7 +106,7 @@
      </size>
     </property>
     <property name="styleSheet">
-     <string notr="true">image: url(./images/itemfood.png);</string>
+     <string notr="true">image: url(../images/itemfood.png);</string>
     </property>
     <property name="text">
      <string/>
@@ -128,7 +128,7 @@
      </size>
     </property>
     <property name="styleSheet">
-     <string notr="true">image: url(./images/itemtreasure.png);</string>
+     <string notr="true">image: url(../images/itemtreasure.png);</string>
     </property>
     <property name="text">
      <string/>
@@ -150,7 +150,7 @@
      </size>
     </property>
     <property name="styleSheet">
-     <string notr="true">image: url(./images/itembullets.png);</string>
+     <string notr="true">image: url(../images/itembullets.png);</string>
     </property>
     <property name="text">
      <string/>
@@ -172,7 +172,7 @@
      </size>
     </property>
     <property name="styleSheet">
-     <string notr="true">image: url(./images/itemametralladora.png);</string>
+     <string notr="true">image: url(../images/itemametralladora.png);</string>
     </property>
     <property name="text">
      <string/>
@@ -194,7 +194,7 @@
      </size>
     </property>
     <property name="styleSheet">
-     <string notr="true">image: url(./images/itemspawn.png);</string>
+     <string notr="true">image: url(../images/itemspawn.png);</string>
     </property>
     <property name="text">
      <string/>

@@ -70,6 +70,7 @@ void Shoot::tryAction(GameStatus& gs, int clientID){
 
                         this->throwWeapon(gs.players.at(target_id).getSelectedWeaponIndex(), target_id, gs);
                         gs.items.push_back(new Bullets(gs.getPosition(target_id),false));
+                        //gs.items.push_back(new Corpse(gs.getPosition(target_id),false));
 
                         gs.addEnemyDead(clientID);
                         gs.respawn_events.at(target_id)->activate(this->respawn_timeout);

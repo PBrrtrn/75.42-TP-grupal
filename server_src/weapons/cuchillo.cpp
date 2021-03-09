@@ -11,7 +11,7 @@ Cuchillo::Cuchillo() : Arma() {
 }
 
 bool Cuchillo::aimWeapon(float ort_dist, float target_dist) {
-    if (target_dist <= this->attack_range && ort_dist <= this->precision) { return true; }
+    if (target_dist <= this->attack_range) { return true; }
     return false;
 }
 

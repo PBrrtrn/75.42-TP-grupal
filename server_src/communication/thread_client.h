@@ -32,9 +32,9 @@ private:
     bool choosing_game;
     bool game_started;
     
-	void sendJoinOk();
-	void sendJoinRefused();
-	void sendGameUpdate();
+	bool sendJoinOk();
+	bool sendJoinRefused();
+	bool sendGameUpdate();
 	
 public:
 
@@ -62,42 +62,40 @@ public:
      * @brief Envia al cliente la lista de juegos disponibles
      * activos en el momento en el que pidió el refresh
      */
-    void sendGamesList();
+    bool sendGamesList();
 
     /**
      * @brief Envia al cliente la lista de mapas disponibles
      */
-    void sendMapsList();
+    bool sendMapsList();
 
     /**
      * @brief Envia al cliente el estado del lobby
      * de la partida correspondiente
      * @param gameID: id del game que mando el mensaje
      */
-    void sendLobbyStatus(int gameID);
+    bool sendLobbyStatus(int gameID);
 
     /**
      * @brief Envia las estadisticas de la
      * partida al finalizar
      */
-    void sendGameStatistics();
+    bool sendGameStatistics();
 
     /**
      * @brief Envia al cliente su numero
      * de jugador asignado a través del socket.
      */
-    void informClientId();
+    bool informClientId();
     
     /**
     * @brief Envia por socket el mapa actual donde va a jugar
     */   
-    void sendCurrentGameMap();
-
-    void sleepAndRespawn();
+    bool sendCurrentGameMap();
     
-    void informNothingToReport();
+    bool informNothingToReport();
     
-    void informSomethingToReport(MessageType type);
+    bool informSomethingToReport(MessageType type);
 
     virtual ~ThreadClient() override;
 };

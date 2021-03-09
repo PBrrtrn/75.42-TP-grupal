@@ -28,6 +28,8 @@ Player::Player(int id) :
 	this->previous_weapon_idx = 0;
 	this->movement_state = STATE_NOT_MOVING;
 	this->firing_state = STATE_NOT_FIRING;
+	this->shooting_state = STATE_NOT_SHOOTING;
+	this->rotation_state = STATE_NOT_MOVING;
 }
 
 Player::Player(Player&& from){
@@ -45,6 +47,8 @@ Player::Player(Player&& from){
 	this->movement_state = from.movement_state;
 	this->firing_state = from.firing_state;
 	this->before_respawn = from.before_respawn;
+	this->shooting_state = from.shooting_state;
+	this->rotation_state = from.rotation_state;
 
 	this->armas[0] = from.armas[0];
 	this->armas[1] = from.armas[1];
@@ -219,6 +223,10 @@ MovementState Player::getCurrentMovementState(){
 	return this->movement_state;
 }
 
+bool Player::isMoving() {
+	return this->movement_state != STATE_NOT_MOVING;
+}
+
 bool Player::changeShootingState(ShootingState state) {
 	this->shooting_state = state;
 	return true;
@@ -235,6 +243,10 @@ bool Player::changeFiringState(FiringState state) {
     
 FiringState Player::getCurrentFiringState() {
 	return this->firing_state;
+}
+
+bool Player::isShooting() {
+	return this->firing_state == STATE_FIRING;
 }
 
 bool Player::changeRotationState(MovementState state){

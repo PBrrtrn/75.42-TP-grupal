@@ -2,6 +2,6 @@
 
 ItemSpawnPoint::ItemSpawnPoint(QWidget* widget): ItemDraggable(widget)
 {
-    this->icon = ":/images/itemspawn.png";
+    this->icon = ObjectList::textures.at(999);
     this->itemData = "SPAWNPOINT";
 }

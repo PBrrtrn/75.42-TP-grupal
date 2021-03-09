@@ -3,7 +3,9 @@
 RespawnEvent::RespawnEvent(Player* player, void (Player::*player_func)(void)): 
     player_func(player_func), 
     player(player), 
-    elapsed(0)
+    elapsed(0),
+    timeout(0),
+    active(false)
     {}
 
 void RespawnEvent::activate(double timeout) {

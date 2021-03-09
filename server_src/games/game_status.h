@@ -79,6 +79,10 @@ public:
   void updateRespawnEvents(double delta);
 
   bool isPlayer(Vector& position);
+  
+  int* getMapGrid();
+  int getMapWidth();
+  int getMapHeight();
     
   friend class Action;
   friend class Shoot;

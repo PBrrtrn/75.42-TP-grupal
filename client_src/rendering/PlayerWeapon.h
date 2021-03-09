@@ -5,7 +5,6 @@
 #include <SDL2/SDL.h>
 
 #include "Animation.h"
-#include "TimedAnimation.h"
 #include "SoundEffect.h"
 
 class PlayerWeapon {
@@ -15,11 +14,12 @@ private:
 	int sprite_width;
 	int sprite_height;
   Animation* idle_animation;
-  TimedAnimation* shooting_animation;
+  Animation* shooting_animation;
   SoundEffect* shooting_sound;
   bool shooting;
-  int total_shooting_steps;
-  int elapsed_shooting_steps;
+  int shooting_steps_per_frame;
+  int idle_steps_per_frame;
+  int elapsed_steps;
 public:
   PlayerWeapon(YAML::Node spec, SDL_Renderer* renderer);
   ~PlayerWeapon();
