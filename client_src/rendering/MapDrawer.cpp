@@ -79,15 +79,12 @@ void MapDrawer::drawEnemies(SDL_Renderer* renderer,
     float transf_x = inv_det * (view_x * enemy_dir.y - view_y * enemy_dir.x);
     float transf_y = inv_det * (plane.y * enemy_dir.x - plane.x * enemy_dir.y);
 
+    Vector view_dir(view_angle);
+    float dot = enemy_dir.x*view_dir.x + enemy_dir.y*view_dir.y;
+    float det = enemy_dir.x*view_dir.y - enemy_dir.y*view_dir.x;
+    float p_angle = atan2(det, dot);
+
     if (transf_y > 0.1) {
-      float angle_to_enemy = enemy_dir.getAngle();
-      float enemy_view_angle = enemy->direction.getAngle();
-
-      float p_angle = enemy_view_angle - angle_to_enemy;
-      /* No funciona este cálculo para todos los vectores posibles
-         por ejemplo, cuando los dos tienen direccion (-1,0) el ángulo
-         se vuelve cerca de -6.28 - habría que analizar los casos posibles */
-
       int perspective = 0;
       if ((5*M_PI/6 < p_angle) || (p_angle < -5*M_PI/6))
         perspective = 0; // front
