@@ -35,12 +35,20 @@ GameStatusUpdate GameStatus::getUpdate() {
                             this->player_status.health,
                             this->player_status.bullets,
                             this->player_status.lives,
-                            this->player_status.hasKey,
+                            (this->player_status.hasKey != 0),
                             this->player_status.firing_state,
                             this->enemies,
                             this->items };
 
   return update;
+}
+
+void GameStatus::saveStatistics(GameStatistics& statistics) {
+  this->statistics = statistics;
+}
+
+GameStatistics& GameStatus::getStatistics() {
+  return this->statistics;
 }
 
 /*

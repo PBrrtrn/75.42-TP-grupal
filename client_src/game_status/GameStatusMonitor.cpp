@@ -3,7 +3,7 @@
 #include "GameStatusMonitor.h"
 
 GameStatusMonitor::GameStatusMonitor() 
-: synchronized(false), map_initialized(false) { }
+: synchronized(false), map_initialized(false), statistics_saved(false) { }
 
 GameStatusMonitor::~GameStatusMonitor() { }
 
@@ -18,6 +18,19 @@ Map& GameStatusMonitor::getMap() {
   std::unique_lock<std::mutex> lock(this->mutex);
   while (!this->map_initialized) this->cv.wait(lock);
   return this->game_status.getMap();
+}
+
+void GameStatusMonitor::saveStatistics(GameStatistics& statistics) {
+  std::unique_lock<std::mutex> lock(this->mutex);
+  this->game_status.saveStatistics(statistics);
+  this->statistics_saved = true;
+  this->cv.notify_one();
+}
+
+GameStatistics& GameStatusMonitor::getStatistics() {
+  std::unique_lock<std::mutex> lock(this->mutex);
+  while (!this->statistics_saved) this->cv.wait(lock);
+  return this->game_status.getStatistics();
 }
 
 void GameStatusMonitor::updateGameStatus(GameStatusUpdate& status_update) {

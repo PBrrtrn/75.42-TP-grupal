@@ -10,6 +10,7 @@ add_library(rendering SHARED
 	SoundEffect.cpp
 	Renderer.cpp
 	MenuRenderer.cpp
+	StatisticsRenderer.cpp
 	UIDrawer.cpp
 	PlayerWeapon.cpp
 	Texture.cpp

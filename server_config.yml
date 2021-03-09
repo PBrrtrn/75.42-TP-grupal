@@ -61,3 +61,4 @@ MapsSequence:
   - 'map1.yml'
   - 'map-large.yml'
   - 'x-room.yml'
+  - 'center-piece.yml'

@@ -168,3 +168,15 @@ int* MapServer::getMapGridCopy(){
 	return this->map.getMapGridCopy();
 	
 }
+
+bool MapServer::eraseItemAt(unsigned int pos){
+	Item* it = this->items[pos];
+	delete it;
+	this->items.erase(this->items.begin() + pos);
+	return true;	
+}
+
+bool MapServer::eraseSpawnPointAt(unsigned int pos){
+	this->respawnPoints.erase(this->respawnPoints.begin() + pos);
+	return true;	
+}
