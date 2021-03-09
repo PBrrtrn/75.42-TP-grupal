@@ -129,10 +129,11 @@ void Renderer::renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer) {
     entity->type = enemy.selectedWeapon;
     entity->position = enemy.position;
     entity->direction = enemy.direction;
-    if (!enemy.isAlive) entity->setDying();
-    else if (enemy.receiveDamage) entity->setReceivingDamage();
-    else if (enemy.firing_state == STATE_FIRING) entity->setShooting();
-    else if (enemy.movement_state != 5) entity->setMoving();
+    if (enemy.died == 1) entity->setDying();
+    else if (enemy.before_respawn == 1) entity->setRespawning();
+    else if (enemy.receiveDamage == 1) entity->setReceivingDamage();
+    else if (enemy.firing_state == 1) entity->setShooting();
+    else if (enemy.movement_state == 1) entity->setMoving();
     else entity->setIdle();
   }
 

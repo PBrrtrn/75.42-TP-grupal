@@ -32,6 +32,7 @@ public:
 	void setDying();
 	void setReceivingDamage();
 	void setShooting();
+	void setRespawning();
 };
 
 #endif
