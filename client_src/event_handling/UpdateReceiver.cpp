@@ -45,8 +45,11 @@ void UpdateReceiver::fetchGameUpdate() {
 
 void UpdateReceiver::fetchStatistics() {
 	GameStatistics statistics = this->connection.getGameStatistics();
-	// Hacer algo con las statistics
-	this->game_status_monitor.saveStatistics(statistics);
+	this->game_status_monitor.endGame();
+	this->in_game = false;
+
+	this->menu_status.updateCurrentScreen(STATISTICS);
+	this->menu_status.updateStatistics(statistics);
 }
 
 void UpdateReceiver::receiveMenuUpdate(MessageType message_type) {

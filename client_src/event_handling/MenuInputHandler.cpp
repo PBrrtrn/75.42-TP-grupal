@@ -24,6 +24,9 @@ void MenuInputHandler::handle(SDL_Event input) {
 			case (GAME_CREATION) :
 				handleGameCreation(input);
 				break;
+			case (STATISTICS) :
+				handleStatistics(input);
+				break;
 		}
 	}
 }
@@ -75,6 +78,15 @@ void MenuInputHandler::handleGameCreation(SDL_Event input) {
 		this->menu_status.selectOptionUp();
 	} else if (keycode == SDLK_s) {
 		this->menu_status.selectOptionDown();
+	}
+}
+
+void MenuInputHandler::handleStatistics(SDL_Event input) {
+	SDL_Keycode keycode = input.key.keysym.sym;
+
+	if (keycode == SDLK_SPACE) {
+		this->refresh();
+		this->menu_status.updateCurrentScreen(GAME_SELECTION);
 	}
 }
 

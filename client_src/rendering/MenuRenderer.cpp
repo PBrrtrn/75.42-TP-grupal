@@ -1,6 +1,8 @@
 #include <iostream>
 #include "MenuRenderer.h"
 
+#include "../../common_src/ClientGameStatusElements.h"
+
 MenuRenderer::MenuRenderer(YAML::Node config,
 													 MenuStatus& menu_status,
 													 SDL_Renderer* renderer)
@@ -59,9 +61,11 @@ void MenuRenderer::render() {
 		}
 		this->font->render(this->renderer, "BACK", 300, 
 		                   420, 1, back_text_color);
-	} else {
+	} else if (this->menu_status.getCurrentScreen() == LOBBY) {
 		this->renderLobbyBox(this->menu_status.getLobbyStatus());
-	}
+	} else {
+    this->renderStatisticsScreen();
+  }
 
 	SDL_RenderPresent(this->renderer);
 }
@@ -247,4 +251,43 @@ void MenuRenderer::renderMapOption(MapListItem& option, int y, bool highlight) {
 
 	this->font->render(this->renderer, text.c_str(),
 										 250, y, 1, text_color);
+}
+
+void MenuRenderer::renderStatisticsScreen() {
+  GameStatistics statistics = this->menu_status.getStatistics();
+
+  YAML::Node node = this->config["statistics_box"];
+  int box_x = node["x_pos"].as<int>();
+  int box_y = node["x_pos"].as<int>();
+  int box_w = node["width"].as<int>();
+  int box_h = node["height"].as<int>();
+
+  int gilding_w = node["gilding"].as<int>();
+
+  SDL_Rect statistics_box { box_x, box_y, box_w, box_h };
+
+  SDL_Rect outer_gilding { box_x - gilding_w * 2, box_y - gilding_w * 2, 
+                           box_w + gilding_w * 4, box_h + gilding_w * 4 };
+
+  SDL_SetRenderDrawColor(this->renderer, 255, 223, 0, 0);
+  SDL_RenderFillRect(this->renderer, &outer_gilding);
+
+  SDL_Rect inner_gilding { box_x - gilding_w, box_y - gilding_w, 
+                           box_w + gilding_w * 2, box_h + gilding_w * 2 };
+
+  SDL_SetRenderDrawColor(this->renderer, 200, 173, 0, 0);
+  SDL_RenderFillRect(this->renderer, &inner_gilding);
+
+  SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
+  SDL_RenderFillRect(this->renderer, &statistics_box);
+
+  int back_text_x = node["back_text"]["x_pos"].as<int>();
+  int back_text_y = node["back_text"]["y_pos"].as<int>();
+  std::string back_text = node["back_text"]["text"].as<std::string>();
+
+  SDL_Color back_text_color { 255, 69, 0 };
+
+  this->font->render(this->renderer, back_text.c_str(), 
+                     back_text_x, back_text_y, 
+                     1, back_text_color);
 }

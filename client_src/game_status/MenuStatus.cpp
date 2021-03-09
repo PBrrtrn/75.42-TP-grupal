@@ -29,6 +29,11 @@ LobbyStatusData MenuStatus::getLobbyStatus() {
 	return this->lobby_status;
 }
 
+GameStatistics MenuStatus::getStatistics() {
+	std::unique_lock<std::mutex> lock(this->mutex);
+	return this->statistics;
+}
+
 void MenuStatus::updateGameOptions(std::vector<GameListItem>& new_options) {
 	std::unique_lock<std::mutex> lock(this->mutex);
 	this->game_options = new_options;
@@ -47,6 +52,11 @@ void MenuStatus::updateLobbyStatus(LobbyStatusData new_lobby_status) {
 void MenuStatus::updateCurrentScreen(Screen new_screen) {
 	std::unique_lock<std::mutex> lock(this->mutex);
 	this->current_screen = new_screen;
+}
+
+void MenuStatus::updateStatistics(GameStatistics new_statistics) {
+	std::unique_lock<std::mutex> lock(this->mutex);
+	this->statistics = new_statistics;
 }
 
 void MenuStatus::selectOptionUp() {

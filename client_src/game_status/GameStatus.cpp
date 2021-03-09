@@ -43,14 +43,6 @@ GameStatusUpdate GameStatus::getUpdate() {
   return update;
 }
 
-void GameStatus::saveStatistics(GameStatistics& statistics) {
-  this->statistics = statistics;
-}
-
-GameStatistics& GameStatus::getStatistics() {
-  return this->statistics;
-}
-
 /*
 bool GameStatus::isRunning() {
   return this->running;

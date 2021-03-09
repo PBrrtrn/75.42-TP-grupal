@@ -14,6 +14,7 @@ private:
 	void handleGameSelection(SDL_Event input);
 	void handleLobby(SDL_Event input);
 	void handleGameCreation(SDL_Event input);
+	void handleStatistics(SDL_Event input);
 	void refresh();
 public:
 	MenuInputHandler(BlockingQueue<ClientMessage>& message_queue, 

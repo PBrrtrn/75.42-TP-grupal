@@ -23,6 +23,7 @@ private:
 	void renderLobbyBox(LobbyStatusData lobby_status);
 	void renderGameOption(GameListItem& option, int y, bool highlight);
 	void renderMapOption(MapListItem& option, int y, bool highlight);
+	void renderStatisticsScreen();
 public:
 	MenuRenderer(YAML::Node config, 
 							 MenuStatus& menu_status, 

@@ -22,7 +22,6 @@ struct GameStatusUpdate {
 class GameStatus {
 private:
   Map map;
-  GameStatistics statistics;
   PlayerStatus player_status;
   std::vector<PlayerListItem> enemies;
   std::vector<ItemListElement> items;
@@ -30,8 +29,6 @@ public:
   GameStatus();
   ~GameStatus();
   void initialize(Map new_map);
-  void saveStatistics(GameStatistics& statistics);
-  GameStatistics& getStatistics();
   void update(GameStatusUpdate& status_update);
   Map& getMap();
   GameStatusUpdate getUpdate();
