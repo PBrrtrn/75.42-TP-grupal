@@ -18,9 +18,9 @@ Item* ItemSerializer::deserialize(const std::string& serializedItem){
 	ss >> positionX;
 	ss >> positionY;
 	
-	std::cout << "type: " << std::to_string(type) << std::endl;
-	std::cout << "positionX: " << positionX << std::endl;
-	std::cout << "positionY: " << positionY << std::endl;
+	//std::cout << "type: " << std::to_string(type) << std::endl;
+	//std::cout << "positionX: " << positionX << std::endl;
+	//std::cout << "positionY: " << positionY << std::endl;
 	
 	switch (type) {
 		case TYPE_FOOD:
