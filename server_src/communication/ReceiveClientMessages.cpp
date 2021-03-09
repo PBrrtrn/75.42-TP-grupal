@@ -22,7 +22,7 @@ void ReceiveClientMessages::run() {
                                                  sizeof(ClientMessage));
 
         if (received < sizeof(ClientMessage)) {
-            std::cout << "recv en threadclient fallo, no recibi nada! (cerro el socket?)" << std::endl;
+            std::cout << "Client exit game! No messages received (socket closed)" << std::endl;
             this->shutdown();
         } else {
             Message m(client_message.type, client_message.entityId, this->id);

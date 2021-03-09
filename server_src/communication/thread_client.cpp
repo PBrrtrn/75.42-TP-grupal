@@ -17,28 +17,28 @@ ThreadClient::ThreadClient(int id, BlockingQueue<Message>* messagesOut,
 void ThreadClient::run() {
     char buffer[BUF_SIZE];
 
-	this->informClientId(); 
+	if(!this->informClientId()) this->shutdown(); 
 
 	this->choosing_game = true;
 
 	while(choosing_game){
 		try{
 			Message answer = this->messages_out->pop();
-			this->informSomethingToReport(answer.getType());
+			if(!this->informSomethingToReport(answer.getType())) this->shutdown();
 			switch (answer.getType())
 			{
 			case TYPE_SERVER_SEND_GAMES_LIST:
-				this->sendGamesList();
+				if (!this->sendGamesList()) this->shutdown();
 				break;			
 			case TYPE_SERVER_JOIN_OK:
 				this->choosing_game = false;
 				//this->sendJoinOk();
 				break;
 			case TYPE_SERVER_JOIN_REFUSED:
-				this->sendJoinRefused();
+				if (!this->sendJoinRefused()) this->shutdown();
 				break;
 			case TYPE_SERVER_SEND_MAP_LIST:
-				this->sendMapsList();
+				if(!this->sendMapsList()) this->shutdown();
 				break;
 
 			case TYPE_SERVER_SHUTDOWN_CLIENT:
@@ -57,20 +57,20 @@ void ThreadClient::run() {
     while (keep_running){
         try {
 			Message m = this->messages_out->pop();
-			this->informSomethingToReport(m.getType());
+			if(!this->informSomethingToReport(m.getType())) this->shutdown();
 			switch (m.getType())
 			{
 			case TYPE_SERVER_SEND_MAP:
-				this->sendCurrentGameMap();
+				if(!this->sendCurrentGameMap()) this->shutdown();
 				break;					
 			case TYPE_LOBBY_STATUS_UPDATE:
-				this->sendLobbyStatus(m.getEntity());
+				if (!this->sendLobbyStatus(m.getEntity())) this->shutdown();
 				break;
 			case TYPE_SERVER_SEND_GAME_UPDATE:
-				this->sendGameUpdate();
+				if (!this->sendGameUpdate()) this->shutdown();
 				break;
 			case TYPE_SERVER_SEND_GAME_STATISTICS:
-				this->sendGameStatistics();
+				if (!this->sendGameStatistics()) this->shutdown();
 				break;
 			default:
 				//std::cout << "ThreadClient "<< this->id <<": no se donde estoy! no procese este evento!" << std::endl;
@@ -84,70 +84,83 @@ void ThreadClient::run() {
     }
 }
 
-void ThreadClient::informNothingToReport(){
+bool ThreadClient::informNothingToReport(){
 	MessageType message = TYPE_SERVER_NOTHING_TO_REPORT;
-	this->peer.socket_send((char*)&message, sizeof(MessageType));
+	int send = this->peer.socket_send((char*)&message, sizeof(MessageType));
+	if (send < 0) return false;
+	return true;
 }
 
-void ThreadClient::informSomethingToReport(MessageType type){
+bool ThreadClient::informSomethingToReport(MessageType type){
 	MessageType message = type;
-	this->peer.socket_send((char*)&message, sizeof(MessageType));
+	int send = this->peer.socket_send((char*)&message, sizeof(MessageType));
+	if (send < 0) return false;
+	return true;
 }
 
 
-void ThreadClient::sendCurrentGameMap(){
-   //std::string mapa = this->game_status->getEntireMap();
-   int* mapGrid = this->game_status->getMapGrid();
-   size_t size = this->game_status->getMapWidth() * this->game_status->getMapHeight() * sizeof(int);
-   //size_t size = mapa.length() + 1;
-   
-   int width = this->game_status->getMapWidth();
-   int height = this->game_status->getMapHeight();
-   
-   std::cout << "Map width:" << std::to_string(size) << std::endl;
-   std::cout << "Map height:" << std::to_string(size) << std::endl;
-   std::cout << "Map size:" << std::to_string(size) << std::endl;
-   this->peer.socket_send((char*)(&width), sizeof(width));
-   this->peer.socket_send((char*)(&height), sizeof(height));
-   this->peer.socket_send((char*)(&size), sizeof(size));
-   this->peer.socket_send((char*)mapGrid,size);
-   //this->peer.socket_send(mapa.c_str(), size - 1);
-   //char endOfFile = 0;
-   //this->peer.socket_send((&endOfFile), sizeof(char));
-   
-   std::cout << "Map sent" << std::endl;
-   
-   delete[] mapGrid;
-   
-   std::cout << "Map grid data released - pointer deleted" << std::endl;
-   
+bool ThreadClient::sendCurrentGameMap(){
+	int send;
+	int* mapGrid = this->game_status->getMapGrid();
+	size_t size = this->game_status->getMapWidth() * this->game_status->getMapHeight() * sizeof(int);
+
+	int width = this->game_status->getMapWidth();
+	int height = this->game_status->getMapHeight();
+
+	std::cout << "Map width:" << std::to_string(size) << std::endl;
+	std::cout << "Map height:" << std::to_string(size) << std::endl;
+	std::cout << "Map size:" << std::to_string(size) << std::endl;
+	send = this->peer.socket_send((char*)(&width), sizeof(width));
+	if (send < 0) return false;
+	send = this->peer.socket_send((char*)(&height), sizeof(height));
+	if (send < 0) return false;
+	send = this->peer.socket_send((char*)(&size), sizeof(size));
+	if (send < 0) return false;
+	send = this->peer.socket_send((char*)mapGrid,size);
+	if (send < 0) return false;
+
+	std::cout << "Map sent" << std::endl;
+
+	delete[] mapGrid;
+
+	std::cout << "Map grid data released - pointer deleted" << std::endl;
+	return true;
 }
 
-void ThreadClient::sendGameUpdate() {
+bool ThreadClient::sendGameUpdate() {
+	int send;
 	if (this->game_status == NULL) {
 		std::cout << "gameStatus pointer in client is NULL!" << std::endl;
-		return;
+		return false;
 	}
-	this->peer.socket_send((char*)(&this->game_status->thisPlayerStatus), sizeof(PlayerStatus));
+	send = this->peer.socket_send((char*)(&this->game_status->thisPlayerStatus), sizeof(PlayerStatus));
+	if (send < 0) return false;
 
 	size_t size = this->game_status->players.size()*sizeof(PlayerListItem);
-	this->peer.socket_send((char*)(&size), sizeof(size));
+	send = this->peer.socket_send((char*)(&size), sizeof(size));
+	if (send < 0) return false;
 	for (auto& it: this->game_status->players) {
-		this->peer.socket_send((char*)&(it.second), sizeof(PlayerListItem));
+		send = this->peer.socket_send((char*)&(it.second), sizeof(PlayerListItem));
+		if (send < 0) return false;
 	}
 
 	//char door_
 	size = this->game_status->doors.size()*sizeof(DoorListItem);
-	this->peer.socket_send((char*)(&size), sizeof(size));
+	send = this->peer.socket_send((char*)(&size), sizeof(size));
+	if (send < 0) return false;
 	for (auto& it: this->game_status->doors) {
-		this->peer.socket_send((char*)(&it.second), sizeof(DoorListItem));
+		send = this->peer.socket_send((char*)(&it.second), sizeof(DoorListItem));
+		if (send < 0) return false;
 	}
 
 	size = this->game_status->items.size()*sizeof(ItemListElement);
-	this->peer.socket_send((char*)(&size), sizeof(size));
+	send = this->peer.socket_send((char*)(&size), sizeof(size));
+	if (send < 0) return false;
 	for (auto& it: this->game_status->items) {
-		this->peer.socket_send((char*)(&it), sizeof(ItemListElement));
+		send = this->peer.socket_send((char*)(&it), sizeof(ItemListElement));
+		if (send < 0) return false;
 	}
+	return true;
 }
 
 void ThreadClient::assignToOutQueue(BlockingQueue<Message>* messages_out){
@@ -158,54 +171,70 @@ void ThreadClient::assignToGameStatus(ClientGameStatus* gs){
 	this->game_status = gs;
 }
 
-void ThreadClient::informClientId() {
+bool ThreadClient::informClientId() {
 	char client_id = (char)this->id;
-    this->peer.socket_send(&client_id, sizeof(client_id));
-    
-    std::cout << "Client ID sent" << std::endl;
-    
+    int send = this->peer.socket_send(&client_id, sizeof(client_id));
+	if (send < 0) return false;
+	
+	std::cout << "Client ID sent" << std::endl;
+	return true;
 }
 
-void ThreadClient::sendGamesList() {
+bool ThreadClient::sendGamesList() {
 	std::vector<GameListItem> list = this->serverStatus.getGamesList();
 	size_t size = list.size()*sizeof(GameListItem);
-	this->peer.socket_send((char*)(&size), sizeof(size_t));
+	int send = this->peer.socket_send((char*)(&size), sizeof(size_t));
+	if (send < 0) return false;
 	for (auto& it: list) {
-		this->peer.socket_send((char*)(&it), sizeof(GameListItem));
+		send = this->peer.socket_send((char*)(&it), sizeof(GameListItem));
+		if (send < 0) return false;
 	}
+	return true;
 }
 
-void ThreadClient::sendLobbyStatus(int gameID) {
+bool ThreadClient::sendLobbyStatus(int gameID) {
 	LobbyStatusData lobbyStatus = this->lobbyStatus.getLobbyStatus(gameID);
-	this->peer.socket_send((char*)(&lobbyStatus), sizeof(LobbyStatusData));
+	int send = this->peer.socket_send((char*)(&lobbyStatus), sizeof(LobbyStatusData));
+	if (send < 0) return false;
 	this->game_started = lobbyStatus.gameStarted;
+	return true;
 }
 
-void ThreadClient::sendGameStatistics() {
+bool ThreadClient::sendGameStatistics() {
 	GameStatistics gs = this->game_status->getStatistics();
-	this->peer.socket_send((char*)(&gs), sizeof(GameStatistics));
+	int send = this->peer.socket_send((char*)(&gs), sizeof(GameStatistics));
+	if (send < 0) return false;
+	return true;
 }
 
-void ThreadClient::sendMapsList() {
+bool ThreadClient::sendMapsList() {
+	int send;
 	std::cout << "Sending maps list" << std::endl;
 	const std::vector<MapListItem>& list = this->serverStatus.getMapsList();
 	size_t size = list.size()*sizeof(MapListItem);
-	this->peer.socket_send((char*)(&size), sizeof(size));
+	send = this->peer.socket_send((char*)(&size), sizeof(size));
+	if (send < 0) return false;
 	for (auto& it: list) {
-		this->peer.socket_send((char*)(&it), sizeof(MapListItem));
+		send = this->peer.socket_send((char*)(&it), sizeof(MapListItem));
+		if (send < 0) return false;
 	}
+	return true;
 }
 
-void ThreadClient::sendJoinOk() {
+bool ThreadClient::sendJoinOk() {
 	char result_join = 0;
-	this->peer.socket_send(&result_join, sizeof(result_join)); 
+	int send = this->peer.socket_send(&result_join, sizeof(result_join)); 
+	if (send < 0) return false;
 
 	std::cout << "Join OK sent" << std::endl;
+	return true;
 }
 
-void ThreadClient::sendJoinRefused() {
+bool ThreadClient::sendJoinRefused() {
 	char result_join = -1;
-	this->peer.socket_send(&result_join, sizeof(result_join)); 
+	int send = this->peer.socket_send(&result_join, sizeof(result_join)); 
+	if (send < 0) return false;
+	return true;
 }
 
 void ThreadClient::shutdown(){
