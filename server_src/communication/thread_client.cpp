@@ -52,7 +52,7 @@ void ThreadClient::run() {
 		}
 	} 
 
-	std::cout << "ThreadClient "<< this->id <<": voy a ingresar loop de juego" << std::endl;
+	//std::cout << "ThreadClient "<< this->id <<": voy a ingresar loop de juego" << std::endl;
 
     while (keep_running){
         try {
@@ -106,9 +106,9 @@ bool ThreadClient::sendCurrentGameMap(){
 	int width = this->game_status->getMapWidth();
 	int height = this->game_status->getMapHeight();
 
-	std::cout << "Map width:" << std::to_string(size) << std::endl;
-	std::cout << "Map height:" << std::to_string(size) << std::endl;
-	std::cout << "Map size:" << std::to_string(size) << std::endl;
+	//std::cout << "Map width:" << std::to_string(size) << std::endl;
+	//std::cout << "Map height:" << std::to_string(size) << std::endl;
+	//std::cout << "Map size:" << std::to_string(size) << std::endl;
 	send = this->peer.socket_send((char*)(&width), sizeof(width));
 	if (send < 0) return false;
 	send = this->peer.socket_send((char*)(&height), sizeof(height));
@@ -118,11 +118,11 @@ bool ThreadClient::sendCurrentGameMap(){
 	send = this->peer.socket_send((char*)mapGrid,size);
 	if (send < 0) return false;
 
-	std::cout << "Map sent" << std::endl;
+	//std::cout << "Map sent" << std::endl;
 
 	delete[] mapGrid;
 
-	std::cout << "Map grid data released - pointer deleted" << std::endl;
+	//std::cout << "Map grid data released - pointer deleted" << std::endl;
 	return true;
 }
 
@@ -175,7 +175,7 @@ bool ThreadClient::informClientId() {
     int send = this->peer.socket_send(&client_id, sizeof(client_id));
 	if (send < 0) return false;
 	
-	std::cout << "Client ID sent" << std::endl;
+	//std::cout << "Client ID sent" << std::endl;
 	return true;
 }
 
@@ -208,7 +208,7 @@ bool ThreadClient::sendGameStatistics() {
 
 bool ThreadClient::sendMapsList() {
 	int send;
-	std::cout << "Sending maps list" << std::endl;
+	//std::cout << "Sending maps list" << std::endl;
 	const std::vector<MapListItem>& list = this->serverStatus.getMapsList();
 	size_t size = list.size()*sizeof(MapListItem);
 	send = this->peer.socket_send((char*)(&size), sizeof(size));
@@ -225,7 +225,7 @@ bool ThreadClient::sendJoinOk() {
 	int send = this->peer.socket_send(&result_join, sizeof(result_join)); 
 	if (send < 0) return false;
 
-	std::cout << "Join OK sent" << std::endl;
+	//std::cout << "Join OK sent" << std::endl;
 	return true;
 }
 

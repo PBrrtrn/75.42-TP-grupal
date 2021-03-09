@@ -87,7 +87,7 @@ bool Player::aimWeapon(float ort_dist, float target_dist) {
 bool Player::loseHealth(int amount) {
 	if (this->before_respawn) return false;
 	this->health = this->health - amount;
-	std::cout << "Player was attacked --> health: " << this->health << std::endl;
+	//std::cout << "Player was attacked --> health: " << this->health << std::endl;
 	this->receivedDamage = true;
 	if (this->health <= 0 && this->vidas > 0) {
 		this->died = true;
@@ -105,7 +105,7 @@ bool Player::loseHealth(int amount) {
 			}
 		}
 		this->movement_state = STATE_NOT_MOVING;
-		std::cout << "LIVES: " << this->vidas << std::endl;
+		//std::cout << "LIVES: " << this->vidas << std::endl;
 		return true;
 	} else {
 		return false;

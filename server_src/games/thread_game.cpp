@@ -19,7 +19,7 @@ ThreadGame:: ThreadGame(int gameId, ProtectedQueue<Message>* messageReceiver,
 }
 
 void ThreadGame:: run() {
-  std::cout << "Game " << std::to_string(this->id) << " waiting for more players!" << std::endl;
+  //std::cout << "Game " << std::to_string(this->id) << " waiting for more players!" << std::endl;
   
   GameListItem game;
   game.gameId = this->id;
@@ -50,10 +50,10 @@ void ThreadGame:: run() {
   //el juego ya esta por arrancar (o hubo timeout sin gente), lo saco de la lista de disponibles
   this->gameList.erase(this->id);
   
-  std::cout << "Game started!" << std::endl;
+  //std::cout << "Game started!" << std::endl;
   this->sendLobbyStatus();
   
-  std::cout << "Sending map to each client" << std::endl;
+  //std::cout << "Sending map to each client" << std::endl;
   for (auto& it: this->out_queues) {
         int clientId = it.first;
         this->sendMapToClient(clientId);
