@@ -26,4 +26,16 @@ void Statistics::addBulletShooted(int playerID) {
     }
 }
 
+std::unordered_map<int, int>& Statistics::getBulletsShot() {
+    return this->balas_disparadas;
+}
+
+std::unordered_map<int, int>& Statistics::getEnemysDead() {
+    return this->enemigos_matados;
+}
+
+std::unordered_map<int, int>& Statistics::getPointsGame() {
+    return this->puntos_tesoro;
+}
+
 Statistics::~Statistics() {}

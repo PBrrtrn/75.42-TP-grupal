@@ -102,13 +102,13 @@ GameStatistics ClientGameStatus::getStatistics() {
 
 	Statistics& s = this->gameStatus.showStatistics();
 
-	std::vector<std::pair<int, int>> kills(s.enemigos_matados.begin(), s.enemigos_matados.end());
+	std::vector<std::pair<int, int>> kills(s.getEnemysDead().begin(), s.getEnemysDead().end());
 	std::sort(kills.begin(), kills.end(), comp);
 
-	std::vector<std::pair<int, int>> points(s.puntos_tesoro.begin(), s.puntos_tesoro.end());
+	std::vector<std::pair<int, int>> points(s.getPointsGame().begin(), s.getPointsGame().end());
 	std::sort(points.begin(), points.end(), comp);
 
-	std::vector<std::pair<int, int>> bullets(s.balas_disparadas.begin(), s.balas_disparadas.end());
+	std::vector<std::pair<int, int>> bullets(s.getBulletsShot().begin(), s.getBulletsShot().end());
 	std::sort(bullets.begin(), bullets.end(), comp);
 
 	for (int i = 0; i < TOP_STATISTICS; i++) {

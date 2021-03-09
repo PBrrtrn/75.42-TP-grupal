@@ -15,8 +15,11 @@ class Statistics {
 
         Statistics();
         void addEnemyDead(int playerID);
+        std::unordered_map<int, int>& getEnemysDead();
         void addPointsTreasure(int playerID, int amount);
+        std::unordered_map<int, int>& getPointsGame();
         void addBulletShooted(int playerID);
+        std::unordered_map<int, int>& getBulletsShot();
         ~Statistics();
 
 };
