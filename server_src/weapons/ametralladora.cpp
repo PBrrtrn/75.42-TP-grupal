@@ -11,8 +11,6 @@ Ametralladora::Ametralladora() : Arma() {
 }
 
 bool Ametralladora::aimWeapon(float ort_dist, float target_dist) {
-    std::cout << "Ort. dist.:" << ort_dist << std::endl;
-    std::cout << "Target dist.:" << target_dist << std::endl;
     return (ort_dist < this->precision && target_dist < this->attack_range);
 }
 

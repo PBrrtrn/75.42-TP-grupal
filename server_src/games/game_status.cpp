@@ -15,8 +15,6 @@ GameStatus::GameStatus(std::string mapLocation) : map(mapLocation) {
 
     this->itemPickUpRange = c["PickUpRange"].as<float>();
 	
-	//std::cout << "Entire map:" << this->entireMap << std::endl;
-	
 }
 
 std::vector<SpawnPoint> GameStatus::getSpawnPoints() {

@@ -73,7 +73,6 @@ void ThreadClient::run() {
 				if (!this->sendGameStatistics()) this->shutdown();
 				break;
 			default:
-				//std::cout << "ThreadClient "<< this->id <<": no se donde estoy! no procese este evento!" << std::endl;
 				break;
 			}
 			
