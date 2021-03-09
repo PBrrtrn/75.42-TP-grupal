@@ -13,6 +13,7 @@
 class UpdateReceiver : public Thread {
 private:
 	std::atomic<bool>& in_game;
+	std::atomic<bool>& end_game;
 	ServerConnection& connection;
 	GameStatusMonitor& game_status_monitor;
 	MenuStatus& menu_status;
@@ -28,7 +29,8 @@ public:
 	UpdateReceiver(std::atomic<bool>& in_game, 
 								 ServerConnection& connection,
 								 GameStatusMonitor& game_status_monitor,
-								 MenuStatus& menu_status);
+								 MenuStatus& menu_status, 
+								 std::atomic<bool>& end_game);
 	~UpdateReceiver();
 	void run();
 };

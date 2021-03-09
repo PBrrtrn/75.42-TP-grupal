@@ -39,16 +39,17 @@ void GameLoop::run() {
 
   BlockingQueue<ClientMessage> message_queue;
 
-  std::atomic<bool> in_game(false);
+  std::atomic<bool> in_game{false};
+  std::atomic<bool> end_game{false};
 
   EventSender event_sender(message_queue, server_connection);
   UpdateReceiver update_receiver(in_game, server_connection,
                                  game_status_monitor,
-                                 menu_status);
+                                 menu_status, end_game);
 
-  Renderer renderer(this->config, in_game, game_status_monitor, menu_status);
+  Renderer renderer(this->config, in_game, game_status_monitor, menu_status, end_game);
 
-  InputHandler input_handler(in_game, menu_status, message_queue);
+  InputHandler input_handler(in_game, menu_status, message_queue, end_game);
 
   event_sender.start();
   update_receiver.start();

@@ -1,11 +1,13 @@
 #include "UpdateReceiver.h"
 
 UpdateReceiver::UpdateReceiver(std::atomic<bool>& in_game, 
-								 							 ServerConnection& connection,
-								 							 GameStatusMonitor& game_status_monitor,
-								 							 MenuStatus& menu_status)
+								ServerConnection& connection,
+								GameStatusMonitor& game_status_monitor,
+								MenuStatus& menu_status,
+								std::atomic<bool>& end_game)
 : in_game(in_game), connection(connection),
-	game_status_monitor(game_status_monitor), menu_status(menu_status) { }
+	game_status_monitor(game_status_monitor), menu_status(menu_status),
+	end_game(end_game) { }
 
 UpdateReceiver::~UpdateReceiver() {
 	this->join();
@@ -14,8 +16,8 @@ UpdateReceiver::~UpdateReceiver() {
 void UpdateReceiver::run() {
 	while (true) {
 		MessageType message_type = this->connection.receiveMessageType();
-		if (this->in_game) this->receiveGameUpdate(message_type);
-		else this->receiveMenuUpdate(message_type);
+		if (this->in_game || this->end_game) this->receiveGameUpdate(message_type);
+		else if (!this->in_game && !this->end_game)this->receiveMenuUpdate(message_type);
 	}
 }
 
@@ -44,8 +46,9 @@ void UpdateReceiver::fetchGameUpdate() {
 }
 
 void UpdateReceiver::fetchStatistics() {
+	this->in_game = false;
+	this->end_game = true;
 	GameStatistics statistics = this->connection.getGameStatistics();
-	// Hacer algo con las statistics
 	this->game_status_monitor.saveStatistics(statistics);
 }
 

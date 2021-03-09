@@ -11,10 +11,11 @@
 
 Renderer::Renderer(YAML::Node& config, std::atomic<bool>& in_game, 
                    GameStatusMonitor& game_status_monitor, 
-                   MenuStatus& menu_status)
+                   MenuStatus& menu_status, 
+                   std::atomic<bool>& end_game)
 : renderer(NULL), config(config), window(config["window"]),
   in_game(in_game), game_status_monitor(game_status_monitor),
-  menu_status(menu_status), fps_cap(config["FPS_cap"].as<int>()) {
+  menu_status(menu_status), fps_cap(config["FPS_cap"].as<int>()), end_game(end_game) {
   this->renderer = this->window.getRenderer();
   if (this->renderer == NULL) throw RendererConstructorError(SDL_GetError());
 
@@ -98,7 +99,7 @@ void Renderer::run() {
                                this->menu_status,
                                this->renderer);
     this->menu_music->play();
-    while (!this->in_game) menu_renderer.render();
+    while (!this->in_game && !this->end_game) menu_renderer.render();
 
     this->game_music->play();
     Map map = this->game_status_monitor.getMap();
@@ -112,14 +113,20 @@ void Renderer::run() {
       this->enemies[enemy.clientId] = new EnemyEntity(this->enemy_components);
     }
 
-    while (this->in_game) renderMatch(map_drawer, ui_drawer);
-    this->game_music->pause();
+    while (this->in_game && !this->end_game) {
+      renderMatch(map_drawer, ui_drawer);
+    }
 
+    this->game_music->pause();
+    std::cout << "A MOSTARRRR" << std::endl;
     GameStatistics& statistics = this->game_status_monitor.getStatistics();
+    std::cout << "mostar estadisticas 1" << std::endl;
     StatisticsRenderer statistics_renderer(this->config["game_end_ui"], 
                                   this->renderer, 
                                   statistics);
-    statistics_renderer.render();
+    std::cout << "mostar estadisticas 2" << std::endl;
+    while (this->end_game) statistics_renderer.render();
+    std::cout << "mostar estadisticas 3" << std::endl;
     
     for (auto it : this->enemies) delete it.second;
   }

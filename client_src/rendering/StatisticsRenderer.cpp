@@ -59,6 +59,7 @@ void StatisticsRenderer::renderStatisticsBox() {
 	SDL_RenderFillRect(this->renderer, &inner_gilding);
 
 	SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
+	SDL_RenderFillRect(this->renderer, &statistics_box);
 
 	SDL_Color text_color { 255, 255, 255 };
 
@@ -67,7 +68,7 @@ void StatisticsRenderer::renderStatisticsBox() {
 	std::stringstream kills_stream;
 	kills_stream << config["kills"]["text"].as<std::string>();
 	for (auto k : statistics.kills) {
-		kills_stream << k.clientId << "-" << k.kills << "/";
+		kills_stream << "-" << k.clientId << ":" << k.kills;
 	}
 	std::string kills = kills_stream.str();
 
@@ -79,7 +80,7 @@ void StatisticsRenderer::renderStatisticsBox() {
 	std::stringstream points_stream;
 	points_stream << config["points"]["text"].as<std::string>();
 	for (auto p : statistics.points) {
-		points_stream << p.clientId << "-" << p.puntaje << "/";
+		points_stream << "-" << p.clientId << ":" << p.puntaje;
 	}
 	std::string points = points_stream.str();
 
@@ -91,7 +92,7 @@ void StatisticsRenderer::renderStatisticsBox() {
 	std::stringstream shot_bullets_stream;
 	shot_bullets_stream << config["shot_bullets"]["text"].as<std::string>();
 	for (auto p : statistics.bullets) {
-		shot_bullets_stream << p.clientId << "-" << p.bullets_shooted << "/";
+		shot_bullets_stream << "-"<< p.clientId << ":" << p.bullets_shooted;
 	}
 	std::string shot_bullets = shot_bullets_stream.str();
 

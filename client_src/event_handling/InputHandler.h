@@ -13,11 +13,13 @@
 class InputHandler {
 private:
 	std::atomic<bool>& in_game;
+	std::atomic<bool>& end_game;
 	MenuInputHandler menu_input_handler;
 	GameInputHandler game_input_handler;
 public:
 	InputHandler(std::atomic<bool>& in_game, MenuStatus& menu_status,
-							 BlockingQueue<ClientMessage>& message_queue);
+							 BlockingQueue<ClientMessage>& message_queue, 
+							 std::atomic<bool>& end_game);
 	~InputHandler();
 	void process(SDL_Event user_input);
 };

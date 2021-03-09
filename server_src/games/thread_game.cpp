@@ -95,7 +95,7 @@ void ThreadGame:: run() {
     }
     this->sendGameStatistics();
     
-    usleep(2000000);
+    //usleep(2000000 * 2);
     
     this->is_dead = true;
 }

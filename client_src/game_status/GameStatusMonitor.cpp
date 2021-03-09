@@ -24,6 +24,7 @@ void GameStatusMonitor::saveStatistics(GameStatistics& statistics) {
   std::unique_lock<std::mutex> lock(this->mutex);
   this->game_status.saveStatistics(statistics);
   this->statistics_saved = true;
+  std::cout << "guarde estadisticas" << std::endl;
   this->cv.notify_one();
 }
 

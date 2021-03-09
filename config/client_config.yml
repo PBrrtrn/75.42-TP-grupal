@@ -152,21 +152,21 @@ game_end_ui:
     width: 440
     height: 300
     gilding: 3
-    kills:
-      x_pos: 320
-      y_pos: 130
-      text: Game kills
-    points:
-      x_pos: 250
-      y_pos: 170
-      text: Game points
-    shot_bullets:
-      x_pos: 170
-      y_pos: 210
-      text: Game shoots
-      directory: ../assets/menu_ui/
-    font: wolfenstein.ttf
-    background: background.png
+  kills:
+    x_pos: 320
+    y_pos: 130
+    text: Game kills
+  points:
+    x_pos: 250
+    y_pos: 170
+    text: Game points
+  shot_bullets:
+    x_pos: 170
+    y_pos: 210
+    text: Game shoots
+  directory: ../assets/menu_ui/
+  font: wolfenstein.ttf
+  background: background.png
 enemies:
   - directory: ../assets/enemies/ss/
     idle_steps_per_frame: 1
