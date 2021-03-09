@@ -67,8 +67,8 @@ void StatisticsRenderer::renderStatisticsBox() {
 	int kills_y = config["kills"]["y_pos"].as<int>();
 	std::stringstream kills_stream;
 	kills_stream << config["kills"]["text"].as<std::string>();
-	for (auto k : statistics.kills) {
-		kills_stream << "-" << k.clientId << ":" << k.kills;
+	for (int i = 0; i < statistics.kills.size(); i++) {
+		kills_stream << "-" << statistics.kills[i].clientId << ":" << statistics.kills[i].kills;
 	}
 	std::string kills = kills_stream.str();
 
@@ -79,8 +79,8 @@ void StatisticsRenderer::renderStatisticsBox() {
 	int points_y = config["points"]["y_pos"].as<int>();
 	std::stringstream points_stream;
 	points_stream << config["points"]["text"].as<std::string>();
-	for (auto p : statistics.points) {
-		points_stream << "-" << p.clientId << ":" << p.puntaje;
+	for (int i = 0; i < statistics.points.size(); i++) {
+		points_stream << "-" << statistics.points[i].clientId << ":" << statistics.points[i].puntaje;
 	}
 	std::string points = points_stream.str();
 
@@ -91,8 +91,8 @@ void StatisticsRenderer::renderStatisticsBox() {
 	int shot_bullets_y = config["shot_bullets"]["y_pos"].as<int>();
 	std::stringstream shot_bullets_stream;
 	shot_bullets_stream << config["shot_bullets"]["text"].as<std::string>();
-	for (auto p : statistics.bullets) {
-		shot_bullets_stream << "-"<< p.clientId << ":" << p.bullets_shooted;
+	for (int i = 0; i < statistics.bullets.size(); i++) {
+		shot_bullets_stream << "-"<< statistics.bullets[i].clientId << ":" << statistics.bullets[i].bullets_shooted;
 	}
 	std::string shot_bullets = shot_bullets_stream.str();
 
