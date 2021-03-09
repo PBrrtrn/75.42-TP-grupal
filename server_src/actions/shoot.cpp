@@ -66,7 +66,7 @@ void Shoot::tryAction(GameStatus& gs, int clientID){
                 if (gs.players.at(clientID).aimWeapon(ort_dist, target_dist)) {
                     int danio = 1+rand()%10;
                     if (target.loseHealth(danio) ) {
-                        std::cout << "Player "<< target_id <<" has been killed" << std::endl;
+                        //std::cout << "Player "<< target_id <<" has been killed" << std::endl;
 
                         this->throwWeapon(gs.players.at(target_id).getSelectedWeaponIndex(), target_id, gs);
                         gs.items.push_back(new Bullets(gs.getPosition(target_id),false));
