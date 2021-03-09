@@ -18,6 +18,7 @@ sudo cp ../scripts/EditorLauncher.sh /usr/lib/fiubastein3d/bin/
 sudo cp ../maps/map1.yml /usr/lib/fiubastein3d/maps/
 sudo cp ../maps/map-large.yml /usr/lib/fiubastein3d/maps/
 sudo cp ../maps/x-room.yml /usr/lib/fiubastein3d/maps/
+sudo cp ../maps/center-piece.yml /usr/lib/fiubastein3d/maps/center-piece.yml
 sudo cp ../server_config.yml /usr/lib/fiubastein3d/
 sudo cp ../config/client_config.yml /usr/lib/fiubastein3d/config/client_config.yml
 sudo cp -r ../assets/ /usr/lib/fiubastein3d/
@@ -30,6 +31,3 @@ grep -qxF 'alias fiubastein-client="sh /usr/lib/fiubastein3d/bin/ClientLauncher.
 
 grep -qxF 'alias fiubastein-editor="sh /usr/lib/fiubastein3d/bin/EditorLauncher.sh"' ~/.bash_aliases || echo 'alias fiubastein-editor="sh /usr/lib/fiubastein3d/bin/EditorLauncher.sh"' >> ~/.bash_aliases
 
-#alias fiubastein-server="sh /usr/lib/fiubastein3d/bin/ServerLauncher.sh"
-#alias fiubastein-client="sh /usr/lib/fiubastein3d/bin/ClientLauncher.sh"
-#alias fiubastein-editor="sh /usr/lib/fiubastein3d/bin/EditorLauncher.sh"
