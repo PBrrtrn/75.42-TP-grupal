@@ -20,6 +20,7 @@
 #include "MusicTrack.h"
 #include "../../common_src/Map.h"
 #include "../../common_src/Thread.h"
+#include "StatisticsRenderer.h"
 
 class Renderer : public Thread {
 private:

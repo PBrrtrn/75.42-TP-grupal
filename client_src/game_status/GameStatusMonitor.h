@@ -14,11 +14,14 @@ private:
   std::condition_variable cv;
   bool synchronized;
   bool map_initialized;
+  bool statistics_saved;
 public:
   GameStatusMonitor();
   ~GameStatusMonitor();
   void initializeMap(Map& map);
   Map& getMap();
+  void saveStatistics(GameStatistics& statistics);
+  GameStatistics& getStatistics();
   void updateGameStatus(GameStatusUpdate& update);
   GameStatusUpdate getUpdate();
 };
