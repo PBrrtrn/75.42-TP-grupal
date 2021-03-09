@@ -37,7 +37,7 @@ void MapDrawer::draw(SDL_Renderer* renderer, Vector position, float view_angle,
     float distance = cos(a - view_angle) * hit.distance;
     int l = this->wall_height * projection_distance / distance;
 
-    Texture* wall_texture = this->wall_textures[0];
+    Texture* wall_texture = this->wall_textures[hit.texture];
     wall_texture->renderTexel(renderer, x, hit.texel,
                               this->screen_height, l, hit.side);
 
