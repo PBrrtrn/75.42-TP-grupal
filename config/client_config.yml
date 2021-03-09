@@ -121,7 +121,7 @@ weapons:
     shooting:
       - pistol_shooting_1.png
       - pistol_shooting_2.png
-  - directory: ../assets/player_weapons/pistol/ # Ametralladora
+  - directory: ../assets/player_weapons/machinegun/ # Ametralladora
     sfx: shooting.wav
     x_pos: 120
     y_pos: 310
@@ -129,11 +129,11 @@ weapons:
     height: 120
     steps: 12
     idle:
-      - pistol_idle.png
+      - machinegun_idle.png
     shooting:
-      - pistol_shooting_1.png
-      - pistol_shooting_2.png
-  - directory: ../assets/player_weapons/pistol/ # Chaincannon
+      - machinegun_shooting_1.png
+      - machinegun_shooting2.png
+  - directory: ../assets/player_weapons/chaingun/ # Chaincannon
     sfx: shooting.wav
     x_pos: 120
     y_pos: 310
@@ -141,10 +141,10 @@ weapons:
     height: 120
     steps: 12
     idle:
-      - pistol_idle.png
+      - chaingun_idle.png
     shooting:
-      - pistol_shooting_1.png
-      - pistol_shooting_2.png
+      - chaingun_shooting_1.png
+      - chaingun_shooting_2.png
 game_end_ui:
   statistics_box:
     x_pos: 100
