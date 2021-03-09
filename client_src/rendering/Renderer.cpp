@@ -44,7 +44,7 @@ Renderer::~Renderer() {
   TTF_Quit();
   IMG_Quit();
   Mix_Quit();
-  this->join();
+  //this->join();
 }
 
 void Renderer::load() {
@@ -92,8 +92,12 @@ void Renderer::load() {
   this->game_music = new MusicTrack(music_path.c_str());
 }
 
+void Renderer::shutdown() {
+  this->keep_running = false;
+}
+
 void Renderer::run() {
-  while (true) {
+  while (this->keep_running) {
     MenuRenderer menu_renderer(this->config["menu_ui"],
                                this->menu_status,
                                this->renderer);
@@ -117,6 +121,7 @@ void Renderer::run() {
 
     for (auto it : this->enemies) delete it.second;
   }
+  std::cout << "renderer end run" << std::endl;
 }
 
 void Renderer::renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer) {

@@ -160,6 +160,10 @@ GameStatusUpdate ServerConnection::getGameStatusUpdate() {
   return update;
 }
 
+void ServerConnection::end() {
+  this->socket.close_socket();
+}
+
 GameStatistics ServerConnection::getGameStatistics() {
   GameStatistics statistics;
   ssize_t receive = this->socket.socket_receive((char*)&statistics, sizeof(GameStatistics));

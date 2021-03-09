@@ -26,6 +26,7 @@ public:
 	GameStatusUpdate getGameStatusUpdate();
 	GameStatistics getGameStatistics();
 	void sendMessage(ClientMessage message);
+	void end();
 	/*
 	bool joinGame(char game_id);
 	void exitLobby();
