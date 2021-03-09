@@ -98,23 +98,20 @@ std::string ClientGameStatus::getEntireMap(){
 
 GameStatistics ClientGameStatus::getStatistics() {
 	GameStatistics gs;
-	memset(&gs, 0, sizeof(GameStatistics));
+	memset(&gs, -1, sizeof(GameStatistics));
 
 	Statistics& s = this->gameStatus.showStatistics();
 
-	std::vector<std::pair<int, int>> kills(s.enemigos_matados.begin(), s.enemigos_matados.end());
+	std::vector<std::pair<int, int>> kills(s.getEnemysDead().begin(), s.getEnemysDead().end());
 	std::sort(kills.begin(), kills.end(), comp);
-
-	std::vector<std::pair<int, int>> points(s.puntos_tesoro.begin(), s.puntos_tesoro.end());
+	std::vector<std::pair<int, int>> points(s.getPointsGame().begin(), s.getPointsGame().end());
 	std::sort(points.begin(), points.end(), comp);
-
-	std::vector<std::pair<int, int>> bullets(s.balas_disparadas.begin(), s.balas_disparadas.end());
+	std::vector<std::pair<int, int>> bullets(s.getBulletsShot().begin(), s.getBulletsShot().end());
 	std::sort(bullets.begin(), bullets.end(), comp);
-
 	for (int i = 0; i < TOP_STATISTICS; i++) {
 		if (i < kills.size()) {
 			ClientKills gs_kills;
-			memset(&gs_kills, 0, sizeof(ClientKills));
+			memset(&gs_kills, -1, sizeof(ClientKills));
 			gs_kills.clientId = kills[i].first;
 			gs_kills.kills = kills[i].second;
 			gs.kills[i] = gs_kills;
@@ -122,22 +119,19 @@ GameStatistics ClientGameStatus::getStatistics() {
 		
 		if (i < points.size()) {
 			ClientPoints gs_points;
-			memset(&gs_points, 0, sizeof(ClientPoints));
+			memset(&gs_points, -1, sizeof(ClientPoints));
 			gs_points.clientId = points[i].first;
 			gs_points.puntaje = points[i].second;
 			gs.points[i] = gs_points;
 		}
-
 		if (i < kills.size()) {
 			ClientShootedBullets gs_bullets;
-			memset(&gs_bullets, 0, sizeof(ClientShootedBullets));
+			memset(&gs_bullets, -1, sizeof(ClientShootedBullets));
 			gs_bullets.clientId = bullets[i].first;
 			gs_bullets.bullets_shooted = bullets[i].second;
 			gs.bullets[i] = gs_bullets;
 		}
-
 	}
-	
 	return gs;
 }
 

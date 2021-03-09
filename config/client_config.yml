@@ -54,14 +54,19 @@ menu_ui:
     width: 440
     height: 300
     gilding: 3
-    header_text:
+    kills:
       x_pos: 320
       y_pos: 130
-      text: 'Statistics:'
-    back_text:
+      text: Game kills
+    points:
       x_pos: 320
-      y_pos: 420
-      text: BACK
+      y_pos: 170
+      text: Game points
+    shot_bullets:
+      x_pos: 320
+      y_pos: 210
+      text: Game shoots
+    top_statistics: 10
   directory: ../assets/menu_ui/
   font: wolfenstein.ttf
   background: background.png
