@@ -102,6 +102,49 @@ GameStatistics ClientGameStatus::getStatistics() {
 
 	Statistics& s = this->gameStatus.showStatistics();
 
+	std::unordered_map<int, int> kills = s.getEnemysDead();
+	ClientKills gs_kills;
+	memset(&gs_kills, 0, sizeof(ClientKills));
+	int top = 0;
+	for (auto k: kills) {
+		if (top >= TOP_STATISTICS) break;
+		std::cout << "id" << k.first << std::endl;
+		gs_kills.clientId = k.first;
+		std::cout << "kills" << k.second << std::endl;
+		gs_kills.kills = k.second;
+		gs.kills[top] = gs_kills;
+		top++;
+	}
+
+	std::unordered_map<int, int> points = s.getPointsGame();
+	ClientPoints gs_points;
+	memset(&gs_points, 0, sizeof(ClientPoints));
+	top = 0;
+	for (auto p: points) {
+		if (top >= TOP_STATISTICS) break;
+		std::cout << "id" << p.first << std::endl;
+		gs_points.clientId = p.first;
+		std::cout << "puntaje" << p.second << std::endl;
+		gs_points.puntaje = p.second;
+		gs.points[top] = gs_points;
+		top++;
+	}
+
+	std::unordered_map<int, int> bullets = s.getBulletsShot();
+	ClientShootedBullets gs_bullets;
+	memset(&gs_bullets, 0, sizeof(ClientShootedBullets));
+	top = 0;
+	for (auto b: points) {
+		if (top >= TOP_STATISTICS) break;
+		std::cout << "id" << b.first << std::endl;
+		gs_bullets.clientId = b.first;
+		std::cout << "bullets" << b.second << std::endl;
+		gs_bullets.bullets_shooted = b.second;
+		gs.bullets[top] = gs_bullets;
+		top++;
+	}
+
+	/*
 	std::vector<std::pair<int, int>> kills(s.getEnemysDead().begin(), s.getEnemysDead().end());
 	std::sort(kills.begin(), kills.end(), comp);
 
@@ -137,6 +180,7 @@ GameStatistics ClientGameStatus::getStatistics() {
 		}
 
 	}
+	*/
 	
 	return gs;
 }
