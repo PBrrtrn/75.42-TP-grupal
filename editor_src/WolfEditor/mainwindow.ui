@@ -35,6 +35,11 @@
     </item>
     <item>
      <property name="text">
+      <string>Wood</string>
+     </property>
+    </item>	    
+    <item>
+     <property name="text">
       <string>BlueStone</string>
      </property>
     </item>

@@ -6,10 +6,11 @@
 
 namespace TextureList {
 static std::unordered_map<int,std::string> textures({{0,"../images/empty.png"},
-                                                {1,"../images/bluestone.png"},
-                                                {2,"../images/colorstone.png"},
-                                                {3,"../images/eagle.png"},
-                                                {4,"../images/greystone.png"}
+                                                {1,"../images/wood.png"},
+						{2,"../images/bluestone.png"},
+                                                {3,"../images/colorstone.png"},
+                                                {4,"../images/eagle.png"},
+                                                {5,"../images/greystone.png"}
                                                });
 }
 
