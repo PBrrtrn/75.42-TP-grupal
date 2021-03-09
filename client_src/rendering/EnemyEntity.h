@@ -16,6 +16,7 @@ private:
 	bool dying;
 	bool shooting;
 	bool receiving_damage;
+	bool respawning;
 	int elapsed_steps;
 public:
 	uint8_t type;
