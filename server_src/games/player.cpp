@@ -223,6 +223,10 @@ MovementState Player::getCurrentMovementState(){
 	return this->movement_state;
 }
 
+bool Player::isMoving() {
+	return this->movement_state != STATE_NOT_MOVING;
+}
+
 bool Player::changeShootingState(ShootingState state) {
 	this->shooting_state = state;
 	return true;
@@ -239,6 +243,10 @@ bool Player::changeFiringState(FiringState state) {
     
 FiringState Player::getCurrentFiringState() {
 	return this->firing_state;
+}
+
+bool Player::isShooting() {
+	return this->firing_state == STATE_FIRING;
 }
 
 bool Player::changeRotationState(MovementState state){

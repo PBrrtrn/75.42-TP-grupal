@@ -89,7 +89,7 @@ Map ServerConnection::getMap() {
   int* mapGrid = new int[width*height];
   this->socket.socket_receive((char*)mapGrid, map_data_size);
   Map map(width,height,mapGrid);
-  delete mapGrid;
+  delete[] mapGrid;
   
   return map;
 }

@@ -36,9 +36,10 @@ void ClientGameStatus::updateThisGameStatus(){
 				p.selectedWeapon = it.second.getSelectedWeaponIndex();
 				p.isAlive = it.second.getHealth();
 				p.receiveDamage = it.second.receivedDamageInStep();
-				p.firing_state = it.second.getCurrentFiringState();
-				p.movement_state = it.second.getCurrentMovementState();
+				p.firing_state = it.second.isShooting();
+				p.movement_state = it.second.isMoving();
 				p.before_respawn = it.second.outGame();
+				p.died = it.second.diedInStep();
 				this->players.insert({it.first,p});
 			} else {
 				this->players.at(it.first).clientId = it.first;
@@ -47,9 +48,10 @@ void ClientGameStatus::updateThisGameStatus(){
 				this->players.at(it.first).selectedWeapon = it.second.getSelectedWeaponIndex();
 				this->players.at(it.first).isAlive = it.second.getHealth() ? true : false;
 				this->players.at(it.first).receiveDamage = it.second.receivedDamageInStep();
-				this->players.at(it.first).firing_state = it.second.getCurrentFiringState();
-				this->players.at(it.first).movement_state = it.second.getCurrentMovementState();
-				this->players.at(it.first).before_respawn = it.second.outGame();				
+				this->players.at(it.first).firing_state = it.second.isShooting();
+				this->players.at(it.first).movement_state = it.second.isMoving();
+				this->players.at(it.first).before_respawn = it.second.outGame();	
+				this->players.at(it.first).died = it.second.diedInStep();			
 			}
 		}
 		for (auto& it: this->gameStatus.doors) {

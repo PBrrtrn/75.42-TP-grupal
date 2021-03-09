@@ -117,7 +117,7 @@ void ThreadClient::sendCurrentGameMap(){
    
    std::cout << "Map sent" << std::endl;
    
-   delete mapGrid;
+   delete[] mapGrid;
    
    std::cout << "Map grid data released - pointer deleted" << std::endl;
    
@@ -212,10 +212,6 @@ void ThreadClient::shutdown(){
 	this->keep_running = false;
 	this->choosing_game = false;
 	this->messages_out->close();
-}
-
-void ThreadClient::sleepAndRespawn() {
-	usleep(1000000);
 }
 
 ThreadClient:: ~ThreadClient(){	
