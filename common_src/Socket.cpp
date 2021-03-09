@@ -107,7 +107,7 @@ ssize_t Socket:: socket_send(const char* buffer, size_t length){
                         remaining_bytes, MSG_NOSIGNAL);
 
         if (bytes == -1) {
-			fprintf(stderr, "socket_send-->send: %s\n", strerror(errno));
+			//fprintf(stderr, "socket_send-->send: %s\n", strerror(errno));
             return bytes;
         }
         if (bytes == 0) break;
