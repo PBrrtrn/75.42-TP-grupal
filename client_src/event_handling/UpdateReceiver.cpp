@@ -8,15 +8,20 @@ UpdateReceiver::UpdateReceiver(std::atomic<bool>& in_game,
 	game_status_monitor(game_status_monitor), menu_status(menu_status) { }
 
 UpdateReceiver::~UpdateReceiver() {
-	this->join();
+	//this->join();
+}
+
+void UpdateReceiver::shutdown() {
+	this->keep_running = false;
 }
 
 void UpdateReceiver::run() {
-	while (true) {
+	while (this->keep_running) {
 		MessageType message_type = this->connection.receiveMessageType();
 		if (this->in_game) this->receiveGameUpdate(message_type);
 		else this->receiveMenuUpdate(message_type);
 	}
+	std::cout << "update receiver end run" << std::endl;
 }
 
 void UpdateReceiver::receiveGameUpdate(MessageType message_type) {

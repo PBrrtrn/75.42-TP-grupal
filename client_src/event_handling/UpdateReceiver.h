@@ -24,12 +24,14 @@ private:
 	void fetchMapOptions();
 	void fetchGameOptions();
 	void fetchLobbyStatus();
+	std::atomic<bool> keep_running{true};
 public:
 	UpdateReceiver(std::atomic<bool>& in_game, 
 								 ServerConnection& connection,
 								 GameStatusMonitor& game_status_monitor,
 								 MenuStatus& menu_status);
 	~UpdateReceiver();
+	void shutdown();
 	void run();
 };
 

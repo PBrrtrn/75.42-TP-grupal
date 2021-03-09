@@ -55,16 +55,37 @@ void GameLoop::run() {
   renderer.start();
 
   SDL_Event input;
-  while (true) {
+  while (this->keep_running) {
     try {
       SDL_WaitEvent(&input);
     } catch (...) {
       // throw ...
+      //this->keep_running = false;
+      message_queue.close();
+      server_connection.end();
+      /*
+      renderer.shutdown();
+      renderer.join();
+      event_sender.shutdown();
+      event_sender.join();
+      update_receiver.shutdown();
+      update_receiver.join();
+      */
+      this->keep_running = false;
     }
     SDL_Keycode code = input.key.keysym.sym;
 
     if (input.type == SDL_QUIT) {
-      throw 1;
+      //throw 1;
+      message_queue.close();
+      server_connection.end();
+      renderer.shutdown();
+      renderer.join();
+      event_sender.shutdown();
+      event_sender.join();
+      update_receiver.shutdown();
+      update_receiver.join();
+      this->keep_running = false;
     } else if ((input.type == SDL_KEYDOWN) && (code == SDLK_f)) {
       renderer.toggleFullscreen();
     } else {

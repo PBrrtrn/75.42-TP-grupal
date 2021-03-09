@@ -23,6 +23,7 @@
 
 class Renderer : public Thread {
 private:
+  std::atomic<bool> keep_running{true};
   SDL_Renderer* renderer;
   YAML::Node& config;
   Window window;
@@ -45,6 +46,7 @@ public:
            MenuStatus& menu_status);
   ~Renderer();
   void run();
+  void shutdown();
   void toggleFullscreen();
 };
 
