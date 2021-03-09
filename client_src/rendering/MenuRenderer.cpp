@@ -258,36 +258,70 @@ void MenuRenderer::renderStatisticsScreen() {
 
   YAML::Node node = this->config["statistics_box"];
   int box_x = node["x_pos"].as<int>();
-  int box_y = node["x_pos"].as<int>();
-  int box_w = node["width"].as<int>();
-  int box_h = node["height"].as<int>();
+	int box_y = node["x_pos"].as<int>();
+	int box_w = node["width"].as<int>();
+	int box_h = node["height"].as<int>();
 
-  int gilding_w = node["gilding"].as<int>();
+	int gilding_w = node["gilding"].as<int>();
 
-  SDL_Rect statistics_box { box_x, box_y, box_w, box_h };
+	SDL_Rect statistics_box { box_x, box_y, box_w, box_h };
 
-  SDL_Rect outer_gilding { box_x - gilding_w * 2, box_y - gilding_w * 2, 
-                           box_w + gilding_w * 4, box_h + gilding_w * 4 };
+	SDL_Rect outer_gilding { box_x - gilding_w * 2, box_y - gilding_w * 2, 
+							box_w + gilding_w * 4, box_h + gilding_w * 4 };
 
-  SDL_SetRenderDrawColor(this->renderer, 255, 223, 0, 0);
-  SDL_RenderFillRect(this->renderer, &outer_gilding);
+	SDL_SetRenderDrawColor(this->renderer, 255, 223, 0, 0);
+	SDL_RenderFillRect(this->renderer, &outer_gilding);
 
-  SDL_Rect inner_gilding { box_x - gilding_w, box_y - gilding_w, 
-                           box_w + gilding_w * 2, box_h + gilding_w * 2 };
+	SDL_Rect inner_gilding { box_x - gilding_w, box_y - gilding_w, 
+							box_w + gilding_w * 2, box_h + gilding_w * 2 };
 
-  SDL_SetRenderDrawColor(this->renderer, 200, 173, 0, 0);
-  SDL_RenderFillRect(this->renderer, &inner_gilding);
+	SDL_SetRenderDrawColor(this->renderer, 200, 173, 0, 0);
+	SDL_RenderFillRect(this->renderer, &inner_gilding);
 
-  SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
-  SDL_RenderFillRect(this->renderer, &statistics_box);
+	SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
+	SDL_RenderFillRect(this->renderer, &statistics_box);
 
-  int back_text_x = node["back_text"]["x_pos"].as<int>();
-  int back_text_y = node["back_text"]["y_pos"].as<int>();
-  std::string back_text = node["back_text"]["text"].as<std::string>();
+	SDL_Color text_color { 255, 255, 255 };
 
-  SDL_Color back_text_color { 255, 69, 0 };
+	int kills_x = node["kills"]["x_pos"].as<int>();
+	int kills_y = node["kills"]["y_pos"].as<int>();
+	std::stringstream kills_stream;
+	kills_stream << node["kills"]["text"].as<std::string>();
+	for (int i = 0; i < node["top_statistics"].as<int>(); i++) {
+    if (statistics.kills[i].clientId != -1) {
+		  kills_stream << "-" << std::to_string(statistics.kills[i].clientId) << ":" << std::to_string(statistics.kills[i].kills);
+    }
+	}
+	std::string kills = kills_stream.str();
 
-  this->font->render(this->renderer, back_text.c_str(), 
-                     back_text_x, back_text_y, 
-                     1, back_text_color);
+	this->font->render(this->renderer, kills.c_str(), 
+										kills_x, kills_y, 1, text_color);
+
+	int points_x = node["points"]["x_pos"].as<int>();
+	int points_y = node["points"]["y_pos"].as<int>();
+	std::stringstream points_stream;
+	points_stream << node["points"]["text"].as<std::string>();
+	for (int i = 0; i < node["top_statistics"].as<int>(); i++) {
+    if (statistics.points[i].clientId != -1) {
+		  points_stream << "-" << std::to_string(statistics.points[i].clientId) << ":" << std::to_string(statistics.points[i].puntaje);
+    }
+  }
+	std::string points = points_stream.str();
+
+	this->font->render(this->renderer, points.c_str(), 
+										points_x, points_y, 1, text_color);
+
+	int shot_bullets_x = node["shot_bullets"]["x_pos"].as<int>();
+	int shot_bullets_y = node["shot_bullets"]["y_pos"].as<int>();
+	std::stringstream shot_bullets_stream;
+	shot_bullets_stream << node["shot_bullets"]["text"].as<std::string>();
+	for (int i = 0; i < node["top_statistics"].as<int>(); i++) {
+    if (statistics.bullets[i].clientId != -1) {
+		  shot_bullets_stream << "-"<< std::to_string(statistics.bullets[i].clientId) << ":" << std::to_string(statistics.bullets[i].bullets_shooted);
+    }
+  }
+	std::string shot_bullets = shot_bullets_stream.str();
+
+	this->font->render(this->renderer, shot_bullets.c_str(), 
+										shot_bullets_x, shot_bullets_y, 1, text_color);
 }

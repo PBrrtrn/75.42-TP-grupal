@@ -1,8 +1,10 @@
 #include "statistics.h"
+#include <iostream>
 
 Statistics::Statistics(){}
 
 void Statistics::addEnemyDead(int playerID) {
+    std::cout << "agrego muertes statistics" << std::endl;
     if (this->enemigos_matados.find(playerID) == this->enemigos_matados.end()) {
         this->enemigos_matados.insert({playerID, 1});
     } else {
@@ -11,6 +13,7 @@ void Statistics::addEnemyDead(int playerID) {
 }
 
 void Statistics::addPointsTreasure(int playerID, int amount) {
+    std::cout << "agrego puntos statistics" << std::endl;
     if (this->puntos_tesoro.find(playerID) == this->puntos_tesoro.end()) {
         this->puntos_tesoro.insert({playerID, amount});
     } else {
@@ -19,11 +22,24 @@ void Statistics::addPointsTreasure(int playerID, int amount) {
 }
 
 void Statistics::addBulletShooted(int playerID) {
+    std::cout << "agrego balas statistics" << std::endl;
     if (this->balas_disparadas.find(playerID) == this->balas_disparadas.end()) {
         this->balas_disparadas.insert({playerID, 1});
     } else {
         this->balas_disparadas.at(playerID) += 1;
     }
+}
+
+std::unordered_map<int, int>& Statistics::getBulletsShot() {
+    return this->balas_disparadas;
+}
+
+std::unordered_map<int, int>& Statistics::getEnemysDead() {
+    return this->enemigos_matados;
+}
+
+std::unordered_map<int, int>& Statistics::getPointsGame() {
+    return this->puntos_tesoro;
 }
 
 Statistics::~Statistics() {}
