@@ -13,7 +13,7 @@ Renderer::Renderer(YAML::Node& config, std::atomic<bool>& in_game,
                    GameStatusMonitor& game_status_monitor, 
                    MenuStatus& menu_status)
 : renderer(NULL), config(config), window(config["window"]),
-  in_game(in_game), game_status_monitor(game_status_monitor),
+  in_game(in_game), running(true), game_status_monitor(game_status_monitor),
   menu_status(menu_status), fps_cap(config["FPS_cap"].as<int>()) {
   this->renderer = this->window.getRenderer();
   if (this->renderer == NULL) throw RendererConstructorError(SDL_GetError());
@@ -93,12 +93,12 @@ void Renderer::load() {
 }
 
 void Renderer::run() {
-  while (true) {
+  while (this->running) {
     MenuRenderer menu_renderer(this->config["menu_ui"],
                                this->menu_status,
                                this->renderer);
     this->menu_music->play();
-    while (!this->in_game) menu_renderer.render();
+    while (!this->in_game && this->running) menu_renderer.render();
 
     this->game_music->play();
     Map map = this->game_status_monitor.getMap();
@@ -112,7 +112,7 @@ void Renderer::run() {
       this->enemies[enemy.clientId] = new EnemyEntity(this->enemy_components);
     }
 
-    while (this->in_game) renderMatch(map_drawer, ui_drawer);
+    while (this->in_game && this->running) renderMatch(map_drawer, ui_drawer);
     this->game_music->pause();
 
     for (auto it : this->enemies) delete it.second;
@@ -151,6 +151,10 @@ void Renderer::renderMatch(MapDrawer& map_drawer, UIDrawer& ui_drawer) {
                  status_update.lives, status_update.has_key);
 
   SDL_RenderPresent(this->renderer);
+}
+
+void Renderer::stop() {
+  this->running = false;
 }
 
 void Renderer::toggleFullscreen() {

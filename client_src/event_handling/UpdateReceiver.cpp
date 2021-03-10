@@ -4,7 +4,7 @@ UpdateReceiver::UpdateReceiver(std::atomic<bool>& in_game,
 								 							 ServerConnection& connection,
 								 							 GameStatusMonitor& game_status_monitor,
 								 							 MenuStatus& menu_status)
-: in_game(in_game), connection(connection),
+: in_game(in_game), running(true), connection(connection),
 	game_status_monitor(game_status_monitor), menu_status(menu_status) { }
 
 UpdateReceiver::~UpdateReceiver() {
@@ -12,7 +12,7 @@ UpdateReceiver::~UpdateReceiver() {
 }
 
 void UpdateReceiver::run() {
-	while (true) {
+	while (this->running) {
 		MessageType message_type = this->connection.receiveMessageType();
 		if (this->in_game) this->receiveGameUpdate(message_type);
 		else this->receiveMenuUpdate(message_type);
@@ -89,4 +89,8 @@ void UpdateReceiver::fetchLobbyStatus() {
 		this->in_game = true;
 	if (lobby_status.remainingTime == 0)
 		this->menu_status.updateCurrentScreen(GAME_CREATION);
+}
+
+void UpdateReceiver::stop() {
+	this->running = false;
 }

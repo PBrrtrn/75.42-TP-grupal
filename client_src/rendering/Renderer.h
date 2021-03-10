@@ -27,6 +27,7 @@ private:
   YAML::Node& config;
   Window window;
   std::atomic<bool>& in_game;
+  std::atomic<bool> running;
   GameStatusMonitor& game_status_monitor;
   MenuStatus& menu_status;
   int fps_cap;
@@ -45,6 +46,7 @@ public:
            MenuStatus& menu_status);
   ~Renderer();
   void run();
+  void stop();
   void toggleFullscreen();
 };
 

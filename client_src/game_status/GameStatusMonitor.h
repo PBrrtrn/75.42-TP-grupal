@@ -12,6 +12,7 @@ private:
   GameStatus game_status;
   std::mutex mutex;
   std::condition_variable cv;
+  std::atomic<bool> open;
   bool synchronized;
   bool map_initialized;
 public:
@@ -22,6 +23,9 @@ public:
   void updateGameStatus(GameStatusUpdate& update);
   GameStatusUpdate getUpdate();
   void endGame();
+  void close();
 };
+
+class ClosedGameStatusMonitor : public std::exception { };
 
 #endif
