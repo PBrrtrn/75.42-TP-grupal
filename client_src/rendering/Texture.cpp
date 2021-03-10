@@ -35,9 +35,10 @@ void Texture::renderTexels(SDL_Renderer* renderer,
                            int width, int height) {
   int start_x = x_pos - (width/2);
   int end_x = x_pos + (width/2);
-  for (int texel_x = start_x; (texel_x < end_x) && (texel_x < 640); texel_x++) {
+
+  for (int texel_x = start_x; texel_x < end_x; texel_x++) {
     if (z_depth < z_buffer[texel_x]) {
-      float texel = ((float)(texel_x - start_x))/(float(this->getWidth()));
+      float texel = float(texel_x - start_x) / float(end_x - start_x);
       this->renderTexel(renderer, texel_x, texel, 480, height, 0);
     }
   }
