@@ -16,9 +16,7 @@ ServerConnection::ServerConnection(std::string host, std::string service) {
   this->client_id = buffer;
 }
 
-ServerConnection::~ServerConnection() {
-  this->socket.close_socket();
-}
+ServerConnection::~ServerConnection() { }
 
 MessageType ServerConnection::receiveMessageType() {
   MessageType message_type;
@@ -100,25 +98,19 @@ GameStatusUpdate ServerConnection::getGameStatusUpdate() {
   int receive; 
 
   PlayerStatus player_status;
-  receive = this->socket.socket_receive((char*)&player_status, 
-                                        sizeof(PlayerStatus));
-  if (receive < sizeof(PlayerStatus)) 
-    throw ServerConnectionError("Failed to connect");
+  receive = this->socket.socket_receive((char*)&player_status, sizeof(PlayerStatus));
+  if (receive < 0) throw ServerConnectionError("Failed to connect");
 
   std::vector<PlayerListItem> players_list;
   size_t player_list_size;
-  receive = this->socket.socket_receive((char*)&player_list_size, 
-                                        sizeof(size_t));
-  if (receive < sizeof(size_t)) 
-    throw ServerConnectionError("Failed to connect");
+  receive = this->socket.socket_receive((char*)&player_list_size, sizeof(size_t));
+  if (receive < 0) throw ServerConnectionError("Failed to connect");
   size_t n_players = player_list_size/sizeof(PlayerListItem);
   players_list.reserve(n_players);
   for (int i = 0; i < n_players; i++) {
     PlayerListItem player;
-    receive = this->socket.socket_receive((char*)&player,
-                                          sizeof(PlayerListItem));
-    if (receive < sizeof(PlayerListItem)) 
-      throw ServerConnectionError("Failed to connect");
+    receive = this->socket.socket_receive((char*)&player, sizeof(PlayerListItem));
+    if (receive < 0) throw ServerConnectionError("Failed to connect");
 
     if (player.clientId != this->client_id) players_list.push_back(player);
   }
@@ -126,15 +118,13 @@ GameStatusUpdate ServerConnection::getGameStatusUpdate() {
   std::vector<DoorListItem> doors_list;
   size_t door_list_size;
   receive = this->socket.socket_receive((char*)&door_list_size, sizeof(size_t));
-  if (receive < sizeof(size_t)) 
-    throw ServerConnectionError("Failed to connect");
+  if (receive < 0) throw ServerConnectionError("Failed to connect");
   size_t n_doors = door_list_size/sizeof(DoorListItem);
   doors_list.reserve(n_doors);
   for (int i = 0; i < n_doors; i++) {
     DoorListItem door;
     receive = this->socket.socket_receive((char*)&door, sizeof(DoorListItem));
-    if (receive < sizeof(DoorListItem)) 
-      throw ServerConnectionError("Failed to connect");
+    if (receive < 0) throw ServerConnectionError("Failed to connect");
 
     doors_list.push_back(door);
   }

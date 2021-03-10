@@ -26,6 +26,12 @@ public:
 	GameStatusUpdate getGameStatusUpdate();
 	GameStatistics getGameStatistics();
 	void sendMessage(ClientMessage message);
+	/*
+	bool joinGame(char game_id);
+	void exitLobby();
+	void sendEvents(std::vector<MessageType> events);
+	void sendPing();
+	*/
 };
 
 #define ERROR_BUF_LEN 256

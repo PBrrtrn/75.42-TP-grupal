@@ -13,13 +13,11 @@ class EventSender : public Thread {
 private:
 	BlockingQueue<ClientMessage>& message_queue;
 	ServerConnection& server_connection;
-	std::atomic<bool> running;
 public:
 	EventSender(BlockingQueue<ClientMessage>& message_queue,
 							ServerConnection& server_connection);
 	~EventSender();
 	void run();
-	void stop();
 };
 
 #endif

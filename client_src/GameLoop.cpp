@@ -54,9 +54,8 @@ void GameLoop::run() {
   update_receiver.start();
   renderer.start();
 
-  bool running = true;
   SDL_Event input;
-  while (running) {
+  while (true) {
     try {
       SDL_WaitEvent(&input);
     } catch (...) {
@@ -65,12 +64,7 @@ void GameLoop::run() {
     SDL_Keycode code = input.key.keysym.sym;
 
     if (input.type == SDL_QUIT) {
-      running = false;
-      message_queue.close();
-      game_status_monitor.close();
-      event_sender.stop();
-      update_receiver.stop();
-      renderer.stop();
+      throw 1;
     } else if ((input.type == SDL_KEYDOWN) && (code == SDLK_f)) {
       renderer.toggleFullscreen();
     } else {
